@@ -1,0 +1,41 @@
+.bpm-input-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  margin: 0.5rem 0;
+}
+
+.bpm-input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.bpm-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.bpm-input:focus {
+  border-color: #00A3E0;
+  box-shadow: 0 0 0 2px rgba(0, 163, 224, 0.2);
+}
+
+.bpm-input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.bpm-input::placeholder {
+  color: #999;
+}

@@ -1,0 +1,29 @@
+.bpm-checkbox-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
+.bpm-checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: #00A3E0;
+  cursor: pointer;
+}
+
+.bpm-checkbox-label {
+  color: #333;
+}
+
+.bpm-checkbox-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bpm-checkbox-disabled .bpm-checkbox {
+  cursor: not-allowed;
+}

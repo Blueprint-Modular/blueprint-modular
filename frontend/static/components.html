@@ -5,200 +5,84 @@
   <meta name="viewport" content="width:device-width, initial-scale=1" />
   <title>Components Blueprint Modular</title>
   <meta name="description" content="Bibliothèque de composants Blueprint Modular (BPM). Boutons, formulaires, tableaux, modales et plus." />
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="doc.css" />
   <style>
-    /* Palette Blueprint Modular */
-    :root {
-      --bg: #ffffff;
-      --bg-card: #f6f6f6;
-      --bg-code: #f0f0f0;
-      --fg: #333;
-      --muted: #666;
-      --bleu-profond: #1A4B8F;
-      --bleu-cyan: #00A3E0;
-      --vert-menthe: #45D09E;
-      --degrade-lumiere: #B2EBF2;
-      --accent: var(--bleu-cyan);
-      --border: rgb(237, 237, 237);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Inter", "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      line-height: 1.6;
-      min-height: 100vh;
-      padding: 0 1.5rem 3rem;
-      -webkit-font-smoothing: antialiased;
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-    .nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-    }
-    .nav a:hover { color: var(--accent); }
-    .nav .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; }
-    .nav .brand .brand-logo { height: 32px; width: auto; max-width: 48px; object-fit: contain; flex-shrink: 0; }
-    .nav .brand .word-blueprint { color: var(--bleu-profond); }
-    .nav .brand .word-modular { color: var(--bleu-cyan); }
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .hero h1 {
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-      color: var(--fg);
-    }
-    .hero p {
-      color: var(--muted);
-      font-size: 1.1rem;
-      max-width: 560px;
-      margin: 0 auto 1.5rem;
-    }
-    .hero code {
-      background: var(--bg-code);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.9em;
-    }
-    .search-wrap {
-      max-width: 400px;
-      margin: 0 auto 2rem;
-    }
-    .search-wrap input {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--fg);
-      font-size: 0.95rem;
-    }
-    .search-wrap input::placeholder { color: var(--muted); }
-    .search-wrap input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .categories {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-    .cat-btn {
-      padding: 0.4rem 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg-card);
-      color: var(--muted);
-      font-size: 0.85rem;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .cat-btn:hover, .cat-btn.active { border-color: var(--accent); color: var(--accent); }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      transition: border-color 0.2s;
-    }
-    .card:hover { border-color: var(--accent); }
-    .card.hidden { display: none; }
-    .card h2 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--fg);
-    }
-    .card .cat-tag {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      background: var(--bg-code);
-      color: var(--muted);
-      font-weight: 400;
-    }
-    .card .desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-    .card .import-line {
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-      word-break: break-all;
-    }
-    .card pre {
-      background: var(--bg-code);
-      border-radius: 8px;
-      padding: 0.75rem;
-      font-size: 0.8rem;
-      overflow-x: auto;
-      margin-bottom: 0.75rem;
-      border: 1px solid var(--border);
-    }
-    .card pre code { color: #333; font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
-    .card .props-table {
-      width: 100%;
-      font-size: 0.8rem;
-      border-collapse: collapse;
-    }
-    .card .props-table th,
-    .card .props-table td {
-      text-align: left;
-      padding: 0.35rem 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .card .props-table th { color: var(--muted); font-weight: 500; }
-    .card .props-table td:first-child { color: var(--accent); font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
-    .footer {
-      margin-top: 3rem;
-      text-align: center;
-      font-size: 0.875rem;
-      color: var(--muted);
-    }
-    .footer a { color: var(--accent); text-decoration: none; }
+    .doc-main .hero { text-align: center; margin-bottom: 2.5rem; }
+    .doc-main .hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .doc-main .hero p { color: var(--muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto 1.5rem; }
+    .doc-main .search-wrap { max-width: 400px; margin: 0 auto 2rem; }
+    .doc-main .search-wrap input { width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--fg); font-size: 0.95rem; }
+    .doc-main .search-wrap input:focus { outline: none; border-color: var(--accent); }
+    .doc-main .categories { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
+    .doc-main .cat-btn { padding: 0.4rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--muted); font-size: 0.85rem; cursor: pointer; font-family: inherit; }
+    .doc-main .cat-btn:hover, .doc-main .cat-btn.active { border-color: var(--accent); color: var(--accent); }
+    .doc-main .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+    .doc-main .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: border-color 0.2s; }
+    .doc-main .card:hover { border-color: var(--accent); }
+    .doc-main .card.hidden { display: none; }
+    .doc-main .card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem; }
+    .doc-main .card .cat-tag { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; background: var(--bg-code); color: var(--muted); font-weight: 400; }
+    .doc-main .card .desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
+    .doc-main .card .import-line { font-size: 0.8rem; color: var(--accent); margin-bottom: 0.5rem; word-break: break-all; }
+    .doc-main .card pre { background: var(--bg-code); border-radius: 8px; padding: 0.75rem; font-size: 0.8rem; overflow-x: auto; margin-bottom: 0.75rem; border: 1px solid var(--border); }
+    .doc-main .card .props-table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
+    .doc-main .card .props-table th, .doc-main .card .props-table td { text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); }
+    .doc-main .card .props-table th { color: var(--muted); font-weight: 500; }
+    .doc-main .card .props-table td:first-child { color: var(--accent); font-family: ui-monospace, monospace; }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="/" class="brand">
-      <img src="/Logo BPM.png" alt="" class="brand-logo" />
+  <nav class="doc-nav">
+    <a href="docs.html" class="brand">
+      <img src="img/logo-bpm-nom.jpg" alt="" class="brand-logo" />
       <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
     </a>
-    <a href="/components">Components</a>
-    <a href="/reference">API Reference</a>
+    <a href="get-started/installation.html">Get started</a>
+    <a href="components.html">Components</a>
+    <a href="api-reference/text.html">API Reference</a>
+    <a href="deploy/concepts.html">Deploy</a>
+    <a href="cheat-sheet.html">Cheat sheet</a>
   </nav>
 
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Accueil</h3>
+      <a href="docs.html">Accueil</a>
+      <h3>Get started</h3>
+      <a href="get-started/installation.html">Installation</a>
+      <a href="get-started/fundamentals.html">Fundamentals</a>
+      <a href="get-started/first-app.html">First app</a>
+      <h3>Components</h3>
+      <a href="components.html" class="active">Catalogue des composants</a>
+      <h3>API Reference</h3>
+      <a href="api-reference/text.html">Texte &amp; Affichage</a>
+      <a href="api-reference/data.html">Données</a>
+      <a href="api-reference/metrics.html">Metrics</a>
+      <a href="api-reference/charts.html">Charts</a>
+      <a href="api-reference/inputs.html">Inputs</a>
+      <a href="api-reference/layout.html">Layout</a>
+      <a href="api-reference/panels.html">Panels</a>
+      <a href="api-reference/media.html">Media</a>
+      <a href="api-reference/status.html">Status</a>
+      <a href="api-reference/chat.html">Chat</a>
+      <a href="api-reference/config.html">Config</a>
+      <a href="api-reference/connection.html">Connexion aux données</a>
+      <h3>Deploy</h3>
+      <a href="deploy/concepts.html">Concepts</a>
+      <a href="deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="knowledge-base/faq.html">FAQ</a>
+      <a href="knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="cheat-sheet.html">Cheat sheet</a>
+      <a href="reference.html">Reference</a>
+    </aside>
+
+    <main class="doc-main">
   <section class="hero">
     <h1>Components Blueprint Modular</h1>
     <p>Briques prêtes à l'emploi. Importez depuis <code>./bpm</code>, le reste est déjà fait.</p>
@@ -209,6 +93,8 @@
   </section>
 
   <div class="grid" id="grid"></div>
+  </main>
+  </div>
 
   <script>
     const COMPONENTS = [

@@ -1,0 +1,34 @@
+.bpm-progress-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  margin: 0.5rem 0;
+}
+
+.bpm-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.bpm-progress-label {
+  color: var(--bpm-doc-fg, #333);
+}
+
+.bpm-progress-value {
+  color: var(--bpm-doc-muted, #666);
+}
+
+.bpm-progress-track {
+  height: 8px;
+  background: var(--bpm-doc-border, #ededed);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bpm-progress-fill {
+  height: 100%;
+  background: var(--bpm-doc-accent, #00A3E0);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}

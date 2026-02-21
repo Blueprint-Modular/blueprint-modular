@@ -15,6 +15,8 @@ export const docSidebarSections = [
     title: 'Get started',
     links: [
       { label: 'Installation', href: '/get-started/installation' },
+      { label: 'Fundamentals', href: '/get-started/fundamentals' },
+      { label: 'First app', href: '/get-started/first-app' },
     ],
   },
   {
@@ -41,6 +43,14 @@ export const docSidebarSections = [
     title: 'Deploy',
     links: [
       { label: 'Concepts', href: '/deploy/concepts' },
+      { label: 'Platforms', href: '/deploy/platforms' },
+    ],
+  },
+  {
+    title: 'Knowledge base',
+    links: [
+      { label: 'FAQ', href: '/knowledge-base/faq' },
+      { label: 'Troubleshooting', href: '/knowledge-base/troubleshooting' },
     ],
   },
   {

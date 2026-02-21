@@ -1,0 +1,62 @@
+.bpm-toggle-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
+.bpm-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: -1px;
+  overflow: hidden;
+}
+
+.bpm-toggle-track {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--bpm-doc-border, #ddd);
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.bpm-toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.bpm-toggle:checked + .bpm-toggle-track {
+  background: var(--bpm-doc-accent, #00A3E0);
+}
+
+.bpm-toggle:checked + .bpm-toggle-track::after {
+  transform: translateX(18px);
+}
+
+.bpm-toggle-label {
+  color: var(--bpm-doc-fg, #333);
+}
+
+.bpm-toggle-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bpm-toggle-disabled .bpm-toggle-track {
+  opacity: 0.7;
+}

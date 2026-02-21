@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Installation — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="installation.html" class="active">Installation</a>
+      <a href="fundamentals.html">Fundamentals</a>
+      <a href="first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Installation</h1>
+      <p class="lead">Installez Blueprint Modular et lancez votre première commande.</p>
+      <h2>Prérequis</h2>
+      <ul><li><strong>Python 3.9+</strong></li><li>Optionnel : environnement virtuel (<code>python -m venv .venv</code>)</li></ul>
+      <h2>Installation</h2>
+      <pre><code>pip install blueprint-modular</code></pre>
+      <h2>Lancer une app</h2>
+      <pre><code>bpm run app.py</code></pre>
+      <p>L'app est servie en local (par défaut sur un port configurable).</p>
+      <h2>Scaffolder une app vide (optionnel)</h2>
+      <pre><code>bpm init</code></pre>
+      <p>Génère une structure minimale (ex. <code>app.py</code>) pour démarrer.</p>
+      <p><strong>Suivant :</strong> <a href="fundamentals.html">Fundamentals</a> — Comment fonctionne BPM.</p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text — API Reference — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="text.html" class="active">Text</a>
+      <a href="data.html">Data</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="charts.html">Charts</a>
+      <a href="inputs.html">Inputs</a>
+      <a href="layout.html">Layout</a>
+      <a href="panels.html">Panels</a>
+      <a href="media.html">Media</a>
+      <a href="status.html">Status</a>
+      <a href="chat.html">Chat</a>
+      <a href="config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Text</h1>
+      <p class="lead">Composants d'affichage de texte : <code>bpm.write</code>, <code>bpm.markdown</code>, <code>bpm.title</code>, <code>bpm.header</code>, <code>bpm.subheader</code>, <code>bpm.caption</code>, <code>bpm.code</code>, <code>bpm.latex</code>, <code>bpm.badge</code>, <code>bpm.html</code>.</p>
+      <h2>Mapping Streamlit → BPM</h2>
+      <table>
+        <thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+        <tbody>
+          <tr><td>st.write()</td><td>bpm.write()</td></tr>
+          <tr><td>st.markdown()</td><td>bpm.markdown()</td></tr>
+          <tr><td>st.text()</td><td>bpm.text()</td></tr>
+          <tr><td>st.title()</td><td>bpm.title()</td></tr>
+          <tr><td>st.header()</td><td>bpm.header()</td></tr>
+          <tr><td>st.subheader()</td><td>bpm.subheader()</td></tr>
+          <tr><td>st.caption()</td><td>bpm.caption()</td></tr>
+          <tr><td>st.code()</td><td>bpm.code()</td></tr>
+          <tr><td>st.latex()</td><td>bpm.latex()</td></tr>
+          <tr><td>st.badge()</td><td>bpm.badge()</td></tr>
+          <tr><td>st.html()</td><td>bpm.html()</td></tr>
+        </tbody>
+      </table>
+      <h2>Exemples</h2>
+      <pre><code>import bpm
+
+bpm.title("Mon titre")
+bpm.header("Section")
+bpm.subheader("Sous-section")
+bpm.markdown("Du **gras** et de l'*italique*.")
+bpm.write("Texte brut ou objet Python.")
+bpm.caption("Légende discrète.")
+bpm.code("def hello():\\n    print('Hello')", language="python")
+bpm.latex(r"e^{i\\pi} + 1 = 0")
+bpm.badge("Nouveau", type="info")</code></pre>
+      <h2>Preview live</h2>
+      <p>Voir le rendu : <a href="https://sandbox.beam-consulting.fr?component=bpm.text" target="_blank" rel="noopener">sandbox.beam-consulting.fr</a></p>
+      <p class="doc-footer" style="margin-top:1rem;"><small>Variables CSS : <code>--bpm-font-family</code>, <code>--bpm-color-text</code>, <code>--bpm-color-muted</code>.</small></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

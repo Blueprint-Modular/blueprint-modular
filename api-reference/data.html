@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data — API Reference — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="text.html">Text</a>
+      <a href="data.html" class="active">Data</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="charts.html">Charts</a>
+      <a href="inputs.html">Inputs</a>
+      <a href="layout.html">Layout</a>
+      <a href="panels.html">Panels</a>
+      <a href="media.html">Media</a>
+      <a href="status.html">Status</a>
+      <a href="chat.html">Chat</a>
+      <a href="config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Data</h1>
+      <p class="lead">Affichage de données : <code>bpm.dataframe</code>, <code>bpm.table</code>, <code>bpm.json</code>.</p>
+      <h2>Mapping Streamlit → BPM</h2>
+      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+        <tbody>
+          <tr><td>st.dataframe()</td><td>bpm.dataframe()</td></tr>
+          <tr><td>st.table()</td><td>bpm.table()</td></tr>
+          <tr><td>st.json()</td><td>bpm.json()</td></tr>
+        </tbody>
+      </table>
+      <h2>bpm.dataframe</h2>
+      <p>Signature : <code>bpm.dataframe(data, use_container_width=True, ...)</code></p>
+      <pre><code>import bpm
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+bpm.dataframe(df)</code></pre>
+      <h2>bpm.table</h2>
+      <p>Signature : <code>bpm.table(data)</code> — tableau statique (HTML).</p>
+      <pre><code>bpm.table(df)</code></pre>
+      <h2>bpm.json</h2>
+      <p>Signature : <code>bpm.json(obj)</code> — affichage JSON repliable.</p>
+      <pre><code>bpm.json({"clé": "valeur", "nested": {"a": 1}})</code></pre>
+      <p><strong>Preview live :</strong> <a href="https://sandbox.beam-consulting.fr?component=bpm.table" target="_blank" rel="noopener">sandbox — bpm.table</a></p>
+      <p><small>Variables CSS : <code>--bpm-table-border</code>, <code>--bpm-table-stripe</code>.</small></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

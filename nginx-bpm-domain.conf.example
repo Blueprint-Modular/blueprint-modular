@@ -1,0 +1,70 @@
+# Exemple de configuration Nginx pour le site Blueprint Modular
+# 1. Copier sur le VPS : scp nginx-bpm-domain.conf.example ubuntu@IP:/tmp/
+# 2. Sur le VPS : sudo cp /tmp/nginx-bpm-domain.conf.example /etc/nginx/sites-available/VOTRE_DOMAINE.fr
+# 3. Remplacer VOTRE_DOMAINE.fr par votre domaine dans le fichier
+# 4. Activer : sudo ln -sf /etc/nginx/sites-available/VOTRE_DOMAINE.fr /etc/nginx/sites-enabled/
+# 5. Tester : sudo nginx -t && sudo systemctl reload nginx
+# 6. Obtenir le SSL : sudo certbot certonly --nginx -d VOTRE_DOMAINE.fr -d www.VOTRE_DOMAINE.fr
+# Voir DEPLOIEMENT_DOMAINE.md pour l'ordre complet.
+
+# Bloc HTTP (pour Certbot)
+server {
+    listen 80;
+    listen [::]:80;
+    server_name VOTRE_DOMAINE.fr www.VOTRE_DOMAINE.fr;
+
+    root /var/www/blueprint-modular;
+    index index.html;
+
+    location = / {
+        try_files /index.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location = /components {
+        try_files /components.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location = /reference {
+        try_files /reference.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+}
+
+# Bloc HTTPS (décommenter et adapter après : sudo certbot certonly --nginx -d VOTRE_DOMAINE.fr -d www.VOTRE_DOMAINE.fr)
+# Puis ajouter en tête la redirection HTTP → HTTPS (voir DEPLOIEMENT_DOMAINE.md § 3 étape B).
+# server {
+#     listen 443 ssl http2;
+#     listen [::]:443 ssl http2;
+#     server_name VOTRE_DOMAINE.fr www.VOTRE_DOMAINE.fr;
+#
+#     ssl_certificate /etc/letsencrypt/live/VOTRE_DOMAINE.fr/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/VOTRE_DOMAINE.fr/privkey.pem;
+#
+#     root /var/www/blueprint-modular;
+#     index index.html;
+#
+#     location = / {
+#         try_files /index.html =404;
+#         add_header Content-Type "text/html; charset=utf-8";
+#     }
+#     location = /components {
+#         try_files /components.html =404;
+#         add_header Content-Type "text/html; charset=utf-8";
+#     }
+#     location = /reference {
+#         try_files /reference.html =404;
+#         add_header Content-Type "text/html; charset=utf-8";
+#     }
+#     location / {
+#         try_files $uri $uri/ =404;
+#     }
+#
+#     add_header X-Frame-Options "SAMEORIGIN" always;
+#     add_header X-Content-Type-Options "nosniff" always;
+# }

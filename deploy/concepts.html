@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deploy — Concepts — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="concepts.html" class="active">Concepts</a>
+      <a href="platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Concepts</h1>
+      <p class="lead">Comment une app Blueprint Modular fonctionne en production.</p>
+      <h2>Architecture</h2>
+      <p>En production, une app BPM repose sur :</p>
+      <ul>
+        <li><strong>Processus Python</strong> : exécute votre script (<code>bpm run app.py</code> ou équivalent via systemd/supervisor).</li>
+        <li><strong>Serveur HTTP</strong> : BPM sert l'UI et les assets.</li>
+        <li><strong>Reverse proxy (optionnel)</strong> : Nginx (ou autre) devant pour SSL, domaine, load balancing.</li>
+      </ul>
+      <h2>Variables d'environnement</h2>
+      <p>Utilisez des variables d'environnement pour la configuration (ports, chemins). Les <strong>secrets</strong> (clés API, mots de passe) : utilisez <code>bpm.secrets</code> ou des variables injectées par le déploiement.</p>
+      <pre><code>import os
+port = int(os.environ.get("BPM_PORT", 8501))</code></pre>
+      <h2>Connexions et état</h2>
+      <p>Pour les connexions DB ou APIs, privilégiez <code>bpm.connection()</code> et le cache (<code>@bpm.cache_resource</code>) pour ne pas rouvrir une connexion à chaque rerun.</p>
+      <p><strong>Suivant :</strong> <a href="platforms.html">Platforms</a> — VPS, Docker, Nginx.</p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

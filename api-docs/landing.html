@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blueprint Modular — BEAM Consulting</title>
+  <meta name="description" content="Blueprint Modular : structure et briques prêtes à l'emploi pour construire votre interface." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Palette Blueprint Modular */
+    :root {
+      --bg: #ffffff;
+      --fg: #333;
+      --bleu-profond: #1A4B8F;
+      --bleu-cyan: #00A3E0;
+      --vert-menthe: #45D09E;
+      --degrade-lumiere: #B2EBF2;
+      --accent: var(--bleu-cyan);
+      --muted: #888;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .container { max-width: 720px; }
+    .logo { max-height: 300px; height: auto; width: auto; max-width: 100%; object-fit: contain; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto; }
+    .tagline {
+      font-size: 1.25rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .cta {
+      display: inline-block;
+      background: var(--bleu-profond);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      transition: filter 0.2s;
+    }
+    .cta:hover { filter: brightness(1.1); }
+    .footer {
+      margin-top: 3rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="/Logo-BPM-nom.jpg" alt="Blueprint Modular" class="logo" />
+    <p class="tagline">Structure et briques prêtes à l'emploi pour construire votre interface.</p>
+    <a href="https://myportfolio.beam-consulting.fr" class="cta">Accéder à l'application</a>
+    <p class="footer"><a href="/api/docs/components">Components Blueprint Modular</a> · <a href="/api/docs/reference">API Reference</a></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blueprint Modular — Documentation</title>
+  <meta name="description" content="Blueprint Modular : briques prêtes à l'emploi. Importez depuis bpm, le reste est déjà fait." />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="index.html" class="brand">
+      <img src="Logo BPM.png" alt="" class="brand-logo" />
+      <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
+    </a>
+    <a href="get-started/installation.html">Get started</a>
+    <a href="api-reference/text.html">API Reference</a>
+    <a href="deploy/concepts.html">Deploy</a>
+    <a href="cheat-sheet.html">Cheat sheet</a>
+  </nav>
+
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Accueil</h3>
+      <a href="index.html" class="active">Accueil</a>
+      <h3>Get started</h3>
+      <a href="get-started/installation.html">Installation</a>
+      <a href="get-started/fundamentals.html">Fundamentals</a>
+      <a href="get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="api-reference/text.html">Text</a>
+      <a href="api-reference/data.html">Data</a>
+      <a href="api-reference/metrics.html">Metrics</a>
+      <a href="api-reference/charts.html">Charts</a>
+      <a href="api-reference/inputs.html">Inputs</a>
+      <a href="api-reference/layout.html">Layout</a>
+      <a href="api-reference/panels.html">Panels</a>
+      <a href="api-reference/media.html">Media</a>
+      <a href="api-reference/status.html">Status</a>
+      <a href="api-reference/chat.html">Chat</a>
+      <a href="api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="deploy/concepts.html">Concepts</a>
+      <a href="deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="knowledge-base/faq.html">FAQ</a>
+      <a href="knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="cheat-sheet.html">Cheat sheet</a>
+    </aside>
+
+    <main class="doc-main">
+      <h1>Blueprint Modular</h1>
+      <p class="lead"><strong>Briques prêtes à l'emploi.</strong> Importez depuis <code>bpm</code>, le reste est déjà fait.</p>
+
+      <h2>Installation</h2>
+      <pre><code>pip install blueprint-modular</code></pre>
+      <p>Prérequis : Python 3.9+</p>
+      <pre><code>import bpm
+
+bpm.metric("Valeur", 142500, delta=3.2)
+bpm.table(df)</code></pre>
+      <p>Exemple minimal : après <code>bpm run app.py</code>, votre interface est servie.</p>
+
+      <hr style="margin: 2rem 0; border-color: var(--bpm-border);" />
+
+      <h2>Commencer</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+        <div>
+          <h3 style="font-size: 1rem;">Get started</h3>
+          <p style="font-size: 0.9rem; color: var(--bpm-muted);">Installation, fondamentaux et premier tutoriel.</p>
+          <a href="get-started/installation.html" class="doc-cta">Commencer →</a>
+        </div>
+        <div>
+          <h3 style="font-size: 1rem;">API Reference</h3>
+          <p style="font-size: 0.9rem; color: var(--bpm-muted);">Tous les composants : texte, données, graphiques, inputs, layout…</p>
+          <a href="api-reference/text.html" class="doc-cta">Voir l'API →</a>
+        </div>
+        <div>
+          <h3 style="font-size: 1rem;">Deploy</h3>
+          <p style="font-size: 0.9rem; color: var(--bpm-muted);">Concepts et plateformes (VPS, Docker, Nginx).</p>
+          <a href="deploy/concepts.html" class="doc-cta">Déployer →</a>
+        </div>
+      </div>
+
+      <hr style="margin: 2rem 0; border-color: var(--bpm-border);" />
+      <h2>What's new</h2>
+      <p>Consultez le changelog des composants pour les dernières mises à jour.</p>
+      <div class="info-box">Cette section sera alimentée par le changelog du package blueprint-modular.</div>
+
+      <footer class="doc-footer">
+        <a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

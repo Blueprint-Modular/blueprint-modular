@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fundamentals — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="installation.html">Installation</a>
+      <a href="fundamentals.html" class="active">Fundamentals</a>
+      <a href="first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Fundamentals</h1>
+      <p class="lead">Comment Blueprint Modular exécute votre script et gère l'état.</p>
+      <h2>Exécution de haut en bas</h2>
+      <p>Comme Streamlit, BPM exécute votre script <strong>de haut en bas</strong> à chaque interaction. Chaque appel à un composant ajoute un élément à l'interface.</p>
+      <h2>Session state</h2>
+      <p>L'état est conservé dans <strong><code>bpm.session_state</code></strong>. Utilisez-le pour stocker des valeurs entre les reruns.</p>
+      <pre><code>import bpm
+
+if "count" not in bpm.session_state:
+    bpm.session_state.count = 0
+
+if bpm.button("Incrémenter"):
+    bpm.session_state.count += 1
+    bpm.rerun()
+
+bpm.write(f"Compteur : {bpm.session_state.count}")</code></pre>
+      <h2>Rechargement automatique</h2>
+      <p>En développement, BPM surveille les fichiers et recharge automatiquement lors des modifications.</p>
+      <h2>Composants natifs vs iframe (sandbox)</h2>
+      <ul>
+        <li><strong>Composants natifs</strong> : rendus directement par le serveur BPM (Python).</li>
+        <li><strong>Composants React (sandbox)</strong> : certains UIs sont servis via une iframe vers <code>sandbox.beam-consulting.fr</code>.</li>
+      </ul>
+      <p><strong>Suivant :</strong> <a href="first-app.html">First app</a> — Tutoriel complet en 5 minutes.</p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

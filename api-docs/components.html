@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width:device-width, initial-scale=1" />
+  <title>Components Blueprint Modular — BEAM Consulting</title>
+  <meta name="description" content="Bibliothèque de composants Blueprint Modular (BPM). Boutons, formulaires, tableaux, modales et plus." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Palette Blueprint Modular */
+    :root {
+      --bg: #ffffff;
+      --bg-card: #f6f6f6;
+      --bg-code: #f0f0f0;
+      --fg: #333;
+      --muted: #666;
+      --bleu-profond: #1A4B8F;
+      --bleu-cyan: #00A3E0;
+      --vert-menthe: #45D09E;
+      --degrade-lumiere: #B2EBF2;
+      --accent: var(--bleu-cyan);
+      --border: rgb(237, 237, 237);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 0 1.5rem 3rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .nav a:hover { color: var(--accent); }
+    .nav .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; }
+    .nav .brand .brand-logo { height: 32px; width: auto; max-width: 48px; object-fit: contain; flex-shrink: 0; }
+    .nav .brand .word-blueprint { color: var(--bleu-profond); }
+    .nav .brand .word-modular { color: var(--bleu-cyan); }
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero code {
+      background: var(--bg-code);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .search-wrap {
+      max-width: 400px;
+      margin: 0 auto 2rem;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 0.95rem;
+    }
+    .search-wrap input::placeholder { color: var(--muted); }
+    .search-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .categories {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .cat-btn {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-card);
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .cat-btn:hover, .cat-btn.active { border-color: var(--accent); color: var(--accent); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card.hidden { display: none; }
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--fg);
+    }
+    .card .cat-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg-code);
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .card .desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .card .import-line {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      word-break: break-all;
+    }
+    .card pre {
+      background: var(--bg-code);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
+    }
+    .card pre code { color: #333; font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
+    .card .props-table {
+      width: 100%;
+      font-size: 0.8rem;
+      border-collapse: collapse;
+    }
+    .card .props-table th,
+    .card .props-table td {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .card .props-table th { color: var(--muted); font-weight: 500; }
+    .card .props-table td:first-child { color: var(--accent); font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
+    .footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/api/docs" class="brand">
+      <img src="/Logo-BPM-seul.png" alt="" class="brand-logo" />
+      <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
+    </a>
+    <a href="/api/docs/components">Components</a>
+    <a href="/api/docs/reference">API Reference</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Components Blueprint Modular</h1>
+    <p>Briques prêtes à l'emploi. Importez depuis <code>./bpm</code>, le reste est déjà fait.</p>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Rechercher un composant..." autocomplete="off" />
+    </div>
+    <div class="categories" id="categories"></div>
+  </section>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="footer">BEAM Consulting · <a href="https://beam-consulting.fr">beam-consulting.fr</a></p>
+
+  <script>
+    const COMPONENTS = [
+      { id: 'Button', name: 'Button', category: 'Widgets', desc: 'Bouton avec variantes (primary, secondary, danger) et tailles (small, medium, large).', import: "import { Button } from './bpm';", example: '<Button onClick={() => {}} variant="primary">Valider</Button>', props: [{ name: 'variant', type: 'string', default: 'primary', desc: 'primary | secondary | danger' }, { name: 'size', type: 'string', default: 'medium', desc: 'small | medium | large' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }, { name: 'fullWidth', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'Selectbox', name: 'Selectbox', category: 'Widgets', desc: 'Liste déroulante avec options, label, aide et placeholder. Gère le clic extérieur et Escape.', import: "import { Selectbox } from './bpm';", example: '<Selectbox label="Choix" options={[{value:\'a\',label:\'Option A\'}]} value={val} onChange={setVal} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'options', type: 'array', default: '[]', desc: '{ value, label }' }, { name: 'value', type: 'any', default: '-', desc: 'Valeur sélectionnée' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'placeholder', type: 'string', default: 'Sélectionner...', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'NumberInput', name: 'NumberInput', category: 'Widgets', desc: 'Champ numérique avec label, min/max/step, aide. Contrôlé ou non contrôlé.', import: "import { NumberInput } from './bpm';", example: '<NumberInput label="Montant" value={n} onChange={setN} min={0} max={100} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'number', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'min', type: 'number', default: 'null', desc: '' }, { name: 'max', type: 'number', default: 'null', desc: '' }, { name: 'step', type: 'number', default: '1', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'DateInput', name: 'DateInput', category: 'Widgets', desc: 'Sélecteur de date (type date) avec label, min/max et aide.', import: "import { DateInput } from './bpm';", example: '<DateInput label="Date" value={date} onChange={setDate} min={minDate} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'Date|string', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'min', type: 'Date|string', default: 'null', desc: '' }, { name: 'max', type: 'Date|string', default: 'null', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'ColorPicker', name: 'ColorPicker', category: 'Widgets', desc: 'Sélecteur de couleur (input color) avec label et valeur hex.', import: "import { ColorPicker } from './bpm';", example: '<ColorPicker label="Couleur" value={color} onChange={setColor} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'string', default: '#000000', desc: 'Hex' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'Tabs', name: 'Tabs', category: 'Widgets', desc: 'Onglets avec contenu. tabs = [{ label, content }] ou tableau de strings.', import: "import { Tabs } from './bpm';", example: '<Tabs tabs={[{label:\'A\',content:<p>A</p>},{label:\'B\',content:<p>B</p>}]} defaultTab={0} onChange={fn} />', props: [{ name: 'tabs', type: 'array', default: '[]', desc: '{ label, content } ou string' }, { name: 'defaultTab', type: 'number', default: '0', desc: 'Index initial' }, { name: 'onChange', type: 'function', default: '-', desc: '(index) => {}' }] },
+      { id: 'Title', name: 'Title', category: 'Structure', desc: 'Titre avec niveaux 1–4. Niveau 1 affiche le logo (optionnel onLogoClick). Exporte Title1..Title4.', import: "import { Title, Title1, Title2 } from './bpm';", example: '<Title level={1}>Mon écran</Title> ou <Title2>Sous-titre</Title2>', props: [{ name: 'level', type: 'number', default: '1', desc: '1 | 2 | 3 | 4' }, { name: 'onLogoClick', type: 'function', default: 'null', desc: 'Clic sur le logo (niveau 1, mobile)' }] },
+      { id: 'Message', name: 'Message', category: 'Feedback', desc: 'Bloc de message avec type info, success, warning ou error.', import: "import { Message } from './bpm';", example: '<Message type="success">Enregistré.</Message>', props: [{ name: 'type', type: 'string', default: 'info', desc: 'info | success | warning | error' }] },
+      { id: 'Panel', name: 'Panel', category: 'Layout', desc: 'Panneau informatif (alertes, états). Variantes : info, warning, error, success.', import: "import { Panel } from './bpm';", example: '<Panel variant="warning" title="Attention">Contenu.</Panel>', props: [{ name: 'variant', type: 'string', default: 'info', desc: 'info | warning | error | success' }, { name: 'title', type: 'string', default: 'null', desc: '' }, { name: 'icon', type: 'node|false', default: 'null', desc: 'Icône ou false pour masquer' }] },
+      { id: 'Box', name: 'Box', category: 'Layout', desc: 'Bloc avec titre, statut, détails. Optionnel isConnected pour style vert/rouge.', import: "import { Box } from './bpm';", example: '<Box title="Connexion" isConnected={true} details="Dernière synchro." />', props: [{ name: 'title', type: 'string', default: '-', desc: '' }, { name: 'status', type: 'string', default: '-', desc: '' }, { name: 'details', type: 'node', default: '-', desc: '' }, { name: 'isConnected', type: 'boolean', default: '-', desc: 'Style vert/rouge' }, { name: 'actions', type: 'node', default: '-', desc: 'Boutons en bas' }] },
+      { id: 'Modal', name: 'Modal', category: 'Feedback', desc: 'Fenêtre modale avec titre, fermeture Escape et clic backdrop. Rendu en portail.', import: "import { Modal } from './bpm';", example: '<Modal isOpen={open} onClose={() => setOpen(false)} title="Titre">{children}</Modal>', props: [{ name: 'isOpen', type: 'boolean', default: '-', desc: '' }, { name: 'onClose', type: 'function', default: '-', desc: '' }, { name: 'title', type: 'string', default: '-', desc: '' }, { name: 'size', type: 'string', default: 'medium', desc: 'medium | small | large' }, { name: 'showCloseButton', type: 'boolean', default: 'true', desc: '' }] },
+      { id: 'Toast', name: 'Toast', category: 'Feedback', desc: 'Notifications toast. Utiliser ToastProvider et useToast(). showToast(message, type, duration, title, pageName, pageIcon).', import: "import { ToastProvider, useToast } from './bpm';", example: 'const { showToast } = useToast(); showToast("OK", "success", 3000);', props: [{ name: 'ToastProvider', type: 'component', default: '-', desc: 'Envelopper l\'app' }, { name: 'useToast()', type: 'hook', default: '-', desc: 'showToast(msg, type, duration, title, pageName, pageIcon)' }] },
+      { id: 'Spinner', name: 'Spinner', category: 'Feedback', desc: 'Indicateur de chargement avec texte optionnel et tailles small, medium, large.', import: "import { Spinner } from './bpm';", example: '<Spinner text="Chargement..." size="medium" />', props: [{ name: 'text', type: 'string', default: 'Chargement...', desc: '' }, { name: 'size', type: 'string', default: 'medium', desc: 'small | medium | large' }] },
+      { id: 'Tooltip', name: 'Tooltip', category: 'Feedback', desc: 'Infobulle (MUI). text = contenu, position = top | bottom | left | right | top-start | etc.', import: "import { Tooltip } from './bpm';", example: '<Tooltip text="Explication"><span>Survoler</span></Tooltip>', props: [{ name: 'text', type: 'string', default: '-', desc: 'Contenu du tooltip' }, { name: 'position', type: 'string', default: 'top', desc: 'top | bottom | left | right | top-start | ...' }] },
+      { id: 'InfoIcon', name: 'InfoIcon', category: 'Feedback', desc: 'Icône info (cercle avec i), style feather. Taille en px.', import: "import { InfoIcon } from './bpm';", example: '<InfoIcon size={16} />', props: [{ name: 'size', type: 'number', default: '16', desc: 'Taille en px' }] },
+      { id: 'Table', name: 'Table', category: 'Data', desc: 'Tableau triable. columns = [{ key, label, align }], data = tableau d\'objets.', import: "import { Table } from './bpm';", example: '<Table columns={[{key:\'name\',label:\'Nom\'}]} data={rows} defaultSortColumn="name" defaultSortDirection="asc" />', props: [{ name: 'columns', type: 'array', default: '-', desc: '{ key, label, align? }' }, { name: 'data', type: 'array', default: '-', desc: 'Lignes' }, { name: 'striped', type: 'boolean', default: 'true', desc: '' }, { name: 'hover', type: 'boolean', default: 'true', desc: '' }, { name: 'onRowClick', type: 'function', default: '-', desc: '(row) => {}' }, { name: 'defaultSortColumn', type: 'string', default: 'null', desc: '' }, { name: 'defaultSortDirection', type: 'string', default: 'asc', desc: 'asc | desc' }] },
+      { id: 'Metric', name: 'Metric', category: 'Data', desc: 'Indicateur avec label, valeur et delta optionnel (positif/négatif, deltaType inverse).', import: "import { Metric } from './bpm';", example: '<Metric label="Performance" value={1234.56} delta={+2.5} deltaType="normal" currency="EUR" />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'number|string', default: '-', desc: '' }, { name: 'delta', type: 'number', default: '-', desc: 'Variation' }, { name: 'deltaType', type: 'string', default: 'normal', desc: 'normal | inverse' }, { name: 'currency', type: 'string', default: 'EUR', desc: 'EUR | USD | ...' }] },
+      { id: 'Expander', name: 'Expander', category: 'Structure', desc: 'Bloc repliable avec titre. defaultExpanded pour ouvrir par défaut.', import: "import { Expander } from './bpm';", example: '<Expander title="Détails" defaultExpanded={false}>{content}</Expander>', props: [{ name: 'title', type: 'string', default: '-', desc: '' }, { name: 'defaultExpanded', type: 'boolean', default: 'false', desc: '' }] },
+      { id: 'Layout', name: 'Layout', category: 'Layout', desc: 'Shell sidebar + topbar + body (Blueprint Modular Framework). Utilise Sidebar et DashboardHeader; config et contenu fournis par le parent.', import: "import { Layout } from './bpm';", example: '<Layout sidebarOpen={open} onToggleSidebar={setOpen} sidebarContent={...} headerContent={...} sidebarProps={...} />', props: [{ name: 'config', type: 'object', default: '{}', desc: 'Config app' }, { name: 'sidebarOpen', type: 'boolean', default: '-', desc: '' }, { name: 'onToggleSidebar', type: 'function', default: '-', desc: '' }, { name: 'sidebarContent', type: 'node', default: '-', desc: '' }, { name: 'headerContent', type: 'node', default: '-', desc: '' }, { name: 'sidebarProps', type: 'object', default: '{}', desc: 'logoUrl, profile, activePage, compactMenuItems...' }, { name: 'children', type: 'node', default: '-', desc: 'Contenu principal' }] },
+      { id: 'Sandbox', name: 'Sandbox', category: 'Utils', desc: 'Affiche un composant Blueprint Modular seul (sans sidebar). Usage: ?component=bpm.panel&variant=warning ou route /sandbox.', import: "import { Sandbox } from './bpm';", example: 'Route /sandbox?component=bpm.panel&variant=warning&title=Test', props: [{ name: 'URL', type: 'query', default: '-', desc: 'component, variant, title, value, label, theme=dark' }] }
+    ];
+
+    const categories = [...new Set(COMPONENTS.map(c => c.category))].sort();
+    let activeCategory = '';
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function renderCard(c) {
+      const matchSearch = !searchVal || [c.name, c.category, c.desc].some(t => t.toLowerCase().includes(searchVal));
+      const matchCat = !activeCategory || c.category === activeCategory;
+      const hidden = !matchSearch || !matchCat;
+      const propsRows = (c.props || []).map(p => `
+        <tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.type)}</td><td>${escapeHtml(p.default)}</td><td>${escapeHtml(p.desc || '')}</td></tr>
+      `).join('');
+      return `
+        <article class="card ${hidden ? 'hidden' : ''}" data-name="${escapeHtml(c.name)}" data-category="${escapeHtml(c.category)}">
+          <h2>${escapeHtml(c.name)} <span class="cat-tag">${escapeHtml(c.category)}</span></h2>
+          <p class="desc">${escapeHtml(c.desc)}</p>
+          <div class="import-line">${escapeHtml(c.import)}</div>
+          <pre><code>${escapeHtml(c.example)}</code></pre>
+          ${propsRows ? `<table class="props-table"><thead><tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th></tr></thead><tbody>${propsRows}</tbody></table>` : ''}
+        </article>
+      `;
+    }
+
+    function render() {
+      document.getElementById('grid').innerHTML = COMPONENTS.map(renderCard).join('');
+      const catEl = document.getElementById('categories');
+      catEl.innerHTML = '<button type="button" class="cat-btn' + (activeCategory === '' ? ' active' : '') + '" data-cat="">Tous</button>' +
+        categories.map(cat => '<button type="button" class="cat-btn' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + escapeHtml(cat) + '">' + escapeHtml(cat) + '</button>').join('');
+    }
+
+    let searchVal = '';
+    document.getElementById('search').addEventListener('input', (e) => {
+      searchVal = (e.target.value || '').trim().toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const name = (card.dataset.name || '').toLowerCase();
+        const category = (card.dataset.category || '').toLowerCase();
+        const desc = (card.querySelector('.desc') || {}).textContent || '';
+        const match = !searchVal || name.includes(searchVal) || category.includes(searchVal) || desc.toLowerCase().includes(searchVal);
+        card.classList.toggle('hidden', !match || (activeCategory && card.dataset.category !== activeCategory));
+      });
+    });
+
+    document.getElementById('categories').addEventListener('click', (e) => {
+      const btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      activeCategory = (btn.dataset.cat || '').trim();
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.card').forEach(card => {
+        const matchCat = !activeCategory || card.dataset.category === activeCategory;
+        const text = (document.getElementById('search').value || '').trim().toLowerCase();
+        const name = (card.dataset.name || '').toLowerCase();
+        const category = (card.dataset.category || '').toLowerCase();
+        const desc = (card.querySelector('.desc') || {}).textContent || '';
+        const matchSearch = !text || name.includes(text) || category.includes(text) || desc.toLowerCase().includes(text);
+        card.classList.toggle('hidden', !matchCat || !matchSearch);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>

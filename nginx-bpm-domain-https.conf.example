@@ -1,0 +1,47 @@
+# Configuration Nginx HTTPS complète pour Blueprint Modular (à utiliser après Certbot)
+# 1. Obtenir le certificat : sudo certbot certonly --nginx -d VOTRE_DOMAINE.fr -d www.VOTRE_DOMAINE.fr
+# 2. Remplacer VOTRE_DOMAINE.fr par votre domaine dans tout ce fichier
+# 3. Sur le VPS : sudo cp nginx-bpm-domain-https.conf.example /etc/nginx/sites-available/VOTRE_DOMAINE.fr
+# 4. Activer : sudo ln -sf /etc/nginx/sites-available/VOTRE_DOMAINE.fr /etc/nginx/sites-enabled/
+# 5. Tester : sudo nginx -t && sudo systemctl reload nginx
+# Voir DEPLOIEMENT_DOMAINE.md pour l'ordre complet et le renouvellement SSL.
+
+# Redirection HTTP → HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name VOTRE_DOMAINE.fr www.VOTRE_DOMAINE.fr;
+    return 301 https://$server_name$request_uri;
+}
+
+# HTTPS
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name VOTRE_DOMAINE.fr www.VOTRE_DOMAINE.fr;
+
+    ssl_certificate /etc/letsencrypt/live/VOTRE_DOMAINE.fr/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/VOTRE_DOMAINE.fr/privkey.pem;
+
+    root /var/www/blueprint-modular;
+    index index.html;
+
+    location = / {
+        try_files /index.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location = /components {
+        try_files /components.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location = /reference {
+        try_files /reference.html =404;
+        add_header Content-Type "text/html; charset=utf-8";
+    }
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+}

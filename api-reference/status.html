@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status — API Reference — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="text.html">Text</a>
+      <a href="data.html">Data</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="charts.html">Charts</a>
+      <a href="inputs.html">Inputs</a>
+      <a href="layout.html">Layout</a>
+      <a href="panels.html">Panels</a>
+      <a href="media.html">Media</a>
+      <a href="status.html" class="active">Status</a>
+      <a href="chat.html">Chat</a>
+      <a href="config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Status</h1>
+      <p class="lead">Indicateurs de chargement et retours : <code>bpm.spinner</code>, <code>bpm.progress</code>, <code>bpm.toast</code>, <code>bpm.status</code>, <code>bpm.exception</code>.</p>
+      <h2>Mapping Streamlit → BPM</h2>
+      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+        <tbody>
+          <tr><td>st.spinner()</td><td>bpm.spinner()</td></tr>
+          <tr><td>st.progress()</td><td>bpm.progress()</td></tr>
+          <tr><td>st.status()</td><td>bpm.status()</td></tr>
+          <tr><td>st.toast()</td><td>bpm.toast()</td></tr>
+          <tr><td>st.balloons()</td><td>bpm.balloons()</td></tr>
+          <tr><td>st.snow()</td><td>bpm.snow()</td></tr>
+          <tr><td>st.exception()</td><td>bpm.exception()</td></tr>
+        </tbody>
+      </table>
+      <h2>Exemples</h2>
+      <pre><code>import bpm
+import time
+
+with bpm.spinner("Chargement..."):
+    time.sleep(2)
+
+bpm.progress(0.75, text="75 %")
+bpm.toast("Terminé !")
+bpm.balloons()
+bpm.snow()
+
+with bpm.status("Traitement en cours"):
+    bpm.write("Étape 1...")
+    bpm.write("Étape 2...")
+
+try:
+    raise ValueError("Erreur exemple")
+except Exception as e:
+    bpm.exception(e)</code></pre>
+      <p><strong>Preview live :</strong> <a href="https://sandbox.beam-consulting.fr?component=bpm.spinner" target="_blank" rel="noopener">sandbox — bpm.status</a></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Troubleshooting — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="faq.html">FAQ</a>
+      <a href="troubleshooting.html" class="active">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Troubleshooting</h1>
+      <p class="lead">Dépannage courant pour les apps Blueprint Modular.</p>
+      <h2>L'app ne démarre pas</h2>
+      <ul>
+        <li>Vérifier que <strong>Python 3.9+</strong> est utilisé : <code>python --version</code>.</li>
+        <li>Vérifier l'installation : <code>pip show blueprint-modular</code>.</li>
+        <li>Vérifier que le fichier passé à <code>bpm run</code> existe et est exécutable (pas d'erreur d'import au démarrage).</li>
+      </ul>
+      <h2>Port déjà utilisé</h2>
+      <p>Changer le port : <code>bpm run app.py --server.port=8502</code> (ou l'option équivalente selon la CLI BPM).</p>
+      <h2>Composants qui ne s'affichent pas</h2>
+      <ul>
+        <li>Vérifier la console du navigateur (erreurs JS, blocage d'iframe si sandbox).</li>
+        <li>S'assurer que l'URL du sandbox (<code>sandbox.beam-consulting.fr</code>) est accessible depuis le réseau du déploiement.</li>
+      </ul>
+      <h2>Session state perdu</h2>
+      <p>Le session state est lié à la session utilisateur. En cas de rechargement forcé ou de déploiement sans persistance, l'état peut être réinitialisé. Pour des données persistantes, utiliser une DB ou un stockage externe.</p>
+      <p><strong>Voir aussi :</strong> <a href="faq.html">FAQ</a> | <a href="../deploy/platforms.html">Deploy — Platforms</a></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

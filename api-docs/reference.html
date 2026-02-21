@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width:device-width, initial-scale=1" />
+  <title>API Reference — Components Blueprint Modular</title>
+  <meta name="description" content="Référence API des composants Blueprint Modular (BPM). Signature, paramètres et exemples." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Palette Blueprint Modular */
+    :root {
+      --bg: #ffffff;
+      --bg-card: #f6f6f6;
+      --bg-code: #f0f0f0;
+      --fg: #333;
+      --muted: #666;
+      --bleu-profond: #1A4B8F;
+      --bleu-cyan: #00A3E0;
+      --vert-menthe: #45D09E;
+      --degrade-lumiere: #B2EBF2;
+      --accent: var(--bleu-cyan);
+      --border: rgb(237, 237, 237);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+    .nav a:hover { color: var(--accent); }
+    .nav .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; }
+    .nav .brand .brand-logo { height: 32px; width: auto; max-width: 48px; object-fit: contain; flex-shrink: 0; }
+    .nav .brand .word-blueprint { color: var(--bleu-profond); }
+    .nav .brand .word-modular { color: var(--bleu-cyan); }
+    .layout {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 1.5rem 1rem 2rem;
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .sidebar a {
+      display: block;
+      padding: 0.35rem 0;
+      font-size: 0.9rem;
+      color: var(--fg);
+      text-decoration: none;
+    }
+    .sidebar a:hover { color: var(--accent); }
+    .main {
+      flex: 1;
+      padding: 2rem 2.5rem 3rem;
+      min-width: 0;
+    }
+    .main h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+    .main .lead {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .main h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      color: var(--fg);
+    }
+    .main p { margin-bottom: 0.75rem; font-size: 0.95rem; color: var(--fg); }
+    .main table {
+      width: 100%;
+      font-size: 0.9rem;
+      border-collapse: collapse;
+      margin: 0.75rem 0 1.5rem;
+    }
+    .main th, .main td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .main th { background: var(--bg-code); color: var(--muted); font-weight: 500; }
+    .main td:first-child { font-family: source-code-pro, Menlo, Monaco, Consolas, monospace; color: var(--accent); }
+    .main pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 1.5rem;
+    }
+    .main pre code { color: #333; font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
+    .main code { background: var(--bg-code); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    .main .example-title { font-weight: 600; margin: 1.25rem 0 0.5rem; font-size: 0.95rem; }
+    .footer { margin-top: 3rem; padding: 1rem 2.5rem; font-size: 0.875rem; color: var(--muted); border-top: 1px solid var(--border); }
+    .footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; max-height: none; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/api/docs" class="brand">
+      <img src="/Logo-BPM-seul.png" alt="" class="brand-logo" />
+      <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
+    </a>
+    <a href="/api/docs/components">Components</a>
+    <a href="/api/docs/reference">API Reference</a>
+  </nav>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Data elements</h3>
+      <a href="#metric">Metric</a>
+      <a href="#table">Table</a>
+      <h3>Widgets</h3>
+      <a href="#button">Button</a>
+      <a href="#selectbox">Selectbox</a>
+      <a href="#numberinput">NumberInput</a>
+      <a href="#dateinput">DateInput</a>
+      <a href="#colorpicker">ColorPicker</a>
+      <a href="#tabs">Tabs</a>
+      <h3>Feedback</h3>
+      <a href="#message">Message</a>
+      <a href="#modal">Modal</a>
+      <a href="#toast">Toast</a>
+      <a href="#spinner">Spinner</a>
+      <a href="#tooltip">Tooltip</a>
+      <h3>Layout & Structure</h3>
+      <a href="#title">Title</a>
+      <a href="#panel">Panel</a>
+      <a href="#box">Box</a>
+      <a href="#expander">Expander</a>
+    </aside>
+
+    <main class="main">
+      <!-- Metric -->
+      <section id="metric">
+        <h1>Metric</h1>
+        <p class="lead">Affiche un indicateur avec un libellé, une valeur et un delta optionnel (variation positive/négative).</p>
+
+        <h2>Signature</h2>
+        <pre><code>import { Metric } from './bpm';
+
+&lt;Metric
+  label={string}
+  value={number|string}
+  delta={number|undefined}
+  deltaType="normal" | "inverse"
+  deltaDecimals={number}
+  currency={string}
+  help={string|null}
+/&gt;</code></pre>
+
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>label</td><td>str</td><td>—</td><td>Titre ou en-tête de la métrique.</td></tr>
+            <tr><td>value</td><td>number, string, or None</td><td>—</td><td>Valeur affichée. <code>null</code> ou non défini est rendu comme un tiret long.</td></tr>
+            <tr><td>delta</td><td>number or None</td><td>—</td><td>Variation affichée avec une flèche (▲ si positif, ▼ si négatif). Couleur selon <code>deltaType</code>. Si <code>null</code>, pas de flèche.</td></tr>
+            <tr><td>deltaType</td><td>str</td><td>"normal"</td><td><strong>"normal"</strong> : positif = vert, négatif = rouge. <strong>"inverse"</strong> : positif = rouge, négatif = vert (ex. coûts).</td></tr>
+            <tr><td>deltaDecimals</td><td>number</td><td>0</td><td>Nombre de décimales pour l'affichage du delta.</td></tr>
+            <tr><td>currency</td><td>str</td><td>"EUR"</td><td>Symbole pour le delta (EUR, USD, GBP, JPY, CHF, CAD, AUD). Chaîne vide pour un pourcentage.</td></tr>
+            <tr><td>help</td><td>str or None</td><td>null</td><td>Info-bulle affichée à côté du libellé (icône ⓘ).</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Examples</h2>
+        <p class="example-title">Example 1: Afficher une métrique</p>
+        <pre><code>&lt;Metric label="Valorisation" value={12345.67} delta={+250.5} currency="EUR" /&gt;</code></pre>
+
+        <p class="example-title">Example 2: Plusieurs métriques côte à côte</p>
+        <pre><code>import { Metric } from './bpm';
+
+&lt;div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}&gt;
+  &lt;Metric label="Valorisation" value={valorisation} delta={deltaVal} currency="EUR" /&gt;
+  &lt;Metric label="Positions" value={nbPositions} /&gt;
+  &lt;Metric label="Valeur nette" value={valeurNette} delta={deltaNet} currency="EUR" /&gt;
+&lt;/div&gt;</code></pre>
+
+        <p class="example-title">Example 3: Inverser la couleur du delta</p>
+        <p>Pour un indicateur où une baisse est positive (ex. coût), utilisez <code>deltaType="inverse"</code>.</p>
+        <pre><code>&lt;Metric
+  label="Coût"
+  value={4200}
+  delta={-150}
+  deltaType="inverse"
+  currency="EUR"
+/&gt;</code></pre>
+      </section>
+
+      <!-- Button -->
+      <section id="button">
+        <h1>Button</h1>
+        <p class="lead">Bouton avec variantes (primary, secondary, danger) et tailles (small, medium, large).</p>
+
+        <h2>Signature</h2>
+        <pre><code>import { Button } from './bpm';
+
+&lt;Button
+  onClick={function}
+  variant="primary" | "secondary" | "danger"
+  size="small" | "medium" | "large"
+  disabled={boolean}
+  fullWidth={boolean}
+  type="button" | "submit"
+&gt;
+  {children}
+&lt;/Button&gt;</code></pre>
+
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>variant</td><td>str</td><td>"primary"</td><td><strong>primary</strong> : accent. <strong>secondary</strong> : neutre. <strong>danger</strong> : suppression.</td></tr>
+            <tr><td>size</td><td>str</td><td>"medium"</td><td>small, medium, large.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le bouton.</td></tr>
+            <tr><td>fullWidth</td><td>bool</td><td>false</td><td>Le bouton occupe toute la largeur disponible.</td></tr>
+            <tr><td>type</td><td>str</td><td>"button"</td><td>type HTML : button ou submit.</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Examples</h2>
+        <p class="example-title">Example 1: Bouton primary</p>
+        <pre><code>&lt;Button onClick={() => save()} variant="primary"&gt;Enregistrer&lt;/Button&gt;</code></pre>
+
+        <p class="example-title">Example 2: Bouton danger et small</p>
+        <pre><code>&lt;Button onClick={() => confirmDelete()} variant="danger" size="small"&gt;Supprimer&lt;/Button&gt;</code></pre>
+      </section>
+
+      <!-- Selectbox -->
+      <section id="selectbox">
+        <h1>Selectbox</h1>
+        <p class="lead">Liste déroulante avec options, label, aide et placeholder. Gère le clic extérieur et Escape.</p>
+
+        <h2>Signature</h2>
+        <pre><code>import { Selectbox } from './bpm';
+
+&lt;Selectbox
+  label={string}
+  options={Array&lt;{ value, label }&gt;}
+  value={any}
+  onChange={function}
+  placeholder="Sélectionner..."
+  disabled={boolean}
+  required={boolean}
+  help={string|null}
+/&gt;</code></pre>
+
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>label</td><td>str</td><td>—</td><td>Libellé au-dessus du champ.</td></tr>
+            <tr><td>options</td><td>array</td><td>[]</td><td>Tableau d’objets <code>{ value, label }</code>.</td></tr>
+            <tr><td>value</td><td>any</td><td>—</td><td>Valeur sélectionnée (contrôlée).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur lors du changement.</td></tr>
+            <tr><td>placeholder</td><td>str</td><td>"Sélectionner..."</td><td>Texte affiché quand aucune valeur n’est sélectionnée.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le select.</td></tr>
+            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte d’aide.</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Examples</h2>
+        <p class="example-title">Example 1: Liste simple</p>
+        <pre><code>&lt;Selectbox
+  label="Devise"
+  options={[{ value: 'EUR', label: 'Euro' }, { value: 'USD', label: 'Dollar' }]}
+  value={currency}
+  onChange={setCurrency}
+/&gt;</code></pre>
+      </section>
+
+      <!-- Table -->
+      <section id="table">
+        <h1>Table</h1>
+        <p class="lead">Tableau triable. Colonnes avec <code>key</code>, <code>label</code>, optionnellement <code>align</code>. Données = tableau d’objets.</p>
+
+        <h2>Signature</h2>
+        <pre><code>import { Table } from './bpm';
+
+&lt;Table
+  columns={Array&lt;{ key, label, align? }&gt;}
+  data={Array&lt;object&gt;}
+  striped={boolean}
+  hover={boolean}
+  onRowClick={function}
+  defaultSortColumn={string|null}
+  defaultSortDirection="asc" | "desc"
+  name={string|null}
+  keyColumn={string|null}
+/&gt;</code></pre>
+
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>columns</td><td>array</td><td>—</td><td><code>{ key, label, align? }</code>. <code>key</code> utilisé pour le tri si présent.</td></tr>
+            <tr><td>data</td><td>array</td><td>—</td><td>Lignes (objets). Les clés doivent correspondre aux <code>key</code> des colonnes.</td></tr>
+            <tr><td>striped</td><td>bool</td><td>true</td><td>Lignes alternées.</td></tr>
+            <tr><td>hover</td><td>bool</td><td>true</td><td>Surbrillance au survol.</td></tr>
+            <tr><td>onRowClick</td><td>function</td><td>—</td><td>Appelé avec la ligne (row) au clic.</td></tr>
+            <tr><td>defaultSortColumn</td><td>str or null</td><td>null</td><td>Colonne de tri initiale.</td></tr>
+            <tr><td>defaultSortDirection</td><td>str</td><td>"asc"</td><td>asc ou desc.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- NumberInput, DateInput, ColorPicker, Tabs (résumés) -->
+      <section id="numberinput">
+        <h1>NumberInput</h1>
+        <p class="lead">Champ numérique avec label, min/max/step, aide. Contrôlé ou non contrôlé.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;NumberInput label="Montant" value={n} onChange={setN} min={0} max={100} step={1} disabled={false} help={null} /&gt;</code></pre>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
+            <tr><td>value</td><td>number</td><td>—</td><td>Valeur (contrôlée).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur (number ou string en mode contrôlé).</td></tr>
+            <tr><td>min, max, step</td><td>number or null</td><td>null, null, 1</td><td>Contraintes et pas.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le champ.</td></tr>
+            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="dateinput">
+        <h1>DateInput</h1>
+        <p class="lead">Sélecteur de date (type date) avec label, min/max et aide.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;DateInput label="Date" value={date} onChange={setDate} min={minDate} max={maxDate} disabled={false} /&gt;</code></pre>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
+            <tr><td>value</td><td>Date or string</td><td>—</td><td>Valeur (objet Date ou chaîne ISO).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec Date ou null.</td></tr>
+            <tr><td>min, max</td><td>Date or string</td><td>null</td><td>Bornes du sélecteur.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="colorpicker">
+        <h1>ColorPicker</h1>
+        <p class="lead">Sélecteur de couleur (input color) avec label et valeur hex.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;ColorPicker label="Couleur" value={color} onChange={setColor} disabled={false} help={null} /&gt;</code></pre>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
+            <tr><td>value</td><td>str</td><td>"#000000"</td><td>Couleur hexadécimale.</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur hex.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tabs">
+        <h1>Tabs</h1>
+        <p class="lead">Onglets avec contenu. <code>tabs</code> = tableau de <code>{ label, content }</code> ou de strings.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Tabs tabs={[{ label: 'A', content: &lt;p&gt;Contenu A&lt;/p&gt; }, { label: 'B', content: &lt;p&gt;Contenu B&lt;/p&gt; }]} defaultTab={0} onChange={(index) => {}} /&gt;</code></pre>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>tabs</td><td>array</td><td>[]</td><td><code>{ label, content }</code> ou string (label seul).</td></tr>
+            <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de l’onglet actif au montage.</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec l’index lors du changement d’onglet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Feedback -->
+      <section id="message">
+        <h1>Message</h1>
+        <p class="lead">Bloc de message avec type info, success, warning ou error.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Message type="info" | "success" | "warning" | "error"&gt;{children}&lt;/Message&gt;</code></pre>
+      </section>
+
+      <section id="modal">
+        <h1>Modal</h1>
+        <p class="lead">Fenêtre modale avec titre, fermeture Escape et clic sur le fond. Rendu en portail.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Modal isOpen={open} onClose={() => setOpen(false)} title="Titre" size="medium" | "small" | "large" showCloseButton={true}&gt;{children}&lt;/Modal&gt;</code></pre>
+      </section>
+
+      <section id="toast">
+        <h1>Toast</h1>
+        <p class="lead">Notifications toast. Envelopper l’app avec <code>ToastProvider</code> et utiliser le hook <code>useToast()</code>.</p>
+        <h2>Signature</h2>
+        <pre><code>import { ToastProvider, useToast } from './bpm';
+
+// À la racine
+&lt;ToastProvider&gt;{children}&lt;/ToastProvider&gt;
+
+// Dans un composant
+const { showToast } = useToast();
+showToast(message, type, duration, title, pageName, pageIcon);</code></pre>
+      </section>
+
+      <section id="spinner">
+        <h1>Spinner</h1>
+        <p class="lead">Indicateur de chargement avec texte optionnel et tailles small, medium, large.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Spinner text="Chargement..." size="medium" | "small" | "large" /&gt;</code></pre>
+      </section>
+
+      <section id="tooltip">
+        <h1>Tooltip</h1>
+        <p class="lead">Infobulle (MUI). <code>text</code> = contenu, <code>position</code> = top, bottom, left, right, top-start, etc.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Tooltip text="Explication" position="top"&gt;&lt;span&gt;Survoler&lt;/span&gt;&lt;/Tooltip&gt;</code></pre>
+      </section>
+
+      <!-- Layout & Structure -->
+      <section id="title">
+        <h1>Title</h1>
+        <p class="lead">Titre avec niveaux 1–4. Niveau 1 affiche le logo (optionnel <code>onLogoClick</code>). Exporte Title1, Title2, Title3, Title4.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Title level={1|2|3|4} onLogoClick={function|null}&gt;{children}&lt;/Title&gt;
+// ou
+&lt;Title1&gt;Mon écran&lt;/Title1&gt;
+&lt;Title2&gt;Sous-titre&lt;/Title2&gt;</code></pre>
+      </section>
+
+      <section id="panel">
+        <h1>Panel</h1>
+        <p class="lead">Panneau informatif (alertes, états). Variantes : info, warning, error, success.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Panel variant="info" | "warning" | "error" | "success" title="Titre" icon={node|false}&gt;{children}&lt;/Panel&gt;</code></pre>
+      </section>
+
+      <section id="box">
+        <h1>Box</h1>
+        <p class="lead">Bloc avec titre, statut, détails. Optionnel <code>isConnected</code> pour style vert/rouge.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Box title="Connexion" status="..." details="..." isConnected={boolean} actions={node} /&gt;</code></pre>
+      </section>
+
+      <section id="expander">
+        <h1>Expander</h1>
+        <p class="lead">Bloc repliable avec titre. <code>defaultExpanded</code> pour ouvrir par défaut.</p>
+        <h2>Signature</h2>
+        <pre><code>&lt;Expander title="Détails" defaultExpanded={false}&gt;{children}&lt;/Expander&gt;</code></pre>
+      </section>
+    </main>
+  </div>
+
+  <p class="footer">BEAM Consulting · <a href="https://beam-consulting.fr">beam-consulting.fr</a></p>
+</body>
+</html>

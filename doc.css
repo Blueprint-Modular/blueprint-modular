@@ -1,0 +1,88 @@
+/* Blueprint Modular — Site doc (thème BPM, accent #d4af37, dark mode) */
+:root {
+  --bpm-bg: #0e1117;
+  --bpm-bg-secondary: #262730;
+  --bpm-bg-code: #1a1d24;
+  --bpm-fg: #fafafa;
+  --bpm-muted: #9ca3af;
+  --bpm-accent: #d4af37;
+  --bpm-border: #374151;
+  --bpm-font: "Inter", "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--bpm-font);
+  background: var(--bpm-bg);
+  color: var(--bpm-fg);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.doc-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--bpm-border);
+  flex-wrap: wrap;
+}
+.doc-nav a { color: var(--bpm-muted); text-decoration: none; font-size: 0.95rem; }
+.doc-nav a:hover { color: var(--bpm-accent); }
+.doc-nav .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; }
+.doc-nav .brand .brand-logo { height: 32px; width: auto; max-width: 48px; object-fit: contain; flex-shrink: 0; }
+.doc-nav .brand .word-blueprint { color: #7dd3fc; }
+.doc-nav .brand .word-modular { color: var(--bpm-accent); }
+.doc-layout { display: flex; max-width: 1400px; margin: 0 auto; }
+.doc-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 1.5rem 1rem 2rem;
+  border-right: 1px solid var(--bpm-border);
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.doc-sidebar h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bpm-muted);
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+}
+.doc-sidebar h3:first-child { margin-top: 0; }
+.doc-sidebar a { display: block; padding: 0.35rem 0; font-size: 0.9rem; color: var(--bpm-fg); text-decoration: none; }
+.doc-sidebar a:hover { color: var(--bpm-accent); }
+.doc-sidebar a.active { color: var(--bpm-accent); font-weight: 500; }
+.doc-main { flex: 1; padding: 2rem 2.5rem 3rem; min-width: 0; }
+.doc-main h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.doc-main .lead { color: var(--bpm-muted); font-size: 1rem; margin-bottom: 1.5rem; }
+.doc-main h2 { font-size: 1.1rem; font-weight: 600; margin: 2rem 0 0.75rem; }
+.doc-main p { margin-bottom: 0.75rem; font-size: 0.95rem; }
+.doc-main table { width: 100%; font-size: 0.9rem; border-collapse: collapse; margin: 0.75rem 0 1.5rem; }
+.doc-main th, .doc-main td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--bpm-border); vertical-align: top; }
+.doc-main th { background: var(--bpm-bg-secondary); color: var(--bpm-muted); font-weight: 500; }
+.doc-main td:first-child { font-family: ui-monospace, monospace; color: var(--bpm-accent); }
+.doc-main pre {
+  background: var(--bpm-bg-code);
+  border: 1px solid var(--bpm-border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  margin: 0.75rem 0 1.5rem;
+}
+.doc-main pre code { color: var(--bpm-fg); font-family: ui-monospace, monospace; }
+.doc-main code { background: var(--bpm-bg-secondary); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+.doc-main .example-title { font-weight: 600; margin: 1.25rem 0 0.5rem; font-size: 0.95rem; }
+.doc-main .info-box { background: var(--bpm-bg-secondary); border-left: 4px solid var(--bpm-accent); padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+.doc-main ul { margin: 0.5rem 0 1rem 1.5rem; }
+.doc-footer { margin-top: 3rem; padding-top: 1rem; font-size: 0.875rem; color: var(--bpm-muted); border-top: 1px solid var(--bpm-border); }
+.doc-footer a { color: var(--bpm-accent); text-decoration: none; }
+.doc-cta { display: inline-block; background: var(--bpm-accent); color: #0e1117; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 0.5rem; font-size: 0.9rem; }
+.doc-cta:hover { filter: brightness(1.15); }
+@media (max-width: 768px) {
+  .doc-layout { flex-direction: column; }
+  .doc-sidebar { width: 100%; max-height: none; border-right: none; border-bottom: 1px solid var(--bpm-border); }
+}

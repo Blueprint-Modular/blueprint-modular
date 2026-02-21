@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panels — API Reference — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="text.html">Text</a>
+      <a href="data.html">Data</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="charts.html">Charts</a>
+      <a href="inputs.html">Inputs</a>
+      <a href="layout.html">Layout</a>
+      <a href="panels.html" class="active">Panels</a>
+      <a href="media.html">Media</a>
+      <a href="status.html">Status</a>
+      <a href="chat.html">Chat</a>
+      <a href="config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Panels</h1>
+      <p class="lead">Blocs d'information : <code>bpm.panel</code> avec variantes <strong>info</strong>, <strong>warning</strong>, <strong>error</strong>, <strong>success</strong>. Équivalent unifié de st.info(), st.warning(), st.error(), st.success().</p>
+      <h2>Signature</h2>
+      <pre><code>bpm.panel(body, variant='info', title=None, icon=True)</code></pre>
+      <h2>Exemples</h2>
+      <pre><code>import bpm
+
+bpm.panel("Message informatif.", variant="info")
+bpm.panel("Attention à cette action.", variant="warning")
+bpm.panel("Une erreur s'est produite.", variant="error")
+bpm.panel("Opération réussie.", variant="success")
+bpm.panel("Détails ici.", variant="info", title="À savoir")</code></pre>
+      <p><strong>Preview live :</strong> <a href="https://sandbox.beam-consulting.fr?component=bpm.panel" target="_blank" rel="noopener">sandbox — bpm.panel</a></p>
+      <p><small>Variables CSS : <code>--bpm-panel-info-bg</code>, <code>--bpm-panel-warning-border</code>, etc.</small></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

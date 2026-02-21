@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>First app — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="installation.html">Installation</a>
+      <a href="fundamentals.html">Fundamentals</a>
+      <a href="first-app.html" class="active">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>First app</h1>
+      <p class="lead">Tutoriel : du vide à une app fonctionnelle en quelques minutes.</p>
+      <h2>1. Créer un fichier <code>app.py</code></h2>
+      <pre><code>import bpm
+
+bpm.title("Ma première app BPM")</code></pre>
+      <h2>2. Ajouter une métrique et un tableau</h2>
+      <pre><code>import bpm
+import pandas as pd
+
+bpm.title("Ma première app BPM")
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+bpm.metric("Lignes", len(df))
+bpm.table(df)</code></pre>
+      <h2>3. Ajouter un toggle qui conditionne l'affichage</h2>
+      <pre><code>if bpm.toggle("Afficher le tableau"):
+    bpm.table(df)</code></pre>
+      <h2>4. Lancer en local</h2>
+      <pre><code>bpm run app.py</code></pre>
+      <p>Ouvrez l'URL affichée (ex. <code>http://localhost:8501</code>).</p>
+      <h2>5. Accessible en réseau</h2>
+      <p>Par défaut, le serveur écoute sur toutes les interfaces. Sur le même réseau, d'autres machines peuvent accéder à l'app via l'IP de votre machine.</p>
+      <p><strong>Ensuite :</strong> <a href="../deploy/concepts.html">Deploy — Concepts</a> pour mettre en production.</p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

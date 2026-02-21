@@ -1,0 +1,2 @@
+# Blueprint Modular — site doc (www.blueprint-modular.com)
+streamlit>=1.28.0

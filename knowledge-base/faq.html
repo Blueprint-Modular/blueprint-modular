@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="../api-reference/text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="../api-reference/text.html">Text</a>
+      <a href="../api-reference/data.html">Data</a>
+      <a href="../api-reference/metrics.html">Metrics</a>
+      <a href="../api-reference/charts.html">Charts</a>
+      <a href="../api-reference/inputs.html">Inputs</a>
+      <a href="../api-reference/layout.html">Layout</a>
+      <a href="../api-reference/panels.html">Panels</a>
+      <a href="../api-reference/media.html">Media</a>
+      <a href="../api-reference/status.html">Status</a>
+      <a href="../api-reference/chat.html">Chat</a>
+      <a href="../api-reference/config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="faq.html" class="active">FAQ</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>FAQ</h1>
+      <p class="lead">Questions fréquentes sur Blueprint Modular.</p>
+      <h2>Installation et démarrage</h2>
+      <p><strong>Q : Quelle version de Python ?</strong> — Python 3.9 ou supérieur.</p>
+      <p><strong>Q : Comment lancer mon app ?</strong> — <code>bpm run app.py</code> depuis le dossier contenant <code>app.py</code>.</p>
+      <h2>Comportement</h2>
+      <p><strong>Q : Pourquoi l'app se recharge à chaque action ?</strong> — BPM, comme Streamlit, réexécute le script à chaque interaction. Utilisez <code>bpm.session_state</code> pour conserver des valeurs.</p>
+      <p><strong>Q : Différence entre composants natifs et sandbox ?</strong> — Les composants natifs sont rendus côté serveur BPM ; certains UIs avancés sont servis via une iframe (sandbox). L'API reste la même pour l'utilisateur.</p>
+      <h2>Déploiement</h2>
+      <p><strong>Q : Peut-on déployer sur un VPS ?</strong> — Oui. Voir <a href="../deploy/platforms.html">Deploy — Platforms</a>.</p>
+      <p><strong>Q : BPM Cloud ?</strong> — Non, pas de service cloud dédié pour l'instant.</p>
+      <p><strong>Voir aussi :</strong> <a href="troubleshooting.html">Troubleshooting</a> pour le dépannage.</p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

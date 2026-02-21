@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inputs — API Reference — Blueprint Modular</title>
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../doc.css" />
+</head>
+<body>
+  <nav class="doc-nav">
+    <a href="../index.html" class="brand"><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
+    <a href="../get-started/installation.html">Get started</a>
+    <a href="text.html">API Reference</a>
+    <a href="../deploy/concepts.html">Deploy</a>
+    <a href="../cheat-sheet.html">Cheat sheet</a>
+  </nav>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <h3>Get started</h3>
+      <a href="../get-started/installation.html">Installation</a>
+      <a href="../get-started/fundamentals.html">Fundamentals</a>
+      <a href="../get-started/first-app.html">First app</a>
+      <h3>API Reference</h3>
+      <a href="text.html">Text</a>
+      <a href="data.html">Data</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="charts.html">Charts</a>
+      <a href="inputs.html" class="active">Inputs</a>
+      <a href="layout.html">Layout</a>
+      <a href="panels.html">Panels</a>
+      <a href="media.html">Media</a>
+      <a href="status.html">Status</a>
+      <a href="chat.html">Chat</a>
+      <a href="config.html">Config</a>
+      <h3>Deploy</h3>
+      <a href="../deploy/concepts.html">Concepts</a>
+      <a href="../deploy/platforms.html">Platforms</a>
+      <h3>Knowledge base</h3>
+      <a href="../knowledge-base/faq.html">FAQ</a>
+      <a href="../knowledge-base/troubleshooting.html">Troubleshooting</a>
+      <h3>Ressources</h3>
+      <a href="../cheat-sheet.html">Cheat sheet</a>
+    </aside>
+    <main class="doc-main">
+      <h1>Inputs</h1>
+      <p class="lead">Widgets de saisie et d'action : <code>bpm.button</code>, <code>bpm.toggle</code>, <code>bpm.select</code>, <code>bpm.slider</code>, <code>bpm.input</code>, <code>bpm.date_input</code>, etc.</p>
+      <h2>Mapping Streamlit → BPM (sélection)</h2>
+      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+        <tbody>
+          <tr><td>st.button()</td><td>bpm.button()</td></tr>
+          <tr><td>st.toggle()</td><td>bpm.toggle()</td></tr>
+          <tr><td>st.selectbox()</td><td>bpm.select()</td></tr>
+          <tr><td>st.slider()</td><td>bpm.slider()</td></tr>
+          <tr><td>st.text_input()</td><td>bpm.input()</td></tr>
+          <tr><td>st.number_input()</td><td>bpm.number_input()</td></tr>
+          <tr><td>st.date_input()</td><td>bpm.date_input()</td></tr>
+          <tr><td>st.download_button()</td><td>bpm.download_button()</td></tr>
+          <tr><td>st.file_uploader()</td><td>bpm.file_uploader()</td></tr>
+          <tr><td>st.color_picker()</td><td>bpm.color_picker()</td></tr>
+        </tbody>
+      </table>
+      <h2>Exemples</h2>
+      <pre><code>import bpm
+
+bpm.button("Cliquer")
+x = bpm.toggle("Activer")
+choice = bpm.select("Option", ["A", "B", "C"])
+val = bpm.slider("Valeur", 0, 100, 50)
+txt = bpm.input("Nom")
+n = bpm.number_input("Quantité", 0, 100, 10)
+d = bpm.date_input("Date")
+bpm.download_button("Télécharger", data=bytes(), file_name="file.csv")</code></pre>
+      <p><strong>Preview live :</strong> <a href="https://sandbox.beam-consulting.fr?component=bpm.toggle" target="_blank" rel="noopener">sandbox — bpm.inputs</a></p>
+      <p><small>Variables CSS : <code>--bpm-input-border</code>, <code>--bpm-accent</code>.</small></p>
+      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+    </main>
+  </div>
+</body>
+</html>

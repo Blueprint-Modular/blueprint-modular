@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>First app — Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../doc.css" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
 </head>
 <body>
   <nav class="doc-nav">
     <a href="https://blueprint-modular.com/" class="brand"><img src="../img/logo-bpm-nom.jpg" alt="" class="brand-logo" /><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
-    <a href="installation.html">Get started</a>
+    <a href="../get-started/installation.html">Get started</a>
     <a href="../components.html">Components</a>
     <a href="../api-reference/text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
@@ -53,32 +54,89 @@
       <a href="../cheat-sheet.html">Cheat sheet</a>
     </aside>
     <main class="doc-main">
-      <h1>First app</h1>
-      <p class="lead">Tutoriel : du vide à une app fonctionnelle en quelques minutes.</p>
-      <h2>1. Créer un fichier <code>app.py</code></h2>
-      <pre><code>import bpm
+      <nav class="breadcrumb">
+        <a href="../index.html">Accueil</a> › <a href="../index.html">Get started</a> › First app
+      </nav>
 
-bpm.title("Ma première app BPM")</code></pre>
-      <h2>2. Ajouter une métrique et un tableau</h2>
-      <pre><code>import bpm
+      <h1>Première app</h1>
+      <p class="lead">Tutoriel pas à pas : créer un dashboard de métriques de vente.</p>
+
+      <h2>Ce que vous allez créer</h2>
+      <p>Un dashboard de ventes avec 3 métriques, un tableau et un graphique d'évolution du CA.</p>
+      <div class="preview-placeholder" style="min-height:280px;">[ Screenshot résultat final : dashboard ventes ]</div>
+
+      <h2>Étape 1 — Créer le fichier</h2>
+      <pre><code class="language-bash">mkdir mon-dashboard &amp;&amp; cd mon-dashboard
+touch app.py</code></pre>
+
+      <h2>Étape 2 — Écrire l'app</h2>
+      <pre><code class="language-python">import bpm
 import pandas as pd
 
-bpm.title("Ma première app BPM")
-df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
-bpm.metric("Lignes", len(df))
+bpm.set_page_config(page_title="Dashboard Ventes", layout="wide")
+bpm.title("Dashboard Ventes")
+
+# Métriques
+col1, col2, col3 = bpm.columns(3)
+with col1:
+    bpm.metric("CA du mois", 142500, delta=3200)
+with col2:
+    bpm.metric("Commandes", 284, delta=-12)
+with col3:
+    bpm.metric("Panier moyen", 501.8, delta=15.2)
+
+# Données
+df = pd.DataFrame({
+    "Mois": ["Jan", "Fév", "Mar", "Avr", "Mai"],
+    "CA": [98000, 112000, 134000, 128000, 142500]
+})
+
+bpm.subheader("Évolution du CA")
+bpm.chart.line(df, x="Mois", y="CA")
+
+bpm.subheader("Détail par mois")
 bpm.table(df)</code></pre>
-      <h2>3. Ajouter un toggle qui conditionne l'affichage</h2>
-      <pre><code>if bpm.toggle("Afficher le tableau"):
-    bpm.table(df)</code></pre>
-      <h2>4. Lancer en local</h2>
-      <pre><code>bpm run app.py</code></pre>
-      <p>Ouvrez l'URL affichée (ex. <code>http://localhost:8501</code>).</p>
-      <h2>5. Accessible en réseau</h2>
-      <p>Par défaut, le serveur écoute sur toutes les interfaces. Sur le même réseau, d'autres machines peuvent accéder à l'app via l'IP de votre machine.</p>
-      <p><strong>Ensuite :</strong> <a href="../deploy/concepts.html">Deploy — Concepts</a> pour mettre en production.</p>
-      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div class="alert-body"><strong>Note</strong> — <code>bpm.columns</code> et <code>bpm.chart.line</code> sont prévus dans l'API ; l'implémentation actuelle propose <code>bpm.metric</code>, <code>bpm.table</code>, <code>bpm.title</code>, <code>bpm.write</code>, <code>bpm.button</code>, <code>bpm.panel</code>. Voir <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</div>
+      </div>
+
+      <h2>Étape 3 — Lancer</h2>
+      <pre><code class="language-bash">bpm run app.py</code></pre>
+      <p>Ouvrez <code>http://localhost:8501</code> dans votre navigateur.</p>
+
+      <h2>Résultat attendu</h2>
+      <div class="preview-placeholder" style="min-height:200px;">[ Screenshot : titre, 3 métriques, graphique, tableau ]</div>
+
+      <nav class="doc-pagination">
+        <a class="prev" href="fundamentals.html">← Précédent : Fundamentals</a>
+        <a class="next" href="../components.html">Suivant : Catalogue des composants →</a>
+      </nav>
+
+      <section class="whats-next">
+        <h2>Et maintenant ?</h2>
+        <ul>
+          <li><a href="../components.html">Catalogue des composants</a> — Découvrir tous les widgets</li>
+          <li><a href="../api-reference/metrics.html">API Reference — Metrics</a></li>
+          <li><a href="../deploy/concepts.html">Déployer</a> — Mettre en production</li>
+        </ul>
+      </section>
+
+      <section class="help-cta">
+        <p>Une question ou un retour ? Écrivez-nous à <a href="mailto:contact@blueprint-modular.com">contact@blueprint-modular.com</a>.</p>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-links">
+          <a href="../index.html">Documentation</a>
+          <a href="../cheat-sheet.html">Cheat sheet</a>
+          <a href="../knowledge-base/faq.html">FAQ</a>
+          <a href="../knowledge-base/reste-a-faire.html">Roadmap</a>
+        </div>
+        <div class="footer-meta">Blueprint Modular v0.1-alpha · Licence MIT</div>
+      </footer>
     </main>
   </div>
-<script src="/doc.js"></script>
+  <script src="/doc.js"></script>
 </body>
 </html>

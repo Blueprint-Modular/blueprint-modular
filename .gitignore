@@ -21,5 +21,14 @@ node_modules/
 # Build
 dist/
 
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+*.egg
+
 # Doublon (source = frontend/doc-app)
 doc-app/

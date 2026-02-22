@@ -1,46 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width:device-width, initial-scale=1" />
-  <title>Components Blueprint Modular</title>
-  <meta name="description" content="Bibliothèque de composants Blueprint Modular (BPM). Boutons, formulaires, tableaux, modales et plus." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalogue des composants — Blueprint Modular</title>
+  <meta name="description" content="Bibliothèque de composants BPM : texte, données, graphiques, inputs, layout, panels, médias, status, chat." />
   <link rel="icon" href="favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="doc.css" />
-  <style>
-    .doc-main .hero { text-align: center; margin-bottom: 2.5rem; }
-    .doc-main .hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .doc-main .hero p { color: var(--muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto 1.5rem; }
-    .doc-main .search-wrap { max-width: 400px; margin: 0 auto 2rem; }
-    .doc-main .search-wrap input { width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--fg); font-size: 0.95rem; }
-    .doc-main .search-wrap input:focus { outline: none; border-color: var(--accent); }
-    .doc-main .categories { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
-    .doc-main .cat-btn { padding: 0.4rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--muted); font-size: 0.85rem; cursor: pointer; font-family: inherit; }
-    .doc-main .cat-btn:hover, .doc-main .cat-btn.active { border-color: var(--accent); color: var(--accent); }
-    .doc-main .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
-    .doc-main .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: border-color 0.2s; }
-    .doc-main .card:hover { border-color: var(--accent); }
-    .doc-main .card.hidden { display: none; }
-    .doc-main .card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem; }
-    .doc-main .card .cat-tag { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; background: var(--bg-code); color: var(--muted); font-weight: 400; }
-    .doc-main .card .desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
-    .doc-main .card .import-line { font-size: 0.8rem; color: var(--accent); margin-bottom: 0.5rem; word-break: break-all; }
-    .doc-main .card pre { background: var(--bg-code); border-radius: 8px; padding: 0.75rem; font-size: 0.8rem; overflow-x: auto; margin-bottom: 0.75rem; border: 1px solid var(--border); }
-    .doc-main .card .props-table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
-    .doc-main .card .props-table th, .doc-main .card .props-table td { text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); }
-    .doc-main .card .props-table th { color: var(--muted); font-weight: 500; }
-    .doc-main .card .props-table td:first-child { color: var(--accent); font-family: ui-monospace, monospace; }
-  </style>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
 </head>
 <body>
   <nav class="doc-nav">
-    <a href="https://blueprint-modular.com/" class="brand">
-      <img src="img/logo-bpm-nom.jpg" alt="" class="brand-logo" />
-      <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
-    </a>
+    <a href="https://blueprint-modular.com/" class="brand"><img src="img/logo-bpm-nom.jpg" alt="" class="brand-logo" /><span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span></a>
     <a href="get-started/installation.html">Get started</a>
     <a href="components.html">Components</a>
     <a href="api-reference/text.html">API Reference</a>
@@ -48,7 +20,6 @@
     <a href="cheat-sheet.html">Cheat sheet</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
-
   <div class="doc-layout">
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
@@ -82,141 +53,177 @@
       <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
       <h3>Ressources</h3>
       <a href="cheat-sheet.html">Cheat sheet</a>
-      <a href="reference.html">Reference</a>
     </aside>
-
     <main class="doc-main">
-  <section class="hero">
-    <h1>Components Blueprint Modular</h1>
-    <p>Briques prêtes à l'emploi. Importez depuis <code>./bpm</code>, le reste est déjà fait.</p>
-    <div class="search-wrap">
-      <input type="text" id="search" placeholder="Rechercher un composant..." autocomplete="off" />
-    </div>
-    <div class="categories" id="categories"></div>
-  </section>
+      <nav class="breadcrumb">
+        <a href="index.html">Accueil</a> › Catalogue des composants
+      </nav>
 
-  <div class="grid" id="grid"></div>
-  </main>
+      <h1>Catalogue des composants</h1>
+      <p class="lead">Composants BPM par catégorie. Chaque carte renvoie vers la page API Reference correspondante.</p>
+
+      <p style="margin-bottom:1rem;"><button type="button" id="toggle-sort" class="doc-cta" style="font-size:0.85rem;padding:0.4rem 0.8rem;">Trier A→Z</button></p>
+
+      <section class="component-category" data-category="Texte">
+        <h2>📝 Texte</h2>
+        <p>Titres, texte, markdown, badge, code, formules.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.title, bpm.header, bpm.markdown, bpm.badge, bpm.code, bpm.latex ]</div></div>
+          <div class="component-code"><pre><code>bpm.title("Mon titre")
+bpm.markdown("**Gras** et *italique*")
+bpm.code("snippet")</code></pre></div>
+          <a href="api-reference/text.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Données">
+        <h2>📊 Données</h2>
+        <p>Métriques, tableaux, dataframe, JSON.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.metric, bpm.table, bpm.dataframe, bpm.json ]</div></div>
+          <div class="component-code"><pre><code>bpm.metric("CA", 142500, delta=3200)
+bpm.table(df)
+bpm.dataframe(df)</code></pre></div>
+          <a href="api-reference/metrics.html" class="component-link">Metrics →</a>
+          <a href="api-reference/data.html" class="component-link">Data →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Graphiques">
+        <h2>📈 Graphiques</h2>
+        <p>Ligne, barres, aires, nuage de points, Plotly.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.chart.line, bpm.chart.bar, bpm.chart.area, bpm.chart.scatter, bpm.chart.plotly ]</div></div>
+          <div class="component-code"><pre><code>bpm.chart.line(df, x="Mois", y="CA")
+bpm.chart.bar(df, x="Catégorie", y="Valeur")</code></pre></div>
+          <a href="api-reference/charts.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Inputs">
+        <h2>🎛️ Inputs</h2>
+        <p>Boutons, toggle, select, slider, input, date, fichier.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.button, bpm.toggle, bpm.select, bpm.slider, bpm.input, bpm.date_input, bpm.file_uploader ]</div></div>
+          <div class="component-code"><pre><code>bpm.button("Valider", key="ok")
+bpm.toggle("Activer", key="on")
+bpm.select("Choix", options=["A", "B"], key="choice")</code></pre></div>
+          <a href="api-reference/inputs.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Layout">
+        <h2>📐 Layout</h2>
+        <p>Colonnes, onglets, expander, sidebar, formulaire.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.columns, bpm.tabs, bpm.expander, bpm.sidebar, bpm.form ]</div></div>
+          <div class="component-code"><pre><code>col1, col2 = bpm.columns(2)
+with col1:
+    bpm.metric("A", 10)
+with col2:
+    bpm.metric("B", 20)</code></pre></div>
+          <a href="api-reference/layout.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Panels">
+        <h2>📋 Panels</h2>
+        <p>Panneaux info, warning, error, success.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.panel variants ]</div></div>
+          <div class="component-code"><pre><code>bpm.panel("Info", "Message", variant="info")
+bpm.panel("Attention", "Détail", variant="warning")</code></pre></div>
+          <a href="api-reference/panels.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Médias">
+        <h2>🖼️ Médias</h2>
+        <p>Image, audio, vidéo, PDF.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.image, bpm.audio, bpm.video, bpm.pdf ]</div></div>
+          <div class="component-code"><pre><code>bpm.image("https://example.com/img.png")
+bpm.audio("file.mp3")
+bpm.video("file.mp4")</code></pre></div>
+          <a href="api-reference/media.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Status">
+        <h2>⏳ Status</h2>
+        <p>Spinner, barre de progression, toast, skeleton, état vide.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.spinner, bpm.progress, bpm.toast, bpm.skeleton, bpm.empty_state ]</div></div>
+          <div class="component-code"><pre><code>bpm.spinner("Chargement...")
+bpm.progress(0.65, label="Avancement")
+bpm.toast("Enregistré.", type="success")</code></pre></div>
+          <a href="api-reference/status.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="component-category" data-category="Chat">
+        <h2>💬 Chat</h2>
+        <p>Messages chat, input, streaming.</p>
+        <div class="component-card">
+          <div class="component-preview"><div class="preview-placeholder">[ bpm.chat.message, bpm.chat.input, bpm.write_stream ]</div></div>
+          <div class="component-code"><pre><code>bpm.chat.message("Bonjour", role="user")
+bpm.chat.input(key="msg")
+bpm.write_stream(generator)</code></pre></div>
+          <a href="api-reference/chat.html" class="component-link">Voir l'API →</a>
+        </div>
+      </section>
+
+      <section class="whats-next">
+        <h2>Et maintenant ?</h2>
+        <ul>
+          <li><a href="api-reference/text.html">API Reference — Text</a></li>
+          <li><a href="api-reference/metrics.html">API Reference — Metrics</a></li>
+          <li><a href="get-started/first-app.html">First app</a> — Tutoriel pas à pas</li>
+        </ul>
+      </section>
+
+      <section class="help-cta">
+        <p>Une question ou un retour ? Écrivez-nous à <a href="mailto:contact@blueprint-modular.com">contact@blueprint-modular.com</a>.</p>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-links">
+          <a href="index.html">Documentation</a>
+          <a href="cheat-sheet.html">Cheat sheet</a>
+          <a href="knowledge-base/faq.html">FAQ</a>
+          <a href="knowledge-base/reste-a-faire.html">Roadmap</a>
+        </div>
+        <div class="footer-meta">Blueprint Modular v0.1-alpha · Licence MIT</div>
+      </footer>
+    </main>
   </div>
-
+  <script src="/doc.js"></script>
   <script>
-    const COMPONENTS = [
-      { id: 'Button', name: 'Button', category: 'Widgets', desc: 'Bouton avec variantes (primary, secondary, danger) et tailles (small, medium, large).', import: "import { Button } from './bpm';", example: '<Button onClick={() => {}} variant="primary">Valider</Button>', props: [{ name: 'variant', type: 'string', default: 'primary', desc: 'primary | secondary | danger' }, { name: 'size', type: 'string', default: 'medium', desc: 'small | medium | large' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }, { name: 'fullWidth', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Selectbox', name: 'Selectbox', category: 'Widgets', desc: 'Liste déroulante avec options, label, aide et placeholder. Gère le clic extérieur et Escape.', import: "import { Selectbox } from './bpm';", example: '<Selectbox label="Choix" options={[{value:\'a\',label:\'Option A\'}]} value={val} onChange={setVal} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'options', type: 'array', default: '[]', desc: '{ value, label }' }, { name: 'value', type: 'any', default: '-', desc: 'Valeur sélectionnée' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'placeholder', type: 'string', default: 'Sélectionner...', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'NumberInput', name: 'NumberInput', category: 'Widgets', desc: 'Champ numérique avec label, min/max/step, aide. Contrôlé ou non contrôlé.', import: "import { NumberInput } from './bpm';", example: '<NumberInput label="Montant" value={n} onChange={setN} min={0} max={100} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'number', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'min', type: 'number', default: 'null', desc: '' }, { name: 'max', type: 'number', default: 'null', desc: '' }, { name: 'step', type: 'number', default: '1', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'DateInput', name: 'DateInput', category: 'Widgets', desc: 'Sélecteur de date (type date) avec label, min/max et aide.', import: "import { DateInput } from './bpm';", example: '<DateInput label="Date" value={date} onChange={setDate} min={minDate} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'Date|string', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'min', type: 'Date|string', default: 'null', desc: '' }, { name: 'max', type: 'Date|string', default: 'null', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'ColorPicker', name: 'ColorPicker', category: 'Widgets', desc: 'Sélecteur de couleur (input color) avec label et valeur hex.', import: "import { ColorPicker } from './bpm';", example: '<ColorPicker label="Couleur" value={color} onChange={setColor} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'string', default: '#000000', desc: 'Hex' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Tabs', name: 'Tabs', category: 'Widgets', desc: 'Onglets avec contenu. tabs = [{ label, content }] ou tableau de strings.', import: "import { Tabs } from './bpm';", example: '<Tabs tabs={[{label:\'A\',content:<p>A</p>},{label:\'B\',content:<p>B</p>}]} defaultTab={0} onChange={fn} />', props: [{ name: 'tabs', type: 'array', default: '[]', desc: '{ label, content } ou string' }, { name: 'defaultTab', type: 'number', default: '0', desc: 'Index initial' }, { name: 'onChange', type: 'function', default: '-', desc: '(index) => {}' }] },
-      { id: 'Title', name: 'Title', category: 'Structure', desc: 'Titre avec niveaux 1–4. Niveau 1 affiche le logo (optionnel onLogoClick). Exporte Title1..Title4.', import: "import { Title, Title1, Title2 } from './bpm';", example: '<Title level={1}>Mon écran</Title> ou <Title2>Sous-titre</Title2>', props: [{ name: 'level', type: 'number', default: '1', desc: '1 | 2 | 3 | 4' }, { name: 'onLogoClick', type: 'function', default: 'null', desc: 'Clic sur le logo (niveau 1, mobile)' }] },
-      { id: 'Message', name: 'Message', category: 'Feedback', desc: 'Bloc de message avec type info, success, warning ou error.', import: "import { Message } from './bpm';", example: '<Message type="success">Enregistré.</Message>', props: [{ name: 'type', type: 'string', default: 'info', desc: 'info | success | warning | error' }] },
-      { id: 'Panel', name: 'Panel', category: 'Layout', desc: 'Panneau informatif (alertes, états). Variantes : info, warning, error, success.', import: "import { Panel } from './bpm';", example: '<Panel variant="warning" title="Attention">Contenu.</Panel>', props: [{ name: 'variant', type: 'string', default: 'info', desc: 'info | warning | error | success' }, { name: 'title', type: 'string', default: 'null', desc: '' }, { name: 'icon', type: 'node|false', default: 'null', desc: 'Icône ou false pour masquer' }] },
-      { id: 'Box', name: 'Box', category: 'Layout', desc: 'Bloc avec titre, statut, détails. Optionnel isConnected pour style vert/rouge.', import: "import { Box } from './bpm';", example: '<Box title="Connexion" isConnected={true} details="Dernière synchro." />', props: [{ name: 'title', type: 'string', default: '-', desc: '' }, { name: 'status', type: 'string', default: '-', desc: '' }, { name: 'details', type: 'node', default: '-', desc: '' }, { name: 'isConnected', type: 'boolean', default: '-', desc: 'Style vert/rouge' }, { name: 'actions', type: 'node', default: '-', desc: 'Boutons en bas' }] },
-      { id: 'Modal', name: 'Modal', category: 'Feedback', desc: 'Fenêtre modale avec titre, fermeture Escape et clic backdrop. Rendu en portail.', import: "import { Modal } from './bpm';", example: '<Modal isOpen={open} onClose={() => setOpen(false)} title="Titre">{children}</Modal>', props: [{ name: 'isOpen', type: 'boolean', default: '-', desc: '' }, { name: 'onClose', type: 'function', default: '-', desc: '' }, { name: 'title', type: 'string', default: '-', desc: '' }, { name: 'size', type: 'string', default: 'medium', desc: 'medium | small | large' }, { name: 'showCloseButton', type: 'boolean', default: 'true', desc: '' }] },
-      { id: 'Toast', name: 'Toast', category: 'Feedback', desc: 'Notifications toast. Utiliser ToastProvider et useToast(). showToast(message, type, duration, title, pageName, pageIcon).', import: "import { ToastProvider, useToast } from './bpm';", example: 'const { showToast } = useToast(); showToast("OK", "success", 3000);', props: [{ name: 'ToastProvider', type: 'component', default: '-', desc: 'Envelopper l\'app' }, { name: 'useToast()', type: 'hook', default: '-', desc: 'showToast(msg, type, duration, title, pageName, pageIcon)' }] },
-      { id: 'Spinner', name: 'Spinner', category: 'Feedback', desc: 'Indicateur de chargement avec texte optionnel et tailles small, medium, large.', import: "import { Spinner } from './bpm';", example: '<Spinner text="Chargement..." size="medium" />', props: [{ name: 'text', type: 'string', default: 'Chargement...', desc: '' }, { name: 'size', type: 'string', default: 'medium', desc: 'small | medium | large' }] },
-      { id: 'Tooltip', name: 'Tooltip', category: 'Feedback', desc: 'Infobulle (MUI). text = contenu, position = top | bottom | left | right | top-start | etc.', import: "import { Tooltip } from './bpm';", example: '<Tooltip text="Explication"><span>Survoler</span></Tooltip>', props: [{ name: 'text', type: 'string', default: '-', desc: 'Contenu du tooltip' }, { name: 'position', type: 'string', default: 'top', desc: 'top | bottom | left | right | top-start | ...' }] },
-      { id: 'InfoIcon', name: 'InfoIcon', category: 'Feedback', desc: 'Icône info (cercle avec i), style feather. Taille en px.', import: "import { InfoIcon } from './bpm';", example: '<InfoIcon size={16} />', props: [{ name: 'size', type: 'number', default: '16', desc: 'Taille en px' }] },
-      { id: 'Table', name: 'Table', category: 'Data', desc: 'Tableau triable. columns = [{ key, label, align }], data = tableau d\'objets.', import: "import { Table } from './bpm';", example: '<Table columns={[{key:\'name\',label:\'Nom\'}]} data={rows} defaultSortColumn="name" defaultSortDirection="asc" />', props: [{ name: 'columns', type: 'array', default: '-', desc: '{ key, label, align? }' }, { name: 'data', type: 'array', default: '-', desc: 'Lignes' }, { name: 'striped', type: 'boolean', default: 'true', desc: '' }, { name: 'hover', type: 'boolean', default: 'true', desc: '' }, { name: 'onRowClick', type: 'function', default: '-', desc: '(row) => {}' }, { name: 'defaultSortColumn', type: 'string', default: 'null', desc: '' }, { name: 'defaultSortDirection', type: 'string', default: 'asc', desc: 'asc | desc' }] },
-      { id: 'Metric', name: 'Metric', category: 'Data', desc: 'Indicateur avec label, valeur et delta optionnel (positif/négatif, deltaType inverse).', import: "import { Metric } from './bpm';", example: '<Metric label="Performance" value={1234.56} delta={+2.5} deltaType="normal" currency="EUR" />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'number|string', default: '-', desc: '' }, { name: 'delta', type: 'number', default: '-', desc: 'Variation' }, { name: 'deltaType', type: 'string', default: 'normal', desc: 'normal | inverse' }, { name: 'currency', type: 'string', default: 'EUR', desc: 'EUR | USD | ...' }] },
-      { id: 'Expander', name: 'Expander', category: 'Structure', desc: 'Bloc repliable avec titre. defaultExpanded pour ouvrir par défaut.', import: "import { Expander } from './bpm';", example: '<Expander title="Détails" defaultExpanded={false}>{content}</Expander>', props: [{ name: 'title', type: 'string', default: '-', desc: '' }, { name: 'defaultExpanded', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Layout', name: 'Layout', category: 'Layout', desc: 'Shell sidebar + topbar + body (Blueprint Modular Framework). Utilise Sidebar et DashboardHeader; config et contenu fournis par le parent.', import: "import { Layout } from './bpm';", example: '<Layout sidebarOpen={open} onToggleSidebar={setOpen} sidebarContent={...} headerContent={...} sidebarProps={...} />', props: [{ name: 'config', type: 'object', default: '{}', desc: 'Config app' }, { name: 'sidebarOpen', type: 'boolean', default: '-', desc: '' }, { name: 'onToggleSidebar', type: 'function', default: '-', desc: '' }, { name: 'sidebarContent', type: 'node', default: '-', desc: '' }, { name: 'headerContent', type: 'node', default: '-', desc: '' }, { name: 'sidebarProps', type: 'object', default: '{}', desc: 'logoUrl, profile, activePage, compactMenuItems...' }, { name: 'children', type: 'node', default: '-', desc: 'Contenu principal' }] },
-      { id: 'Sandbox', name: 'Sandbox', category: 'Utils', desc: 'Affiche un composant Blueprint Modular seul (sans sidebar). Usage: ?component=bpm.panel&variant=warning ou route /sandbox.', import: "import { Sandbox } from './bpm';", example: 'Route /sandbox?component=bpm.panel&variant=warning&title=Test', props: [{ name: 'URL', type: 'query', default: '-', desc: 'component, variant, title, value, label, theme=dark' }] },
-      { id: 'Input', name: 'Input', category: 'Widgets', desc: 'Champ texte avec label, placeholder, type (text/password/email).', import: "import { Input } from './bpm';", example: '<Input label="Email" value={email} onChange={setEmail} type="email" />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'string', default: "''", desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'placeholder', type: 'string', default: "''", desc: '' }, { name: 'type', type: 'string', default: "'text'", desc: 'text | password | email' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Textarea', name: 'Textarea', category: 'Widgets', desc: 'Zone de texte multiligne avec label et rows.', import: "import { Textarea } from './bpm';", example: '<Textarea label="Commentaire" value={text} onChange={setText} rows={4} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'string', default: "''", desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'rows', type: 'number', default: '4', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Checkbox', name: 'Checkbox', category: 'Widgets', desc: 'Case à cocher avec label.', import: "import { Checkbox } from './bpm';", example: '<Checkbox label="Accepter" checked={ok} onChange={setOk} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'checked', type: 'boolean', default: 'false', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Toggle', name: 'Toggle', category: 'Widgets', desc: 'Interrupteur on/off avec label.', import: "import { Toggle } from './bpm';", example: '<Toggle label="Activer" value={on} onChange={setOn} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'boolean', default: 'false', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'disabled', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Slider', name: 'Slider', category: 'Widgets', desc: 'Curseur numérique avec min, max, step et label.', import: "import { Slider } from './bpm';", example: '<Slider label="Volume" value={vol} onChange={setVol} min={0} max={100} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'value', type: 'number', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'min', type: 'number', default: '0', desc: '' }, { name: 'max', type: 'number', default: '100', desc: '' }, { name: 'step', type: 'number', default: '1', desc: '' }] },
-      { id: 'RadioGroup', name: 'RadioGroup', category: 'Widgets', desc: 'Groupe de boutons radio. options = [{ value, label }] ou valeurs simples.', import: "import { RadioGroup } from './bpm';", example: '<RadioGroup name="choix" label="Option" options={[{value:\'a\',label:\'A\'}]} value={val} onChange={setVal} />', props: [{ name: 'name', type: 'string', default: '-', desc: '' }, { name: 'label', type: 'string', default: '-', desc: '' }, { name: 'options', type: 'array', default: '[]', desc: '{ value, label } ou valeur' }, { name: 'value', type: 'any', default: '-', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: '' }, { name: 'layout', type: 'string', default: "'vertical'", desc: 'vertical | horizontal' }] },
-      { id: 'FileInput', name: 'FileInput', category: 'Widgets', desc: 'Sélection de fichier(s). accept, multiple, onChange(files).', import: "import { FileInput } from './bpm';", example: '<FileInput label="Fichier" accept=".csv" onChange={setFiles} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'accept', type: 'string', default: '-', desc: 'MIME ou extensions' }, { name: 'multiple', type: 'boolean', default: 'false', desc: '' }, { name: 'onChange', type: 'function', default: '-', desc: 'fichier ou tableau' }] },
-      { id: 'Badge', name: 'Badge', category: 'Structure', desc: 'Étiquette ou compteur. Variantes : default, success, warning, error, info.', import: "import { Badge } from './bpm';", example: '<Badge variant="success">Nouveau</Badge>', props: [{ name: 'variant', type: 'string', default: "'default'", desc: 'default | success | warning | error | info' }] },
-      { id: 'Caption', name: 'Caption', category: 'Structure', desc: 'Légende ou texte secondaire petit.', import: "import { Caption } from './bpm';", example: '<Caption>Source : données 2024</Caption>', props: [] },
-      { id: 'Progress', name: 'Progress', category: 'Feedback', desc: 'Barre de progression. value, max, label, showValue.', import: "import { Progress } from './bpm';", example: '<Progress value={0.65} max={1} label="Avancement" />', props: [{ name: 'value', type: 'number', default: '0', desc: '' }, { name: 'max', type: 'number', default: '1', desc: '' }, { name: 'label', type: 'string', default: '-', desc: '' }, { name: 'showValue', type: 'boolean', default: 'true', desc: '' }] },
-      { id: 'Card', name: 'Card', category: 'Layout', desc: 'Carte avec titre, sous-titre, image optionnelle et actions. Variantes : default, elevated, outlined.', import: "import { Card } from './bpm';", example: '<Card title="Titre" subtitle="Sous-titre" actions={<Button>Voir</Button>}>{content}</Card>', props: [{ name: 'title', type: 'string', default: '-', desc: '' }, { name: 'subtitle', type: 'string', default: '-', desc: '' }, { name: 'image', type: 'string', default: '-', desc: 'URL' }, { name: 'actions', type: 'node', default: '-', desc: '' }, { name: 'variant', type: 'string', default: "'default'", desc: 'default | elevated | outlined' }] },
-      { id: 'Divider', name: 'Divider', category: 'Structure', desc: 'Séparateur horizontal ou vertical. Optionnel label au centre.', import: "import { Divider } from './bpm';", example: '<Divider label="ou" /> ou <Divider orientation="vertical" />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'orientation', type: 'string', default: "'horizontal'", desc: 'horizontal | vertical' }] },
-      { id: 'Skeleton', name: 'Skeleton', category: 'Feedback', desc: 'Placeholder de chargement animé. variant: text, circular, rectangular.', import: "import { Skeleton } from './bpm';", example: '<Skeleton variant="text" width={200} />', props: [{ name: 'variant', type: 'string', default: "'rectangular'", desc: 'text | circular | rectangular' }, { name: 'width', type: 'number|string', default: '-', desc: 'px ou %' }, { name: 'height', type: 'number|string', default: '-', desc: '' }] },
-      { id: 'Breadcrumb', name: 'Breadcrumb', category: 'Structure', desc: 'Fil d\'Ariane. items = [{ label, href? }], separator.', import: "import { Breadcrumb } from './bpm';", example: '<Breadcrumb items={[{label:\'Accueil\',href:\'/\'},{label:\'Page\'}]} />', props: [{ name: 'items', type: 'array', default: '[]', desc: '{ label, href? }' }, { name: 'separator', type: 'string', default: "'›'", desc: '' }] },
-      { id: 'EmptyState', name: 'EmptyState', category: 'Feedback', desc: 'État vide : titre, description, icône et action optionnels.', import: "import { EmptyState } from './bpm';", example: '<EmptyState title="Aucun résultat" description="..." action={<Button>Ajouter</Button>} />', props: [{ name: 'title', type: 'string', default: "'Aucune donnée'", desc: '' }, { name: 'description', type: 'string', default: '-', desc: '' }, { name: 'icon', type: 'node', default: '-', desc: '' }, { name: 'action', type: 'node', default: '-', desc: '' }] },
-      { id: 'CopyButton', name: 'CopyButton', category: 'Utils', desc: 'Bouton pour copier du texte dans le presse-papier. text ou children.', import: "import { CopyButton } from './bpm';", example: '<CopyButton text={code} label="Copier" copiedLabel="Copié" />', props: [{ name: 'text', type: 'string', default: '-', desc: 'À copier' }, { name: 'label', type: 'string', default: "'Copier'", desc: '' }, { name: 'copiedLabel', type: 'string', default: "'Copié'", desc: '' }, { name: 'onCopy', type: 'function', default: '-', desc: '(text, err?) => {}' }] },
-      { id: 'Chip', name: 'Chip', category: 'Structure', desc: 'Tag ou pastille. onDelete pour retirer, onClick pour clic. variant: default, primary.', import: "import { Chip } from './bpm';", example: '<Chip label="Filtre" onDelete={() => {}} />', props: [{ name: 'label', type: 'string', default: '-', desc: '' }, { name: 'onDelete', type: 'function', default: '-', desc: '' }, { name: 'onClick', type: 'function', default: '-', desc: '' }, { name: 'variant', type: 'string', default: "'default'", desc: 'default | primary' }] },
-      { id: 'Avatar', name: 'Avatar', category: 'Structure', desc: 'Photo ou initiales. src (URL), initials, size: small, medium, large.', import: "import { Avatar } from './bpm';", example: '<Avatar src={url} alt="User" /> ou <Avatar initials="JD" size="large" />', props: [{ name: 'src', type: 'string', default: '-', desc: 'URL image' }, { name: 'initials', type: 'string', default: '-', desc: 'Ex: JD' }, { name: 'size', type: 'string', default: "'medium'", desc: 'small | medium | large' }] },
-      { id: 'Accordion', name: 'Accordion', category: 'Layout', desc: 'Panneaux repliables multiples. sections = [{ title, content }], allowMultiple.', import: "import { Accordion } from './bpm';", example: '<Accordion sections={[{title:\'A\',content:\'...\'}]} allowMultiple />', props: [{ name: 'sections', type: 'array', default: '[]', desc: '' }, { name: 'allowMultiple', type: 'boolean', default: 'false', desc: '' }] },
-      { id: 'Stepper', name: 'Stepper', category: 'Layout', desc: 'Wizard multi-étapes. steps = [{ label, optional?, content? }], currentStep.', import: "import { Stepper } from './bpm';", example: '<Stepper steps={[{label:\'Étape 1\',content:<p>...</p>}]} currentStep={0} />', props: [{ name: 'steps', type: 'array', default: '[]', desc: '' }, { name: 'currentStep', type: 'number', default: '0', desc: '' }, { name: 'onStepClick', type: 'function', default: '-', desc: '' }] },
-      { id: 'Drawer', name: 'Drawer', category: 'Layout', desc: 'Panneau latéral overlay. isOpen, onClose, placement (left|right), title.', import: "import { Drawer } from './bpm';", example: '<Drawer isOpen={open} onClose={() => setOpen(false)} title="Menu">{content}</Drawer>', props: [{ name: 'isOpen', type: 'boolean', default: 'false', desc: '' }, { name: 'onClose', type: 'function', default: '-', desc: '' }, { name: 'placement', type: 'string', default: "'left'", desc: 'left | right' }] },
-      { id: 'FAB', name: 'FAB', category: 'Layout', desc: 'Bouton flottant. placement: bottom-right, bottom-left, top-right, top-left.', import: "import { FAB } from './bpm';", example: '<FAB onClick={fn} placement="bottom-right">+</FAB>', props: [{ name: 'placement', type: 'string', default: "'bottom-right'", desc: '' }] },
-      { id: 'Grid', name: 'Grid', category: 'Layout', desc: 'Grille responsive. cols (nombre ou { xs, sm, md, lg }), gap.', import: "import { Grid } from './bpm';", example: '<Grid cols={3} gap="1rem">{children}</Grid>', props: [{ name: 'cols', type: 'number|object', default: '1', desc: '' }, { name: 'gap', type: 'string|number', default: "'1rem'", desc: '' }] },
-      { id: 'TopNav', name: 'TopNav', category: 'Layout', desc: 'Navbar horizontale. brand (node), items = [{ label, href? ou onClick? }].', import: "import { TopNav } from './bpm';", example: '<TopNav brand={<span>App</span>} items={[{label:\'Home\',href:\'/\'}]} />', props: [] },
-      { id: 'TreeView', name: 'TreeView', category: 'Data', desc: 'Arbre hiérarchique. nodes = [{ id, label, children? }], onSelect, selectedId.', import: "import { TreeView } from './bpm';", example: '<TreeView nodes={[{id:\'1\',label:\'Root\',children:[]}]} onSelect={fn} />', props: [] },
-      { id: 'Timeline', name: 'Timeline', category: 'Data', desc: 'Liste d\'événements. items = [{ date, title, description?, icon? }].', import: "import { Timeline } from './bpm';", example: '<Timeline items={[{date:\'2024-01\',title:\'Event\'}]} />', props: [] },
-      { id: 'SparklineMetric', name: 'SparklineMetric', category: 'Data', desc: 'KPI + mini-graphique. label, value, delta?, sparklineData = [].', import: "import { SparklineMetric } from './bpm';", example: '<SparklineMetric label="CA" value={1200} sparklineData={[10,20,15,30]} />', props: [] },
-      { id: 'DateRangePicker', name: 'DateRangePicker', category: 'Widgets', desc: 'Plage de dates. value = { start, end }, onChange({ start, end }).', import: "import { DateRangePicker } from './bpm';", example: '<DateRangePicker value={range} onChange={setRange} label="Période" />', props: [] },
-      { id: 'Autocomplete', name: 'Autocomplete', category: 'Widgets', desc: 'Input avec suggestions. options = [{ value, label }] ou strings.', import: "import { Autocomplete } from './bpm';", example: '<Autocomplete value={v} onChange={setV} options={[\'A\',\'B\']} />', props: [] },
-      { id: 'Rating', name: 'Rating', category: 'Widgets', desc: 'Étoiles. value, max (défaut 5), onChange, readOnly.', import: "import { Rating } from './bpm';", example: '<Rating value={3} max={5} onChange={setRating} />', props: [] }
-    ];
-
-    const categories = [...new Set(COMPONENTS.map(c => c.category))].sort();
-    let activeCategory = '';
-
-    function escapeHtml(s) {
-      const div = document.createElement('div');
-      div.textContent = s;
-      return div.innerHTML;
-    }
-
-    function renderCard(c) {
-      const matchSearch = !searchVal || [c.name, c.category, c.desc].some(t => t.toLowerCase().includes(searchVal));
-      const matchCat = !activeCategory || c.category === activeCategory;
-      const hidden = !matchSearch || !matchCat;
-      const propsRows = (c.props || []).map(p => `
-        <tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.type)}</td><td>${escapeHtml(p.default)}</td><td>${escapeHtml(p.desc || '')}</td></tr>
-      `).join('');
-      return `
-        <article class="card ${hidden ? 'hidden' : ''}" data-name="${escapeHtml(c.name)}" data-category="${escapeHtml(c.category)}">
-          <h2>${escapeHtml(c.name)} <span class="cat-tag">${escapeHtml(c.category)}</span></h2>
-          <p class="desc">${escapeHtml(c.desc)}</p>
-          <div class="import-line">${escapeHtml(c.import)}</div>
-          <pre><code>${escapeHtml(c.example)}</code></pre>
-          ${propsRows ? `<table class="props-table"><thead><tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th></tr></thead><tbody>${propsRows}</tbody></table>` : ''}
-        </article>
-      `;
-    }
-
-    function render() {
-      document.getElementById('grid').innerHTML = COMPONENTS.map(renderCard).join('');
-      const catEl = document.getElementById('categories');
-      catEl.innerHTML = '<button type="button" class="cat-btn' + (activeCategory === '' ? ' active' : '') + '" data-cat="">Tous</button>' +
-        categories.map(cat => '<button type="button" class="cat-btn' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + escapeHtml(cat) + '">' + escapeHtml(cat) + '</button>').join('');
-    }
-
-    let searchVal = '';
-    document.getElementById('search').addEventListener('input', (e) => {
-      searchVal = (e.target.value || '').trim().toLowerCase();
-      document.querySelectorAll('.card').forEach(card => {
-        const name = (card.dataset.name || '').toLowerCase();
-        const category = (card.dataset.category || '').toLowerCase();
-        const desc = (card.querySelector('.desc') || {}).textContent || '';
-        const match = !searchVal || name.includes(searchVal) || category.includes(searchVal) || desc.toLowerCase().includes(searchVal);
-        card.classList.toggle('hidden', !match || (activeCategory && card.dataset.category !== activeCategory));
+    (function() {
+      var btn = document.getElementById('toggle-sort');
+      var main = document.querySelector('.doc-main');
+      var whatsNext = main && main.querySelector('.whats-next');
+      var defaultOrder = [];
+      if (!btn || !main || !whatsNext) return;
+      var sections = Array.from(main.querySelectorAll('.component-category'));
+      sections.forEach(function(s) { defaultOrder.push(s); });
+      var byCategory = true;
+      btn.addEventListener('click', function() {
+        byCategory = !byCategory;
+        btn.textContent = byCategory ? 'Trier A→Z' : 'Trier par catégorie';
+        if (byCategory) {
+          defaultOrder.forEach(function(s) { main.insertBefore(s, whatsNext); });
+        } else {
+          var list = Array.from(main.querySelectorAll('.component-category'));
+          list.sort(function(a, b) {
+            var h2a = (a.querySelector('h2') || {}).textContent || '';
+            var h2b = (b.querySelector('h2') || {}).textContent || '';
+            return h2a.localeCompare(h2b);
+          });
+          list.forEach(function(s) { main.insertBefore(s, whatsNext); });
+        }
       });
-    });
-
-    document.getElementById('categories').addEventListener('click', (e) => {
-      const btn = e.target.closest('.cat-btn');
-      if (!btn) return;
-      activeCategory = (btn.dataset.cat || '').trim();
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
-      document.querySelectorAll('.card').forEach(card => {
-        const matchCat = !activeCategory || card.dataset.category === activeCategory;
-        const text = (document.getElementById('search').value || '').trim().toLowerCase();
-        const name = (card.dataset.name || '').toLowerCase();
-        const category = (card.dataset.category || '').toLowerCase();
-        const desc = (card.querySelector('.desc') || {}).textContent || '';
-        const matchSearch = !text || name.includes(text) || category.includes(text) || desc.toLowerCase().includes(text);
-        card.classList.toggle('hidden', !matchCat || !matchSearch);
-      });
-    });
-
-    render();
+    })();
   </script>
-<script src="/doc.js"></script>
 </body>
 </html>

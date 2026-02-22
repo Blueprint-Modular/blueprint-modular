@@ -23,7 +23,7 @@ pip install -r requirements.txt
 echo "⚙️  Configuration systemd..."
 cat > /etc/systemd/system/$SERVICE_NAME.service << EOF
 [Unit]
-Description=Blueprint Modular — documentation site
+Description=Blueprint Modular — app BPM (bpm run)
 After=network.target
 
 [Service]
@@ -31,13 +31,7 @@ User=www-data
 WorkingDirectory=$APP_DIR
 Environment="PATH=$APP_DIR/venv/bin"
 EnvironmentFile=$APP_DIR/.env
-ExecStart=$APP_DIR/venv/bin/streamlit run app.py \\
-  --server.port $PORT \\
-  --server.address 127.0.0.1 \\
-  --server.headless true \\
-  --server.enableCORS false \\
-  --server.enableXsrfProtection true \\
-  --browser.gatherUsageStats false
+ExecStart=$APP_DIR/venv/bin/python -m bpm.cli run app.py --port $PORT --host 127.0.0.1
 Restart=always
 RestartSec=5
 

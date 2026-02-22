@@ -31,7 +31,7 @@ Aucune dépendance au reste du repo : vous pouvez ouvrir uniquement ce dossier d
 | **backend/** | Réservé au code serveur (API, etc.). Aucun backend pour l'instant — voir backend/README.md. |
 | **deploy/** | Scripts de déploiement : setup.sh, update.sh, nginx.conf. |
 | **Logo BPM.png**, **Logo-BPM-*** | Logos (racine). |
-| **app.py**, **pages/** | Ancienne app de démo (référence). |
+| **app.py** | Exemple d’app BPM : <code>bpm run app.py</code>. |
 | **deploy_blueprint_modular.ps1** | Déploie **frontend/static/** + Logo vers le VPS. |
 | **DEPLOIEMENT_DOMAINE.md** | Guide : DNS, Nginx, Certbot. |
 
@@ -45,7 +45,7 @@ Aucune dépendance au reste du repo : vous pouvez ouvrir uniquement ce dossier d
 | **api-reference/** | Text, Data, Metrics, Charts, Inputs, Layout, Panels, Media, Status, Chat, Config |
 | **bpm/** | Composants React BPM (Button, Panel, Table, etc.) + **composants doc** : DocNav, DocSidebar, DocLayout, CodeBlock. |
 | **doc-app/** | **Site doc en React** : utilise uniquement les composants BPM. Build : `cd doc-app && npm run build` → `dist/`. |
-| **app.py**, **pages/** | Ancienne app de démo (conservée pour référence) — **non utilisée** ; la doc est dans **doc-app**. |
+| **app.py** | Exemple d’app BPM : <code>bpm run app.py</code> (voir Installation). |
 | **deploy/** | **Scripts de déploiement** : setup.sh, update.sh, nginx.conf, CHECKLIST.md — voir deploy/README.md. |
 | **.env.example** | Exemple pour .env sur le serveur (ENVIRONMENT=production). |
 | **knowledge-base/** | FAQ, Troubleshooting |

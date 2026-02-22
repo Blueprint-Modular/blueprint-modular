@@ -53,23 +53,62 @@
       <a href="../cheat-sheet.html">Cheat sheet</a>
     </aside>
     <main class="doc-main">
-      <h1>Concepts</h1>
-      <p class="lead">Comment une app Blueprint Modular fonctionne en production.</p>
-      <h2>Architecture</h2>
+      <nav class="breadcrumb"><a href="../index.html">Accueil</a> › <a href="../index.html">Deploy</a> › Concepts</nav>
+      <h1>Concepts de déploiement</h1>
+      <p class="lead">Comment BPM sert votre app et quelles options de déploiement choisir.</p>
+
+      <h2>Comment BPM sert votre app</h2>
+      <p><code>bpm run app.py</code> démarre un serveur HTTP local. En production, ce serveur tourne en arrière-plan (systemd ou Docker).</p>
+
+      <h2>Options de déploiement</h2>
+      <div class="platform-grid">
+        <a class="platform-card" href="platforms.html#vps">
+          <span class="platform-icon">🖥️</span>
+          <h3>VPS + Nginx</h3>
+          <p>Contrôle total, recommandé pour la production.</p>
+        </a>
+        <a class="platform-card" href="platforms.html#docker">
+          <span class="platform-icon">🐳</span>
+          <h3>Docker</h3>
+          <p>Isolation et portabilité. Idéal pour les équipes.</p>
+        </a>
+        <p style="margin-top:0.5rem;font-size:0.9rem;color:var(--muted);">Déploiement direct (sans proxy) : dev/test uniquement.</p>
+      </div>
+
+      <h2>Architecture type</h2>
+      <pre><code>Browser → Nginx (reverse proxy, SSL) → bpm server (port 8501) → app.py</code></pre>
       <p>En production, une app BPM repose sur :</p>
       <ul>
-        <li><strong>Processus Python</strong> : exécute votre script (<code>bpm run app.py</code> ou équivalent via systemd/supervisor).</li>
-        <li><strong>Serveur HTTP</strong> : BPM sert l'UI et les assets.</li>
-        <li><strong>Reverse proxy (optionnel)</strong> : Nginx (ou autre) devant pour SSL, domaine, load balancing.</li>
+        <li><strong>Processus Python</strong> — exécute votre script (<code>bpm run app.py</code> via systemd ou Docker).</li>
+        <li><strong>Serveur HTTP</strong> — BPM sert l'UI (HTML/JS) et gère les requêtes (clics, re-run).</li>
+        <li><strong>Reverse proxy</strong> — Nginx (ou autre) pour SSL, domaine, load balancing.</li>
       </ul>
-      <h2>Variables d'environnement</h2>
-      <p>Utilisez des variables d'environnement pour la configuration (ports, chemins). Les <strong>secrets</strong> (clés API, mots de passe) : utilisez <code>bpm.secrets</code> ou des variables injectées par le déploiement.</p>
-      <pre><code>import os
-port = int(os.environ.get("BPM_PORT", 8501))</code></pre>
-      <h2>Connexions et état</h2>
-      <p>Pour les connexions DB ou APIs, privilégiez <code>bpm.connection()</code> et le cache (<code>@bpm.cache_resource</code>) pour ne pas rouvrir une connexion à chaque rerun.</p>
-      <p><strong>Suivant :</strong> <a href="platforms.html">Platforms</a> — VPS, Docker, Nginx.</p>
-      <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
+
+      <h2>Prérequis communs</h2>
+      <ul>
+        <li>Python 3.9+ installé sur le serveur</li>
+        <li>Git (pour déployer depuis le repo)</li>
+        <li>Domaine pointant vers le VPS (pour SSL)</li>
+      </ul>
+
+      <nav class="doc-pagination">
+        <span></span>
+        <a class="next" href="platforms.html">Suivant : Platforms →</a>
+      </nav>
+      <section class="whats-next">
+        <h2>Et maintenant ?</h2>
+        <ul>
+          <li><a href="platforms.html#vps">VPS + Nginx</a> — Étapes détaillées</li>
+          <li><a href="platforms.html#docker">Docker</a> — Dockerfile et docker-compose</li>
+        </ul>
+      </section>
+      <section class="help-cta">
+        <p>Une question ou un retour ? Écrivez-nous à <a href="mailto:contact@blueprint-modular.com">contact@blueprint-modular.com</a>.</p>
+      </section>
+      <footer class="site-footer">
+        <div class="footer-links"><a href="../index.html">Documentation</a> <a href="../cheat-sheet.html">Cheat sheet</a> <a href="../knowledge-base/faq.html">FAQ</a> <a href="../knowledge-base/reste-a-faire.html">Roadmap</a></div>
+        <div class="footer-meta">Blueprint Modular v0.1-alpha · Licence MIT</div>
+      </footer>
     </main>
   </div>
 <script src="/doc.js"></script>

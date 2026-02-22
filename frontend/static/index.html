@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="landing.css" />
+  <link rel="stylesheet" href="doc.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
 <body>
   <header class="landing-header">
@@ -27,13 +31,20 @@
   </header>
 
   <main class="landing-main">
+    <div class="alert alert-important" style="margin: 1rem 1.5rem 0;">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-body"><strong>Important</strong> — Blueprint Modular est en cours de développement. Le package PyPI n'est pas encore publié. Suivez l'avancement sur la page <a href="get-started/installation.html">Installation</a> (installation depuis le repo) et <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</div>
+    </div>
     <section class="hero">
       <p class="hero-kicker">Framework Python</p>
       <h1 class="hero-title">Briques prêtes.<br />Vous écrivez la logique.</h1>
       <p class="hero-desc">Importez depuis <code>bpm</code>, assemblez métriques, tableaux, formulaires. Pas de HTML, pas de JS. Une seule codebase.</p>
+      <div class="hero-visual-placeholder" style="width:100%;max-width:800px;height:450px;margin:1.5rem auto;background:#e5e7eb;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:1rem;">
+        [ Screenshot dashboard BPM ]
+      </div>
       <div class="hero-actions">
-        <a href="https://docs.blueprint-modular.com/get-started/installation.html" class="btn-primary">Commencer</a>
-        <a href="https://docs.blueprint-modular.com/" class="btn-secondary">Lire la doc</a>
+        <a href="get-started/first-app.html" class="btn-primary">Voir la démo</a>
+        <a href="index.html" class="btn-secondary">Lire la doc</a>
       </div>
       <div class="hero-code-wrap">
         <p class="hero-code-label">Démarrage en une minute</p>
@@ -72,20 +83,50 @@
         <span>Outils data &amp; ML</span>
         <span>Apps de démo</span>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.5rem;">
+        <div style="border:1px solid var(--border, #eee); border-radius:8px; padding:1rem;">
+          <strong>Prototypes métier</strong>
+          <pre style="margin:0.5rem 0 0;font-size:0.8rem;"><code>import bpm
+bpm.title("Mon outil")
+bpm.button("Valider", key="ok")</code></pre>
+        </div>
+        <div style="border:1px solid var(--border, #eee); border-radius:8px; padding:1rem;">
+          <strong>Dashboards internes</strong>
+          <pre style="margin:0.5rem 0 0;font-size:0.8rem;"><code>import bpm
+bpm.metric("CA", 142500, delta=3200)
+bpm.table(df)</code></pre>
+        </div>
+        <div style="border:1px solid var(--border, #eee); border-radius:8px; padding:1rem;">
+          <strong>Outils data &amp; ML</strong>
+          <pre style="margin:0.5rem 0 0;font-size:0.8rem;"><code>import bpm
+bpm.file_uploader("Fichier CSV")
+bpm.chart.line(df, x="date", y="value")</code></pre>
+        </div>
+        <div style="border:1px solid var(--border, #eee); border-radius:8px; padding:1rem;">
+          <strong>Apps de démo</strong>
+          <pre style="margin:0.5rem 0 0;font-size:0.8rem;"><code>import bpm
+bpm.set_page_config(layout="wide")
+bpm.panel("Info", "Contenu", variant="info")</code></pre>
+        </div>
+      </div>
     </section>
 
     <section class="section-cta">
       <p class="cta-text">Tout est documenté : installation, composants, référence API, déploiement.</p>
-      <a href="https://docs.blueprint-modular.com/" class="btn-primary btn-cta">Ouvrir la documentation</a>
+      <a href="get-started/installation.html" class="btn-primary btn-cta">Ouvrir la documentation</a>
     </section>
   </main>
 
-  <footer class="landing-footer">
-    <a href="https://github.com/remigit55/blueprint-modular">GitHub</a>
-    <span class="footer-dot">·</span>
-    <a href="https://docs.blueprint-modular.com/">Documentation</a>
-    <span class="footer-dot">·</span>
-    <a href="https://docs.blueprint-modular.com/cheat-sheet.html">Cheat sheet</a>
+  <footer class="site-footer" style="margin-top:2rem;">
+    <div class="footer-links">
+      <a href="get-started/installation.html">Documentation</a>
+      <a href="cheat-sheet.html">Cheat sheet</a>
+      <a href="knowledge-base/faq.html">FAQ</a>
+      <a href="knowledge-base/reste-a-faire.html">Roadmap</a>
+    </div>
+    <div class="footer-meta">
+      Blueprint Modular v0.1-alpha · Licence MIT · <a href="mailto:contact@blueprint-modular.com">contact@blueprint-modular.com</a>
+    </div>
   </footer>
 </body>
 </html>

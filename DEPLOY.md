@@ -102,6 +102,7 @@ Le script lance `docker-compose up -d --build`, attend la base, puis exécute le
 $env:VPS_HOST = "ton-ip-ou-domaine"
 $env:VPS_USER = "root"
 .\scripts\deploy-vps-remote.ps1
+# Ou en paramètres : .\scripts\deploy-vps-remote.ps1 -VpsHost ton-ip -User root
 ```
 
 Cela fait un `ssh` sur le VPS, `git pull` puis `scripts/deploy-vps.sh`.

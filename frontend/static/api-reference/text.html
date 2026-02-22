@@ -16,6 +16,8 @@
     <a href="text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
     <a href="../cheat-sheet.html">Cheat sheet</a>
+    <a href="https://blueprint-modular.com" class="back-to-site">← Blueprint-modular.com</a>
+    <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
   <div class="doc-layout">
     <aside class="doc-sidebar">
@@ -28,8 +30,8 @@
       <h3>Components</h3>
       <a href="../components.html">Catalogue des composants</a>
       <h3>API Reference</h3>
-      <a href="text.html" class="active">Texte &amp; Affichage</a>
-      <a href="data.html">Données</a>
+      <a href="text.html" class="active">Text</a>
+      <a href="data.html">Data</a>
       <a href="metrics.html">Metrics</a>
       <a href="charts.html">Charts</a>
       <a href="inputs.html">Inputs</a>
@@ -52,21 +54,21 @@
     <main class="doc-main">
       <h1>Text</h1>
       <p class="lead">Composants d'affichage de texte : <code>bpm.write</code>, <code>bpm.markdown</code>, <code>bpm.title</code>, <code>bpm.header</code>, <code>bpm.subheader</code>, <code>bpm.caption</code>, <code>bpm.code</code>, <code>bpm.latex</code>, <code>bpm.badge</code>, <code>bpm.html</code>.</p>
-      <h2>Mapping Streamlit → BPM</h2>
+      <h2>Référence API</h2>
       <table>
-        <thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+        <thead><tr><th>Fonction</th><th>BPM</th></tr></thead>
         <tbody>
-          <tr><td>st.write()</td><td>bpm.write()</td></tr>
-          <tr><td>st.markdown()</td><td>bpm.markdown()</td></tr>
-          <tr><td>st.text()</td><td>bpm.text()</td></tr>
-          <tr><td>st.title()</td><td>bpm.title()</td></tr>
-          <tr><td>st.header()</td><td>bpm.header()</td></tr>
-          <tr><td>st.subheader()</td><td>bpm.subheader()</td></tr>
-          <tr><td>st.caption()</td><td>bpm.caption()</td></tr>
-          <tr><td>st.code()</td><td>bpm.code()</td></tr>
-          <tr><td>st.latex()</td><td>bpm.latex()</td></tr>
-          <tr><td>st.badge()</td><td>bpm.badge()</td></tr>
-          <tr><td>st.html()</td><td>bpm.html()</td></tr>
+          <tr><td>write()</td><td>bpm.write()</td></tr>
+          <tr><td>markdown()</td><td>bpm.markdown()</td></tr>
+          <tr><td>text()</td><td>bpm.text()</td></tr>
+          <tr><td>title()</td><td>bpm.title()</td></tr>
+          <tr><td>header()</td><td>bpm.header()</td></tr>
+          <tr><td>subheader()</td><td>bpm.subheader()</td></tr>
+          <tr><td>caption()</td><td>bpm.caption()</td></tr>
+          <tr><td>code()</td><td>bpm.code()</td></tr>
+          <tr><td>latex()</td><td>bpm.latex()</td></tr>
+          <tr><td>badge()</td><td>bpm.badge()</td></tr>
+          <tr><td>html()</td><td>bpm.html()</td></tr>
         </tbody>
       </table>
       <h2>Exemples</h2>
@@ -87,5 +89,6 @@ bpm.badge("Nouveau", type="info")</code></pre>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>
+<script src="../doc.js"></script>
 </body>
 </html>

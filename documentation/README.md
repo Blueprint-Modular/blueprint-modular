@@ -1,6 +1,6 @@
 # Documentation Blueprint Modular
 
-Le site de documentation **n’est pas basé sur Streamlit** : c’est un site **statique HTML/CSS** (l’équivalent de la doc, pas une app Streamlit).
+Le site de documentation est un site **statique HTML/CSS**.
 
 Il se trouve à la **racine du projet** :
 

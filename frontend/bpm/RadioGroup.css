@@ -1,0 +1,49 @@
+.bpm-radiogroup-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  margin: 0.5rem 0;
+}
+
+.bpm-radiogroup-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--bpm-text-primary, #333);
+}
+
+.bpm-radiogroup-options {
+  display: flex;
+  gap: 0.5rem 1.25rem;
+}
+
+.bpm-radiogroup-vertical .bpm-radiogroup-options {
+  flex-direction: column;
+}
+
+.bpm-radiogroup-horizontal .bpm-radiogroup-options {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.bpm-radiogroup-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.bpm-radiogroup-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bpm-radiogroup-input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent-color, #1f77b4);
+}
+
+.bpm-radiogroup-option-label {
+  user-select: none;
+}

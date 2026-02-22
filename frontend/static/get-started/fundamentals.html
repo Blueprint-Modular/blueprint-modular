@@ -16,6 +16,8 @@
     <a href="../api-reference/text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
     <a href="../cheat-sheet.html">Cheat sheet</a>
+    <a href="https://blueprint-modular.com" class="back-to-site">← Blueprint-modular.com</a>
+    <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
   <div class="doc-layout">
     <aside class="doc-sidebar">
@@ -39,6 +41,7 @@
       <a href="../api-reference/status.html">Status</a>
       <a href="../api-reference/chat.html">Chat</a>
       <a href="../api-reference/config.html">Config</a>
+      <a href="../api-reference/connection.html">Connexion aux données</a>
       <h3>Deploy</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Platforms</a>
@@ -52,7 +55,7 @@
       <h1>Fundamentals</h1>
       <p class="lead">Comment Blueprint Modular exécute votre script et gère l'état.</p>
       <h2>Exécution de haut en bas</h2>
-      <p>Comme Streamlit, BPM exécute votre script <strong>de haut en bas</strong> à chaque interaction. Chaque appel à un composant ajoute un élément à l'interface.</p>
+      <p>BPM exécute votre script <strong>de haut en bas</strong> à chaque interaction. Chaque appel à un composant ajoute un élément à l'interface.</p>
       <h2>Session state</h2>
       <p>L'état est conservé dans <strong><code>bpm.session_state</code></strong>. Utilisez-le pour stocker des valeurs entre les reruns.</p>
       <pre><code>import bpm
@@ -76,5 +79,6 @@ bpm.write(f"Compteur : {bpm.session_state.count}")</code></pre>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>
+<script src="../doc.js"></script>
 </body>
 </html>

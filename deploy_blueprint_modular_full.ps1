@@ -1,4 +1,4 @@
-# Deploiement COMPLET du site Blueprint Modular (Streamlit + static) vers le VPS
+# Deploiement COMPLET du site Blueprint Modular (app + static) vers le VPS
 # Usage: .\deploy_blueprint_modular_full.ps1
 # Prealable: sur le serveur, avoir execute deploy/setup.sh une fois (venv, systemd).
 # Serveur: unzip installe (apt install unzip).
@@ -58,4 +58,4 @@ ssh -i $SSH_KEY "${SERVER_USER}@${SERVER_IP}" $remoteCmd
 
 Remove-Item $archive -ErrorAction SilentlyContinue
 Write-Host "[OK] Deploiement complet termine." -ForegroundColor Green
-Write-Host "Service Streamlit: systemctl status blueprint-modular (sur le serveur)" -ForegroundColor Cyan
+Write-Host "Service app: systemctl status blueprint-modular (sur le serveur)" -ForegroundColor Cyan

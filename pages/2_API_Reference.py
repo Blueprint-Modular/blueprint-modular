@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="API Reference — Blueprint Modular", page_icon="📐", layout="wide")
 st.title("API Reference")
-st.markdown("Mapping Streamlit → BPM. Exemples :")
+st.markdown("Référence API. Exemples :")
 st.code("""bpm.title("Mon titre")
 bpm.metric("Valeur", 142500, delta=3200)
 bpm.table(df)

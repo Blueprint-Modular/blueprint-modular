@@ -40,8 +40,8 @@ sudo nginx -t && sudo systemctl reload nginx
 |---------|------|
 | **deploy-from-git.sh** | Déploiement depuis Git (clone/pull + copie vers `/var/www/blueprint-modular`). À exécuter sur le VPS. |
 | **nginx.conf** | Vhost Nginx (site statique). À copier dans `/etc/nginx/sites-available/blueprint-modular`. |
-| **setup.sh** | Ancien : Streamlit + systemd (référence). |
-| **update.sh** | Ancien : mise à jour Streamlit (référence). |
+| **setup.sh** | Ancien : app + systemd (référence). |
+| **update.sh** | Ancien : mise à jour app (référence). |
 | **CHECKLIST.md** | Checklist (DNS, Nginx, Certbot). |
 
 ## Prérequis

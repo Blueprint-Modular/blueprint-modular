@@ -16,6 +16,8 @@
     <a href="text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
     <a href="../cheat-sheet.html">Cheat sheet</a>
+    <a href="https://blueprint-modular.com" class="back-to-site">← Blueprint-modular.com</a>
+    <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
   <div class="doc-layout">
     <aside class="doc-sidebar">
@@ -39,6 +41,7 @@
       <a href="status.html">Status</a>
       <a href="chat.html">Chat</a>
       <a href="config.html">Config</a>
+      <a href="connection.html">Connexion aux données</a>
       <h3>Deploy</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Platforms</a>
@@ -51,17 +54,17 @@
     <main class="doc-main">
       <h1>Charts</h1>
       <p class="lead">Graphiques : <code>bpm.chart.line</code>, <code>bpm.chart.bar</code>, <code>bpm.chart.area</code>, <code>bpm.chart.scatter</code>, <code>bpm.chart.map</code>, <code>bpm.chart.plotly</code>, <code>bpm.chart.altair</code>, <code>bpm.chart.pyplot</code>.</p>
-      <h2>Mapping Streamlit → BPM</h2>
-      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+      <h2>Référence API</h2>
+      <table><thead><tr><th>Fonction</th><th>BPM</th></tr></thead>
         <tbody>
-          <tr><td>st.line_chart()</td><td>bpm.chart.line()</td></tr>
-          <tr><td>st.bar_chart()</td><td>bpm.chart.bar()</td></tr>
-          <tr><td>st.area_chart()</td><td>bpm.chart.area()</td></tr>
-          <tr><td>st.scatter_chart()</td><td>bpm.chart.scatter()</td></tr>
-          <tr><td>st.map()</td><td>bpm.chart.map()</td></tr>
-          <tr><td>st.plotly_chart()</td><td>bpm.chart.plotly()</td></tr>
-          <tr><td>st.altair_chart()</td><td>bpm.chart.altair()</td></tr>
-          <tr><td>st.pyplot()</td><td>bpm.chart.pyplot()</td></tr>
+          <tr><td>line_chart()</td><td>bpm.chart.line()</td></tr>
+          <tr><td>bar_chart()</td><td>bpm.chart.bar()</td></tr>
+          <tr><td>area_chart()</td><td>bpm.chart.area()</td></tr>
+          <tr><td>scatter_chart()</td><td>bpm.chart.scatter()</td></tr>
+          <tr><td>map()</td><td>bpm.chart.map()</td></tr>
+          <tr><td>plotly_chart()</td><td>bpm.chart.plotly()</td></tr>
+          <tr><td>altair_chart()</td><td>bpm.chart.altair()</td></tr>
+          <tr><td>pyplot()</td><td>bpm.chart.pyplot()</td></tr>
         </tbody>
       </table>
       <h2>Exemples</h2>
@@ -80,5 +83,6 @@ bpm.chart.pyplot(fig)</code></pre>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>
+<script src="../doc.js"></script>
 </body>
 </html>

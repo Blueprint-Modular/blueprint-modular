@@ -1,0 +1,35 @@
+.bpm-divider {
+  display: flex;
+  align-items: center;
+  color: var(--bpm-text-secondary, #666);
+  font-size: 0.8125rem;
+}
+
+.bpm-divider-horizontal {
+  width: 100%;
+  gap: 1rem;
+}
+
+.bpm-divider-horizontal .bpm-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--bpm-border, #e5e5e5);
+}
+
+.bpm-divider-horizontal .bpm-divider-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.bpm-divider-vertical {
+  flex-direction: column;
+  width: 1px;
+  min-height: 1.5rem;
+}
+
+.bpm-divider-vertical .bpm-divider-line {
+  flex: 1;
+  width: 1px;
+  min-height: 1rem;
+  background: var(--bpm-border, #e5e5e5);
+}

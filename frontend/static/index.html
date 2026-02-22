@@ -3,88 +3,67 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blueprint Modular — Une façon plus rapide de construire des apps data</title>
-  <meta name="description" content="Briques prêtes à l'emploi. Importez depuis bpm, le reste est déjà fait. Python, pas de front." />
+  <title>Blueprint Modular — Briques Python pour vos interfaces</title>
+  <meta name="description" content="Importez depuis bpm, le reste est déjà fait. Composants, doc, déploiement. Pas de front." />
   <link rel="icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="landing.css" />
 </head>
 <body>
-  <nav class="landing-nav">
+  <header class="landing-header">
     <a href="index.html" class="brand">
       <img src="img/logo-bpm-nom.jpg" alt="Blueprint Modular" class="brand-logo" />
       <span class="word-blueprint">Blueprint</span> <span class="word-modular">Modular</span>
     </a>
-    <div class="landing-nav-links">
-      <a href="https://docs.blueprint-modular.com/">Docs</a>
-      <a href="https://docs.blueprint-modular.com/get-started/installation.html">Get started</a>
-      <a href="https://docs.blueprint-modular.com/components.html">Components</a>
-      <a href="https://docs.blueprint-modular.com/api-reference/text.html">API Reference</a>
-      <a href="https://docs.blueprint-modular.com/deploy/concepts.html">Deploy</a>
-      <a href="https://docs.blueprint-modular.com/" class="cta">Documentation →</a>
-    </div>
-  </nav>
+    <nav class="landing-nav-links">
+      <a href="https://docs.blueprint-modular.com/">Documentation</a>
+      <a href="https://docs.blueprint-modular.com/get-started/installation.html">Installation</a>
+      <a href="https://docs.blueprint-modular.com/components.html">Composants</a>
+      <a href="https://docs.blueprint-modular.com/" class="btn-doc">Accéder à la doc →</a>
+    </nav>
+  </header>
 
-  <section class="landing-hero">
-    <h1>Une façon plus rapide de construire et partager des apps data</h1>
-    <p class="subtitle">Transformez vos scripts en interfaces en quelques lignes. En Python. Pas de front.</p>
-    <div class="landing-hero-buttons">
-      <a href="https://docs.blueprint-modular.com/get-started/installation.html" class="primary">Commencer</a>
-      <a href="https://docs.blueprint-modular.com/">Voir la doc →</a>
-    </div>
-  </section>
+  <main class="landing-main">
+    <section class="hero">
+      <p class="hero-kicker">Framework Python</p>
+      <h1 class="hero-title">Briques prêtes.<br />Vous écrivez la logique.</h1>
+      <p class="hero-desc">Importez depuis <code>bpm</code>, assemblez métriques, tableaux, formulaires. Pas de HTML, pas de JS. Une seule codebase.</p>
+      <div class="hero-actions">
+        <a href="https://docs.blueprint-modular.com/get-started/installation.html" class="btn-primary">Commencer</a>
+        <a href="https://docs.blueprint-modular.com/" class="btn-secondary">Lire la doc</a>
+      </div>
+      <div class="hero-code">
+        <span class="hero-code-label">En terminal</span>
+        <pre><code>pip install blueprint-modular &amp;&amp; bpm run app.py</code></pre>
+      </div>
+    </section>
 
-  <section class="landing-install">
-    <h2>Démarrage en moins d’une minute</h2>
-    <p>Blueprint Modular est un framework d’apps. Installez-le comme n’importe quelle lib Python :</p>
-    <div class="landing-code">pip install blueprint-modular</div>
-    <div class="landing-code">bpm run app.py</div>
-    <p class="hint">C’est tout. Ensuite, consultez la <a href="https://docs.blueprint-modular.com/">documentation</a> et le <a href="https://github.com/remigit55/blueprint-modular">dépôt GitHub</a>.</p>
-  </section>
+    <section class="section-pitch">
+      <h2>Pourquoi Blueprint Modular</h2>
+      <ul class="pitch-list">
+        <li><strong>Composants réutilisables</strong> — Texte, données, graphiques, formulaires, layout. Tout est dans la doc.</li>
+        <li><strong>Python uniquement</strong> — Pas de front à câbler. Vous déclarez, l’interface se met à jour.</li>
+        <li><strong>Doc et déploiement inclus</strong> — Installation, API, déploiement VPS/Docker décrits pas à pas.</li>
+      </ul>
+    </section>
 
-  <section class="landing-principles">
-    <h2>Blueprint Modular repose sur trois idées</h2>
-    <div class="landing-principles-grid">
-      <div>
-        <h3>Écrire du script</h3>
-        <p>Construisez une app en quelques lignes avec une API simple. L’interface se met à jour quand vous sauvegardez le fichier.</p>
+    <section class="section-use">
+      <h2>Idéal pour</h2>
+      <div class="use-tags">
+        <span>Prototypes métier</span>
+        <span>Dashboards internes</span>
+        <span>Outils data &amp; ML</span>
+        <span>Apps de démo</span>
       </div>
-      <div>
-        <h3>Composer l’interface</h3>
-        <p>Ajouter un widget, c’est déclarer une variable. Pas de backend, routes, HTML ou CSS à gérer.</p>
-      </div>
-      <div>
-        <h3>Déployer tout de suite</h3>
-        <p>VPS, Docker, Nginx — la doc décrit les concepts et plateformes pour mettre en production.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="landing-testimonials">
-    <h2>Utilisé par des équipes data</h2>
-    <div class="landing-testimonials-grid">
-      <div class="landing-testimonial">
-        <blockquote>“Du code production tout en produisant des artefacts partageables.”</blockquote>
-        <cite>— Équipes data &amp; ML</cite>
-      </div>
-      <div class="landing-testimonial">
-        <blockquote>“Une excellente façon de partager modèles et analyses avec les métiers.”</blockquote>
-        <cite>— Data scientists</cite>
-      </div>
-      <div class="landing-testimonial">
-        <blockquote>“On se concentre sur la logique, pas sur l’alignement des divs.”</blockquote>
-        <cite>— Développeurs</cite>
-      </div>
-    </div>
-  </section>
-
-  <section class="landing-gallery">
-    <h2>Construisez des apps puissantes</h2>
-    <p>Composants texte, données, graphiques, inputs, layout, panels… Tout est dans la doc.</p>
-    <a href="https://docs.blueprint-modular.com/components.html">Voir les composants →</a>
-  </section>
+    <section class="section-cta">
+      <p>Tout est documenté : installation, composants, référence API, déploiement.</p>
+      <a href="https://docs.blueprint-modular.com/" class="btn-primary">Ouvrir la documentation</a>
+    </section>
+  </main>
 
   <footer class="landing-footer">
     <a href="https://github.com/remigit55/blueprint-modular">GitHub</a> ·

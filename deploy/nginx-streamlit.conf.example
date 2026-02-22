@@ -1,4 +1,4 @@
-# Exemple si vous voulez servir l'app STREAMLIT (proxy vers le port 8503)
+# Exemple si vous voulez servir l'app (proxy vers le port 8503)
 # À la place du bloc location / dans nginx.conf, vous pouvez utiliser :
 #
 # location / {
@@ -14,4 +14,4 @@
 # }
 #
 # Attention : avec ce proxy, les URLs comme /get-started/installation.html
-# ne fonctionneront pas (404), car Streamlit ne sert pas ces fichiers.
+# ne fonctionneront pas (404), car l'app ne sert pas ces fichiers.

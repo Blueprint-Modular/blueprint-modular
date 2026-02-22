@@ -1,0 +1,33 @@
+.bpm-skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--bpm-border, #e5e5e5) 25%,
+    var(--bpm-surface, #f5f5f5) 50%,
+    var(--bpm-border, #e5e5e5) 75%
+  );
+  background-size: 200% 100%;
+  animation: bpm-skeleton-shimmer 1.2s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.bpm-skeleton-rectangular {
+  border-radius: 4px;
+}
+
+.bpm-skeleton-text {
+  height: 1em;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.bpm-skeleton-circular {
+  border-radius: 50%;
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+@keyframes bpm-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

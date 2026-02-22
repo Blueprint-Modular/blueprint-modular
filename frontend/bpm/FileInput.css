@@ -1,0 +1,55 @@
+.bpm-fileinput-wrap {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  margin: 0.5rem 0;
+}
+
+.bpm-fileinput-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--bpm-text-primary, #333);
+}
+
+.bpm-fileinput-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.bpm-fileinput {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.bpm-fileinput-placeholder {
+  flex: 1;
+  min-width: 120px;
+  font-size: 0.875rem;
+  color: var(--bpm-text-secondary, #666);
+}
+
+.bpm-fileinput-trigger {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--bpm-border, #ddd);
+  border-radius: 8px;
+  background: var(--bpm-surface, #fff);
+  color: var(--bpm-text-primary, #333);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.bpm-fileinput-trigger:hover:not(:disabled) {
+  background: var(--bpm-border, #f0f0f0);
+}
+
+.bpm-fileinput-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

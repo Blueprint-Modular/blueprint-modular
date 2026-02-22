@@ -1,0 +1,32 @@
+.bpm-emptystate {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--bpm-text-secondary, #666);
+}
+
+.bpm-emptystate-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.bpm-emptystate-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bpm-text-primary, #333);
+}
+
+.bpm-emptystate-desc {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bpm-emptystate-action {
+  margin-top: 1rem;
+}

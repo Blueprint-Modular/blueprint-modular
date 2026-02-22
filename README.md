@@ -31,7 +31,7 @@ Aucune dépendance au reste du repo : vous pouvez ouvrir uniquement ce dossier d
 | **backend/** | Réservé au code serveur (API, etc.). Aucun backend pour l'instant — voir backend/README.md. |
 | **deploy/** | Scripts de déploiement : setup.sh, update.sh, nginx.conf. |
 | **Logo BPM.png**, **Logo-BPM-*** | Logos (racine). |
-| **app.py**, **pages/** | Ancien site Streamlit (référence). |
+| **app.py**, **pages/** | Ancienne app de démo (référence). |
 | **deploy_blueprint_modular.ps1** | Déploie **frontend/static/** + Logo vers le VPS. |
 | **DEPLOIEMENT_DOMAINE.md** | Guide : DNS, Nginx, Certbot. |
 
@@ -44,8 +44,8 @@ Aucune dépendance au reste du repo : vous pouvez ouvrir uniquement ce dossier d
 | **get-started/** | Installation, Fundamentals, First app |
 | **api-reference/** | Text, Data, Metrics, Charts, Inputs, Layout, Panels, Media, Status, Chat, Config |
 | **bpm/** | Composants React BPM (Button, Panel, Table, etc.) + **composants doc** : DocNav, DocSidebar, DocLayout, CodeBlock. |
-| **doc-app/** | **Site doc en React** (aucun Streamlit) : utilise uniquement les composants BPM. Build : `cd doc-app && npm run build` → `dist/`. |
-| **app.py**, **pages/** | Ancien site Streamlit (conservés pour référence) — **non utilisés** ; la doc est dans **doc-app**. |
+| **doc-app/** | **Site doc en React** : utilise uniquement les composants BPM. Build : `cd doc-app && npm run build` → `dist/`. |
+| **app.py**, **pages/** | Ancienne app de démo (conservée pour référence) — **non utilisée** ; la doc est dans **doc-app**. |
 | **deploy/** | **Scripts de déploiement** : setup.sh, update.sh, nginx.conf, CHECKLIST.md — voir deploy/README.md. |
 | **.env.example** | Exemple pour .env sur le serveur (ENVIRONMENT=production). |
 | **knowledge-base/** | FAQ, Troubleshooting |
@@ -61,7 +61,7 @@ Aucune dépendance au reste du repo : vous pouvez ouvrir uniquement ce dossier d
 | **nginx-bpm-domain.conf.example** | Exemple de vhost Nginx (HTTP seul, pour Certbot) |
 | **nginx-bpm-domain-https.conf.example** | Exemple de vhost Nginx HTTPS complet (après Certbot) |
 | **deploy_blueprint_modular.ps1** | Script PowerShell : copie des fichiers statiques (index, components, reference, logos) vers le VPS. |
-| **deploy_blueprint_modular_full.ps1** | Script PowerShell : déploiement complet (Streamlit + static) via archive + SSH (puis `deploy/update.sh` sur le serveur). |
+| **deploy_blueprint_modular_full.ps1** | Script PowerShell : déploiement complet (app + static) via archive + SSH (puis `deploy/update.sh` sur le serveur). |
 | **deploy_blueprint_modular.sh** | Script Bash (Linux / WSL) équivalent (fichiers statiques). |
 
 Les liens internes du site à la racine utilisent `/`, `/components` et `/reference`. Les fichiers dans `api-docs/` utilisent `/api/docs`, `/api/docs/components`, `/api/docs/reference`.
@@ -86,9 +86,9 @@ cd frontend/doc-app && npm install && cp "../../Logo BPM.png" "public/Logo BPM.p
 # Puis ouvrir l’URL affichée (http://localhost:5173)
 ```
 
-## Déploiement — www.blueprint-modular.com (fichiers statiques, sans Streamlit)
+## Déploiement — www.blueprint-modular.com (fichiers statiques)
 
-Le site doc est construit avec les **composants BPM** (React) dans **frontend/doc-app/**. Aucun Streamlit.
+Le site doc est construit avec les **composants BPM** (React) dans **frontend/doc-app/**.
 
 1. En local : `cd frontend/doc-app && npm run build` → les fichiers sont dans **frontend/doc-app/dist/**.
 2. Déployer **frontend/doc-app/dist/** vers le VPS, ou utiliser **deploy_blueprint_modular.ps1** (depuis Windows) pour le site **HTML statique** (**frontend/static/**), ou **deploy/deploy-from-git.sh** (sur le serveur, après clone du repo — voir **deploy/README.md**).
@@ -100,7 +100,7 @@ Repo : [github.com/remigit55/blueprint-modular](https://github.com/remigit55/blu
 
 ## Déploiement site statique (ancien / alternatif)
 
-Pour déployer uniquement les **fichiers HTML statiques** (sans Streamlit) :
+Pour déployer uniquement les **fichiers HTML statiques** :
 
 1. Lire **[DEPLOIEMENT_DOMAINE.md](./DEPLOIEMENT_DOMAINE.md)**.
 2. Configurer le DNS, créer le vhost Nginx (partir de **nginx-bpm-domain.conf.example**), Certbot, puis déployer les fichiers avec **deploy_blueprint_modular.ps1** ou **deploy_blueprint_modular.sh** (variables SERVER_IP, SSH_KEY à adapter).

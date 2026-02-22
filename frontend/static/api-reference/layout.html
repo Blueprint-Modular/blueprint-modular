@@ -16,6 +16,8 @@
     <a href="text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
     <a href="../cheat-sheet.html">Cheat sheet</a>
+    <a href="https://blueprint-modular.com" class="back-to-site">← Blueprint-modular.com</a>
+    <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
   <div class="doc-layout">
     <aside class="doc-sidebar">
@@ -39,6 +41,7 @@
       <a href="status.html">Status</a>
       <a href="chat.html">Chat</a>
       <a href="config.html">Config</a>
+      <a href="connection.html">Connexion aux données</a>
       <h3>Deploy</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Platforms</a>
@@ -51,17 +54,17 @@
     <main class="doc-main">
       <h1>Layout</h1>
       <p class="lead">Organisation de l'interface : <code>bpm.sidebar</code>, <code>bpm.columns</code>, <code>bpm.tabs</code>, <code>bpm.expander</code>, <code>bpm.form</code>.</p>
-      <h2>Mapping Streamlit → BPM</h2>
-      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+      <h2>Référence API</h2>
+      <table><thead><tr><th>Fonction</th><th>BPM</th></tr></thead>
         <tbody>
-          <tr><td>st.sidebar</td><td>bpm.sidebar</td></tr>
-          <tr><td>st.columns()</td><td>bpm.columns()</td></tr>
-          <tr><td>st.tabs()</td><td>bpm.tabs()</td></tr>
-          <tr><td>st.expander()</td><td>bpm.expander()</td></tr>
-          <tr><td>st.popover()</td><td>bpm.popover()</td></tr>
-          <tr><td>st.container()</td><td>bpm.container()</td></tr>
-          <tr><td>st.form()</td><td>bpm.form()</td></tr>
-          <tr><td>st.space()</td><td>bpm.space()</td></tr>
+          <tr><td>sidebar</td><td>bpm.sidebar</td></tr>
+          <tr><td>columns()</td><td>bpm.columns()</td></tr>
+          <tr><td>tabs()</td><td>bpm.tabs()</td></tr>
+          <tr><td>expander()</td><td>bpm.expander()</td></tr>
+          <tr><td>popover()</td><td>bpm.popover()</td></tr>
+          <tr><td>container()</td><td>bpm.container()</td></tr>
+          <tr><td>form()</td><td>bpm.form()</td></tr>
+          <tr><td>space()</td><td>bpm.space()</td></tr>
         </tbody>
       </table>
       <h2>Exemples</h2>
@@ -91,5 +94,6 @@ with bpm.form("mon_form"):
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>
+<script src="../doc.js"></script>
 </body>
 </html>

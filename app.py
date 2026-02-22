@@ -1,6 +1,6 @@
 """
 Blueprint Modular — Site documentation (www.blueprint-modular.com)
-Entrypoint Streamlit pour déploiement VPS.
+Entrypoint pour déploiement VPS.
 """
 import streamlit as st
 

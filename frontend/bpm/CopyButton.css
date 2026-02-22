@@ -1,0 +1,34 @@
+.bpm-copybutton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8125rem;
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  border: 1px solid var(--bpm-border, #ddd);
+  border-radius: 6px;
+  background: var(--bpm-surface, #fff);
+  color: var(--bpm-text-primary, #333);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.bpm-copybutton:hover {
+  background: var(--bpm-border, #f0f0f0);
+}
+
+.bpm-copybutton-icon {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.bpm-copybutton-check {
+  color: var(--bpm-success-text, #21c354);
+  font-weight: 600;
+}
+
+.bpm-copybutton-copied {
+  border-color: var(--bpm-success-border, #21c354);
+  color: var(--bpm-success-text, #21c354);
+}

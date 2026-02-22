@@ -16,6 +16,8 @@
     <a href="text.html">API Reference</a>
     <a href="../deploy/concepts.html">Deploy</a>
     <a href="../cheat-sheet.html">Cheat sheet</a>
+    <a href="https://blueprint-modular.com" class="back-to-site">← Blueprint-modular.com</a>
+    <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
   <div class="doc-layout">
     <aside class="doc-sidebar">
@@ -39,6 +41,7 @@
       <a href="status.html">Status</a>
       <a href="chat.html">Chat</a>
       <a href="config.html" class="active">Config</a>
+      <a href="connection.html">Connexion aux données</a>
       <h3>Deploy</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Platforms</a>
@@ -51,19 +54,19 @@
     <main class="doc-main">
       <h1>Config</h1>
       <p class="lead">Configuration de la page, thème, cache, navigation et utilitaires.</p>
-      <h2>Mapping Streamlit → BPM</h2>
-      <table><thead><tr><th>Streamlit</th><th>BPM</th></tr></thead>
+      <h2>Référence API</h2>
+      <table><thead><tr><th>Fonction</th><th>BPM</th></tr></thead>
         <tbody>
-          <tr><td>@st.cache_data</td><td>@bpm.cache_data</td></tr>
-          <tr><td>@st.cache_resource</td><td>@bpm.cache_resource</td></tr>
-          <tr><td>st.set_page_config()</td><td>bpm.set_page_config()</td></tr>
-          <tr><td>st.stop()</td><td>bpm.stop()</td></tr>
-          <tr><td>st.rerun()</td><td>bpm.rerun()</td></tr>
-          <tr><td>st.switch_page()</td><td>bpm.switch_page()</td></tr>
-          <tr><td>st.query_params</td><td>bpm.query_params</td></tr>
-          <tr><td>st.connection()</td><td>bpm.connection()</td></tr>
-          <tr><td>st.secrets</td><td>bpm.secrets</td></tr>
-          <tr><td>st.user</td><td>bpm.user</td></tr>
+          <tr><td>@cache_data</td><td>@bpm.cache_data</td></tr>
+          <tr><td>@cache_resource</td><td>@bpm.cache_resource</td></tr>
+          <tr><td>set_page_config()</td><td>bpm.set_page_config()</td></tr>
+          <tr><td>stop()</td><td>bpm.stop()</td></tr>
+          <tr><td>rerun()</td><td>bpm.rerun()</td></tr>
+          <tr><td>switch_page()</td><td>bpm.switch_page()</td></tr>
+          <tr><td>query_params</td><td>bpm.query_params</td></tr>
+          <tr><td>connection()</td><td>bpm.connection()</td></tr>
+          <tr><td>secrets</td><td>bpm.secrets</td></tr>
+          <tr><td>user</td><td>bpm.user</td></tr>
         </tbody>
       </table>
       <h2>Exemples</h2>
@@ -83,5 +86,6 @@ bpm.query_params["id"] = "123"</code></pre>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>
+<script src="../doc.js"></script>
 </body>
 </html>

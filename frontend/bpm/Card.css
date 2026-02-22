@@ -1,0 +1,65 @@
+.bpm-card {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bpm-surface, #fff);
+  color: var(--bpm-text-primary, #333);
+}
+
+.bpm-card-default {
+  border: 1px solid var(--bpm-border, #e5e5e5);
+}
+
+.bpm-card-elevated {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.bpm-card-outlined {
+  border: 1px solid var(--bpm-border, #e5e5e5);
+  background: transparent;
+}
+
+.bpm-card-image-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bpm-border, #eee);
+}
+
+.bpm-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bpm-card-body {
+  padding: 1rem 1.25rem;
+}
+
+.bpm-card-title {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bpm-card-subtitle {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--bpm-text-secondary, #666);
+  line-height: 1.4;
+}
+
+.bpm-card-content {
+  margin-top: 0.5rem;
+}
+
+.bpm-card-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}

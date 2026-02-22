@@ -1,0 +1,39 @@
+.bpm-breadcrumb {
+  font-family: "Segoe UI", "Source Sans", sans-serif;
+  font-size: 0.875rem;
+}
+
+.bpm-breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.25rem;
+}
+
+.bpm-breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bpm-breadcrumb-sep {
+  color: var(--bpm-text-secondary, #888);
+  margin-right: 0.25rem;
+}
+
+.bpm-breadcrumb-link {
+  color: var(--accent-color, #1f77b4);
+  text-decoration: none;
+}
+
+.bpm-breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.bpm-breadcrumb-current {
+  color: var(--bpm-text-primary, #333);
+  font-weight: 500;
+}

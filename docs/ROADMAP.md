@@ -21,12 +21,12 @@ Ce document relie le [paysage concurrentiel](../frontend/static/knowledge-base/c
 
 ## Différenciateurs BPM (à développer en priorité)
 
-| Axe | Doc / Fichiers |
-|-----|----------------|
-| Réactivité granulaire + syntaxe simple | [REACTIVITE_GRANULAIRE.md](REACTIVITE_GRANULAIRE.md) — `frontend/bpm/reactiveStore.js`, `useReactive.js` |
-| Design system cohérent (`bpm.*`) | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) — `frontend/bpm/theme.css` |
-| Registry `$` et `@` | [REGISTRY.md](REGISTRY.md) — `bpm/__init__.py` (ref, register, page, sidebar) |
-| Config-driven layout (`app.config.js`) | [APP_CONFIG.md](APP_CONFIG.md) — `frontend/bpm/app.config.example.js` |
+| Axe | Statut | Doc / Fichiers |
+|-----|--------|----------------|
+| Réactivité granulaire + syntaxe simple | 🚧 | [REACTIVITE_GRANULAIRE.md](REACTIVITE_GRANULAIRE.md) — `reactiveStore.js`, `useReactive.js` en place ; runtime Python à venir |
+| Design system cohérent (`bpm.*`) | ✅ | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) — `theme.css` (tokens), tous composants avec `className` |
+| Registry `$` et `@` | 🚧 | [REGISTRY.md](REGISTRY.md) — `bpm/__init__.py` (ref, register, page, sidebar, cache_data) ; stub utilisable, runtime à brancher |
+| Config-driven layout (`app.config.js`) | 🚧 | [APP_CONFIG.md](APP_CONFIG.md) — `app.config.example.js` + schéma doc ; Layout.jsx prêt pour config |
 
 ---
 
@@ -45,7 +45,7 @@ Ce document relie le [paysage concurrentiel](../frontend/static/knowledge-base/c
 | Fonctionnalité | Statut | BPM / Note |
 |----------------|--------|------------|
 | Classes CSS sur les composants | 🚧 | Prop `className` sur tous les composants BPM |
-| Layouts pixel-perfect / HTML/CSS natif | 📋 | Grid, Box, Divider déjà en place ; documenter usage CSS |
+| Layouts pixel-perfect / HTML/CSS natif | ✅ | Grid, Box, Divider, Card, Accordion, Stepper, Drawer, FAB, TopNav en place ; doc catalogue |
 | Cards natives | ✅ | `Card` (header/body/footer, image, actions) |
 | Navbar horizontale | ✅ | `DocNav` ; `TopNav` (générique) |
 | Grid layout configurable | ✅ | `Grid` (cols, gap, responsive xs/sm/md/lg) |
@@ -121,7 +121,21 @@ Ce document relie le [paysage concurrentiel](../frontend/static/knowledge-base/c
 | Embedding dans page HTML | 📋 | Bundle BPM en UMD + script d’init |
 | Jupyter natif | ⏸ | Package Python `bpm` + extension |
 | REST API auto-générée | ⏸ | Python |
-| Theming via config | 📋 | Fichier thème (CSS vars) + doc |
+| Theming via config | ✅ | `theme.css` (tokens), [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) ; surcharge par variables CSS |
+
+---
+
+## Site vitrine & communication (to-do interne)
+
+| Tâche | Statut | Note |
+|-------|--------|------|
+| Landing refonte (style type Streamlit) | ✅ | Hero, différenciateurs, boutons, lien Pourquoi BPM |
+| Doc : Pourquoi BPM, Ce qu'il reste à faire | ✅ | Pages + sidebar + encart Installation |
+| Logo → blueprint-modular.com, sandbox → catalogue | ✅ | Toutes pages doc ; liens sandbox → catalogue composants |
+| Doc déployée (doc.js, burger mobile, responsive) | ✅ | deploy-from-git.sh copie doc.js ; chemins /doc.js |
+| Sandbox par composant | 📋 | Un sandbox (preview live) dédié par composant BPM, pour tester chaque composant isolément |
+| Page doc par composant | 📋 | Une page de doc par composant (ex. button.html, metric.html) avec description, props, exemples et lien sandbox |
+| Formulaire de contact | 📋 | Page ou modal sur le site (vitrine et/ou doc) pour permettre aux visiteurs de contacter l’équipe BPM |
 
 ---
 
@@ -129,11 +143,17 @@ Ce document relie le [paysage concurrentiel](../frontend/static/knowledge-base/c
 
 | Objectif | Statut |
 |----------|--------|
-| Réactivité granulaire + syntaxe simple | 📋 |
-| Design system cohérent `bpm.*` | 🚧 (composants en place) |
-| Registry `$` et `@` | ⏸ Python |
-| Layout piloté par `app.config.js` | 📋 |
+| Réactivité granulaire + syntaxe simple | 🚧 Store + useReactive en place ; runtime Python à faire |
+| Design system cohérent `bpm.*` | ✅ theme.css, DESIGN_SYSTEM.md, composants avec tokens |
+| Registry `$` et `@` | 🚧 Stub Python (ref, register, page, sidebar) ; à brancher au runtime |
+| Layout piloté par `app.config.js` | 🚧 app.config.example.js, APP_CONFIG.md ; Layout prêt |
 
 ---
 
-*Dernière mise à jour : ajout des fonctionnalités issues du paysage concurrentiel.*
+## Composants BPM (inventaire)
+
+En place : Button, Input, Textarea, Selectbox, Checkbox, Toggle, Slider, DateInput, NumberInput, DateRangePicker, ColorPicker, FileInput, RadioGroup, Autocomplete, Rating — Title, Caption, Badge, CodeBlock — Metric, Table, SparklineMetric, TreeView, Timeline — Panel, Message, Modal, Toast, Spinner, Progress, Skeleton, EmptyState, Tooltip — Box, Card, Divider, Tabs, Expander, Accordion, Stepper, Drawer, FAB, Grid, TopNav — Layout, DocNav, DocSidebar, DocLayout, Sandbox — Breadcrumb, Chip, Avatar, CopyButton — reactiveStore, useReactive.
+
+---
+
+*Dernière mise à jour : roadmap alignée avec l'état actuel (site, doc, différenciateurs, composants, to-do formulaire contact).*

@@ -321,6 +321,9 @@ body {
 .platform-card { border: 1px solid var(--color-border); border-radius: 10px; padding: 1.5rem; text-decoration: none; color: inherit; transition: box-shadow 0.2s, border-color 0.2s; display: block; }
 .platform-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: var(--color-primary); }
 .platform-icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+.platform-card-icon { display: block; margin-bottom: 0.75rem; line-height: 0; }
+.platform-card-icon svg { width: 32px; height: 32px; vertical-align: middle; }
+.platform-card-icon svg[fill="currentColor"] { color: var(--accent); }
 .platform-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
 .platform-card p { margin: 0; font-size: 0.9rem; color: var(--color-muted); }
 .platform-call { margin-top: 0.75rem !important; font-size: 0.8rem !important; }

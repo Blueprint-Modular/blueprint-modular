@@ -55,43 +55,44 @@
     </aside>
     <main class="doc-main">
       <h1>Ce qu'il reste à faire</h1>
-      <p class="lead">La doc et la landing décrivent le flux cible : <code>pip install blueprint-modular &amp;&amp; bpm run app.py</code>. Pour que cela fonctionne réellement, les chantiers suivants restent à réaliser.</p>
+      <p class="lead">Le flux <code>pip install -e . &amp;&amp; bpm run app.py</code> (ou <code>pip install blueprint-modular</code> après publication sur PyPI) <strong>fonctionne</strong> : package installable, CLI <code>bpm run</code> / <code>bpm init</code>, serveur HTTP, APIs composants et session state. Ce qui est fait et ce qui reste à améliorer :</p>
 
       <h2>1. Package Python installable</h2>
       <ul>
-        <li><strong>Nom sur PyPI</strong> — Publier un package nommé <code>blueprint-modular</code> (ou équivalent) sur PyPI, ou documenter l’installation depuis le dépôt Git / en local.</li>
-        <li><strong>Configuration du package</strong> — Ajouter <code>pyproject.toml</code> (ou <code>setup.py</code>) à la racine du repo : métadonnées, dépendances, et point d’entrée pour la commande <code>bpm</code>.</li>
-        <li><strong>Module <code>bpm</code></strong> — Le dossier <code>bpm/</code> existe déjà (refs, registry, décorateurs). Y intégrer le futur CLI et les APIs composants côté Python.</li>
+        <li><strong>Configuration du package</strong> — <strong>Fait.</strong> <code>pyproject.toml</code> à la racine : métadonnées, point d'entrée <code>bpm = bpm.cli:main</code>. Installation en local : <code>pip install -e .</code> (avec un venv sur Linux/macOS).</li>
+        <li><strong>Module <code>bpm</code></strong> — <strong>Fait.</strong> CLI dans <code>bpm/cli.py</code>, APIs composants et session state dans <code>bpm/__init__.py</code>.</li>
+        <li><strong>Nom sur PyPI</strong> — <strong>À faire.</strong> Publier le package <code>blueprint-modular</code> sur PyPI pour permettre <code>pip install blueprint-modular</code> sans cloner le repo.</li>
       </ul>
 
       <h2>2. Commande <code>bpm run</code></h2>
       <ul>
-        <li><strong>Point d’entrée CLI</strong> — Déclarer dans le package une console script <code>bpm</code> qui accepte des sous-commandes (<code>run</code>, éventuellement <code>init</code>).</li>
-        <li><strong><code>bpm run app.py</code></strong> — Exécuter le script Python <code>app.py</code> dans un environnement où les appels du type <code>bpm.title(...)</code>, <code>bpm.button(...)</code>, etc. sont interceptés et convertis en arbre de rendu (ou en messages vers le frontend).</li>
-        <li><strong>Serveur web</strong> — Démarrer un serveur HTTP (ex. sur un port local) qui sert une page HTML/JS embarquant les composants BPM (frontend React) et qui reçoit les mises à jour d’état (refs, clics, etc.).</li>
+        <li><strong>Point d'entrée CLI</strong> — <strong>Fait.</strong> Sous-commandes <code>bpm run &lt;script&gt;</code> et <code>bpm init [dir]</code>.</li>
+        <li><strong><code>bpm run app.py</code></strong> — <strong>Fait.</strong> Exécution du script, collecte des nœuds de rendu, serveur HTTP (port 8501 par défaut, <code>--host</code> / <code>--port</code>).</li>
+        <li><strong>Serveur web</strong> — <strong>Fait.</strong> ThreadingHTTPServer qui exécute le script à chaque requête GET et renvoie une page HTML avec rendu (JS minimal côté client). Clics sur boutons → requête avec <code>?clicked=...</code> → re-run.</li>
       </ul>
 
       <h2>3. Protocole frontend / backend</h2>
       <ul>
-        <li><strong>Premier chargement</strong> — Le serveur exécute une fois <code>app.py</code> (ou le script cible), collecte le rendu (arbres de composants ou sérialisation), et renvoie une page qui affiche ce rendu (ex. via la librairie React <code>frontend/bpm</code>).</li>
-        <li><strong>Interactions</strong> — Clics, changements de champs, etc. : le frontend envoie des événements au backend ; le backend met à jour les refs (<code>bpm.ref</code>), relance éventuellement des parties du script ou du graphe de dépendances, et renvoie les mises à jour de rendu (réactivité granulaire) ou une nouvelle page (re-run complet selon la phase).</li>
-        <li><strong>WebSocket ou requêtes HTTP</strong> — Choisir un protocole (long polling, SSE, WebSocket) pour garder une connexion et pousser les mises à jour sans rechargement complet.</li>
+        <li><strong>Premier chargement</strong> — <strong>Fait.</strong> Le serveur exécute <code>app.py</code>, collecte les nœuds (title, write, button, metric, table, panel, etc.), renvoie une page HTML avec JSON + script de rendu (titres, texte, boutons, métriques, tableaux, panels).</li>
+        <li><strong>Interactions (boutons)</strong> — <strong>Fait.</strong> Clic → GET <code>/?clicked=&lt;key&gt;</code> → mise à jour <code>session_state</code> → re-run du script → nouvelle page. Pas encore de réactivité granulaire (re-run complet comme Streamlit).</li>
+        <li><strong>WebSocket ou SSE</strong> — <strong>À faire.</strong> Pour l'instant : re-run par requête HTTP. Plus tard : WebSocket ou SSE pour pousser les mises à jour sans rechargement complet (réactivité granulaire).</li>
       </ul>
 
       <h2>4. APIs Python côté app (<code>bpm.title</code>, <code>bpm.button</code>, etc.)</h2>
       <ul>
-        <li><strong>Implémentation des composants</strong> — Pour chaque composant documenté (title, metric, table, button, toggle, panel, etc.), implémenter la fonction Python qui enregistre un nœud de rendu ou envoie la description au frontend.</li>
-        <li><strong>Session state</strong> — <code>bpm.session_state</code> (ou équivalent) pour persister les valeurs entre les runs ou entre les requêtes.</li>
-        <li><strong>Rerun</strong> — Mécanisme <code>bpm.rerun()</code> (ou déclenchement automatique après mise à jour de refs) pour réexécuter tout ou partie du script.</li>
+        <li><strong>Implémentation des composants</strong> — <strong>En place (première vague).</strong> <code>title</code>, <code>write</code>, <code>markdown</code>, <code>button</code>, <code>metric</code>, <code>table</code>, <code>header</code>, <code>subheader</code>, <code>caption</code>, <code>code</code>, <code>divider</code>, <code>toggle</code>, <code>panel</code>. Chaque appel enregistre un nœud. À étendre : plus de composants (slider, selectbox, tabs, etc.) et rendu client aligné sur la librairie React <code>frontend/bpm</code>.</li>
+        <li><strong>Session state</strong> — <strong>Fait.</strong> <code>bpm.session_state</code> (dict-like) pour persister entre les runs. Utilisé pour les clics boutons (<code>_clicked_&lt;key&gt;</code>).</li>
+        <li><strong>Rerun</strong> — <strong>Partiel.</strong> Re-run déclenché par une requête (clic). <code>bpm.rerun()</code> existe ; en mode HTTP actuel le re-run est déclenché par le prochain GET.</li>
       </ul>
 
-      <h2>5. Optionnel : <code>bpm init</code></h2>
+      <h2>5. <code>bpm init</code></h2>
       <ul>
-        <li>Sous-commande qui génère un squelette de projet (ex. <code>app.py</code>, structure de dossiers, config minimale) pour démarrer une nouvelle app.</li>
+        <li><strong>Fait.</strong> Sous-commande <code>bpm init [dir]</code> qui génère un fichier <code>app.py</code> avec titre, write, metric, button.</li>
       </ul>
 
       <h2>Résumé</h2>
-      <p>Pour que <code>pip install blueprint-modular &amp;&amp; bpm run app.py</code> marche en vrai : (1) package publié ou installable avec point d’entrée <code>bpm</code>, (2) implémentation de <code>bpm run &lt;script&gt;</code> (exécution du script + serveur web), (3) protocole entre ce serveur et le frontend (HTML/JS/React BPM), (4) implémentation des APIs Python des composants et du session state. La doc, la landing et la librairie de composants React sont en place ; le runtime Python et le pont avec le front restent à développer.</p>
+      <p><strong>En place :</strong> package installable (<code>pip install -e .</code>), CLI <code>bpm run</code> / <code>bpm init</code>, serveur HTTP, premier chargement + interactions boutons (re-run par requête), APIs composants (title, button, metric, table, panel, etc.), <code>session_state</code>. Vous pouvez lancer une app avec <code>python -m bpm.cli run app.py</code> (après <code>pip install -e .</code> dans un venv).</p>
+      <p><strong>À faire / à améliorer :</strong> publication sur PyPI ; WebSocket ou SSE pour réactivité granulaire ; étendre les composants Python et le rendu client (alignement avec la librairie React) ; plus de widgets (slider, selectbox, tabs, etc.).</p>
       <p><strong>Voir aussi :</strong> <a href="../get-started/installation.html">Installation</a>, <a href="faq.html">FAQ</a>, <a href="https://github.com/remigit55/blueprint-modular">dépôt GitHub</a>.</p>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>

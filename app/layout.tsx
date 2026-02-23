@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import { NotificationProviders } from "@/components/NotificationProviders";
 
 export const metadata: Metadata = {
   title: "Blueprint Modular",
@@ -25,7 +26,9 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <NotificationProviders>{children}</NotificationProviders>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

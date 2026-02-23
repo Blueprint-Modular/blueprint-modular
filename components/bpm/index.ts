@@ -65,3 +65,4 @@ export { Grid } from "./Grid";
 export type { GridProps } from "./Grid";
 export { Stepper } from "./Stepper";
 export type { StepperProps, StepperStep } from "./Stepper";
+export { ToastProvider, useToast, default as Toast } from "./Toast";

@@ -22,6 +22,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useState } from "react";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const navItems = [
   { href: "/dashboard", label: "Accueil", icon: LayoutDashboard },
@@ -117,14 +118,21 @@ export function Sidebar() {
         </nav>
 
         <div className="p-2 border-t shrink-0 space-y-1" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-          <button
-            type="button"
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-white/10"
-            onClick={toggleTheme}
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            {!collapsed && <span className="text-sm">Thème</span>}
-          </button>
+          <div className="flex items-center gap-1">
+            <div className="flex-1 min-w-0">
+              <button
+                type="button"
+                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-white/10"
+                onClick={toggleTheme}
+              >
+                {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
+                {!collapsed && <span className="text-sm truncate">Thème</span>}
+              </button>
+            </div>
+            <div className="[&_.notification-bell-button]:text-white [&_.notification-bell-button:hover]:bg-white/10 [&_.notification-bell-button]:rounded-lg">
+              <NotificationBell />
+            </div>
+          </div>
           {session?.user && (
             <div className="flex items-center gap-3 px-3 py-2.5">
               {session.user.image ? (

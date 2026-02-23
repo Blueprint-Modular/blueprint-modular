@@ -2,6 +2,8 @@
 
 Déploiement du site Blueprint Modular sur le VPS : **fichiers statiques (HTML/CSS)** servis par Nginx.
 
+**Note :** le dépôt GitHub est privé. Les procédures ci‑dessous supposent que vous avez accès au repo (clé SSH ou token).
+
 ## Deux façons de déployer
 
 | Méthode | Quand l'utiliser |

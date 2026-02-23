@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -82,11 +82,11 @@
       <h2 id="vps">VPS Ubuntu + Nginx + systemd</h2>
       <p><strong>Recommandé</strong> pour héberger une app BPM sur un serveur dédié.</p>
       <h3>Étape 1 — Installer BPM sur le serveur</h3>
-      <pre><code>git clone https://github.com/remigit55/blueprint-modular
-cd blueprint-modular
-python3 -m venv .venv
+      <p>Le dépôt GitHub est privé. Utilisez <code>pip install blueprint-modular</code> (PyPI) pour installer BPM sur le serveur. Si vous avez accès au dépôt, vous pouvez aussi cloner et faire <code>pip install -e .</code>.</p>
+      <pre><code>python3 -m venv .venv
 source .venv/bin/activate
-pip install -e .</code></pre>
+pip install blueprint-modular</code></pre>
+      <p>Créez ensuite un <code>app.py</code> (ou utilisez <code>bpm init</code>) dans un répertoire de déploiement, par ex. <code>/var/www/blueprint-modular</code>, et pointez <code>WorkingDirectory</code> vers ce dossier (voir Étape 2).</p>
       <h3>Étape 2 — Configurer systemd</h3>
       <p>Créer <code>/etc/systemd/system/blueprint-modular.service</code> :</p>
       <pre><code>[Unit]
@@ -109,7 +109,7 @@ WantedBy=multi-user.target</code></pre>
       <h3>Étape 4 — SSL avec Certbot</h3>
       <p><code>certbot --nginx -d votre-domaine.com</code></p>
       <h3>Étape 5 — Déployer les mises à jour</h3>
-      <p><code>cd /var/www/blueprint-modular && git pull && systemctl restart blueprint-modular</code> (ou utiliser <code>deploy/deploy-from-git.sh</code>).</p>
+      <p>Avec PyPI : <code>source .venv/bin/activate && pip install --upgrade blueprint-modular && systemctl restart blueprint-modular</code>. Si vous déployez depuis le dépôt (accès requis) : <code>git pull</code> puis redémarrage, ou <code>deploy/deploy-from-git.sh</code>.</p>
 
       <h2 id="docker">Docker</h2>
       <p><strong>Dockerfile</strong> minimal :</p>

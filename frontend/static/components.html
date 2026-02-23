@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -69,13 +69,20 @@
       <h1>Catalogue des composants</h1>
       <p class="lead">Composants BPM par catégorie. Chaque carte renvoie vers la page API Reference correspondante.</p>
 
+      <div class="doc-callout" style="margin:1.5rem 0; padding:1rem 1.25rem; background:var(--bpm-bg-secondary, #f5f5f5); border-radius:8px; border:1px solid var(--bpm-border, #e5e7eb);">
+        <strong>Visuels et sandbox live</strong> — Le framework BPM est utilisé sur l’app pour afficher les composants en direct et modifier les paramètres en temps réel.
+        <a href="https://app.blueprint-modular.com/docs/components" target="_blank" rel="noopener" class="doc-cta" style="display:inline-block; margin-top:0.5rem;">Ouvrir la doc composants avec sandbox →</a>
+      </div>
+
       <p style="margin-bottom:1rem;"><button type="button" id="toggle-sort" class="doc-cta" style="font-size:0.85rem;padding:0.4rem 0.8rem;">Trier A→Z</button></p>
 
       <section class="component-category" data-category="Texte">
         <h2>Texte</h2>
         <p>Titres, texte, markdown, badge, code, formules. Une page par composant :</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.title, bpm.header, bpm.markdown, bpm.badge, bpm.code, bpm.latex ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Titres" src="https://app.blueprint-modular.com/sandbox?component=title" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>bpm.title("Mon titre")
 bpm.markdown("**Gras** et *italique*")
 bpm.code("snippet")</code></pre></div>
@@ -88,7 +95,9 @@ bpm.code("snippet")</code></pre></div>
         <h2>Données</h2>
         <p>Métriques, tableaux, dataframe, JSON.</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.metric, bpm.table, bpm.dataframe, bpm.json ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Métriques" src="https://app.blueprint-modular.com/sandbox?component=metric" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>bpm.metric("CA", 142500, delta=3200)
 bpm.table(df)
 bpm.dataframe(df)</code></pre></div>
@@ -99,7 +108,7 @@ bpm.dataframe(df)</code></pre></div>
 
       <section class="component-category" data-category="Graphiques">
         <h2>Graphiques</h2>
-        <p>Ligne, barres, aires, nuage de points, Plotly.</p>
+        <p>Ligne, barres, aires, nuage de points, Plotly. <a href="https://app.blueprint-modular.com/docs/components" target="_blank" rel="noopener">Sandbox live sur l’app</a>.</p>
         <div class="component-card">
           <div class="component-preview"><div class="preview-placeholder">[ bpm.chart.line, bpm.chart.bar, bpm.chart.area, bpm.chart.scatter, bpm.chart.plotly ]</div></div>
           <div class="component-code"><pre><code>bpm.chart.line(df, x="Mois", y="CA")
@@ -112,7 +121,9 @@ bpm.chart.bar(df, x="Catégorie", y="Valeur")</code></pre></div>
         <h2>Inputs</h2>
         <p>Boutons, toggle, select, slider, input, date, fichier.</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.button, bpm.toggle, bpm.select, bpm.slider, bpm.input, bpm.date_input, bpm.file_uploader ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Boutons" src="https://app.blueprint-modular.com/sandbox?component=button" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>bpm.button("Valider", key="ok")
 bpm.toggle("Activer", key="on")
 bpm.select("Choix", options=["A", "B"], key="choice")</code></pre></div>
@@ -124,7 +135,9 @@ bpm.select("Choix", options=["A", "B"], key="choice")</code></pre></div>
         <h2>Layout</h2>
         <p>Colonnes, onglets, expander, <strong>sidebar</strong>, <strong>carousel</strong>, formulaire.</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.columns, bpm.tabs, bpm.expander, bpm.sidebar, bpm.carousel, bpm.form ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Onglets" src="https://app.blueprint-modular.com/sandbox?component=tabs" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>col1, col2 = bpm.columns(2)
 with col1:
     bpm.metric("A", 10)
@@ -140,7 +153,9 @@ bpm.carousel(items=[...])  # diaporama</code></pre></div>
         <h2>Panels</h2>
         <p>Panneaux info, warning, error, success.</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.panel variants ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Panneaux" src="https://app.blueprint-modular.com/sandbox?component=panel&amp;variant=info&amp;title=Exemple%20info" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>bpm.panel("Info", "Message", variant="info")
 bpm.panel("Attention", "Détail", variant="warning")</code></pre></div>
           <a href="api-reference/panels.html" class="component-link">Voir l'API →</a>
@@ -163,7 +178,9 @@ bpm.video("file.mp4")</code></pre></div>
         <h2>Status</h2>
         <p>Spinner, barre de progression, toast, skeleton, état vide.</p>
         <div class="component-card">
-          <div class="component-preview"><div class="preview-placeholder">[ bpm.spinner, bpm.progress, bpm.toast, bpm.skeleton, bpm.empty_state ]</div></div>
+          <div class="component-preview" style="min-height:200px;">
+            <iframe title="Visuel BPM — Spinner" src="https://app.blueprint-modular.com/sandbox?component=spinner" style="width:100%;height:200px;border:1px solid var(--bpm-border);border-radius:6px;"></iframe>
+          </div>
           <div class="component-code"><pre><code>bpm.spinner("Chargement...")
 bpm.progress(0.65, label="Avancement")
 bpm.toast("Enregistré.", type="success")</code></pre></div>

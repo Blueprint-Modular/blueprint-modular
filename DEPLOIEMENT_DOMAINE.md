@@ -11,7 +11,7 @@ Remplacez `VOTRE_DOMAINE.fr` par votre domaine réel (ex. `blueprint-modular.fr`
 - [ ] Domaine acheté chez OVH (ou autre) et accès à la zone DNS
 - [ ] VPS avec accès SSH (même serveur que MyPortfolio ou dédié)
 - [ ] Clé SSH configurée (ex. `~/.ssh/portfolio_beam_key`) et testée : `ssh -i ... ubuntu@IP_VPS "echo OK"`
-- [ ] Fichiers du site prêts dans le dossier `blueprint-modular` : `index.html`, `components.html`, `reference.html`, **Logo BPM.png** (voir [README](./README.md) § Fichiers — si vous clonez depuis le repo parent, vous pouvez copier un logo depuis `frontend/public` en le renommant en `Logo BPM.png`)
+- [ ] Fichiers du site prêts dans le dossier `blueprint-modular` : `index.html`, `components.html`, `reference.html`, **Logo BPM.png** (voir [README](./README.md) § Fichiers — si vous avez accès au dépôt et clonez depuis le repo parent, vous pouvez copier un logo depuis `frontend/public` en le renommant en `Logo BPM.png`)
 
 **Fichier exemple Nginx :** vous pouvez partir du fichier **`nginx-bpm-domain.conf.example`** dans ce dossier : copiez-le sur le VPS, renommez-le avec votre domaine, puis remplacez `VOTRE_DOMAINE.fr` dans tout le fichier. Après obtention du SSL, vous pouvez vous inspirer de **`nginx-bpm-domain-https.conf.example`** pour la config HTTPS complète.
 

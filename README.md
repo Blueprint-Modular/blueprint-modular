@@ -141,7 +141,7 @@ Le site doc est construit avec les **composants BPM** (React) dans **frontend/do
 2. Déployer **frontend/doc-app/dist/** vers le VPS, ou utiliser **deploy_blueprint_modular.ps1** (depuis Windows) pour le site **HTML statique** (**frontend/static/**), ou **deploy/deploy-from-git.sh** (sur le serveur, après clone du repo — voir **deploy/README.md**).
 3. Nginx : servir les fichiers statiques (voir **deploy/nginx.conf** : `root` + `try_files`).
 
-Repo : [github.com/remigit55/blueprint-modular](https://github.com/remigit55/blueprint-modular).
+Code source : dépôt [GitHub](https://github.com/remigit55/blueprint-modular) (privé ; accès réservé aux contributeurs / équipe).
 
 ---
 

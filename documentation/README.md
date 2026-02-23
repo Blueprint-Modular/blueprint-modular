@@ -14,4 +14,4 @@ Il se trouve à la **racine du projet** :
 
 Prévisualisation en local : `python -m http.server 8080` à la racine du projet, puis ouvrir http://localhost:8080.
 
-Dépôt : [github.com/remigit55/blueprint-modular](https://github.com/remigit55/blueprint-modular).
+Dépôt : [github.com/remigit55/blueprint-modular](https://github.com/remigit55/blueprint-modular) (privé).

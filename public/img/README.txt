@@ -1,2 +1,3 @@
-Placez ici logo-bpm-nom.jpg pour afficher le logo dans l'app Next.js (page de connexion et sidebar).
-Si vous avez Logo-BPM-nom.jpg ou Logo BPM.png à la racine du dépôt, copiez-le ici en le renommant logo-bpm-nom.jpg.
+Logo dans l'app Next.js (page de connexion et sidebar) :
+- Soit placez logo-bpm-nom.jpg ou logo-bpm-nom.png dans ce dossier (public/img/).
+- Soit mettez Logo-BPM-nom.jpg ou Logo BPM.png à la racine du dépôt : le script deploy-from-git.sh les copie ici avant le build sur le VPS.

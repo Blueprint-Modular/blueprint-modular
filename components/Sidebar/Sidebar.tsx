@@ -25,7 +25,7 @@ const navItems = [
   { href: "/settings", label: "Paramètres", icon: Settings },
 ];
 
-const LOGO_SRC = "/img/logo-bpm-nom.jpg";
+const LOGO_CANDIDATES = ["/img/logo-bpm-nom.jpg", "/img/logo-bpm-nom.png"];
 /** Couleurs fixes du logo (ne varient pas avec le wizard / couleur d'accent) */
 const LOGO_BLUE = "#1a4b8f";
 const LOGO_CYAN = "#00a3e0";
@@ -37,6 +37,12 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [logoIndex, setLogoIndex] = useState(0);
+  const logoSrc = LOGO_CANDIDATES[logoIndex] ?? LOGO_CANDIDATES[0];
+  const handleLogoError = () => {
+    if (logoIndex < LOGO_CANDIDATES.length - 1) setLogoIndex((i) => i + 1);
+    else setLogoError(true);
+  };
 
   const NavIcon = ({
     icon: Icon,
@@ -110,13 +116,13 @@ export function Sidebar() {
             {collapsed ? (
               !logoError ? (
                 <Image
-                  src={LOGO_SRC}
+                  src={logoSrc}
                   alt="Blueprint Modular"
                   width={32}
                   height={32}
                   className="h-8 w-auto object-contain"
                   priority
-                  onError={() => setLogoError(true)}
+                  onError={handleLogoError}
                 />
               ) : (
                 <span className="font-bold text-sm truncate" style={{ color: LOGO_BLUE }}>BPM</span>
@@ -125,13 +131,13 @@ export function Sidebar() {
               <>
                 {!logoError ? (
                   <Image
-                    src={LOGO_SRC}
+                    src={logoSrc}
                     alt=""
                     width={120}
                     height={40}
                     className="h-10 w-auto object-contain"
                     priority
-                    onError={() => setLogoError(true)}
+                    onError={handleLogoError}
                   />
                 ) : null}
                 <span className="font-bold text-base tracking-tight">

@@ -285,7 +285,6 @@ export default function SettingsPage() {
                     { value: "2", label: "Priorité haute et moyenne (erreurs + succès)" },
                     { value: "3", label: "Toutes les notifications" },
                   ]}
-                  placeholder={null}
                 />
                 <p className="text-sm mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
                   Filtre les notifications affichées dans la cloche

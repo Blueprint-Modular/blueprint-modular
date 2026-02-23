@@ -313,7 +313,6 @@ export default function SettingsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Paramètres</div>
         <h1>Paramètres</h1>
         <p className="doc-description">
           Profil, apparence, clés API et préférences générales. Thème clair/sombre, couleur d&apos;accent, niveau des notifications.

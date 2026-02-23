@@ -16,7 +16,6 @@ export default function ModulesPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Modules</div>
         <h1>Modules</h1>
         <p className="doc-description">
           Accédez aux modules disponibles : Auth, Wiki, IA, Documents, Veille, Notification. Chaque module dispose d&apos;une page dédiée avec description et liens utiles.

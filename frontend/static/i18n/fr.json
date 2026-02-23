@@ -1,4 +1,4 @@
-﻿{
+{
   "page": {
     "title": "Blueprint Modular — Briques Python pour vos interfaces",
     "description": "Importez depuis bpm, le reste est déjà fait. Composants, doc, déploiement. Pas de front."
@@ -20,7 +20,7 @@
       "installation": "Installation",
       "components": "Composants",
       "modules": "Modules",
-      "access_doc": "Accéder à la doc →"
+      "access_doc": "Accéder à la doc"
     },
     "hero": {
       "kicker": "Framework Python",
@@ -69,7 +69,7 @@
       "versions": "Versions",
       "faq": "FAQ",
       "roadmap": "Roadmap",
-      "meta": "Blueprint Modular v0.1 · Licence MIT"
+      "meta": "Blueprint Modular v0.1"
     }
   }
 }

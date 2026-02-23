@@ -11,6 +11,8 @@ export default function DocTitlePage() {
   const [size, setSize] = useState<string>("");
   const [bold, setBold] = useState<string>(""); // "" = défaut niveau, "true", "false"
   const [color, setColor] = useState<string>("");
+  const [bar, setBar] = useState(false);
+  const [inverted, setInverted] = useState(false);
 
   const sizeProp = size.trim() || null;
   const boldProp = bold === "true" ? true : bold === "false" ? false : null;
@@ -21,7 +23,9 @@ export default function DocTitlePage() {
   const pySize = sizeProp ? `, size="${sizeProp}"` : "";
   const pyBold = bold === "true" ? ", bold=True" : bold === "false" ? ", bold=False" : "";
   const pyColor = colorProp ? `, color="${colorProp.replace(/"/g, '\\"')}"` : "";
-  const pythonCode = `bpm.title(${pyLevel}, ${pyContent}${pySize}${pyBold}${pyColor})`;
+  const pyBar = bar ? ", bar=True" : "";
+  const pyInverted = inverted ? ", inverted=True" : "";
+  const pythonCode = `bpm.title(${pyLevel}, ${pyContent}${pySize}${pyBold}${pyColor}${pyBar}${pyInverted})`;
   const { prev, next } = getPrevNext("title");
 
   return (
@@ -43,6 +47,8 @@ export default function DocTitlePage() {
             size={sizeProp}
             bold={boldProp === null ? undefined : boldProp}
             color={colorProp}
+            bar={bar}
+            inverted={inverted}
           >
             {children}
           </Title>
@@ -87,6 +93,20 @@ export default function DocTitlePage() {
               placeholder="ex. var(--bpm-text-primary), #333"
             />
           </div>
+          <div className="sandbox-control-group">
+            <label>bar (optionnel)</label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={bar} onChange={(e) => setBar(e.target.checked)} />
+              Barre verticale à gauche
+            </label>
+          </div>
+          <div className="sandbox-control-group">
+            <label>inverted (optionnel)</label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={inverted} onChange={(e) => setInverted(e.target.checked)} />
+              Couleur inversée (blanc sur noir)
+            </label>
+          </div>
         </div>
         <div className="sandbox-code">
           <div className="sandbox-code-header"><span>Python</span><button type="button" onClick={() => navigator.clipboard.writeText(pythonCode)}>Copier</button></div>
@@ -101,12 +121,16 @@ export default function DocTitlePage() {
           <tr><td><code>size</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Taille CSS (ex. 1.5rem, 24px). Surcharge le niveau.</td></tr>
           <tr><td><code>bold</code></td><td><code>boolean | number</code></td><td>—</td><td>Non</td><td>Gras : true=700, false=400, ou nombre. Surcharge le niveau.</td></tr>
           <tr><td><code>color</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Couleur CSS (ex. var(--bpm-text-primary), #333).</td></tr>
+          <tr><td><code>bar</code></td><td><code>boolean</code></td><td>false</td><td>Non</td><td>Barre verticale sombre à gauche du titre (style en-tête de section).</td></tr>
+          <tr><td><code>inverted</code></td><td><code>boolean</code></td><td>false</td><td>Non</td><td>Couleur inversée : fond sombre, texte blanc (style badge / scénario).</td></tr>
         </tbody>
       </table>
       <h2 className="text-lg font-semibold mt-8 mb-2">Exemples</h2>
       <CodeBlock code={'bpm.title(level=1, content="Tableau de bord")'} language="python" />
       <CodeBlock code={'bpm.title(level=2, content="Section")'} language="python" />
       <CodeBlock code={'bpm.title(level=3, content="Sous-titre", size="1.5rem", bold=True, color="var(--bpm-accent)")'} language="python" />
+      <CodeBlock code={'bpm.title(level=2, content="Quel go-to-market ? 3 scénarios évalués", bar=True)'} language="python" />
+      <CodeBlock code={'bpm.title(level=3, content="SCÉNARIO 2", inverted=True)'} language="python" />
       <nav className="doc-pagination">
         {prev ? <Link href={"/docs/components/" + prev}>← bpm.{prev}</Link> : <span />}
         {next ? <Link href={"/docs/components/" + next}>bpm.{next} →</Link> : <span />}

@@ -16,6 +16,7 @@ export default async function LoginPageRoute({ searchParams }: Props) {
     <LoginPage
       title="Blueprint Modular"
       subtitle="Connexion sécurisée (Google ou e-mail)"
+      logoSrc="/img/logo-bpm-nom.jpg"
       callbackUrl={callbackUrl}
       showEmailOption={true}
     />

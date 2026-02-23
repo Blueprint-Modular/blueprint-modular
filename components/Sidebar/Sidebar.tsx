@@ -20,8 +20,8 @@ import { useState } from "react";
 const navItems = [
   { href: "/dashboard", label: "Accueil", icon: LayoutDashboard },
   { href: "/docs/components", label: "Composants", icon: Boxes },
-  { href: "/sandbox", label: "Sandbox", icon: Play },
   { href: "/modules", label: "Modules", icon: FolderOpen },
+  { href: "/sandbox", label: "Sandbox", icon: Play },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ];
 
@@ -82,6 +82,7 @@ export function Sidebar() {
       {/* Desktop : sidebar verticale grise à gauche */}
       <aside
         className={`
+          group bpm-app-sidebar
           fixed top-0 left-0 z-40 h-full flex flex-col
           w-64 transition-[width] duration-200 ease-in-out
           hidden md:flex
@@ -94,19 +95,41 @@ export function Sidebar() {
           fontWeight: 400,
         }}
       >
-        {/* Header : logo + collapse (hauteur réduite, style notifications) */}
+        {/* Header : logo + collapse (style type PortfolioManagement : logo centré en haut) */}
         <div
-          className="flex items-center justify-between px-4 py-3 border-b shrink-0"
+          className="relative flex flex-col items-center justify-center px-4 py-5 border-b shrink-0"
           style={{ borderColor: "var(--bpm-sidebar-border)" }}
         >
-          {!collapsed && (
-            <Link href="/dashboard" className="font-bold truncate text-base" style={{ color: "var(--bpm-sidebar-text)" }}>
-              Blueprint Modular
-            </Link>
-          )}
+          <Link href="/dashboard" className="flex flex-col items-center justify-center w-full min-h-[2.5rem] gap-1">
+            {collapsed ? (
+              <Image
+                src="/Logo BPM.png"
+                alt="Blueprint Modular"
+                width={32}
+                height={32}
+                className="h-8 w-auto object-contain"
+                priority
+              />
+            ) : (
+              <>
+                <Image
+                  src="/Logo BPM.png"
+                  alt=""
+                  width={120}
+                  height={40}
+                  className="h-10 w-auto object-contain"
+                  priority
+                />
+                <span className="font-bold text-base tracking-tight">
+                  <span style={{ color: "var(--bpm-accent)" }}>Blueprint</span>
+                  <span style={{ color: "var(--bpm-accent-cyan)" }}> Modular</span>
+                </span>
+              </>
+            )}
+          </Link>
           <button
             type="button"
-            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--bpm-sidebar-hover-bg)] transition"
+            className="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--bpm-sidebar-hover-bg)] transition opacity-0 group-hover:opacity-100 focus:opacity-100 focus-visible:opacity-100 duration-200"
             style={{ color: "var(--bpm-sidebar-text)" }}
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Ouvrir" : "Réduire"}

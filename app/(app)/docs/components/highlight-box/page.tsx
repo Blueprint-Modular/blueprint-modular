@@ -39,7 +39,7 @@ export default function DocHighlightBoxPage() {
               value={1}
               label="DAILY"
               title="Tranché hyperprotéiné (type dinde / poulet)"
-              momentDescription="Moment : base quotidienne — petit-déjeuner salé, sandwich, collation"
+              momentDescription="base quotidienne — petit-déjeuner salé, sandwich, collation"
               rtbPoints={exampleRtb}
               targetPoints={exampleCible}
             />
@@ -53,7 +53,7 @@ export default function DocHighlightBoxPage() {
   value=1,
   label="DAILY",
   title="Tranché hyperprotéiné (type dinde / poulet)",
-  moment_description="Moment : base quotidienne — petit-déjeuner salé, sandwich, collation",
+  moment_description="base quotidienne — petit-déjeuner salé, sandwich, collation",
   rtb_points=["+30% protéines vs classique", "Protéines pois & blé français", "Format tranché pratique", "Faible MG"],
   target_points="Usage quotidien, entrée de gamme, recrutement large"
 )`}</code></pre>
@@ -97,7 +97,7 @@ export default function DocHighlightBoxPage() {
             <td><code>string</code></td>
             <td>—</td>
             <td>Non</td>
-            <td>Description &quot;Moment&quot; (affichée en italique, gris).</td>
+            <td>Texte affiché après le libellé &quot;Moment :&quot; (en italique, gris).</td>
           </tr>
           <tr>
             <td><code>rtbPoints</code></td>

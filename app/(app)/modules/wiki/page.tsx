@@ -12,6 +12,8 @@ interface WikiArticle {
   isPublished: boolean;
   updatedAt: string;
   author?: { name: string | null };
+  authorId?: string;
+  canEdit?: boolean;
   children?: WikiArticle[];
 }
 
@@ -62,14 +64,27 @@ export default function WikiPage() {
   const [loading, setLoading] = useState(true);
   const [selectedParent, setSelectedParent] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchArticles = () => {
     const url = search ? `/api/wiki?search=${encodeURIComponent(search)}` : "/api/wiki";
     fetch(url)
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setArticles(Array.isArray(data) ? data : []))
       .catch(() => setArticles([]))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchArticles();
   }, [search]);
+
+  const handleDelete = async (e: React.MouseEvent, slug: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Supprimer cet article ?")) return;
+    const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, { method: "DELETE" });
+    if (res.ok) setArticles((prev) => prev.filter((a) => a.slug !== slug));
+  };
 
   const tree = buildTree(articles);
   const displayed = articles.filter((a) => a.parentId === selectedParent);
@@ -88,10 +103,14 @@ export default function WikiPage() {
       </div>
       <div className="wiki-header">
         <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Articles</h2>
-        {session && (
+        {session ? (
           <Link href="/modules/wiki/new" className="btn-primary">
             + Nouvel article
           </Link>
+        ) : (
+          <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+            <Link href="/login" className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>Connexion</Link> requise pour créer un article.
+          </span>
         )}
       </div>
       <div className="wiki-search">
@@ -107,8 +126,12 @@ export default function WikiPage() {
       ) : articles.length === 0 ? (
         <div className="wiki-empty">
           <p>Le wiki est vide pour l&apos;instant.</p>
-          {session && (
+          {session ? (
             <Link href="/modules/wiki/new">Créer le premier article →</Link>
+          ) : (
+            <p className="text-sm mt-2" style={{ color: "var(--bpm-text-secondary)" }}>
+              <Link href="/login" className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>Connectez-vous</Link> pour créer des articles.
+            </p>
           )}
         </div>
       ) : (
@@ -130,14 +153,38 @@ export default function WikiPage() {
             ) : (
               <div className="wiki-article-list">
                 {displayed.map((article) => (
-                  <Link key={article.id} href={`/modules/wiki/${article.slug}`} className="wiki-card">
-                    <h3>{article.title}</h3>
-                    <div className="wiki-card-meta">
-                      <span>Mis à jour le {new Date(article.updatedAt).toLocaleDateString("fr-FR")}</span>
-                      {article.author && <span> · {article.author.name ?? ""}</span>}
-                      {!article.isPublished && <span className="wiki-draft">Brouillon</span>}
+                  <div key={article.id} className="wiki-card flex flex-col gap-2">
+                    <div className="flex justify-between items-start gap-3">
+                      <Link href={`/modules/wiki/${article.slug}`} className="min-w-0 flex-1 no-underline block" style={{ color: "inherit" }}>
+                        <h3>{article.title}</h3>
+                        <div className="wiki-card-meta">
+                          <span>Mis à jour le {new Date(article.updatedAt).toLocaleDateString("fr-FR")}</span>
+                          {article.author && <span> · {article.author.name ?? ""}</span>}
+                          {!article.isPublished && <span className="wiki-draft">Brouillon</span>}
+                        </div>
+                      </Link>
+                      {article.canEdit && (
+                        <div className="flex gap-2 flex-shrink-0 text-sm">
+                          <Link
+                            href={`/modules/wiki/${article.slug}/edit`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="underline"
+                            style={{ color: "var(--bpm-accent-cyan)" }}
+                          >
+                            Modifier
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={(e) => handleDelete(e, article.slug)}
+                            className="underline"
+                            style={{ color: "var(--bpm-text-secondary)" }}
+                          >
+                            Supprimer
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             )}

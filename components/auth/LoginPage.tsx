@@ -27,6 +27,7 @@ export function LoginPage({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logoError, setLogoError] = useState(false);
 
   const handleGoogleLogin = () => {
     setError(null);
@@ -63,9 +64,17 @@ export function LoginPage({
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {logoSrc && (
+        {logoSrc && !logoError && (
           <div className={styles.logo}>
-            <Image src={logoSrc} alt="" width={120} height={80} priority unoptimized={logoSrc.startsWith("data:")} />
+            <Image
+              src={logoSrc}
+              alt=""
+              width={120}
+              height={80}
+              priority
+              unoptimized={logoSrc.startsWith("data:")}
+              onError={() => setLogoError(true)}
+            />
           </div>
         )}
         <h1 className={styles.title}>{title}</h1>

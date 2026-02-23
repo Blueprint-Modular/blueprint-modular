@@ -103,6 +103,12 @@
       "category": "Interaction"
     },
     {
+      "slug": "theme",
+      "name": "bpm.theme",
+      "description": "Bascule thème clair / sombre.",
+      "category": "Interaction"
+    },
+    {
       "slug": "selectbox",
       "name": "bpm.selectbox",
       "description": "Liste déroulante.",
@@ -190,6 +196,12 @@
       "slug": "stepper",
       "name": "bpm.stepper",
       "description": "Étapes (stepper).",
+      "category": "Navigation"
+    },
+    {
+      "slug": "sidebar",
+      "name": "bpm.sidebar",
+      "description": "Décorateur pour définir le contenu de la barre latérale.",
       "category": "Navigation"
     },
     {

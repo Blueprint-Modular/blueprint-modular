@@ -20,6 +20,8 @@ export interface TitleProps extends Omit<React.HTMLAttributes<HTMLHeadingElement
   color?: string | null;
   /** Barre verticale sombre à gauche du titre (comme en-tête de section). */
   bar?: boolean;
+  /** Couleur inversée : fond sombre, texte blanc (style badge / scénario). */
+  inverted?: boolean;
   /** Optional logo URL (e.g. from localStorage). Shown only when level === 1. */
   logoUrl?: string | null;
   onLogoClick?: () => void;
@@ -32,6 +34,7 @@ export function Title({
   bold: boldProp = null,
   color: colorProp = null,
   bar = false,
+  inverted = false,
   logoUrl = null,
   onLogoClick,
   className = "",
@@ -48,7 +51,7 @@ export function Title({
       : typeof boldProp === "boolean"
         ? boldProp ? 700 : 400
         : boldProp;
-  const color = colorProp ?? "var(--bpm-text-primary)";
+  const color = inverted ? "#fff" : (colorProp ?? "var(--bpm-text-primary)");
 
   const content = (
     <>
@@ -67,7 +70,7 @@ export function Title({
     </>
   );
 
-  const classNames = `bpm-title bpm-title-level-${lvl} flex items-center gap-2 flex-wrap ${bar ? "bpm-title-with-bar" : ""} ${className}`.trim();
+  const classNames = `bpm-title bpm-title-level-${lvl} flex items-center gap-2 flex-wrap ${bar ? "bpm-title-with-bar" : ""} ${inverted ? "bpm-title-inverted" : ""} ${className}`.trim();
   const mergedStyle = { fontSize, fontWeight, ...style };
 
   if (lvl === 1) return <h1 className={classNames} style={mergedStyle} {...props}>{content}</h1>;

@@ -76,24 +76,25 @@ body {
   background: var(--bg);
   font-family: var(--bpm-font);
 }
-/* Taille unique pour tous les liens et le brand du header doc */
-.doc-nav a { color: var(--muted); text-decoration: none; font-size: 0.9375rem; }
+/* Onglets de la topbar : même style que blueprint-modular.com (0.9rem, 500) */
+.doc-nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
 .doc-nav a:hover { color: var(--accent); }
 .doc-nav .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: inherit; font-size: 0.9375rem; }
 .doc-nav .brand .brand-logo { height: 28px; width: auto; max-width: 44px; object-fit: contain; flex-shrink: 0; }
 .doc-nav .brand .word-blueprint { color: var(--bleu-profond); }
 .doc-nav .brand .word-modular { color: var(--bleu-cyan); }
+/* Même style que le bouton "Accéder à la doc" (landing) */
 .doc-nav .doc-nav-app {
   margin-left: auto;
-  padding: 0.4rem 0.75rem;
-  background: var(--accent);
+  padding: 0.5rem 1rem;
+  background: var(--bleu-profond);
   color: #fff;
-  font-weight: 500;
-  font-size: 0.875rem;
+  font-weight: 600;
+  font-size: 0.9rem;
   border-radius: 6px;
   white-space: nowrap;
 }
-.doc-nav .doc-nav-app:hover { filter: brightness(1.1); color: #fff; }
+.doc-nav .doc-nav-app:hover { opacity: 0.92; color: #fff; }
 .doc-nav .doc-nav-app:focus,
 .doc-nav .doc-nav-app:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--accent); }
 .nav-burger {

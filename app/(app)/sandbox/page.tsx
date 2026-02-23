@@ -238,13 +238,13 @@ function SandboxContent() {
         boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <h1 className="text-xl font-semibold mb-4" style={{ color: "var(--bpm-text-primary)" }}>
-          Sandbox
-        </h1>
-        <p className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
-          Choisissez un composant ou écrivez du code pour composer une page en direct.
-        </p>
+      <div className="doc-page" style={{ maxWidth: 720, margin: "0 auto" }}>
+        <div className="doc-page-header">
+          <h1>Sandbox</h1>
+          <p className="doc-description">
+            Choisissez un composant ou écrivez du code pour composer une page en direct.
+          </p>
+        </div>
         <div className="flex gap-2 mb-4">
           <button
             type="button"

@@ -40,15 +40,7 @@ export default function DocSkeletonPage() {
 
       <div className="sandbox-container">
         <div className="sandbox-preview">
-          <div className="flex flex-wrap items-end gap-6">
-            <Skeleton variant={variant} width={wNum} height={hNum} />
-            <div className="flex flex-col gap-2">
-              <Skeleton variant="text" width={180} height={16} />
-              <Skeleton variant="text" width={140} height={16} />
-              <Skeleton variant="text" width={160} height={16} />
-            </div>
-            <Skeleton variant="circular" width={48} height={48} />
-          </div>
+          <Skeleton variant={variant} width={wNum} height={hNum} />
         </div>
         <div className="sandbox-controls">
           <div className="sandbox-control-group">

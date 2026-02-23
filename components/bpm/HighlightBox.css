@@ -61,6 +61,13 @@
   line-height: 1.4;
 }
 
+.bpm-highlight-box-moment-text {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--bpm-text-secondary, #515154);
+  line-height: 1.45;
+}
+
 .bpm-highlight-box-block {
   font-size: 0.875rem;
   line-height: 1.45;
@@ -93,7 +100,8 @@
   color: var(--bpm-text-primary);
 }
 
-[data-theme="dark"] .bpm-highlight-box-moment {
+[data-theme="dark"] .bpm-highlight-box-moment,
+[data-theme="dark"] .bpm-highlight-box-moment-text {
   color: var(--bpm-text-secondary);
 }
 

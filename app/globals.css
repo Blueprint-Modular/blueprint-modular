@@ -103,7 +103,7 @@ body {
 /* Title with vertical bar (bpm.title bar) */
 .bpm-title-with-bar {
   position: relative;
-  padding-left: 11px;
+  padding-left: 14px;
 }
 .bpm-title-with-bar::before {
   content: "";
@@ -111,9 +111,65 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 5px;
   background: var(--bpm-text-primary, #1d1d1f);
   border-radius: 0;
+}
+
+/* Title inverted (bpm.title inverted) — fond sombre, texte blanc, style badge */
+.bpm-title-inverted {
+  display: inline-flex;
+  background: #1d1d1f;
+  color: #fff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  margin: 0.25rem 0;
+}
+.bpm-title-inverted.bpm-title-with-bar {
+  padding-left: calc(14px + 0.75rem);
+}
+.bpm-title-inverted.bpm-title-with-bar::before {
+  background: #fff;
+  left: 0.75rem;
+}
+
+/* Card inverted (bpm.card inverted) — zone type Executive Summary */
+.bpm-card-inverted {
+  background: #1d1d1f !important;
+  color: #fff;
+}
+.bpm-card-inverted .bpm-card-title,
+.bpm-card-inverted .bpm-card-subtitle,
+.bpm-card-inverted .bpm-card-content,
+.bpm-card-inverted .bpm-card-actions {
+  color: #fff;
+}
+.bpm-card-inverted .bpm-card-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Panel inverted (bpm.panel inverted) */
+.bpm-panel-inverted {
+  background: #1d1d1f !important;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.bpm-panel-inverted .font-semibold,
+.bpm-panel-inverted > div {
+  color: #fff;
+}
+
+/* Textarea inverted (bpm.textarea inverted) */
+.bpm-textarea-inverted .bpm-textarea-label {
+  color: #fff;
+}
+.bpm-textarea-inverted .bpm-textarea {
+  background: #1d1d1f !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+.bpm-textarea-inverted .bpm-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Doc page: largeur utile (réduit la marge blanche à droite) */
@@ -122,8 +178,11 @@ body {
 /* Doc page header */
 .doc-page-header { margin-bottom: 32px; }
 .doc-breadcrumb { font-size: 12px; color: var(--bpm-text-secondary); margin-bottom: 8px; }
+.doc-breadcrumb-header { margin-bottom: 0; }
 .doc-breadcrumb a { color: var(--bpm-accent-cyan); text-decoration: none; }
 .doc-breadcrumb a:hover { text-decoration: underline; }
+/* Breadcrumb affiché dans le header ; masquer le doublon dans le contenu */
+.app-main .doc-page-header .doc-breadcrumb { display: none; }
 .doc-page-header h1 { font-size: 1.75rem; font-weight: 700; color: var(--bpm-text-primary); margin: 0 0 8px; }
 .doc-description { color: var(--bpm-text-secondary); margin: 0 0 12px; font-size: 15px; }
 .doc-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

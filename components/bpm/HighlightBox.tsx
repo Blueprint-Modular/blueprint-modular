@@ -51,8 +51,11 @@ export function HighlightBox({
       </div>
       <div className="bpm-highlight-box-content">
         <h3 className="bpm-highlight-box-title">{title}</h3>
-        {momentDescription && (
-          <p className="bpm-highlight-box-moment">{momentDescription}</p>
+        {momentDescription != null && momentDescription !== "" && (
+          <div className="bpm-highlight-box-block">
+            <span className="bpm-highlight-box-block-label">Moment :</span>{" "}
+            <span className="bpm-highlight-box-moment-text">{momentDescription}</span>
+          </div>
         )}
         {rtbText && (
           <div className="bpm-highlight-box-block">

@@ -38,6 +38,84 @@ export default function AuthModulePage() {
         Le module auth utilise NextAuth (providers Google, credentials). La session est disponible dans toute l&apos;app ; les pages protégées redirigent vers la page de connexion si l&apos;utilisateur n&apos;est pas connecté.
       </p>
 
+      <h2 className="text-lg font-semibold mt-8 mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modèles de page de connexion</h2>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
+        Trois modèles par défaut sont proposés. Celui utilisé dans cette app correspond au modèle 1 ; le modèle 2 est celui de myportfolio.beam-consulting.
+      </p>
+      <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
+        <div
+          className="p-4 rounded-xl border"
+          style={{
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          }}
+        >
+          <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
+            1. Modèle Blueprint Modular (actuel)
+          </h3>
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Carte centrée, titre + sous-titre, choix E-mail ou Google, formulaire email avec Retour / Se connecter, footer avec lien accueil et Connexion.
+          </p>
+          <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
+            <li>Composant <code className="text-xs">LoginPage</code> (Next.js)</li>
+            <li>Style <code className="text-xs">LoginPage.module.css</code></li>
+            <li>Utilisé sur <strong>/login</strong> dans cette app</li>
+          </ul>
+          <Link
+            href="/login"
+            className="text-sm font-medium"
+            style={{ color: "var(--bpm-accent-cyan)" }}
+          >
+            Voir la page de connexion →
+          </Link>
+        </div>
+        <div
+          className="p-4 rounded-xl border"
+          style={{
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          }}
+        >
+          <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
+            2. Modèle BEAM (myportfolio.beam-consulting)
+          </h3>
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Logo en haut, titre type « Portfolio Manager », sous-titre, choix « Se connecter avec e-mail » ou « Se connecter avec Google », formulaire email avec Retour, footer Conditions d&apos;utilisation et Contact.
+          </p>
+          <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
+            <li><code className="text-xs">LoginPage.jsx</code> + <code className="text-xs">LoginPage.css</code></li>
+            <li>Fond gris clair, carte blanche border-radius 24px</li>
+            <li>Bouton Google bleu #4285f4, bouton principal couleur accent</li>
+            <li>Thème sombre supporté (html.theme-dark)</li>
+          </ul>
+          <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+            Utilisé dans le projet myportfolio.beam-consulting
+          </span>
+        </div>
+        <div
+          className="p-4 rounded-xl border"
+          style={{
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          }}
+        >
+          <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
+            3. Modèle minimal (Google seul)
+          </h3>
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Une seule option : bouton « Se connecter avec Google », titre court et lien « Retour à l&apos;accueil ». Idéal pour les apps qui n&apos;utilisent que OAuth.
+          </p>
+          <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
+            <li>Pas de formulaire e-mail / mot de passe</li>
+            <li>Même composant <code className="text-xs">LoginPage</code> avec <code className="text-xs">showEmailOption=false</code></li>
+            <li>Page épurée, un seul call-to-action</li>
+          </ul>
+          <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+            Disponible en passant <code className="text-xs">showEmailOption=false</code>
+          </span>
+        </div>
+      </div>
+
       {session?.user ? (
         <div
           className="max-w-md p-6 rounded-xl border"

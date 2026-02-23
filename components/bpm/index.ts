@@ -70,3 +70,5 @@ export type { StepperProps, StepperStep } from "./Stepper";
 export { ToastProvider, useToast, default as Toast } from "./Toast";
 export { HighlightBox } from "./HighlightBox";
 export type { HighlightBoxProps } from "./HighlightBox";
+export { Theme } from "./Theme";
+export type { ThemeProps, ThemeVariant } from "./Theme";

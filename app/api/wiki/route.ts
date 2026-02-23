@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
   const where = searchCondition ? { AND: [visibility, searchCondition] } : visibility;
 
-  const articles = await prisma.wikiArticle.findMany({
+  const rawArticles = await prisma.wikiArticle.findMany({
     where,
     orderBy: { updatedAt: "desc" },
     select: {
@@ -39,11 +39,16 @@ export async function GET(request: Request) {
       title: true,
       slug: true,
       parentId: true,
+      authorId: true,
       updatedAt: true,
       isPublished: true,
       author: { select: { name: true } },
     },
   });
+
+  const canEdit = (authorId: string) =>
+    !!user && (user.id === authorId || user.role === "ADMIN" || user.role === "OWNER");
+  const articles = rawArticles.map((a) => ({ ...a, canEdit: canEdit(a.authorId) }));
   return NextResponse.json(articles);
 }
 

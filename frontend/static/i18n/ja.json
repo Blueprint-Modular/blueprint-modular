@@ -1,4 +1,4 @@
-﻿{
+{
   "page": {
     "title": "Blueprint Modular — インターフェース用 Python ブロック",
     "description": "bpm からインポート、残りはお任せ。コンポーネント、ドキュメント、デプロイ。フロント不要。"
@@ -20,7 +20,7 @@
       "installation": "インストール",
       "components": "コンポーネント",
       "modules": "モジュール",
-      "access_doc": "ドキュメントへ →"
+      "access_doc": "ドキュメントへ"
     },
     "hero": {
       "kicker": "Python フレームワーク",
@@ -69,7 +69,7 @@
       "versions": "バージョン",
       "faq": "FAQ",
       "roadmap": "ロードマップ",
-      "meta": "Blueprint Modular v0.1 · MIT ライセンス"
+      "meta": "Blueprint Modular v0.1"
     }
   }
 }

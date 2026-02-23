@@ -6,6 +6,8 @@ export interface PanelProps {
   variant?: "info" | "success" | "warning" | "error";
   title?: string | null;
   icon?: string | null | false;
+  /** Couleur inversée : fond sombre, texte blanc (style zone type Executive Summary). */
+  inverted?: boolean;
   children?: React.ReactNode;
   className?: string;
 }
@@ -21,6 +23,7 @@ export function Panel({
   variant = "info",
   title = null,
   icon = null,
+  inverted = false,
   children,
   className = "",
 }: PanelProps) {
@@ -29,11 +32,11 @@ export function Panel({
 
   return (
     <div
-      className={`rounded-lg border-l-4 p-4 ${className}`}
+      className={`rounded-lg border-l-4 p-4 ${inverted ? "bpm-panel-inverted" : ""} ${className}`}
       style={{
-        background: "var(--bpm-bg-secondary)",
+        background: inverted ? undefined : "var(--bpm-bg-secondary)",
         borderColor,
-        color: "var(--bpm-text-primary)",
+        color: inverted ? undefined : "var(--bpm-text-primary)",
       }}
       role="region"
       aria-label={title ?? `Panneau ${variant}`}

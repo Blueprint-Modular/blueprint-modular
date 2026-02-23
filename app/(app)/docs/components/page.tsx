@@ -9,6 +9,7 @@ import {
   Tabs,
   Title,
   Toggle,
+  Theme,
   Message,
   Spinner,
   Tooltip,
@@ -58,6 +59,7 @@ const PREVIEW_BY_SLUG: Record<string, React.ReactNode> = {
   emptystate: <EmptyState title="Aucune donnée" description="Ajoutez des éléments." />,
   button: <Button>Action</Button>,
   toggle: <Toggle value={false} onChange={() => {}} label="Option" />,
+  theme: <Theme variant="toggle" />,
   selectbox: <Selectbox options={[{ value: "a", label: "Option A" }]} value={null} onChange={() => {}} placeholder="Choisir" />,
   numberinput: <NumberInput value={10} onChange={() => {}} label="Quantité" />,
   input: <Input value="" onChange={() => {}} label="Nom" placeholder="Saisir..." />,
@@ -92,14 +94,14 @@ export default function DocsComponentsPage() {
   const categories = groupByCategory(registry.components);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-accent)" }}>
-        Composants BPM
-      </h1>
-      <p className="mb-8" style={{ color: "var(--bpm-text-secondary)" }}>
-        Référence des composants avec sandbox live. La liste est alimentée par le package Python{" "}
-        <code className="text-sm">blueprint-modular</code> (pip install). Cliquez sur une carte pour la documentation.
-      </p>
+    <div className="doc-page">
+      <div className="doc-page-header">
+        <h1>Composants BPM</h1>
+        <p className="doc-description">
+          Référence des composants avec sandbox live. La liste est alimentée par le package Python{" "}
+          <code className="text-sm">blueprint-modular</code> (pip install). Cliquez sur une carte pour la documentation.
+        </p>
+      </div>
       <div className="space-y-10">
         {categories.map((cat) => (
           <section key={cat.name}>

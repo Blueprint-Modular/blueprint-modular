@@ -289,9 +289,7 @@ export function NotificationBell() {
 
   return (
     <div className="notification-bell-container" ref={bellRef}>
-      <Tooltip text="Notifications" position="bottom">
-        {buttonEl}
-      </Tooltip>
+      {buttonEl}
       {(isOpen || isClosing) && (
         <div className={popupClasses} onAnimationEnd={handleAnimEnd}>
           {panelContent}

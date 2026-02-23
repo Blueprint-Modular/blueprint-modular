@@ -100,7 +100,7 @@ if [ -f "$REPO_DIR/package.json" ] && [ -f "$REPO_DIR/next.config.mjs" ]; then
   if [ ! -f .env ]; then
     echo "    ⚠ .env manquant dans $REPO_DIR. Copiez deploy/app-env.example vers .env et renseignez DATABASE_URL, NEXTAUTH_*."
   else
-    npm ci
+    npm install
     npx prisma generate
     npm run build
     mkdir -p .next/standalone/.next

@@ -9,7 +9,7 @@ const LEVEL_STYLES: Record<1 | 2 | 3 | 4, { fontSize: string; fontWeight: number
   4: { fontSize: "1.125rem", fontWeight: 600 },
 };
 
-export interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface TitleProps extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color"> {
   children: React.ReactNode;
   level?: 1 | 2 | 3 | 4;
   /** Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau. */

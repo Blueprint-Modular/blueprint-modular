@@ -1,4 +1,4 @@
-{
+﻿{
   "page": {
     "title": "Blueprint Modular — Python building blocks for your UIs",
     "description": "Import from bpm, the rest is done. Components, docs, deployment. No front-end."
@@ -69,7 +69,7 @@
       "versions": "Versions",
       "faq": "FAQ",
       "roadmap": "Roadmap",
-      "meta": "Blueprint Modular v0.1-alpha · MIT License"
+      "meta": "Blueprint Modular v0.1 · MIT License"
     }
   }
 }

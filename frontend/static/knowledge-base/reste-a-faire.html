@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -66,7 +66,7 @@
       <p class="lead">Roadmap publique : ce qui est fait, en cours et à faire pour Blueprint Modular.</p>
       <div class="alert alert-important">
         <span class="alert-icon"></span>
-        <div class="alert-body"><strong>Statut global : Alpha — pas production-ready.</strong> Le package est publiable sur PyPI (<code>pip install blueprint-modular</code> une fois <code>twine upload</code> exécuté). En local, <code>pip install -e . &amp;&amp; bpm run app.py</code> fonctionne. Les optimisations (WebSocket, réactivité granulaire) restent à faire.</div>
+        <div class="alert-body"><strong>Statut global : Alpha — pas production-ready.</strong> Le package est publié sur PyPI : <code>pip install blueprint-modular</code>. Les optimisations (WebSocket, réactivité granulaire) restent à faire.</div>
       </div>
 
       <h2>Fait</h2>
@@ -79,6 +79,7 @@
         <li>Serveur HTTP, premier chargement + interactions boutons (re-run par requête)</li>
         <li>APIs composants (title, write, button, metric, table, panel, etc.) et <code>session_state</code></li>
         <li>Documentation (en cours d’enrichissement)</li>
+        <li>Publication sur PyPI (<code>pip install blueprint-modular</code>) et publication automatique via GitHub Actions (tag <code>v*</code>)</li>
       </ul>
 
       <h2>En cours</h2>
@@ -89,11 +90,10 @@
 
       <h2>À faire</h2>
       <ul>
-        <li>Publication sur PyPI (<code>pip install blueprint-modular</code>)</li>
         <li>Tests automatisés</li>
         <li>WebSocket ou SSE pour réactivité granulaire (mise à jour ciblée sans re-run complet)</li>
         <li>Exemples d’apps complètes et templates (login, chat IA, paramètres)</li>
-        <li>Intégration CI/CD</li>
+        <li>Intégration CI/CD (publication PyPI via workflow — fait ; reste tests, lint, etc.)</li>
         <li><strong>Multi-langue</strong> : (1) site Blueprint Modular (doc + landing) avec sélecteur FR/EN ; (2) composant module réutilisable <code>bpm.i18n</code> pour les apps construites avec BPM (traductions, locale).</li>
         <li><strong>Modules</strong> : pages pré-construites réutilisables — Wiki (appelable, remplissable via IA), Module IA, Module Veille, Module IBKR, Module Analyse de document. Voir la section <a href="https://blueprint-modular.com/modules.html">Modules</a>.</li>
         <li><strong>Module Authentification (add-in)</strong> : à développer en reprenant le modèle de <a href="https://myportfolio.beam-consulting.fr">Myportfolio.beam-consulting</a> (flux, UX, comportement).</li>
@@ -104,7 +104,7 @@
       <ul>
         <li><strong>Configuration du package</strong> — <strong>Fait.</strong> <code>pyproject.toml</code> à la racine : métadonnées, point d'entrée <code>bpm = bpm.cli:main</code>. Installation en local : <code>pip install -e .</code> (avec un venv sur Linux/macOS).</li>
         <li><strong>Module <code>bpm</code></strong> — <strong>Fait.</strong> CLI dans <code>bpm/cli.py</code>, APIs composants et session state dans <code>bpm/__init__.py</code>.</li>
-        <li><strong>Nom sur PyPI</strong> — <strong>À faire.</strong> Publier le package <code>blueprint-modular</code> sur PyPI pour permettre <code>pip install blueprint-modular</code> sans cloner le repo.</li>
+        <li><strong>Nom sur PyPI</strong> — <strong>Fait.</strong> Le package <code>blueprint-modular</code> est publié sur PyPI ; <code>pip install blueprint-modular</code> fonctionne. Publication automatique via tag <code>v*</code> (voir <code>PUBLISH_PYPI.md</code>).</li>
       </ul>
 
       <h3>2. Commande <code>bpm run</code></h3>
@@ -135,7 +135,7 @@
 
       <h3>Résumé</h3>
       <p><strong>En place :</strong> package installable (<code>pip install -e .</code>), CLI <code>bpm run</code> / <code>bpm init</code>, serveur HTTP, premier chargement + interactions boutons (re-run par requête), APIs composants (title, button, metric, table, panel, etc.), <code>session_state</code>. Vous pouvez lancer une app avec <code>python -m bpm.cli run app.py</code> (après <code>pip install -e .</code> dans un venv).</p>
-      <p><strong>À faire / à améliorer :</strong> WebSocket ou SSE pour réactivité granulaire ; étendre les composants Python et le rendu client (alignement avec la librairie React) ; plus de widgets (slider, selectbox, tabs, etc.). Le package est prêt pour PyPI (voir <a href="https://github.com/remigit55/blueprint-modular">repo</a> / <code>PUBLISH_PYPI.md</code>).</p>
+      <p><strong>À faire / à améliorer :</strong> WebSocket ou SSE pour réactivité granulaire ; étendre les composants Python et le rendu client (alignement avec la librairie React) ; plus de widgets (slider, selectbox, tabs, etc.). Le package est publié sur PyPI (voir <a href="https://pypi.org/project/blueprint-modular/">PyPI</a>, <a href="https://github.com/remigit55/blueprint-modular">repo</a>, <code>PUBLISH_PYPI.md</code>).</p>
       <h2>Comment contribuer</h2>
       <p>Quand le dépôt sera public, les contributions (issues, pull requests) seront les bienvenues — voir le README du projet pour les guidelines.</p>
       <p><strong>Voir aussi :</strong> <a href="../get-started/installation.html">Installation</a>, <a href="faq.html">FAQ</a>.</p>
@@ -152,7 +152,7 @@
           <a href="../knowledge-base/faq.html">FAQ</a>
           <a href="../knowledge-base/reste-a-faire.html">Roadmap</a>
         </div>
-        <div class="footer-meta">Blueprint Modular v0.1-alpha · Licence MIT</div>
+        <div class="footer-meta">Blueprint Modular v0.1 · Licence MIT</div>
       </footer>
     </main>
   </div>

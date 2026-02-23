@@ -6,6 +6,8 @@ Framework Python pour créer des interfaces de données sans HTML ni JS.
 
 ## Installation
 
+Le package est disponible sur [PyPI](https://pypi.org/project/blueprint-modular/).
+
 ```bash
 pip install blueprint-modular
 ```
@@ -35,8 +37,7 @@ https://docs.blueprint-modular.com
 
 ## Statut
 
-Blueprint Modular est en développement actif (alpha).  
-Certaines fonctionnalités sont en cours d'implémentation.
+Blueprint Modular est en phase alpha (développement actif). Le package est publié sur PyPI ; certaines fonctionnalités restent en cours d’implémentation.
 
 ## Licence
 

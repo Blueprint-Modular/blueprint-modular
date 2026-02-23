@@ -9,7 +9,7 @@ Ce document relie le [paysage concurrentiel](../frontend/static/knowledge-base/c
 
 | Chantier | Statut | Détail |
 |----------|--------|--------|
-| Package Python sur PyPI (ou installable) | 📋 | `pyproject.toml` / `setup.py`, nom `blueprint-modular`, point d’entrée CLI `bpm` |
+| Package Python sur PyPI (ou installable) | ✅ | Publié sur PyPI : `blueprint-modular`, CLI `bpm`, publication via tag `v*` (Trusted Publishing) |
 | Commande `bpm run app.py` | 📋 | Exécution du script + serveur HTTP qui sert la page et reçoit les événements |
 | Protocole frontend / backend | 📋 | Premier rendu, puis événements (clics, etc.) → mise à jour refs → renvoi des delta de rendu (ou re-run) ; WebSocket ou HTTP |
 | APIs Python des composants | 📋 | `bpm.title`, `bpm.button`, `bpm.metric`, etc. + `bpm.session_state`, `bpm.rerun()` |

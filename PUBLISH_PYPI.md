@@ -1,19 +1,22 @@
 # Publier blueprint-modular sur PyPI
 
-## Option 1 : Trusted Publishing (recommandé, sans token)
+**État actuel :** le package est publié sur PyPI. Installation : `pip install blueprint-modular`.  
+Page projet : https://pypi.org/project/blueprint-modular/
 
-1. **Sur PyPI** : aller dans le projet (ou « Add new pending publisher » si première fois), section **Publishing** → **Add a new trusted publisher**.
+---
+
+## Option 1 : Trusted Publishing (en place, sans token)
+
+1. **Sur PyPI** : section **Publishing** → Trusted publisher configuré avec :
    - **Owner :** `remigit55`
    - **Repository name :** `blueprint-modular`
    - **Workflow name :** `workflow.yml`
-   - **Environment name (optional) :** `pypi`
+   - **Environment name (optional) :** laisser vide ou `pypi` (le workflow n’utilise pas d’environnement GitHub)
 
-2. **Sur GitHub** (optionnel) : dans le repo → Settings → Environments → créer l’environnement `pypi` si tu veux un gate avant publication.
-
-3. **Publier** : pousser un tag `v*` (ex. `v0.1.0`). Le workflow `.github/workflows/workflow.yml` build et envoie sur PyPI.
+2. **Publier une nouvelle version** : incrémenter la version (voir ci-dessous), commit, puis pousser un tag `v*`. Le workflow `.github/workflows/workflow.yml` build et envoie sur PyPI.
    ```bash
-   git tag v0.1.0
-   git push origin v0.1.0
+   git tag v0.1.2
+   git push origin v0.1.2
    ```
 
 ## Option 2 : Publication manuelle (token)
@@ -65,17 +68,18 @@ Page du projet : https://pypi.org/project/blueprint-modular/
 
 ## Mise à jour de version
 
-Modifier la version dans :
+1. Modifier la version dans :
+   - `pyproject.toml` : `version = "0.1.2"`
+   - `bpm/__init__.py` : `__version__ = "0.1.2"`
+   - `bpm/cli.py` : utilise `__version__` de `bpm`, pas de doublon
 
-- `pyproject.toml` : `version = "0.1.1"`
-- `bpm/__init__.py` : `__version__ = "0.1.1"`
-- `bpm/cli.py` : utilise `__version__` de `bpm`, pas de doublon
-
-Puis :
-
-```bash
-python -m build
-python -m twine upload dist/*
-```
+2. Commit + push, puis créer et pousser le tag (publication automatique via le workflow) :
+   ```bash
+   git add pyproject.toml bpm/__init__.py
+   git commit -m "chore: version 0.1.2"
+   git push origin master
+   git tag v0.1.2
+   git push origin v0.1.2
+   ```
 
 PyPI n'accepte pas d'écraser une version existante : toujours incrémenter avant de re-publier.

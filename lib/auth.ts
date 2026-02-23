@@ -3,7 +3,10 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "./prisma";
 
-export const authOptions: NextAuthOptions = {
+/** NextAuthOptions + trustHost (support runtime derrière proxy, types v4 incomplets) */
+type AuthOptions = NextAuthOptions & { trustHost?: boolean };
+
+export const authOptions: AuthOptions = {
   trustHost: true,
   adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   providers: [

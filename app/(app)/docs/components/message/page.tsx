@@ -18,7 +18,7 @@ export default function DocMessagePage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.message</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.message</div>
         <h1>bpm.message</h1>
         <p className="doc-description">Bandeau avec type info, success, warning ou error.</p>
         <div className="doc-meta">

@@ -19,7 +19,7 @@ export default function DocSpinnerPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.spinner</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.spinner</div>
         <h1>bpm.spinner</h1>
         <p className="doc-description">
           Indicateur de chargement avec texte optionnel.
@@ -32,7 +32,7 @@ export default function DocSpinnerPage() {
       </div>
 
       <div className="sandbox-container">
-        <div className="sandbox-preview">
+        <div className="sandbox-preview sandbox-preview--spinner">
           <Spinner text={text} size={size} />
         </div>
         <div className="sandbox-controls">

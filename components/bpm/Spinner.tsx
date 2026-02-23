@@ -10,7 +10,7 @@ export interface SpinnerProps {
   className?: string;
 }
 
-const sizeMap = { small: "w-5 h-5 border-2", medium: "w-8 h-8 border-2", large: "w-10 h-10 border-3" };
+const sizeMap = { small: "w-5 h-5 border-2", medium: "w-8 h-8 border-2", large: "w-10 h-10 border-4" };
 
 export function Spinner({
   text = "Chargement...",

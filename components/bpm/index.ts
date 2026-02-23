@@ -1,5 +1,5 @@
 export { Metric } from "./Metric";
-export type { MetricProps } from "./Metric";
+export type { MetricProps, MetricValueLocale } from "./Metric";
 export { Button } from "./Button";
 export type { ButtonProps } from "./Button";
 export { Panel } from "./Panel";

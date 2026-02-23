@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
 import { NotificationProviders } from "@/components/NotificationProviders";
+import { ChunkLoadHandler } from "@/components/ChunkLoadHandler";
 
 export const metadata: Metadata = {
   title: "Blueprint Modular",
@@ -27,7 +28,10 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AuthProvider>
-            <NotificationProviders>{children}</NotificationProviders>
+            <NotificationProviders>
+              <ChunkLoadHandler />
+              {children}
+            </NotificationProviders>
           </AuthProvider>
         </ThemeProvider>
       </body>

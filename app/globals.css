@@ -12,7 +12,10 @@
   --bpm-accent-cyan: #00a3e0;
   --bpm-accent-mint: #45d09e;
   --bpm-accent-light: #b2ebf2;
-  --bpm-sidebar-bg: #1a4b8f;
+  /* Sidebar style doc : gris (aligné docs.blueprint-modular.com) */
+  --bpm-sidebar-bg: rgb(230, 230, 232);
+  --bpm-sidebar-text: #333;
+  --bpm-sidebar-border: rgb(210, 210, 212);
   --bpm-border: rgb(237, 237, 237);
   --bpm-code-bg: #f5f5f5;
   --bpm-code-border: rgb(237, 237, 237);
@@ -25,7 +28,10 @@
   --bpm-text-primary: #f5f5f7;
   --bpm-text-secondary: #b0b0b0;
   --bpm-border: rgba(255, 255, 255, 0.1);
-  --bpm-sidebar-bg: #0d2d5c;
+  /* Sidebar mode sombre : gris foncé */
+  --bpm-sidebar-bg: rgb(49, 51, 63);
+  --bpm-sidebar-text: #e5e5e5;
+  --bpm-sidebar-border: rgba(255, 255, 255, 0.08);
   --bpm-code-bg: #1a1a1a;
   --bpm-code-border: rgba(255, 255, 255, 0.15);
 }
@@ -53,9 +59,17 @@ body {
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Title levels (bpm.title) */
+.bpm-title-level-1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }
+.bpm-title-level-2 { font-size: 1.5rem; font-weight: 600; margin: 0.5rem 0; }
+.bpm-title-level-3 { font-size: 1.25rem; font-weight: 600; margin: 0.5rem 0; }
+.bpm-title-level-4 { font-size: 1.125rem; font-weight: 600; margin: 0.5rem 0; }
+
 /* Doc page header */
 .doc-page-header { margin-bottom: 32px; }
 .doc-breadcrumb { font-size: 12px; color: var(--bpm-text-secondary); margin-bottom: 8px; }
+.doc-breadcrumb a { color: var(--bpm-accent-cyan); text-decoration: none; }
+.doc-breadcrumb a:hover { text-decoration: underline; }
 .doc-page-header h1 { font-size: 1.75rem; font-weight: 700; color: var(--bpm-text-primary); margin: 0 0 8px; }
 .doc-description { color: var(--bpm-text-secondary); margin: 0 0 12px; font-size: 15px; }
 .doc-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -67,7 +81,8 @@ body {
 
 /* Sandbox */
 .sandbox-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; border: 1px solid var(--bpm-border); border-radius: 12px; overflow: hidden; }
-.sandbox-preview { padding: 32px; background: var(--bpm-surface); display: flex; align-items: center; justify-content: center; min-height: 160px; }
+.sandbox-preview { padding: 32px; background: var(--bpm-surface); display: flex; align-items: center; justify-content: center; min-height: 160px; overflow: visible; }
+.sandbox-preview--spinner { min-height: 220px; }
 .sandbox-controls { padding: 24px; background: var(--bpm-bg-secondary); border-left: 1px solid var(--bpm-border); }
 .sandbox-control-group { margin-bottom: 16px; }
 .sandbox-controls label { display: block; font-size: 12px; font-weight: 600; color: var(--bpm-text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }

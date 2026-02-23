@@ -20,7 +20,7 @@ export default function DocNumberInputPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.numberinput</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.numberinput</div>
         <h1>bpm.numberinput</h1>
         <p className="doc-description">Champ numérique avec min, max et step.</p>
         <div className="doc-meta">

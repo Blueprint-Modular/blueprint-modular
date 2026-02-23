@@ -17,7 +17,7 @@ export default function DocCodeBlockPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.codeblock</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.codeblock</div>
         <h1>bpm.codeblock</h1>
         <p className="doc-description">Bloc de code avec surlignage et bouton Copier.</p>
         <div className="doc-meta">

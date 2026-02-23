@@ -44,66 +44,83 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const NavIcon = ({ icon: Icon, label, href }: { icon: React.ElementType; label: string; href: string }) => {
+  const NavIcon = ({
+    icon: Icon,
+    label,
+    href,
+    compact = false,
+  }: { icon: React.ElementType; label: string; href: string; compact?: boolean }) => {
     const isActive = pathname === href || pathname.startsWith(href + "/");
+    const showLabel = compact ? true : !collapsed;
     return (
       <Link
         href={href}
-        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition"
+        className={`flex items-center rounded-lg transition ${compact ? "flex-col gap-0.5 px-2 py-2 min-w-0" : "gap-3 px-3 py-2.5"}`}
         style={{
           background: isActive ? "var(--bpm-accent-cyan)" : "transparent",
-          color: isActive ? "#fff" : "var(--bpm-text-primary)",
+          color: isActive ? "#fff" : "var(--bpm-sidebar-text)",
         }}
+        title={compact ? label : undefined}
       >
         <Icon className="w-5 h-5 shrink-0" />
-        {!collapsed && <span className="text-sm font-medium">{label}</span>}
+        {showLabel && <span className={compact ? "text-xs font-medium truncate max-w-[4rem]" : "text-sm font-medium truncate"}>{label}</span>}
       </Link>
     );
   };
 
+  /* Barre mobile en bas (style doc) */
+  const mobileNavBar = (
+    <aside
+      className="fixed left-0 right-0 bottom-0 z-40 md:hidden flex flex-row items-center justify-around overflow-x-auto overflow-y-hidden border-t px-1 pb-[env(safe-area-inset-bottom,0)] pt-2"
+      style={{
+        background: "var(--bpm-sidebar-bg)",
+        color: "var(--bpm-sidebar-text)",
+        borderColor: "var(--bpm-sidebar-border)",
+        minHeight: "calc(56px + env(safe-area-inset-bottom, 0))",
+      }}
+    >
+      {navItems.slice(0, 6).map((item) => (
+        <NavIcon key={item.href} href={item.href} label={item.label} icon={item.icon} compact />
+      ))}
+      <Link
+        href="/settings"
+        className="flex flex-col items-center gap-0.5 px-2 py-2 rounded-lg min-w-0 transition"
+        style={{
+          color: pathname.startsWith("/settings") ? "var(--bpm-accent-cyan)" : "var(--bpm-sidebar-text)",
+        }}
+        title="Paramètres"
+      >
+        <Settings className="w-5 h-5 shrink-0" />
+        <span className="text-xs truncate">Param.</span>
+      </Link>
+    </aside>
+  );
+
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        type="button"
-        className="fixed bottom-4 left-4 z-50 md:hidden flex items-center justify-center w-12 h-12 rounded-full shadow-lg"
-        style={{ background: "var(--bpm-sidebar-bg)", color: "#fff" }}
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label="Menu"
-      >
-        <Menu className="w-6 h-6" />
-      </button>
+      {/* Mobile : barre en bas (grise, style doc) */}
+      {mobileNavBar}
 
-      {/* Overlay mobile */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={() => setMobileOpen(false)}
-          aria-hidden
-        />
-      )}
-
-      {/* Sidebar desktop + drawer mobile */}
+      {/* Desktop : sidebar verticale grise à gauche */}
       <aside
         className={`
-          fixed top-0 left-0 z-40 h-full flex flex-col
-          w-64 md:w-64
-          transition-[width] duration-200 ease-in-out
-          md:translate-x-0
-          ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          fixed top-0 left-0 z-40 h-full flex-col
+          w-64 transition-[width] duration-200 ease-in-out
+          hidden md:flex
           ${collapsed ? "md:w-16" : "md:w-64"}
         `}
-        style={{ background: "var(--bpm-sidebar-bg)", color: "#fff" }}
+        style={{ background: "var(--bpm-sidebar-bg)", color: "var(--bpm-sidebar-text)", borderRight: "1px solid var(--bpm-sidebar-border)" }}
       >
-        <div className="flex items-center justify-between h-14 px-3 border-b shrink-0" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+        <div className="flex items-center justify-between h-14 px-3 border-b shrink-0" style={{ borderColor: "var(--bpm-sidebar-border)" }}>
           {!collapsed && (
-            <Link href="/dashboard" className="font-bold text-white">
+            <Link href="/dashboard" className="font-bold truncate" style={{ color: "var(--bpm-sidebar-text)" }}>
               Blueprint Modular
             </Link>
           )}
           <button
             type="button"
-            className="hidden md:flex items-center justify-center w-8 h-8 rounded hover:bg-white/10"
+            className="flex items-center justify-center w-8 h-8 rounded hover:opacity-80"
+            style={{ color: "var(--bpm-sidebar-text)" }}
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Ouvrir" : "Réduire"}
           >
@@ -117,19 +134,20 @@ export function Sidebar() {
           ))}
         </nav>
 
-        <div className="p-2 border-t shrink-0 space-y-1" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+        <div className="p-2 border-t shrink-0 space-y-1" style={{ borderColor: "var(--bpm-sidebar-border)" }}>
           <div className="flex items-center gap-1">
             <div className="flex-1 min-w-0">
               <button
                 type="button"
-                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-white/10"
+                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:opacity-80"
+                style={{ color: "var(--bpm-sidebar-text)" }}
                 onClick={toggleTheme}
               >
                 {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
                 {!collapsed && <span className="text-sm truncate">Thème</span>}
               </button>
             </div>
-            <div className="[&_.notification-bell-button]:text-white [&_.notification-bell-button:hover]:bg-white/10 [&_.notification-bell-button]:rounded-lg">
+            <div className="[&_.notification-bell-button]:rounded-lg" style={{ color: "var(--bpm-sidebar-text)" }}>
               <NotificationBell />
             </div>
           </div>
@@ -138,12 +156,12 @@ export function Sidebar() {
               {session.user.image ? (
                 <Image src={session.user.image} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
               ) : (
-                <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold" style={{ background: "var(--bpm-accent-cyan)" }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-white" style={{ background: "var(--bpm-accent-cyan)" }}>
                   {(session.user.name ?? session.user.email ?? "?").slice(0, 1).toUpperCase()}
                 </div>
               )}
               {!collapsed && (
-                <span className="text-sm truncate">{session.user.name ?? session.user.email}</span>
+                <span className="text-sm truncate" style={{ color: "var(--bpm-sidebar-text)" }}>{session.user.name ?? session.user.email}</span>
               )}
             </div>
           )}

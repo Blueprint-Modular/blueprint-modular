@@ -37,7 +37,7 @@ export default function DocTablePage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.table</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.table</div>
         <h1>bpm.table</h1>
         <p className="doc-description">
           Tableau de données avec tri, lignes alternées et survol.

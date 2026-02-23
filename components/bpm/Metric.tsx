@@ -2,14 +2,24 @@
 
 import React from "react";
 
+/** Locales courants pour le format nombre (ex. "fr-FR" → 1 000,50, "en-US" → 1,000.50). */
+export type MetricValueLocale = "fr-FR" | "en-US" | "de-DE" | string;
+
 export interface MetricProps {
   label: string;
   value: string | number;
   delta?: number | string | null;
-  deltaType?: "normal" | "inverse";
+  /** Aucun = pas de couleur, normal = + vert / - rouge, inverse = + rouge / - vert */
+  deltaType?: "aucun" | "normal" | "inverse";
   help?: string | null;
   deltaDecimals?: number;
   currency?: string;
+  /** Locale pour formater value (et delta) quand ce sont des nombres. Ex. "fr-FR" (1 000,50), "en-US" (1,000.50). */
+  valueLocale?: MetricValueLocale;
+  /** Nombre de décimales pour value (si value est un number et valueLocale est défini). */
+  valueDecimals?: number;
+  /** Afficher le séparateur de milliers (true par défaut). false → 1000,50 au lieu de 1 000,50. */
+  valueGrouping?: boolean;
 }
 
 export function Metric({
@@ -20,6 +30,9 @@ export function Metric({
   help = null,
   deltaDecimals = 0,
   currency = "EUR",
+  valueLocale,
+  valueDecimals = 0,
+  valueGrouping = true,
 }: MetricProps) {
   const symbols: Record<string, string> = {
     EUR: "€",
@@ -29,19 +42,27 @@ export function Metric({
     CHF: "CHF",
   };
   const sym = currency ? (symbols[currency] ?? currency) : "";
+  const locale = valueLocale ?? "fr-FR";
+  const formatWithLocale = (n: number, decimals: number) =>
+    n.toLocaleString(locale, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+      useGrouping: valueGrouping,
+    });
   const formatDelta = (d: number) => {
     if (typeof d !== "number" || !Number.isFinite(d)) return "";
-    const sign = d > 0 ? "+" : "";
-    const fmt = Math.abs(d).toLocaleString("fr-FR", {
-      minimumFractionDigits: deltaDecimals,
-      maximumFractionDigits: deltaDecimals,
-    });
+    const sign = d > 0 ? "+" : d < 0 ? "-" : "";
+    const fmt = formatWithLocale(Math.abs(d), deltaDecimals);
     return currency === "" ? `${sign}${fmt}%` : `${sign}${fmt} ${sym}`;
   };
+  const displayValue =
+    typeof value === "number"
+      ? formatWithLocale(value, valueDecimals)
+      : value;
   const deltaNum = typeof delta === "string" ? parseFloat(delta) : delta;
   const hasDelta = deltaNum != null && !Number.isNaN(deltaNum);
-  const positive = hasDelta && (deltaType === "inverse" ? deltaNum < 0 : deltaNum > 0);
-  const negative = hasDelta && (deltaType === "inverse" ? deltaNum > 0 : deltaNum < 0);
+  const positive = hasDelta && deltaType !== "aucun" && (deltaType === "inverse" ? deltaNum < 0 : deltaNum > 0);
+  const negative = hasDelta && deltaType !== "aucun" && (deltaType === "inverse" ? deltaNum > 0 : deltaNum < 0);
 
   return (
     <div
@@ -60,7 +81,7 @@ export function Metric({
           </span>
         )}
       </div>
-      <div className="text-xl font-bold">{value}</div>
+      <div className="text-xl font-bold">{displayValue}</div>
       <div
         className={`text-sm mt-1 ${hasDelta ? (positive ? "text-green-600" : negative ? "text-red-600" : "") : "opacity-0"}`}
       >

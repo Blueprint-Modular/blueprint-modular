@@ -21,7 +21,7 @@ export default function DocButtonPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.button</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.button</div>
         <h1>bpm.button</h1>
         <p className="doc-description">Bouton avec variantes primary, secondary, outline et tailles.</p>
         <div className="doc-meta">
@@ -33,7 +33,13 @@ export default function DocButtonPage() {
 
       <div className="sandbox-container">
         <div className="sandbox-preview">
-          <Button variant={variant} size={size} disabled={disabled} onClick={() => alert("Cliqué")}>
+          <Button
+            key={`${variant}-${size}-${disabled}`}
+            variant={variant}
+            size={size}
+            disabled={disabled}
+            onClick={() => alert("Cliqué")}
+          >
             {label || "Bouton"}
           </Button>
         </div>

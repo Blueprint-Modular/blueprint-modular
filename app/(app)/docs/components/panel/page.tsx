@@ -18,7 +18,7 @@ export default function DocPanelPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.panel</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.panel</div>
         <h1>bpm.panel</h1>
         <p className="doc-description">Panneau informatif avec variantes (info, success, warning, error).</p>
         <div className="doc-meta">
@@ -30,7 +30,7 @@ export default function DocPanelPage() {
 
       <div className="sandbox-container">
         <div className="sandbox-preview">
-          <Panel variant={variant} title={title}>
+          <Panel key={variant} variant={variant} title={title}>
             {content}
           </Panel>
         </div>

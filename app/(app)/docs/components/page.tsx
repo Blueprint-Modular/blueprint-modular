@@ -1,62 +1,107 @@
 "use client";
 
 import Link from "next/link";
-import { Metric, Button, Panel, Table, Tabs, Title, Toggle, Message, Spinner, Tooltip, Selectbox, NumberInput, Expander, Modal, CodeBlock } from "@/components/bpm";
+import {
+  Metric,
+  Button,
+  Panel,
+  Table,
+  Tabs,
+  Title,
+  Toggle,
+  Message,
+  Spinner,
+  Tooltip,
+  Selectbox,
+  NumberInput,
+  Expander,
+  CodeBlock,
+  Badge,
+  Progress,
+  Skeleton,
+  Accordion,
+  Card,
+  Divider,
+  Grid,
+  EmptyState,
+  Input,
+  Textarea,
+  Checkbox,
+  RadioGroup,
+  Slider,
+  DateInput,
+  ColorPicker,
+  Chip,
+  Breadcrumb,
+  Stepper,
+  Avatar,
+} from "@/components/bpm";
+import registry from "@/lib/generated/bpm-components.json";
 
-const CATEGORIES: { name: string; items: { slug: string; name: string; description: string; preview: React.ReactNode }[] }[] = [
-  {
-    name: "Affichage de données",
-    items: [
-      { slug: "metric", name: "bpm.metric", description: "Métrique avec valeur, label et delta.", preview: <Metric value={142500} label="CA" delta={3200} /> },
-      { slug: "table", name: "bpm.table", description: "Tableau triable avec lignes alternées.", preview: <Table columns={[{ key: "A", label: "A" }, { key: "B", label: "B" }]} data={[{ A: "1", B: "2" }]} /> },
-      { slug: "title", name: "bpm.title", description: "Titre niveaux 1 à 4.", preview: <Title level={2}>Titre</Title> },
-    ],
-  },
-  {
-    name: "Mise en page",
-    items: [
-      { slug: "panel", name: "bpm.panel", description: "Panneau informatif (info, success, warning, error).", preview: <Panel variant="info" title="Info">Contenu</Panel> },
-      { slug: "tabs", name: "bpm.tabs", description: "Onglets pour organiser le contenu.", preview: <Tabs tabs={[{ label: "Onglet 1", content: null }, { label: "Onglet 2", content: null }]} /> },
-      { slug: "expander", name: "bpm.expander", description: "Bloc repliable.", preview: <Expander title="Détails">Contenu</Expander> },
-    ],
-  },
-  {
-    name: "Interaction",
-    items: [
-      { slug: "button", name: "bpm.button", description: "Bouton d'action (primary, secondary, outline).", preview: <Button>Action</Button> },
-      { slug: "toggle", name: "bpm.toggle", description: "Interrupteur on/off.", preview: <Toggle value={false} onChange={() => {}} label="Option" /> },
-      { slug: "selectbox", name: "bpm.selectbox", description: "Liste déroulante.", preview: <Selectbox options={[{ value: "a", label: "Option A" }]} value={null} onChange={() => {}} placeholder="Choisir" /> },
-      { slug: "numberinput", name: "bpm.numberinput", description: "Champ numérique min/max/step.", preview: <NumberInput value={10} onChange={() => {}} label="Quantité" /> },
-    ],
-  },
-  {
-    name: "Feedback",
-    items: [
-      { slug: "message", name: "bpm.message", description: "Bandeau info/success/warning/error.", preview: <Message type="info">Message</Message> },
-      { slug: "spinner", name: "bpm.spinner", description: "Indicateur de chargement.", preview: <Spinner size="small" text="" /> },
-      { slug: "tooltip", name: "bpm.tooltip", description: "Info-bulle au survol.", preview: <Tooltip text="Aide"><span className="underline">?</span></Tooltip> },
-    ],
-  },
-  {
-    name: "Utilitaires",
-    items: [
-      { slug: "modal", name: "bpm.modal", description: "Fenêtre modale.", preview: <span className="text-sm text-[var(--bpm-text-secondary)]">Ouvrir une modal depuis la page doc.</span> },
-      { slug: "codeblock", name: "bpm.codeblock", description: "Bloc de code avec Copier.", preview: <CodeBlock code={'print("hello")'} language="python" /> },
-    ],
-  },
-];
+type ComponentEntry = (typeof registry.components)[number];
+
+/** Previews par slug (React) — les données nom/description/catégorie viennent du registry Python. */
+const PREVIEW_BY_SLUG: Record<string, React.ReactNode> = {
+  metric: <Metric value={142500} label="CA" delta={3200} />,
+  table: <Table columns={[{ key: "A", label: "A" }, { key: "B", label: "B" }]} data={[{ A: "1", B: "2" }]} />,
+  title: <Title level={2}>Titre</Title>,
+  badge: <Badge variant="success">OK</Badge>,
+  progress: <Progress value={60} max={100} />,
+  skeleton: <Skeleton variant="text" />,
+  panel: <Panel variant="info" title="Info">Contenu</Panel>,
+  tabs: <Tabs tabs={[{ label: "Onglet 1", content: null }, { label: "Onglet 2", content: null }]} />,
+  expander: <Expander title="Détails">Contenu</Expander>,
+  accordion: <Accordion sections={[{ id: "s1", title: "Section 1", content: <p>Contenu</p> }]} defaultOpenIds={["s1"]} />,
+  card: <Card title="Carte">Contenu</Card>,
+  divider: <Divider />,
+  grid: <Grid cols={2} gap="0.5rem"><div className="p-2 rounded bg-[var(--bpm-bg-secondary)]">1</div><div className="p-2 rounded bg-[var(--bpm-bg-secondary)]">2</div></Grid>,
+  emptystate: <EmptyState title="Aucune donnée" description="Ajoutez des éléments." />,
+  button: <Button>Action</Button>,
+  toggle: <Toggle value={false} onChange={() => {}} label="Option" />,
+  selectbox: <Selectbox options={[{ value: "a", label: "Option A" }]} value={null} onChange={() => {}} placeholder="Choisir" />,
+  numberinput: <NumberInput value={10} onChange={() => {}} label="Quantité" />,
+  input: <Input value="" onChange={() => {}} label="Nom" placeholder="Saisir..." />,
+  textarea: <Textarea value="" onChange={() => {}} label="Commentaire" rows={2} />,
+  checkbox: <Checkbox checked={false} onChange={() => {}} label="Accepter" />,
+  radiogroup: <RadioGroup options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} value="a" onChange={() => {}} />,
+  slider: <Slider value={50} min={0} max={100} onChange={() => {}} />,
+  dateinput: <DateInput value="" onChange={() => {}} label="Date" />,
+  colorpicker: <ColorPicker value="#00a3e0" onChange={() => {}} />,
+  chip: <Chip label="Tag" variant="default" />,
+  message: <Message type="info">Message</Message>,
+  spinner: <Spinner size="small" text="" />,
+  tooltip: <Tooltip text="Aide"><span className="underline">?</span></Tooltip>,
+  breadcrumb: <Breadcrumb items={[{ label: "Accueil", href: "#" }, { label: "Doc", href: "#" }]} />,
+  stepper: <Stepper steps={[{ label: "Étape 1" }, { label: "Étape 2" }]} currentStep={0} />,
+  avatar: <Avatar initials="JD" size="medium" />,
+  modal: <span className="text-sm text-[var(--bpm-text-secondary)]">Ouvrir une modal depuis la page doc.</span>,
+  codeblock: <CodeBlock code={'print("hello")'} language="python" />,
+};
+
+function groupByCategory(components: ComponentEntry[]): { name: string; items: ComponentEntry[] }[] {
+  const byCat = new Map<string, ComponentEntry[]>();
+  for (const c of components) {
+    const list = byCat.get(c.category) ?? [];
+    list.push(c);
+    byCat.set(c.category, list);
+  }
+  return Array.from(byCat.entries()).map(([name, items]) => ({ name, items }));
+}
 
 export default function DocsComponentsPage() {
+  const categories = groupByCategory(registry.components);
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-accent)" }}>
         Composants BPM
       </h1>
       <p className="mb-8" style={{ color: "var(--bpm-text-secondary)" }}>
-        Référence des composants avec sandbox live. Cliquez sur une carte pour la documentation.
+        Référence des composants avec sandbox live. La liste est alimentée par le package Python{" "}
+        <code className="text-sm">blueprint-modular</code> (pip install). Cliquez sur une carte pour la documentation.
       </p>
       <div className="space-y-10">
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <section key={cat.name}>
             <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--bpm-text-primary)" }}>
               {cat.name}
@@ -76,7 +121,7 @@ export default function DocsComponentsPage() {
                     {item.description}
                   </p>
                   <div className="min-h-[60px] flex items-center justify-center p-3 rounded-lg" style={{ background: "var(--bpm-bg-secondary)" }}>
-                    {item.preview}
+                    {PREVIEW_BY_SLUG[item.slug] ?? null}
                   </div>
                 </Link>
               ))}

@@ -12,20 +12,20 @@ const DEMO_TABS = [
 ];
 
 export default function DocTabsPage() {
-  const [defaultTab, setDefaultTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
   const pythonCode = `bpm.tabs([
     {"label": "Vue générale", "content": vue_generale_fn},
     {"label": "Détails", "content": details_fn},
     {"label": "Historique", "content": historique_fn},
-], default_tab=${defaultTab})`;
+], default_tab=${activeTab})`;
 
   const { prev, next } = getPrevNext("tabs");
 
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.tabs</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.tabs</div>
         <h1>bpm.tabs</h1>
         <p className="doc-description">
           Onglets pour organiser le contenu en sections.
@@ -41,8 +41,8 @@ export default function DocTabsPage() {
         <div className="sandbox-preview">
           <Tabs
             tabs={DEMO_TABS}
-            defaultTab={defaultTab}
-            onChange={() => {}}
+            defaultTab={activeTab}
+            onChange={(index) => setActiveTab(index)}
           />
         </div>
         <div className="sandbox-controls">
@@ -52,12 +52,12 @@ export default function DocTabsPage() {
               type="number"
               min={0}
               max={2}
-              value={defaultTab}
-              onChange={(e) => setDefaultTab(Math.max(0, Math.min(2, Number(e.target.value) || 0)))}
+              value={activeTab}
+              onChange={(e) => setActiveTab(Math.max(0, Math.min(2, Number(e.target.value) || 0)))}
             />
           </div>
           <p className="text-sm mt-2" style={{ color: "var(--bpm-text-secondary)" }}>
-            Onglet actif : {DEMO_TABS[defaultTab]?.label ?? defaultTab}
+            Onglet actif : {DEMO_TABS[activeTab]?.label ?? activeTab}
           </p>
         </div>
         <div className="sandbox-code">

@@ -23,7 +23,7 @@ export default function DocModalPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.modal</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.modal</div>
         <h1>bpm.modal</h1>
         <p className="doc-description">
           Fenêtre modale pour afficher du contenu par-dessus la page.

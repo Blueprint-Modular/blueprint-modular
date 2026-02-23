@@ -145,9 +145,9 @@ function SandboxContent() {
 }
 
 /**
- * Sandbox BPM — Visuel d’un composant BPM seul (sans sidebar).
+ * Sandbox BPM — Visuel d'un composant BPM (avec sidebar app).
  * Usage : /sandbox?component=panel&variant=warning&title=Test
- * Permet l’embed en iframe depuis la doc statique (docs.blueprint-modular.com).
+ * Embed iframe depuis la doc statique : app.blueprint-modular.com/sandbox?component=...
  */
 export default function SandboxPage() {
   return (

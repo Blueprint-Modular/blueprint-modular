@@ -21,7 +21,7 @@ export default function DocSelectboxPage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.selectbox</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.selectbox</div>
         <h1>bpm.selectbox</h1>
         <p className="doc-description">Liste deroulante pour choisir une valeur.</p>
         <div className="doc-meta">

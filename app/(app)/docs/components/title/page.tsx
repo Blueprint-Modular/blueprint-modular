@@ -15,7 +15,7 @@ export default function DocTitlePage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.title</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.title</div>
         <h1>bpm.title</h1>
         <p className="doc-description">Titre avec niveaux 1 à 4 (h1–h4).</p>
         <div className="doc-meta">

@@ -4,6 +4,7 @@ import './Metric.css';
 const Metric = ({ label, value, delta, deltaType = 'normal', help = null, deltaDecimals = 0, currency = 'EUR' }) => {
   const getDeltaClass = () => {
     if (!delta) return '';
+    if (deltaType === 'aucun') return '';
     if (deltaType === 'inverse') {
       return delta > 0 ? 'metric-delta-negative' : 'metric-delta-positive';
     }
@@ -25,7 +26,7 @@ const Metric = ({ label, value, delta, deltaType = 'normal', help = null, deltaD
 
   const formatDelta = (delta, decimals = 0, currency = 'EUR') => {
     if ((!delta && delta !== 0) || typeof delta !== 'number' || !Number.isFinite(delta)) return '';
-    const sign = delta > 0 ? '+' : '';
+    const sign = delta > 0 ? '+' : delta < 0 ? '-' : '';
     // Format avec virgule pour décimales et espaces pour milliers
     const formatted = Math.abs(delta).toLocaleString('fr-FR', {
       minimumFractionDigits: decimals,

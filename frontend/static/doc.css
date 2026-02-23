@@ -11,9 +11,9 @@
   --accent: var(--bleu-cyan);
   --border: rgb(237, 237, 237);
   --bpm-font: "Inter", "Segoe UI", sans-serif;
-  /* Sidebar style BEAM : gris clair en mode clair */
-  --doc-sidebar-bg: rgb(246, 246, 246);
-  --doc-sidebar-border: rgb(237, 237, 237);
+  /* Sidebar : gris (sans blanc) */
+  --doc-sidebar-bg: rgb(230, 230, 232);
+  --doc-sidebar-border: rgb(210, 210, 212);
   /* Alias pour design system bpm.* */
   --color-primary: #2563eb;
   --color-muted: var(--muted);

@@ -18,7 +18,7 @@ export default function DocTogglePage() {
   return (
     <div className="max-w-4xl">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb">Documentation → Composants → bpm.toggle</div>
+        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.toggle</div>
         <h1>bpm.toggle</h1>
         <p className="doc-description">Interrupteur on/off pour une option booléenne.</p>
         <div className="doc-meta">
@@ -39,7 +39,14 @@ export default function DocTogglePage() {
           </div>
           <div className="sandbox-control-group">
             <label>checked</label>
-            <Toggle value={value} onChange={setValue} disabled={disabled} />
+            <label className="inline-flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={value}
+                onChange={(e) => setValue(e.target.checked)}
+              />
+              Coché
+            </label>
           </div>
           <div className="sandbox-control-group">
             <label>disabled</label>

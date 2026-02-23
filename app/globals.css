@@ -76,6 +76,24 @@ body {
   background: rgba(26, 75, 143, 0.35);
 }
 
+/* Titres des pages app (réduits par rapport à text-2xl / text-lg) */
+.app-main h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.app-main h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.app-main h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+/* Titres de cartes / liens (ex. grille Modules) */
+.app-main .grid a .font-semibold {
+  font-size: 0.9375rem;
+}
+
 /* Title levels (bpm.title) */
 .bpm-title-level-1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }
 .bpm-title-level-2 { font-size: 1.5rem; font-weight: 600; margin: 0.5rem 0; }

@@ -19,7 +19,7 @@ export function AppLayoutClient({ children }: { children: React.ReactNode }) {
             <NotificationBell />
           </div>
         </header>
-        <main className="flex-1 pt-4 pb-20 md:pb-4 px-4 min-h-0">
+        <main className="app-main flex-1 pt-4 pb-20 md:pb-4 px-4 min-h-0">
           {children}
         </main>
       </div>

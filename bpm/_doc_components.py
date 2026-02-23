@@ -35,6 +35,7 @@ COMPONENT_DOC: list[ComponentDoc] = [
     # Interaction
     {"slug": "button", "name": "bpm.button", "description": "Bouton d'action (primary, secondary, outline).", "category": "Interaction"},
     {"slug": "toggle", "name": "bpm.toggle", "description": "Interrupteur on/off.", "category": "Interaction"},
+    {"slug": "theme", "name": "bpm.theme", "description": "Bascule thème clair / sombre.", "category": "Interaction"},
     {"slug": "selectbox", "name": "bpm.selectbox", "description": "Liste déroulante.", "category": "Interaction"},
     {"slug": "numberinput", "name": "bpm.numberinput", "description": "Champ numérique min/max/step.", "category": "Interaction"},
     {"slug": "input", "name": "bpm.input", "description": "Champ texte une ligne.", "category": "Interaction"},
@@ -52,6 +53,7 @@ COMPONENT_DOC: list[ComponentDoc] = [
     # Navigation & structure
     {"slug": "breadcrumb", "name": "bpm.breadcrumb", "description": "Fil d'Ariane.", "category": "Navigation"},
     {"slug": "stepper", "name": "bpm.stepper", "description": "Étapes (stepper).", "category": "Navigation"},
+    {"slug": "sidebar", "name": "bpm.sidebar", "description": "Décorateur pour définir le contenu de la barre latérale.", "category": "Navigation"},
     {"slug": "avatar", "name": "bpm.avatar", "description": "Avatar utilisateur.", "category": "Affichage de données"},
     # Utilitaires
     {"slug": "modal", "name": "bpm.modal", "description": "Fenêtre modale.", "category": "Utilitaires"},

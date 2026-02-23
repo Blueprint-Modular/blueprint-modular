@@ -20,7 +20,7 @@ export default function DocBadgePage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.badge
+          <Link href="/docs/components">Composants</Link> → bpm.badge
         </div>
         <h1>bpm.badge</h1>
         <p className="doc-description">

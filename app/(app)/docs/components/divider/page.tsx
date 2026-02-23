@@ -19,7 +19,7 @@ export default function DocDividerPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.divider
+          <Link href="/docs/components">Composants</Link> → bpm.divider
         </div>
         <h1>bpm.divider</h1>
         <p className="doc-description">

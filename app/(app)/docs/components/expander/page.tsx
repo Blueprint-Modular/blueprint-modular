@@ -16,7 +16,7 @@ export default function DocExpanderPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.expander</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.expander</div>
         <h1>bpm.expander</h1>
         <p className="doc-description">Bloc repliable pour afficher/masquer du contenu.</p>
         <div className="doc-meta">

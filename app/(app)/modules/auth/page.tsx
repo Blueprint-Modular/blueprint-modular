@@ -9,22 +9,33 @@ export default function AuthModulePage() {
 
   if (status === "loading") {
     return (
-      <div>
-        <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-text-primary)" }}>
-          Authentification
-        </h1>
-        <p style={{ color: "var(--bpm-text-secondary)" }}>Chargement…</p>
+      <div className="doc-page">
+        <div className="doc-page-header">
+          <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → bpm.auth</div>
+          <h1>bpm.auth</h1>
+          <p className="doc-description">Chargement…</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-text-primary)" }}>
-        Authentification (bpm.auth)
-      </h1>
-      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
-        Gestion de la session et de la connexion (Google ou e-mail). Style aligné sur myportfolio.beam-consulting.
+    <div className="doc-page">
+      <div className="doc-page-header">
+        <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → bpm.auth</div>
+        <h1>bpm.auth</h1>
+        <p className="doc-description">
+          Gestion de la session et de la connexion (Google ou e-mail). Whitelist et protection des routes.
+        </p>
+        <div className="doc-meta">
+          <span className="doc-badge doc-badge-category">Module</span>
+          <span className="doc-reading-time">⏱ 1 min</span>
+        </div>
+      </div>
+
+      <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
+      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
+        Le module auth utilise NextAuth (providers Google, credentials). La session est disponible dans toute l&apos;app ; les pages protégées redirigent vers la page de connexion si l&apos;utilisateur n&apos;est pas connecté.
       </p>
 
       {session?.user ? (

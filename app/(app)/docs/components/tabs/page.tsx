@@ -25,7 +25,7 @@ export default function DocTabsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.tabs</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.tabs</div>
         <h1>bpm.tabs</h1>
         <p className="doc-description">
           Onglets pour organiser le contenu en sections.

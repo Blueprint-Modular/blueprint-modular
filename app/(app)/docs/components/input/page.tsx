@@ -28,7 +28,7 @@ export default function DocInputPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.input
+          <Link href="/docs/components">Composants</Link> → bpm.input
         </div>
         <h1>bpm.input</h1>
         <p className="doc-description">

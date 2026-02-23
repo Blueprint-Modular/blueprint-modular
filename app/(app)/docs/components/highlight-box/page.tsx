@@ -19,7 +19,7 @@ export default function DocHighlightBoxPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.highlight-box
+          <Link href="/docs/components">Composants</Link> → bpm.highlight-box
         </div>
         <h1>bpm.highlight-box</h1>
         <p className="doc-description">

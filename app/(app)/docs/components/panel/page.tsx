@@ -18,7 +18,7 @@ export default function DocPanelPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.panel</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.panel</div>
         <h1>bpm.panel</h1>
         <p className="doc-description">Panneau informatif avec variantes (info, success, warning, error).</p>
         <div className="doc-meta">

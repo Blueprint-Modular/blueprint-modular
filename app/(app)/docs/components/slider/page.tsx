@@ -27,7 +27,7 @@ export default function DocSliderPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.slider
+          <Link href="/docs/components">Composants</Link> → bpm.slider
         </div>
         <h1>bpm.slider</h1>
         <p className="doc-description">

@@ -16,7 +16,7 @@ export default async function DocComponentSlugPage({ params }: Props) {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → {entry.name}
+          <Link href="/docs/components">Composants</Link> → {entry.name}
         </div>
         <h1>{entry.name}</h1>
         <p className="doc-description">{entry.description}</p>

@@ -19,7 +19,7 @@ export default function DocSpinnerPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.spinner</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.spinner</div>
         <h1>bpm.spinner</h1>
         <p className="doc-description">
           Indicateur de chargement avec texte optionnel.

@@ -51,16 +51,26 @@
   right: 3px;
   background-color: var(--bpm-accent-cyan, #0d9488);
   color: white;
-  border-radius: 8px;
-  padding: 1px 4px;
+  border-radius: 999px;
+  padding: 1px 5px;
   font-size: 9px;
   font-weight: bold;
-  min-width: 15px;
-  text-align: center;
-  line-height: 1.4;
+  min-width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid white;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
   pointer-events: none;
+}
+
+/* 1 chiffre : rester parfaitement rond */
+.notification-bell-badge--single {
+  width: 18px;
+  min-width: 18px;
+  padding: 0;
 }
 
 .notification-bell-mobile-btn {

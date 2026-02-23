@@ -29,7 +29,7 @@ export default function DocRadioGroupPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.radiogroup
+          <Link href="/docs/components">Composants</Link> → bpm.radiogroup
         </div>
         <h1>bpm.radiogroup</h1>
         <p className="doc-description">

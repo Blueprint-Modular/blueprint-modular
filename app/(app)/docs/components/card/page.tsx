@@ -25,7 +25,7 @@ export default function DocCardPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.card
+          <Link href="/docs/components">Composants</Link> → bpm.card
         </div>
         <h1>bpm.card</h1>
         <p className="doc-description">

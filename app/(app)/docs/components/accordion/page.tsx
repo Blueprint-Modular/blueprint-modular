@@ -28,7 +28,7 @@ export default function DocAccordionPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.accordion
+          <Link href="/docs/components">Composants</Link> → bpm.accordion
         </div>
         <h1>bpm.accordion</h1>
         <p className="doc-description">

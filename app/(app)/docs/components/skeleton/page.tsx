@@ -25,7 +25,7 @@ export default function DocSkeletonPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.skeleton
+          <Link href="/docs/components">Composants</Link> → bpm.skeleton
         </div>
         <h1>bpm.skeleton</h1>
         <p className="doc-description">

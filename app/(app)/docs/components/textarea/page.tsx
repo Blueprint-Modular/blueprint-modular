@@ -26,7 +26,7 @@ export default function DocTextareaPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.textarea
+          <Link href="/docs/components">Composants</Link> → bpm.textarea
         </div>
         <h1>bpm.textarea</h1>
         <p className="doc-description">

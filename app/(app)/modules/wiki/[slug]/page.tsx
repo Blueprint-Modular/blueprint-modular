@@ -67,6 +67,9 @@ export default function WikiArticlePage() {
 
   return (
     <div>
+      <div className="doc-breadcrumb" style={{ marginBottom: 8 }}>
+        <Link href="/modules">Modules</Link> → <Link href="/modules/wiki">Module Wiki</Link> → {article.title}
+      </div>
       <nav className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/wiki">← Wiki</Link>
         <span className="mx-2">/</span>

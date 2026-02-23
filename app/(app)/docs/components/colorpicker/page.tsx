@@ -21,7 +21,7 @@ export default function DocColorPickerPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.colorpicker
+          <Link href="/docs/components">Composants</Link> → bpm.colorpicker
         </div>
         <h1>bpm.colorpicker</h1>
         <p className="doc-description">

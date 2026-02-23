@@ -21,7 +21,7 @@ export default function DocButtonPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.button</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.button</div>
         <h1>bpm.button</h1>
         <p className="doc-description">Bouton avec variantes primary, secondary, outline et tailles.</p>
         <div className="doc-meta">

@@ -29,7 +29,7 @@ export default function DocStepperPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.stepper
+          <Link href="/docs/components">Composants</Link> → bpm.stepper
         </div>
         <h1>bpm.stepper</h1>
         <p className="doc-description">

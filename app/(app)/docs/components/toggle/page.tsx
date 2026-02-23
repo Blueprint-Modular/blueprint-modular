@@ -18,7 +18,7 @@ export default function DocTogglePage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.toggle</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.toggle</div>
         <h1>bpm.toggle</h1>
         <p className="doc-description">Interrupteur on/off pour une option booléenne.</p>
         <div className="doc-meta">

@@ -25,7 +25,7 @@ export default function DocChipPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.chip
+          <Link href="/docs/components">Composants</Link> → bpm.chip
         </div>
         <h1>bpm.chip</h1>
         <p className="doc-description">

@@ -21,7 +21,7 @@ export default function DocCheckboxPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.checkbox
+          <Link href="/docs/components">Composants</Link> → bpm.checkbox
         </div>
         <h1>bpm.checkbox</h1>
         <p className="doc-description">

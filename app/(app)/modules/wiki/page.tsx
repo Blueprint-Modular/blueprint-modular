@@ -75,9 +75,19 @@ export default function WikiPage() {
   const displayed = articles.filter((a) => a.parentId === selectedParent);
 
   return (
-    <div className="wiki-page">
+    <div className="wiki-page doc-page">
+      <div className="doc-page-header">
+        <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Module Wiki</div>
+        <h1>Module Wiki</h1>
+        <p className="doc-description">
+          Wiki interne : articles en Markdown, arborescence, brouillons et publication. Idéal pour la doc d&apos;équipe.
+        </p>
+        <div className="doc-meta">
+          <span className="doc-badge doc-badge-category">Module</span>
+        </div>
+      </div>
       <div className="wiki-header">
-        <h1>📚 Wiki</h1>
+        <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Articles</h2>
         {session && (
           <Link href="/modules/wiki/new" className="btn-primary">
             + Nouvel article

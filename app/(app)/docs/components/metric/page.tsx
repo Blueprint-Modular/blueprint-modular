@@ -34,7 +34,7 @@ export default function DocMetricPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.metric</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.metric</div>
         <h1>bpm.metric</h1>
         <p className="doc-description">Affiche une métrique avec valeur, label et delta optionnel (évolution).</p>
         <div className="doc-meta">

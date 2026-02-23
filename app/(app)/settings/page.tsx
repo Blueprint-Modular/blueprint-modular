@@ -311,13 +311,18 @@ export default function SettingsPage() {
   );
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-text-primary)" }}>
-        Paramètres (bpm.settings)
-      </h1>
-      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
-        Profil, apparence, clés API et préférences générales. Style aligné sur myportfolio.beam-consulting.
-      </p>
+    <div className="doc-page">
+      <div className="doc-page-header">
+        <div className="doc-breadcrumb">Paramètres</div>
+        <h1>Paramètres</h1>
+        <p className="doc-description">
+          Profil, apparence, clés API et préférences générales. Thème clair/sombre, couleur d&apos;accent, niveau des notifications.
+        </p>
+        <div className="doc-meta">
+          <span className="doc-badge doc-badge-category">Configuration</span>
+          <span className="doc-reading-time">⏱ 2 min</span>
+        </div>
+      </div>
 
       <Tabs tabs={tabs} defaultTab={0} />
     </div>

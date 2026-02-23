@@ -24,7 +24,7 @@ export default function DocGridPage() {
     <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
-          <Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.grid
+          <Link href="/docs/components">Composants</Link> → bpm.grid
         </div>
         <h1>bpm.grid</h1>
         <p className="doc-description">

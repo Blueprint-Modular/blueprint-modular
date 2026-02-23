@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useEffect, useState } from "react";
 import {
   Panel,
@@ -16,7 +16,21 @@ import {
   CodeBlock,
 } from "@/components/bpm";
 
+const SANDBOX_COMPONENTS = [
+  { value: "panel", label: "bpm.panel" },
+  { value: "message", label: "bpm.message" },
+  { value: "button", label: "bpm.button" },
+  { value: "metric", label: "bpm.metric" },
+  { value: "table", label: "bpm.table" },
+  { value: "tabs", label: "bpm.tabs" },
+  { value: "title", label: "bpm.title" },
+  { value: "spinner", label: "bpm.spinner" },
+  { value: "tooltip", label: "bpm.tooltip" },
+  { value: "codeblock", label: "bpm.codeblock" },
+] as const;
+
 function SandboxContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const component = (searchParams.get("component") || searchParams.get("c") || "panel").toLowerCase().replace("bpm.", "");
   const variant = searchParams.get("variant") || searchParams.get("v") || "info";
@@ -26,6 +40,15 @@ function SandboxContent() {
   const theme = (searchParams.get("theme") || searchParams.get("th") || "light").toLowerCase();
   const isDark = theme === "dark";
   const [tableSelectedRow, setTableSelectedRow] = useState<Record<string, unknown> | null>(null);
+
+  const setParams = (updates: Record<string, string>) => {
+    const p = new URLSearchParams(searchParams.toString());
+    Object.entries(updates).forEach(([k, v]) => {
+      if (v) p.set(k, v);
+      else p.delete(k);
+    });
+    router.replace(`/sandbox?${p.toString()}`, { scroll: false });
+  };
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add("theme-dark");
@@ -135,17 +158,118 @@ function SandboxContent() {
     );
   }, [component, variant, title, value, label, tableSelectedRow]);
 
+  const hasVariant = component === "panel" || component === "message";
+  const hasTitle = component === "panel" || component === "message";
+
   return (
     <div
       className={isDark ? "theme-dark" : ""}
       style={{
-        minHeight: "100vh",
+        minHeight: "100%",
         background: "var(--bpm-bg-secondary, #f5f5f5)",
         padding: 24,
         boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: 640, margin: "0 auto" }}>{content}</div>
+      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        <h1 className="text-xl font-semibold mb-4" style={{ color: "var(--bpm-text-primary)" }}>
+          Sandbox
+        </h1>
+        <p className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
+          Choisissez un composant et ajustez les options pour voir le rendu en direct.
+        </p>
+        <div
+          className="flex flex-wrap gap-4 p-4 rounded-lg border mb-6"
+          style={{
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          }}
+        >
+          <div>
+            <label className="block text-xs font-semibold mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
+              Composant
+            </label>
+            <select
+              value={SANDBOX_COMPONENTS.some((c) => c.value === component) ? component : "panel"}
+              onChange={(e) => setParams({ component: e.target.value })}
+              className="px-3 py-2 rounded-lg border text-sm min-w-[160px]"
+              style={{
+                background: "var(--bpm-bg-primary)",
+                borderColor: "var(--bpm-border)",
+                color: "var(--bpm-text-primary)",
+              }}
+            >
+              {SANDBOX_COMPONENTS.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          {hasVariant && (
+            <div>
+              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
+                Variante
+              </label>
+              <select
+                value={variant}
+                onChange={(e) => setParams({ variant: e.target.value })}
+                className="px-3 py-2 rounded-lg border text-sm"
+                style={{
+                  background: "var(--bpm-bg-primary)",
+                  borderColor: "var(--bpm-border)",
+                  color: "var(--bpm-text-primary)",
+                }}
+              >
+                <option value="info">info</option>
+                <option value="success">success</option>
+                <option value="warning">warning</option>
+                <option value="error">error</option>
+              </select>
+            </div>
+          )}
+          {hasTitle && (
+            <div>
+              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
+                Titre
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setParams({ title: e.target.value })}
+                placeholder="Optionnel"
+                className="px-3 py-2 rounded-lg border text-sm min-w-[120px]"
+                style={{
+                  background: "var(--bpm-bg-primary)",
+                  borderColor: "var(--bpm-border)",
+                  color: "var(--bpm-text-primary)",
+                }}
+              />
+            </div>
+          )}
+          <div>
+            <label className="block text-xs font-semibold mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
+              Thème
+            </label>
+            <select
+              value={theme}
+              onChange={(e) => setParams({ theme: e.target.value })}
+              className="px-3 py-2 rounded-lg border text-sm"
+              style={{
+                background: "var(--bpm-bg-primary)",
+                borderColor: "var(--bpm-border)",
+                color: "var(--bpm-text-primary)",
+              }}
+            >
+              <option value="light">Clair</option>
+              <option value="dark">Sombre</option>
+            </select>
+          </div>
+        </div>
+        <div className="rounded-lg border p-4" style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)" }}>
+          {content}
+        </div>
+      </div>
     </div>
   );
 }

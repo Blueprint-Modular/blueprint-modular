@@ -232,9 +232,13 @@ export function NotificationBell() {
 
   const popupClasses = `notification-popup${animActive ? " tooltip-dock-open" : ""}${isClosing ? " tooltip-dock-closing" : ""}`;
 
+  const badgeCount = count > 99 ? "99+" : count;
+  const isSingleDigit = count > 0 && count < 10;
   const badge =
     count > 0 ? (
-      <span className="notification-bell-badge">{count > 99 ? "99+" : count}</span>
+      <span className={`notification-bell-badge${isSingleDigit ? " notification-bell-badge--single" : ""}`}>
+        {badgeCount}
+      </span>
     ) : null;
 
   if (isMobile) {

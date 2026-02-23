@@ -14,13 +14,17 @@ const modules = [
 
 export default function ModulesPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--bpm-text-primary)" }}>
-        Modules
-      </h1>
-      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
-        Accédez aux modules disponibles : Auth, Wiki, IA, Documents, Veille, Notification.
-      </p>
+    <div className="doc-page">
+      <div className="doc-page-header">
+        <div className="doc-breadcrumb">Modules</div>
+        <h1>Modules</h1>
+        <p className="doc-description">
+          Accédez aux modules disponibles : Auth, Wiki, IA, Documents, Veille, Notification. Chaque module dispose d&apos;une page dédiée avec description et liens utiles.
+        </p>
+        <div className="doc-meta">
+          <span className="doc-badge doc-badge-category">Vue d&apos;ensemble</span>
+        </div>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {modules.map((mod) => (
           <Link

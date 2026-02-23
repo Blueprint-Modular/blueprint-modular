@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { Table, Message, Spinner } from "@/components/bpm";
 
 interface Document {
@@ -122,9 +123,19 @@ export default function DocumentsPage() {
   }));
 
   return (
-    <div className="documents-page">
+    <div className="documents-page doc-page">
+      <div className="doc-page-header">
+        <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Module Documents</div>
+        <h1>Module Documents</h1>
+        <p className="doc-description">
+          Analyse de contrats PDF : extraction des métadonnées, résumé, points clés et échéances. Upload et suivi des documents.
+        </p>
+        <div className="doc-meta">
+          <span className="doc-badge doc-badge-category">Module</span>
+        </div>
+      </div>
       <div className="documents-header">
-        <h1>📄 Analyse de documents</h1>
+        <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Documents</h2>
         <div>
           <input
             ref={fileInputRef}

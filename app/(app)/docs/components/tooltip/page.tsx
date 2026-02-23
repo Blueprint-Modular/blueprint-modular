@@ -17,7 +17,7 @@ export default function DocTooltipPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.tooltip</div>
+        <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.tooltip</div>
         <h1>bpm.tooltip</h1>
         <p className="doc-description">Info-bulle au survol.</p>
         <div className="doc-meta">

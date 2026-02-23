@@ -19,6 +19,18 @@
       "category": "Affichage de données"
     },
     {
+      "slug": "text",
+      "name": "bpm.text",
+      "description": "Texte simple (niveau corps).",
+      "category": "Affichage de données"
+    },
+    {
+      "slug": "caption",
+      "name": "bpm.caption",
+      "description": "Légende ou texte secondaire.",
+      "category": "Affichage de données"
+    },
+    {
       "slug": "badge",
       "name": "bpm.badge",
       "description": "Badge / étiquette (success, warning, etc.).",
@@ -34,6 +46,18 @@
       "slug": "skeleton",
       "name": "bpm.skeleton",
       "description": "Placeholder de chargement (skeleton).",
+      "category": "Affichage de données"
+    },
+    {
+      "slug": "jsonviewer",
+      "name": "bpm.jsonviewer",
+      "description": "Affichage JSON formaté et repliable.",
+      "category": "Affichage de données"
+    },
+    {
+      "slug": "avatar",
+      "name": "bpm.avatar",
+      "description": "Avatar utilisateur.",
       "category": "Affichage de données"
     },
     {
@@ -94,6 +118,24 @@
       "slug": "emptystate",
       "name": "bpm.emptystate",
       "description": "État vide (aucune donnée).",
+      "category": "Mise en page"
+    },
+    {
+      "slug": "container",
+      "name": "bpm.container",
+      "description": "Conteneur avec titre optionnel.",
+      "category": "Mise en page"
+    },
+    {
+      "slug": "empty",
+      "name": "bpm.empty",
+      "description": "État vide minimal (icône + message).",
+      "category": "Mise en page"
+    },
+    {
+      "slug": "popover",
+      "name": "bpm.popover",
+      "description": "Contenu au clic ou au survol (popover).",
       "category": "Mise en page"
     },
     {
@@ -163,6 +205,30 @@
       "category": "Interaction"
     },
     {
+      "slug": "daterangepicker",
+      "name": "bpm.daterangepicker",
+      "description": "Sélecteur de plage de dates.",
+      "category": "Interaction"
+    },
+    {
+      "slug": "timeinput",
+      "name": "bpm.timeinput",
+      "description": "Saisie de l'heure.",
+      "category": "Interaction"
+    },
+    {
+      "slug": "rating",
+      "name": "bpm.rating",
+      "description": "Notation par étoiles.",
+      "category": "Interaction"
+    },
+    {
+      "slug": "fileuploader",
+      "name": "bpm.fileuploader",
+      "description": "Upload de fichier(s).",
+      "category": "Interaction"
+    },
+    {
       "slug": "colorpicker",
       "name": "bpm.colorpicker",
       "description": "Sélecteur de couleur.",
@@ -193,6 +259,12 @@
       "category": "Feedback"
     },
     {
+      "slug": "statusbox",
+      "name": "bpm.statusbox",
+      "description": "Boîte de statut (success, warning, error, info).",
+      "category": "Feedback"
+    },
+    {
       "slug": "breadcrumb",
       "name": "bpm.breadcrumb",
       "description": "Fil d'Ariane.",
@@ -211,10 +283,46 @@
       "category": "Navigation"
     },
     {
-      "slug": "avatar",
-      "name": "bpm.avatar",
-      "description": "Avatar utilisateur.",
-      "category": "Affichage de données"
+      "slug": "audio",
+      "name": "bpm.audio",
+      "description": "Lecteur audio.",
+      "category": "Média"
+    },
+    {
+      "slug": "video",
+      "name": "bpm.video",
+      "description": "Lecteur vidéo.",
+      "category": "Média"
+    },
+    {
+      "slug": "html",
+      "name": "bpm.html",
+      "description": "Contenu HTML brut (iframe).",
+      "category": "Média"
+    },
+    {
+      "slug": "linechart",
+      "name": "bpm.linechart",
+      "description": "Graphique en courbes.",
+      "category": "Graphiques"
+    },
+    {
+      "slug": "barchart",
+      "name": "bpm.barchart",
+      "description": "Graphique en barres.",
+      "category": "Graphiques"
+    },
+    {
+      "slug": "areachart",
+      "name": "bpm.areachart",
+      "description": "Graphique en aires.",
+      "category": "Graphiques"
+    },
+    {
+      "slug": "scatterchart",
+      "name": "bpm.scatterchart",
+      "description": "Graphique en nuage de points.",
+      "category": "Graphiques"
     },
     {
       "slug": "modal",

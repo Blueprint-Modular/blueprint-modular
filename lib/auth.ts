@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
+  trustHost: true,
   adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   providers: [
     GoogleProvider({

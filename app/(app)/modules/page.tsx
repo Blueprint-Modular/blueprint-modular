@@ -24,10 +24,7 @@ export default function ModulesPage() {
           <span className="doc-badge doc-badge-category">Vue d&apos;ensemble</span>
         </div>
       </div>
-      <div
-        className="grid gap-4 mb-10"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
-      >
+      <div className="grid gap-4 mb-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {modules.map((mod) => {
           const Icon = mod.icon;
           return (

@@ -10,8 +10,8 @@ function getBreadcrumbFromPathname(pathname: string): { label: string; href?: st
   if (segments.length === 0) return [];
   if (segments[0] === "docs" && segments[1] === "components") {
     const slug = segments[2];
-    if (slug) return [{ label: "Composants", href: "/docs/components" }, { label: `bpm.${slug}` }];
-    return [{ label: "Composants", href: "/docs/components" }];
+    if (slug) return [{ label: "Composants" }, { label: `bpm.${slug}` }];
+    return [{ label: "Composants" }];
   }
   if (segments[0] === "modules") {
     if (segments.length === 1) return [{ label: "Modules" }];

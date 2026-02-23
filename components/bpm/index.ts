@@ -65,6 +65,8 @@ export { Divider } from "./Divider";
 export type { DividerProps } from "./Divider";
 export { Grid } from "./Grid";
 export type { GridProps } from "./Grid";
+export { Column } from "./Column";
+export type { ColumnProps } from "./Column";
 export { Stepper } from "./Stepper";
 export type { StepperProps, StepperStep } from "./Stepper";
 export { ToastProvider, useToast, default as Toast } from "./Toast";

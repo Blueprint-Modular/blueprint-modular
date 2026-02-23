@@ -85,6 +85,12 @@
       "category": "Mise en page"
     },
     {
+      "slug": "column",
+      "name": "bpm.column",
+      "description": "Diviser la page en 1, 2, 3 ou plus colonnes.",
+      "category": "Mise en page"
+    },
+    {
       "slug": "emptystate",
       "name": "bpm.emptystate",
       "description": "État vide (aucune donnée).",

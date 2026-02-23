@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useEffect } from "react";
 import {
@@ -15,12 +16,7 @@ import {
   CodeBlock,
 } from "@/components/bpm";
 
-/**
- * Sandbox BPM — Visuel d’un composant BPM seul (sans sidebar).
- * Usage : /sandbox?component=panel&variant=warning&title=Test
- * Permet l’embed en iframe depuis la doc statique (docs.blueprint-modular.com).
- */
-export default function SandboxPage() {
+function SandboxContent() {
   const searchParams = useSearchParams();
   const component = (searchParams.get("component") || searchParams.get("c") || "panel").toLowerCase().replace("bpm.", "");
   const variant = searchParams.get("variant") || searchParams.get("v") || "info";
@@ -145,5 +141,18 @@ export default function SandboxPage() {
     >
       <div style={{ maxWidth: 640, margin: "0 auto" }}>{content}</div>
     </div>
+  );
+}
+
+/**
+ * Sandbox BPM — Visuel d’un composant BPM seul (sans sidebar).
+ * Usage : /sandbox?component=panel&variant=warning&title=Test
+ * Permet l’embed en iframe depuis la doc statique (docs.blueprint-modular.com).
+ */
+export default function SandboxPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "var(--bpm-bg-secondary)", padding: 24, display: "flex", alignItems: "center", justifyContent: "center" }}>Chargement…</div>}>
+      <SandboxContent />
+    </Suspense>
   );
 }

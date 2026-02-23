@@ -39,7 +39,7 @@ export default function DocAvatarPage() {
         </div>
         <h1>bpm.avatar</h1>
         <p className="doc-description">
-          Avatar utilisateur (initiales ou image). Option <code>variant="sidebar"</code> pour afficher nom, sous-titre et bouton de déconnexion dans une sidebar.
+          Avatar utilisateur (initiales ou image). Option <code>variant=&quot;sidebar&quot;</code> pour afficher nom, sous-titre et bouton de déconnexion dans une sidebar.
         </p>
         <div className="doc-meta">
           <span className="doc-badge doc-badge-category">Affichage de données</span>

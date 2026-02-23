@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { LayoutDashboard, Boxes, Play, FolderOpen, Settings, BookOpen, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Boxes, Play, FolderOpen, Settings, BookOpen, ExternalLink, Sparkles } from "lucide-react";
 
 const quickLinks = [
+  {
+    href: "/settings/wizard",
+    label: "Assistant de configuration",
+    description: "Paramétrer l'app en quelques étapes : thème, couleur, clés API, notifications",
+    icon: Sparkles,
+  },
   {
     href: "/docs/components",
     label: "Composants",

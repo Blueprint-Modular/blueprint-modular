@@ -119,7 +119,7 @@ export default function DocThemePage() {
 
       <h2 className="text-lg font-semibold mt-8 mb-2">Intégration</h2>
       <p className="mb-2" style={{ color: "var(--bpm-text-secondary)" }}>
-        Le composant utilise le <code>ThemeProvider</code> de l’app lorsqu’il est monté ; sinon il lit et écrit <code>data-theme</code> et <code>localStorage</code> directement. Les variables CSS BPM (<code>--bpm-bg-primary</code>, etc.) sont définies dans <code>globals.css</code> pour <code>[data-theme="dark"]</code>.
+        Le composant utilise le <code>ThemeProvider</code> de l’app lorsqu’il est monté ; sinon il lit et écrit <code>data-theme</code> et <code>localStorage</code> directement. Les variables CSS BPM (<code>--bpm-bg-primary</code>, etc.) sont définies dans <code>globals.css</code> pour <code>[data-theme=&quot;dark&quot;]</code>.
       </p>
       <CodeBlock code={'# Toggle (défaut)\nbpm.theme()\n\n# Liste déroulante\nbpm.theme(variant="select", light_label="Clair", dark_label="Sombre")'} language="python" />
 

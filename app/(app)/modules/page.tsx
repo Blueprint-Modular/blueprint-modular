@@ -25,24 +25,27 @@ export default function ModulesPage() {
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {modules.map((mod) => (
-          <Link
-            key={mod.href}
-            href={mod.href}
-            className="flex flex-col p-4 rounded-lg border transition hover:opacity-90"
-            style={{
-              background: "var(--bpm-bg-secondary)",
-              borderColor: "var(--bpm-border)",
-              color: "var(--bpm-text-primary)",
-            }}
-          >
-            <mod.icon className="w-8 h-8 mb-2" style={{ color: "var(--bpm-accent)" }} />
-            <span className="font-semibold">{mod.label}</span>
-            <span className="text-sm mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-              {mod.description}
-            </span>
-          </Link>
-        ))}
+        {modules.map((mod) => {
+          const Icon = mod.icon;
+          return (
+            <Link
+              key={mod.href}
+              href={mod.href}
+              className="flex flex-col p-4 rounded-lg border transition hover:opacity-90"
+              style={{
+                background: "var(--bpm-bg-secondary)",
+                borderColor: "var(--bpm-border)",
+                color: "var(--bpm-text-primary)",
+              }}
+            >
+              <Icon className="w-8 h-8 mb-2 shrink-0" style={{ color: "var(--bpm-accent)" }} aria-hidden />
+              <span className="font-semibold block">{mod.label}</span>
+              <span className="text-sm mt-1 block" style={{ color: "var(--bpm-text-secondary)" }}>
+                {mod.description}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

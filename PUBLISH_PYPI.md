@@ -15,8 +15,8 @@ Page projet : https://pypi.org/project/blueprint-modular/
 
 2. **Publier une nouvelle version** : incrémenter la version (voir ci-dessous), commit, puis pousser un tag `v*`. Le workflow `.github/workflows/workflow.yml` build et envoie sur PyPI.
    ```bash
-   git tag v0.1.2
-   git push origin v0.1.2
+   git tag v0.1.3
+   git push origin v0.1.3
    ```
 
 ## Option 2 : Publication manuelle (token)
@@ -69,17 +69,17 @@ Page du projet : https://pypi.org/project/blueprint-modular/
 ## Mise à jour de version
 
 1. Modifier la version dans :
-   - `pyproject.toml` : `version = "0.1.2"`
-   - `bpm/__init__.py` : `__version__ = "0.1.2"`
+   - `pyproject.toml` : `version = "0.1.3"`
+   - `bpm/__init__.py` : `__version__ = "0.1.3"`
    - `bpm/cli.py` : utilise `__version__` de `bpm`, pas de doublon
 
 2. Commit + push, puis créer et pousser le tag (publication automatique via le workflow) :
    ```bash
    git add pyproject.toml bpm/__init__.py
-   git commit -m "chore: version 0.1.2"
+   git commit -m "chore: version 0.1.3"
    git push origin master
-   git tag v0.1.2
-   git push origin v0.1.2
+   git tag v0.1.3
+   git push origin v0.1.3
    ```
 
 PyPI n'accepte pas d'écraser une version existante : toujours incrémenter avant de re-publier.

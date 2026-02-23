@@ -68,7 +68,7 @@
       <p class="lead">Roadmap publique : ce qui est fait, en cours et à faire pour Blueprint Modular.</p>
       <div class="alert alert-important">
         <span class="alert-icon"></span>
-        <div class="alert-body"><strong>Statut global : Alpha.</strong> Le package est publié sur PyPI : <code>pip install blueprint-modular</code>. L’<strong>app de démo</strong> (docs, sandbox, dashboard, authentification, thème clair/sombre) est opérationnelle sur <a href="https://app.blueprint-modular.com/">app.blueprint-modular.com</a>. Côté <strong>runtime Python</strong> (<code>bpm run</code>), le mode re-run par requête HTTP est en place ; les optimisations (WebSocket, réactivité granulaire) restent à faire.</div>
+        <div class="alert-body"><strong>Statut global : Alpha.</strong> Le package est publié sur PyPI : <code>pip install blueprint-modular</code>. L’<strong>app de démo</strong> (docs, sandbox, dashboard, authentification, thème clair/sombre) est opérationnelle sur <a href="https://app.blueprint-modular.com/dashboard">app.blueprint-modular.com</a>. Côté <strong>runtime Python</strong> (<code>bpm run</code>), le mode re-run par requête HTTP est en place ; les optimisations (WebSocket, réactivité granulaire) restent à faire.</div>
       </div>
 
       <h2>Fait</h2>
@@ -77,7 +77,7 @@
         <li>Registry $ et @ (côté frontend React) et store réactif (reactiveStore.js)</li>
         <li>Package Python installable (<code>pyproject.toml</code>, <code>bpm run</code> / <code>bpm init</code>), publication sur PyPI et via GitHub Actions (tag <code>v*</code>)</li>
         <li>Serveur HTTP du runtime : premier chargement + interactions boutons (re-run par requête), <code>session_state</code></li>
-        <li><strong>Catalogue de composants React</strong> : title, metric, table, badge, progress, skeleton, panel, tabs, expander, accordion, card, grid, divider, emptystate, button, toggle, theme, selectbox, input, textarea, checkbox, radiogroup, slider, numberinput, dateinput, colorpicker, chip, message, spinner, tooltip, breadcrumb, stepper, sidebar, avatar, modal, codeblock, highlight-box</li>
+        <li><strong>Catalogue de composants React</strong> : title (bar, inverted), metric, table, badge, progress, skeleton, panel, tabs, expander, accordion, card (inverted), grid, divider, emptystate, button, toggle, theme, selectbox, input, textarea (inverted), checkbox, radiogroup, slider, numberinput, dateinput, colorpicker, chip, message, spinner, tooltip, breadcrumb, stepper, sidebar, avatar, modal, codeblock, highlight-box</li>
         <li>APIs Python (title, write, button, metric, table, panel, etc.) — première vague ; à aligner avec le catalogue React</li>
         <li><strong>App de démo Next.js</strong> : dashboard, sandbox (aperçu composants par code), docs composants avec aperçu interactif, paramètres, modules (auth, etc.)</li>
         <li><strong>Authentification</strong> : page de connexion (Google, e-mail), logo, intégration dans l'app</li>
@@ -95,7 +95,7 @@
         <li>Tests automatisés (runtime et app)</li>
         <li>WebSocket ou SSE pour réactivité granulaire (mise à jour ciblée sans re-run complet du script)</li>
         <li>CI/CD : tests, lint (publication PyPI déjà en place)</li>
-        <li><strong>Multi-langue</strong> : site doc + landing avec sélecteur FR/EN ; composant <code>bpm.i18n</code> pour les apps BPM</li>
+        <li><strong>Multi-langue</strong> : composant <code>bpm.i18n</code> pour les apps BPM (sélecteur langue sur le site retiré pour l’instant)</li>
         <li><strong>Modules</strong> : pages réutilisables — Wiki, IA, Veille, IBKR, Analyse de document (voir <a href="https://blueprint-modular.com/modules.html">Modules</a>)</li>
       </ul>
 
@@ -135,7 +135,7 @@
 
       <h3>Résumé</h3>
       <p><strong>En place :</strong> package installable (<code>pip install -e .</code>), CLI <code>bpm run</code> / <code>bpm init</code>, serveur HTTP, premier chargement + interactions boutons (re-run par requête), APIs composants (title, button, metric, table, panel, etc.), <code>session_state</code>. Vous pouvez lancer une app avec <code>python -m bpm.cli run app.py</code> (après <code>pip install -e .</code> dans un venv).</p>
-      <p><strong>À faire / à améliorer :</strong> WebSocket ou SSE pour réactivité granulaire ; aligner les composants Python et le rendu runtime avec le catalogue React. Le package est publié sur PyPI (voir <a href="https://pypi.org/project/blueprint-modular/">PyPI</a>). L’app de démo (docs, sandbox, auth, thème) est disponible sur <a href="https://app.blueprint-modular.com/">app.blueprint-modular.com</a>.</p>
+      <p><strong>À faire / à améliorer :</strong> WebSocket ou SSE pour réactivité granulaire ; aligner les composants Python et le rendu runtime avec le catalogue React. Le package est publié sur PyPI (voir <a href="https://pypi.org/project/blueprint-modular/">PyPI</a>). L’app de démo (docs, sandbox, auth, thème) est disponible sur <a href="https://app.blueprint-modular.com/dashboard">app.blueprint-modular.com</a>.</p>
       <h2>Comment contribuer</h2>
       <p>Quand le dépôt sera public, les contributions (issues, pull requests) seront les bienvenues — voir le README du projet pour les guidelines.</p>
       <p><strong>Voir aussi :</strong> <a href="../get-started/installation.html">Installation</a>, <a href="faq.html">FAQ</a>.</p>
@@ -152,7 +152,7 @@
           <a href="../knowledge-base/faq.html">FAQ</a>
           <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
         </div>
-        <div class="footer-meta">Blueprint Modular v0.1</div>
+        <div class="footer-meta">Blueprint Modular v0.1.3</div>
       </footer>
     </main>
   </div>

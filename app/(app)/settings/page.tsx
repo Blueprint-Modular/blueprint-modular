@@ -321,6 +321,11 @@ export default function SettingsPage() {
           <span className="doc-badge doc-badge-category">Configuration</span>
           <span className="doc-reading-time">⏱ 2 min</span>
         </div>
+        <p className="mt-3 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+          <Link href="/settings/wizard" className="underline" style={{ color: "var(--bpm-accent)" }}>
+            Relancer l&apos;assistant de configuration
+          </Link>
+        </p>
       </div>
 
       <Tabs tabs={tabs} defaultTab={0} />

@@ -27,6 +27,8 @@ Le script :
 
 **Vérifier la version en ligne :** ouvrir `https://blueprint-modular.com/version.txt` et `https://docs.blueprint-modular.com/version.txt` (hash = `git rev-parse --short HEAD` en local).
 
+**Note :** Si le build Next.js affiche des warnings « Unsupported engine » (Node 18 sur le VPS), passer à Node 20 une fois en SSH : `cd /home/ubuntu/blueprint-modular && bash deploy/upgrade-node-20.sh`. Puis relancer un déploiement.
+
 Pour la procédure détaillée (build, commit, vérifications), voir **[COMMIT_DEPLOY.md](COMMIT_DEPLOY.md)**.
 
 ---

@@ -36,11 +36,28 @@ sudo ln -sf /etc/nginx/sites-available/blueprint-modular /etc/nginx/sites-enable
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+## Mettre à jour Node.js vers 20 sur le VPS
+
+Si le build Next.js affiche des warnings « Unsupported engine » (Node 18), passer à Node 20 une fois :
+
+**Depuis Windows (PowerShell)** — en se connectant au VPS puis en exécutant le script :
+```powershell
+ssh -i $env:USERPROFILE\.ssh\portfolio_beam_key ubuntu@145.239.199.236 "cd /home/ubuntu/blueprint-modular && git pull && bash deploy/upgrade-node-20.sh"
+```
+
+**Ou directement sur le VPS (SSH)** :
+```bash
+cd /home/ubuntu/blueprint-modular && git pull && bash deploy/upgrade-node-20.sh
+```
+
+Ensuite relancer un déploiement (`.\scripts\deploy-vps-remote.ps1` ou `./deploy/deploy-from-git.sh`).
+
 ## Fichiers
 
 | Fichier | Rôle |
 |---------|------|
 | **deploy-from-git.sh** | Déploiement depuis Git (clone/pull + copie vers `/var/www/blueprint-modular`). À exécuter sur le VPS. |
+| **upgrade-node-20.sh** | Passe le VPS en Node 20 LTS (NodeSource ou nvm). À exécuter une fois en SSH. |
 | **nginx.conf** | Vhost Nginx (site statique). À copier dans `/etc/nginx/sites-available/blueprint-modular`. |
 | **setup.sh** | Ancien : app + systemd (référence). |
 | **update.sh** | Ancien : mise à jour app (référence). |

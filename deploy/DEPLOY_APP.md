@@ -4,7 +4,7 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
 
 ## Prérequis sur le VPS
 
-- Node.js 18+ et npm
+- **Node.js 20+** et npm (recommandé pour éviter les warnings « Unsupported engine » au build). Si le serveur a encore Node 18 : `bash deploy/upgrade-node-20.sh` (une fois en SSH sur le VPS).
 - PostgreSQL (pour l’app)
 - PM2 : `npm i -g pm2`
 - Nginx (déjà en place pour la vitrine / doc)

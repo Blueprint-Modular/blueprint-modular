@@ -3,9 +3,10 @@
 # Usage: ./deploy/deploy-from-git.sh
 # Prérequis: git installé. Pour la 1ère fois: clone dans REPO_DIR puis lancer ce script.
 #
-# Déploie DEUX racines :
+# Déploie :
 # - Site vitrine (blueprint-modular.com) → /var/www/blueprint-modular
 # - Documentation (docs.blueprint-modular.com) → /var/www/blueprint-modular-docs
+# - App Next.js (Wiki, modules, sandbox) → app.blueprint-modular.com via PM2
 
 set -e
 
@@ -15,6 +16,7 @@ STATIC="$REPO_DIR/frontend/static"
 
 VITRINE_DIR="/var/www/blueprint-modular"
 DOCS_DIR="/var/www/blueprint-modular-docs"
+APP_PM2_NAME="blueprint-app"
 
 echo "==> Déploiement Blueprint Modular depuis Git"
 
@@ -91,9 +93,38 @@ echo "${GIT_REV} ${GIT_DATE}" | sudo tee "$VITRINE_DIR/version.txt" >/dev/null
 echo "${GIT_REV} ${GIT_DATE}" | sudo tee "$DOCS_DIR/version.txt" >/dev/null
 sudo chown ubuntu:ubuntu "$VITRINE_DIR/version.txt" "$DOCS_DIR/version.txt" 2>/dev/null || true
 
+# --- App Next.js (Wiki, modules, sandbox) → PM2 pour app.blueprint-modular.com ---
+if [ -f "$REPO_DIR/package.json" ] && [ -f "$REPO_DIR/next.config.mjs" ]; then
+  echo "--> Build et démarrage de l'app Next.js..."
+  cd "$REPO_DIR"
+  if [ ! -f .env ]; then
+    echo "    ⚠ .env manquant dans $REPO_DIR. Copiez deploy/app-env.example vers .env et renseignez DATABASE_URL, NEXTAUTH_*."
+  else
+    npm ci
+    npx prisma generate
+    npm run build
+    mkdir -p .next/standalone/.next
+    cp -r .next/static .next/standalone/.next/ 2>/dev/null || true
+    cp -r public .next/standalone/ 2>/dev/null || true
+    chmod +x deploy/run-app.sh
+    if command -v pm2 >/dev/null 2>&1; then
+      if pm2 describe "$APP_PM2_NAME" >/dev/null 2>&1; then
+        pm2 restart "$APP_PM2_NAME" --update-env
+      else
+        pm2 start deploy/run-app.sh --name "$APP_PM2_NAME" --interpreter bash
+        pm2 save
+      fi
+      echo "    App Next.js: pm2 → $APP_PM2_NAME (app.blueprint-modular.com)"
+    else
+      echo "    ⚠ PM2 non installé. Installez: npm i -g pm2. Puis: pm2 start deploy/run-app.sh --name $APP_PM2_NAME --interpreter bash"
+    fi
+  fi
+fi
+
 echo "✅ Déploiement terminé."
 echo "   Version déployée: $GIT_REV ($GIT_DATE)"
 echo "   Vitrine:    $VITRINE_DIR (blueprint-modular.com)"
 echo "   Documentation: $DOCS_DIR (docs.blueprint-modular.com)"
+echo "   App (Wiki, modules): app.blueprint-modular.com (PM2: $APP_PM2_NAME)"
 echo "   Pour Nginx: sudo cp $REPO_DIR/deploy/nginx.conf /etc/nginx/sites-available/blueprint-modular"
 echo "   Puis:       sudo nginx -t && sudo systemctl reload nginx"

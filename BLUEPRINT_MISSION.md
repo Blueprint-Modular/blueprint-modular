@@ -1,6 +1,6 @@
 # BLUEPRINT MISSION — Suivi en temps réel
 
-Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phases 1 à 4, checkpoints OK).
+Dernière mise à jour : 2026-02-22 — Déploiement prod + nettoyage effectués.
 
 ---
 
@@ -14,7 +14,7 @@ Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phase
 
 ## PHASE EN COURS
 
-**Aucune** — Mission intégralement réalisée. Tous les checkpoints sont passés.
+Aucune. **Prochaine priorité** : Gestion des droits owner/admin/user sur chaque module (Phase 3, optionnel). TOC / Pagefind / barre de progression lecture (Phase 4, optionnel).
 
 ---
 
@@ -32,7 +32,8 @@ Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phase
 
 ### PHASE 2 — Documentation exhaustive
 
-- [x] Page par composant avec sandbox live (bpm.metric, bpm.button, bpm.panel)
+- [x] 15 pages doc composants avec sandbox live (metric, button, panel, table, tabs, modal, toggle, message, spinner, selectbox, expander, tooltip, numberinput, title, codeblock)
+- [x] Page index docs/components (grille par catégorie)
 - [x] Page par module (Wiki, IA, Analyse Documents, Veille)
 - [x] Getting Started wizard interactif (3 étapes)
 - [x] Changelog avec versioning
@@ -42,11 +43,11 @@ Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phase
 
 ### PHASE 3 — Modules fonctionnels
 
-- [x] Module Wiki (CRUD articles, liste, création, lecture par slug, PATCH/DELETE API)
-- [x] Module Analyse de Documents (upload PDF, liste, API /api/documents)
-- [x] Module IA (conversations, messages, API placeholder ; clés API pour réponses réelles)
+- [x] Module Wiki (CRUD, arborescence, search/published, [slug] Markdown, new + [slug]/edit, PUT/DELETE)
+- [x] Module Analyse de Documents (upload PDF, pdf-parse + Claude, GET/DELETE [id], liste + détail, alertes 30j)
+- [x] Module IA (AIChat, POST /api/ai/chat SSE Claude, conversations + messages)
 - [x] Gestion des clés API (Paramètres > Clés API, chiffrement AES-256-GCM)
-- [ ] Gestion des droits owner/admin/user sur chaque module (canContributeToWiki en place)
+- [ ] Gestion des droits owner/admin/user sur chaque module (optionnel)
 - [x] CHECKPOINT PHASE 3 : build propre, modules testables
 
 ### PHASE 4 — Polish & Corrections Audit
@@ -57,7 +58,7 @@ Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phase
 - [x] Burger mobile (Sidebar drawer)
 - [x] Dark mode : blocs code lisibles (--bpm-code-bg, --bpm-code-border)
 - [x] Bouton Copier dans CodeBlock
-- [ ] TOC, recherche Pagefind, barre de progression lecture (optionnel)
+- [ ] TOC / recherche Pagefind / barre de progression lecture (optionnel)
 - [x] Responsive (Sidebar mobile, layout app)
 - [x] CHECKPOINT PHASE 4 : build propre, site impeccable
 
@@ -89,3 +90,6 @@ Dernière mise à jour : 2025-02-22 — Mission intégralement réalisée (Phase
 - Phase 3 : Wiki CRUD (liste, new, [slug], API complète), Documents (upload + liste), Module IA (conversations + messages, réponse placeholder), Paramètres > Clés API (chiffrement AES-256-GCM via lib/encrypt.ts).
 - Phase 4 : 404 stylée, Prev/Next doc, dark mode blocs code, avatar Sidebar en next/image, uploads/ dans .gitignore.
 - Fichiers : .env.local.example, .eslintrc.json, health-check.sh, lib/encrypt.ts.
+- **Phase 2 continuation** : 15 pages doc composants avec structure complète ; index docs/components en grille ; lib/docPages.ts ; styles highlight wiki. Wiki : API search/published, arborescence, [slug] Markdown, new/edit. Documents : pdf-parse + Claude, GET/DELETE [id], alertes 30j. IA : AIChat + /api/ai/chat SSE. CSS global (--bpm-*).
+- **Déploiement production** : Vercel (`npm run deploy` / `npx vercel --prod --yes`), URL https://blueprint-modular.vercel.app. Variables d’env à configurer dans le projet Vercel (DATABASE_URL, NEXTAUTH_*, GOOGLE_*, ANTHROPIC_API_KEY).
+- **Nettoyage** : suppression dossier dupliqué `blueprint-modular/`, `BLUEPRINT_CURSOR_PROMPT_V2.md`, `AUDIT_STATUS.md` ; imports inutiles retirés (Link, useSession sur modules/documents) ; `blueprint-modular/` ajouté au .gitignore.

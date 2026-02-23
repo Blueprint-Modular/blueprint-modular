@@ -1,0 +1,17 @@
+# À copier dans la racine du repo sur le VPS : cp deploy/app-env.example .env
+# Puis renseigner les valeurs (surtout DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL, Google OAuth).
+
+# NextAuth (obligatoire en prod)
+NEXTAUTH_SECRET=    # openssl rand -hex 32
+NEXTAUTH_URL=https://app.blueprint-modular.com
+
+# OAuth (Google pour la connexion)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Base de données (obligatoire)
+DATABASE_URL=postgresql://user:password@localhost:5432/blueprint_modular
+
+# Optionnel : autres OAuth, clés IA, etc.
+# APPLE_ID= ...
+# ANTHROPIC_API_KEY= ...

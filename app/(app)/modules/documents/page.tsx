@@ -1,117 +1,189 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/bpm/Button";
-import { Panel } from "@/components/bpm/Panel";
+import { useState, useEffect, useRef } from "react";
+import { Table, Message, Spinner } from "@/components/bpm";
 
-type Doc = {
+interface Document {
   id: string;
   filename: string;
-  mimeType: string;
-  analysisStatus: string;
+  analysisStatus: "pending" | "processing" | "done" | "error";
   supplier: string | null;
   client: string | null;
   contractDate: string | null;
+  terminationDate: string | null;
+  summary: string | null;
   createdAt: string;
-};
+}
 
-export default function DocumentsModulePage() {
-  const [docs, setDocs] = useState<Doc[]>([]);
+function daysUntil(dateStr: string): number {
+  const diff = new Date(dateStr).getTime() - Date.now();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+export default function DocumentsPage() {
+  const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const load = () => {
-    setLoading(true);
+  const fetchDocuments = () => {
     fetch("/api/documents")
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("Unauthorized"))))
-      .then(setDocs)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        setDocuments(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setDocuments([]);
+        setLoading(false);
+      });
   };
 
-  useEffect(() => load(), []);
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
 
-  const onUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const input = form.querySelector<HTMLInputElement>('input[type="file"]');
-    if (!input?.files?.length) return;
-    setError(null);
+  useEffect(() => {
+    const hasProcessing = documents.some(
+      (d) => d.analysisStatus === "processing" || d.analysisStatus === "pending"
+    );
+    if (!hasProcessing) return;
+    const interval = setInterval(fetchDocuments, 3000);
+    return () => clearInterval(interval);
+  }, [documents]);
+
+  const handleUpload = async (file: File) => {
+    if (!file || file.type !== "application/pdf") {
+      alert("Seuls les fichiers PDF sont acceptés.");
+      return;
+    }
     setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
     try {
-      const fd = new FormData();
-      fd.append("file", input.files[0]);
-      const res = await fetch("/api/documents", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      load();
-      input.value = "";
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur");
+      const res = await fetch("/api/documents", { method: "POST", body: formData });
+      if (res.ok) {
+        const newDoc = await res.json();
+        setDocuments((prev) => [newDoc, ...prev]);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error ?? "Erreur upload");
+      }
     } finally {
       setUploading(false);
     }
   };
 
+  const today = new Date();
+  const in30Days = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const alerts = documents.filter((d) => {
+    if (!d.terminationDate) return false;
+    const t = new Date(d.terminationDate);
+    return t >= today && t <= in30Days;
+  });
+
+  const filtered = documents.filter(
+    (d) =>
+      !search ||
+      [d.supplier, d.client, d.filename].some((v) =>
+        v?.toLowerCase().includes(search.toLowerCase())
+      )
+  );
+
+  const columns = [
+    { key: "filename", label: "Fichier" },
+    { key: "supplier", label: "Fournisseur" },
+    { key: "client", label: "Client" },
+    { key: "contractDate", label: "Date contrat" },
+    { key: "terminationDate", label: "Dénonciation" },
+    { key: "analysisStatus", label: "Statut" },
+  ];
+
+  const tableData = filtered.map((d) => ({
+    id: d.id,
+    filename: d.filename,
+    supplier: d.supplier ?? "—",
+    client: d.client ?? "—",
+    contractDate: d.contractDate
+      ? new Date(d.contractDate).toLocaleDateString("fr-FR")
+      : "—",
+    terminationDate: d.terminationDate
+      ? `${new Date(d.terminationDate).toLocaleDateString("fr-FR")} (J-${daysUntil(d.terminationDate)})`
+      : "—",
+    analysisStatus:
+      d.analysisStatus === "done"
+        ? "✓"
+        : d.analysisStatus === "error"
+          ? "✗ Erreur"
+          : d.analysisStatus === "processing"
+            ? "⏳ Analyse..."
+            : "⏳ En attente",
+  }));
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4" style={{ color: "var(--bpm-accent)" }}>
-        Analyse de Documents
-      </h1>
-      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
-        Upload PDF, extraction IA, tableau structuré.
-      </p>
-
-      {error && (
-        <Panel variant="error" title="Erreur" className="mb-4">
-          {error}
-        </Panel>
-      )}
-
-      <form onSubmit={onUpload} className="mb-8 flex flex-wrap items-end gap-4">
-        <label className="block">
-          <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
-            Fichier PDF
-          </span>
+    <div className="documents-page">
+      <div className="documents-header">
+        <h1>📄 Analyse de documents</h1>
+        <div>
           <input
+            ref={fileInputRef}
             type="file"
-            accept=".pdf,application/pdf"
-            className="block w-full text-sm"
-            style={{ color: "var(--bpm-text-primary)" }}
+            accept=".pdf"
+            hidden
+            onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
           />
-        </label>
-        <Button type="submit" disabled={uploading}>
-          {uploading ? "Envoi..." : "Envoyer"}
-        </Button>
-      </form>
-
-      {loading && <p style={{ color: "var(--bpm-text-secondary)" }}>Chargement...</p>}
-      {!loading && docs.length === 0 && (
-        <Panel variant="info" title="Aucun document">
-          Envoyez un PDF pour lancer l&apos;analyse.
-        </Panel>
-      )}
-      {!loading && docs.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--bpm-border)" }}>
-          <table className="w-full text-sm">
-            <thead style={{ background: "var(--bpm-bg-secondary)" }}>
-              <tr>
-                <th className="text-left p-3" style={{ color: "var(--bpm-text-secondary)" }}>Fichier</th>
-                <th className="text-left p-3" style={{ color: "var(--bpm-text-secondary)" }}>Statut</th>
-                <th className="text-left p-3" style={{ color: "var(--bpm-text-secondary)" }}>Date</th>
-              </tr>
-            </thead>
-            <tbody style={{ color: "var(--bpm-text-primary)" }}>
-              {docs.map((d) => (
-                <tr key={d.id} className="border-t" style={{ borderColor: "var(--bpm-border)" }}>
-                  <td className="p-3">{d.filename}</td>
-                  <td className="p-3">{d.analysisStatus}</td>
-                  <td className="p-3">{new Date(d.createdAt).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "⏳ Analyse en cours..." : "+ Analyser un PDF"}
+          </button>
         </div>
+      </div>
+
+      {alerts.length > 0 && (
+        <Message type="warning">
+          ⚠ {alerts.length} contrat{alerts.length > 1 ? "s" : ""} à dénoncer dans les 30 prochains jours :{" "}
+          {alerts.map((a) => `${a.supplier || a.filename} (J-${daysUntil(a.terminationDate!)})`).join(", ")}
+        </Message>
+      )}
+
+      <div className="documents-filters">
+        <input
+          type="search"
+          placeholder="Rechercher..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {loading ? (
+        <Spinner text="Chargement des documents..." />
+      ) : documents.length === 0 ? (
+        <div className="documents-empty">
+          <p>Aucun document analysé pour l&apos;instant.</p>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Analyser mon premier contrat
+          </button>
+        </div>
+      ) : (
+        <Table
+          columns={columns}
+          data={tableData}
+          striped
+          hover
+          onRowClick={(row) => {
+            const id = (row as { id?: string }).id;
+            if (id) window.location.href = `/modules/documents/${id}`;
+          }}
+        />
       )}
     </div>
   );

@@ -34,3 +34,8 @@ venv/
 
 # Doublon (source = frontend/doc-app)
 doc-app/
+
+# Copie accidentelle du repo dans lui-même
+blueprint-modular/
+
+.vercel

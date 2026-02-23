@@ -27,10 +27,10 @@ const navItems = [
   { href: "/docs", label: "Documentation", icon: BookOpen },
   { href: "/docs/components", label: "Composants", icon: Boxes },
   { href: "/modules", label: "Modules", icon: FolderOpen },
-  { href: "/modules/wiki", label: "Wiki", icon: BookMarked },
-  { href: "/modules/ia", label: "IA", icon: Bot },
-  { href: "/modules/documents", label: "Analyse Documents", icon: FileText },
-  { href: "/modules/veille", label: "Veille", icon: Radio },
+  { href: "/modules/wiki", label: "Module Wiki", icon: BookMarked },
+  { href: "/modules/ia", label: "Module IA", icon: Bot },
+  { href: "/modules/documents", label: "Module Documents", icon: FileText },
+  { href: "/modules/veille", label: "Module Veille", icon: Radio },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ];
 

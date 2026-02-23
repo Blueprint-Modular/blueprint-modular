@@ -38,3 +38,95 @@ html {
 body {
   min-height: 100vh;
 }
+
+/* Table variants (striped / hover) */
+.bpm-table-striped tbody tr:nth-of-type(odd) {
+  background: var(--bpm-surface);
+}
+.bpm-table-striped tbody tr:nth-of-type(even) {
+  background: var(--bpm-bg-secondary);
+}
+.bpm-table-hover tbody tr:hover {
+  background: var(--bpm-bg-secondary);
+}
+[data-theme="dark"] .bpm-table-hover tbody tr:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Doc page header */
+.doc-page-header { margin-bottom: 32px; }
+.doc-breadcrumb { font-size: 12px; color: var(--bpm-text-secondary); margin-bottom: 8px; }
+.doc-page-header h1 { font-size: 1.75rem; font-weight: 700; color: var(--bpm-text-primary); margin: 0 0 8px; }
+.doc-description { color: var(--bpm-text-secondary); margin: 0 0 12px; font-size: 15px; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.doc-badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+.doc-badge-stable { background: var(--bpm-accent-mint); color: #0f5132; }
+.doc-badge-category { background: var(--bpm-border); color: var(--bpm-text-secondary); }
+.doc-reading-time { font-size: 12px; color: var(--bpm-text-secondary); }
+[data-theme="dark"] .doc-badge-stable { background: rgba(69, 208, 158, 0.3); color: var(--bpm-accent-mint); }
+
+/* Sandbox */
+.sandbox-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; border: 1px solid var(--bpm-border); border-radius: 12px; overflow: hidden; }
+.sandbox-preview { padding: 32px; background: var(--bpm-surface); display: flex; align-items: center; justify-content: center; min-height: 160px; }
+.sandbox-controls { padding: 24px; background: var(--bpm-bg-secondary); border-left: 1px solid var(--bpm-border); }
+.sandbox-control-group { margin-bottom: 16px; }
+.sandbox-controls label { display: block; font-size: 12px; font-weight: 600; color: var(--bpm-text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.sandbox-controls input, .sandbox-controls select { width: 100%; padding: 6px 10px; border: 1px solid var(--bpm-border); border-radius: 6px; font-size: 14px; background: var(--bpm-surface); color: var(--bpm-text-primary); }
+.sandbox-code { grid-column: 1 / -1; border-top: 1px solid var(--bpm-border); }
+.sandbox-code-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: #1e1e1e; color: #aaa; font-size: 12px; }
+.sandbox-code pre { margin: 0; padding: 16px; background: #1e1e1e; color: #e5e5e5; font-size: 13px; overflow-x: auto; }
+.sandbox-code button { background: transparent; border: 1px solid #555; color: #aaa; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.sandbox-code button:hover { background: #333; color: #fff; }
+@media (max-width: 768px) { .sandbox-container { grid-template-columns: 1fr; } }
+
+/* Props table */
+.props-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+.props-table th { text-align: left; padding: 10px 12px; background: var(--bpm-bg-secondary); border-bottom: 2px solid var(--bpm-border); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--bpm-text-secondary); }
+.props-table td { padding: 10px 12px; border-bottom: 1px solid var(--bpm-border); vertical-align: top; }
+.props-table code { background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 4px; font-size: 12px; font-family: monospace; }
+[data-theme="dark"] .props-table th { background: rgba(255,255,255,0.05); }
+[data-theme="dark"] .props-table code { background: rgba(255,255,255,0.1); }
+
+/* Doc pagination */
+.doc-pagination { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--bpm-border); }
+.doc-pagination a { color: var(--bpm-accent-cyan); text-decoration: none; font-size: 14px; }
+.doc-pagination a:hover { text-decoration: underline; }
+
+/* Buttons */
+.btn-primary { background: var(--bpm-accent); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn-primary:hover { background: #153d73; }
+.btn-secondary { background: transparent; color: var(--bpm-text-primary); border: 1px solid var(--bpm-border); padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+
+/* Wiki */
+.wiki-page { max-width: 1200px; }
+.wiki-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.wiki-search { margin-bottom: 16px; }
+.wiki-search input { padding: 8px 12px; border: 1px solid var(--bpm-border); border-radius: 8px; width: 100%; max-width: 400px; font-size: 14px; background: var(--bpm-surface); color: var(--bpm-text-primary); }
+.wiki-loading, .wiki-empty { padding: 24px; color: var(--bpm-text-secondary); }
+.wiki-empty a { color: var(--bpm-accent-cyan); text-decoration: none; }
+.wiki-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; margin-top: 24px; }
+.wiki-sidebar { border-right: 1px solid var(--bpm-border); padding-right: 24px; }
+.wiki-tree-node { padding: 6px 8px; border-radius: 6px; cursor: pointer; display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.wiki-tree-node:hover { background: var(--bpm-border); }
+.wiki-tree-node.active { background: rgba(26,75,143,0.1); color: var(--bpm-accent); font-weight: 600; }
+.wiki-tree-count { font-size: 12px; color: var(--bpm-text-secondary); }
+.wiki-article-list { display: flex; flex-direction: column; gap: 12px; }
+.wiki-card { display: block; padding: 16px 20px; border: 1px solid var(--bpm-border); border-radius: 8px; text-decoration: none; color: inherit; transition: border-color 0.15s; }
+.wiki-card:hover { border-color: var(--bpm-accent-cyan); }
+.wiki-card h3 { margin: 0 0 4px; font-size: 16px; }
+.wiki-card-meta { font-size: 12px; color: var(--bpm-text-secondary); }
+.wiki-draft { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+[data-theme="dark"] .wiki-draft { background: rgba(245,158,11,0.3); color: #fcd34d; }
+@media (max-width: 768px) { .wiki-layout { grid-template-columns: 1fr; } .wiki-sidebar { border-right: none; border-bottom: 1px solid var(--bpm-border); padding: 0 0 16px; } }
+
+/* Documents */
+.documents-page { max-width: 1200px; }
+.documents-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.documents-filters { margin-bottom: 16px; }
+.documents-filters input { padding: 8px 12px; border: 1px solid var(--bpm-border); border-radius: 8px; width: 300px; max-width: 100%; font-size: 14px; background: var(--bpm-surface); color: var(--bpm-text-primary); }
+.documents-empty { text-align: center; padding: 64px; color: var(--bpm-text-secondary); }
+.documents-empty .btn-primary { margin-top: 16px; }
+
+/* Highlight.js (rehype-highlight) dans contenu Markdown wiki */
+.wiki-article-content .hljs { background: var(--bpm-code-bg); color: var(--bpm-text-primary); padding: 1rem; border-radius: 6px; border: 1px solid var(--bpm-code-border); overflow-x: auto; }
+.wiki-article-content pre code.hljs { padding: 0; }

@@ -238,7 +238,7 @@ function SandboxContent() {
         boxSizing: "border-box",
       }}
     >
-      <div className="doc-page" style={{ maxWidth: 720, margin: "0 auto" }}>
+      <div className="doc-page w-full">
         <div className="doc-page-header">
           <h1>Sandbox</h1>
           <p className="doc-description">

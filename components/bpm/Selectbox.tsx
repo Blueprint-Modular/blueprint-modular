@@ -185,9 +185,6 @@ export function Selectbox({
           }}
         >
           <span className="truncate">{displayValue}</span>
-          <span className="flex-shrink-0" style={{ color: "var(--bpm-text-secondary)" }}>
-            {isOpen ? "▾" : "▸"}
-          </span>
         </div>
         {typeof document !== "undefined" && dropdownContent && createPortal(dropdownContent, document.body)}
       </div>

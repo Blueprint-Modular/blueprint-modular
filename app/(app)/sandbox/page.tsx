@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import {
   Panel,
   Message,
@@ -25,6 +25,7 @@ function SandboxContent() {
   const label = searchParams.get("label") || "";
   const theme = (searchParams.get("theme") || searchParams.get("th") || "light").toLowerCase();
   const isDark = theme === "dark";
+  const [tableSelectedRow, setTableSelectedRow] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add("theme-dark");
@@ -74,7 +75,12 @@ function SandboxContent() {
       const data = [{ name: "A", val: "1" }, { name: "B", val: "2" }, { name: "C", val: "3" }];
       return (
         <div style={{ padding: 16 }}>
-          <Table columns={columns} data={data} />
+          <Table columns={columns} data={data} onRowClick={(row) => setTableSelectedRow(row)} />
+          {tableSelectedRow && (
+            <p className="mt-3 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+              Ligne cliquée : {JSON.stringify(tableSelectedRow)}
+            </p>
+          )}
         </div>
       );
     }
@@ -127,7 +133,7 @@ function SandboxContent() {
         <p><code>?variant=warning</code>, <code>?title=Mon titre</code>, <code>?theme=dark</code>.</p>
       </Panel>
     );
-  }, [component, variant, title, value, label]);
+  }, [component, variant, title, value, label, tableSelectedRow]);
 
   return (
     <div

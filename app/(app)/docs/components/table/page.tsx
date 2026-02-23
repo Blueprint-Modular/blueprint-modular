@@ -15,7 +15,7 @@ const DEMO_DATA = [
 
 const COLUMNS = [
   { key: "Produit", label: "Produit" },
-  { key: "Prix", label: "Prix" },
+  { key: "Prix", label: "Prix", decimals: 2 },
   { key: "Stock", label: "Stock" },
   { key: "Statut", label: "Statut" },
 ];
@@ -24,12 +24,19 @@ export default function DocTablePage() {
   const [striped, setStriped] = useState(true);
   const [hover, setHover] = useState(true);
   const [defaultSortColumn, setDefaultSortColumn] = useState<string | null>("Produit");
+  const [selectedRow, setSelectedRow] = useState<Record<string, unknown> | null>(null);
+  const [valueLocale, setValueLocale] = useState<"fr-FR" | "en-US" | "de-DE">("fr-FR");
+  const [valueDecimals, setValueDecimals] = useState(0);
+  const [valueGrouping, setValueGrouping] = useState(true);
 
   const pythonCode =
     "import bpm\nimport pandas as pd\n\ndf = pd.DataFrame({\n  \"Produit\": [\"Widget A\", \"Widget B\", \"Widget C\"],\n  \"Prix\": [29.99, 49.99, 9.99],\n  \"Stock\": [142, 38, 500],\n})\n\nbpm.table(df, striped=" +
     String(striped) +
     ", hover=" +
     String(hover) +
+    (valueLocale !== "fr-FR" ? `, value_locale="${valueLocale}"` : "") +
+    (valueDecimals !== 0 ? `, value_decimals=${valueDecimals}` : "") +
+    (!valueGrouping ? ", value_grouping=False" : "") +
     ")";
 
   const { prev, next } = getPrevNext("table");
@@ -40,7 +47,7 @@ export default function DocTablePage() {
         <div className="doc-breadcrumb"><Link href="/docs">Documentation</Link> → <Link href="/docs/components">Composants</Link> → bpm.table</div>
         <h1>bpm.table</h1>
         <p className="doc-description">
-          Tableau de données avec tri, lignes alternées et survol.
+          Tableau de données avec tri, lignes alternées, survol et lignes cliquables pour accéder au détail.
         </p>
         <div className="doc-meta">
           <span className="doc-badge doc-badge-stable">Stable</span>
@@ -58,7 +65,19 @@ export default function DocTablePage() {
             hover={hover}
             defaultSortColumn={defaultSortColumn}
             defaultSortDirection="asc"
+            onRowClick={(row) => setSelectedRow(row)}
+            valueLocale={valueLocale}
+            valueDecimals={valueDecimals}
+            valueGrouping={valueGrouping}
           />
+          {selectedRow && (
+            <div className="mt-3 p-3 rounded-lg text-sm border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}>
+              <strong>Ligne cliquée :</strong> {selectedRow.Produit} — {String(selectedRow.Prix)} € — Stock {String(selectedRow.Stock)} — {String(selectedRow.Statut)}
+            </div>
+          )}
+          {!selectedRow && (
+            <p className="mt-2 text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Cliquez sur une ligne pour afficher le détail.</p>
+          )}
         </div>
         <div className="sandbox-controls">
           <div className="sandbox-control-group">
@@ -96,6 +115,31 @@ export default function DocTablePage() {
               <option value="Statut">Statut</option>
             </select>
           </div>
+          <div className="sandbox-control-group">
+            <label>valueLocale</label>
+            <select value={valueLocale} onChange={(e) => setValueLocale(e.target.value as "fr-FR" | "en-US" | "de-DE")}>
+              <option value="fr-FR">fr-FR (1 000,50)</option>
+              <option value="en-US">en-US (1,000.50)</option>
+              <option value="de-DE">de-DE (1.000,50)</option>
+            </select>
+          </div>
+          <div className="sandbox-control-group">
+            <label>valueDecimals</label>
+            <input
+              type="number"
+              min={0}
+              max={10}
+              value={valueDecimals}
+              onChange={(e) => setValueDecimals(Number(e.target.value) || 0)}
+            />
+          </div>
+          <div className="sandbox-control-group">
+            <label>valueGrouping</label>
+            <select value={valueGrouping ? "true" : "false"} onChange={(e) => setValueGrouping(e.target.value === "true")}>
+              <option value="true">true (1 000,50)</option>
+              <option value="false">false (1000,50)</option>
+            </select>
+          </div>
         </div>
         <div className="sandbox-code">
           <div className="sandbox-code-header">
@@ -127,7 +171,7 @@ export default function DocTablePage() {
             <td><code>Column[]</code></td>
             <td>—</td>
             <td>Oui</td>
-            <td>Définition des colonnes (key, label, align, className).</td>
+            <td>Définition des colonnes (key, label, align, decimals optionnels). Par défaut : texte à gauche, chiffres à droite.</td>
           </tr>
           <tr>
             <td><code>data</code></td>
@@ -171,6 +215,27 @@ export default function DocTablePage() {
             <td>Non</td>
             <td>Direction du tri initial.</td>
           </tr>
+          <tr>
+            <td><code>valueLocale</code></td>
+            <td><code>string</code></td>
+            <td>fr-FR</td>
+            <td>Non</td>
+            <td>Locale pour formater les nombres (ex. fr-FR → 1 000,50, en-US → 1,000.50).</td>
+          </tr>
+          <tr>
+            <td><code>valueDecimals</code></td>
+            <td><code>number</code></td>
+            <td>0</td>
+            <td>Non</td>
+            <td>Décimales par défaut pour les cellules numériques. Surcharge possible par colonne (<code>decimals</code>).</td>
+          </tr>
+          <tr>
+            <td><code>valueGrouping</code></td>
+            <td><code>boolean</code></td>
+            <td>true</td>
+            <td>Non</td>
+            <td>Séparateur de milliers (false = 1000,50 sans espace).</td>
+          </tr>
         </tbody>
       </table>
 
@@ -181,6 +246,14 @@ export default function DocTablePage() {
       />
       <CodeBlock
         code={'# Tri initial par colonne "Prix" décroissant\nbpm.table(df, default_sort_column="Prix", default_sort_direction="desc")'}
+        language="python"
+      />
+      <CodeBlock
+        code={'# Format des nombres (comme bpm.metric)\nbpm.table(df, value_locale="en-US", value_decimals=2, value_grouping=True)'}
+        language="python"
+      />
+      <CodeBlock
+        code={'# Alignement par colonne (left | center | right)\nbpm.table(df, columns=[{"key": "Nom", "label": "Nom"}, {"key": "Montant", "label": "Montant", "align": "right"}])'}
         language="python"
       />
 

@@ -83,11 +83,15 @@ export function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="bpm-modal-header flex justify-between items-center p-6 border-b flex-shrink-0"
-          style={{ borderColor: "var(--bpm-border)" }}
+          className="bpm-modal-header flex justify-between items-center px-6 py-4 border-b flex-shrink-0"
+          style={{
+            background: "var(--bpm-sidebar-bg)",
+            borderColor: "var(--bpm-sidebar-border)",
+            color: "var(--bpm-sidebar-text)",
+          }}
         >
           {title != null && (
-            <h3 className="bpm-modal-title m-0 text-xl font-semibold">
+            <h3 className="bpm-modal-title m-0 text-lg font-semibold" style={{ color: "var(--bpm-sidebar-text)" }}>
               {title}
             </h3>
           )}
@@ -97,7 +101,7 @@ export function Modal({
               className="bpm-modal-close w-8 h-8 flex items-center justify-center text-2xl leading-none rounded transition-colors hover:opacity-80"
               onClick={handleCloseClick}
               aria-label="Fermer"
-              style={{ color: "var(--bpm-text-primary)", background: "transparent", border: "none" }}
+              style={{ color: "var(--bpm-sidebar-text)", background: "transparent", border: "none" }}
             >
               ×
             </button>
@@ -105,7 +109,7 @@ export function Modal({
         </div>
         <div
           className="bpm-modal-content p-6 overflow-y-auto overflow-x-visible flex-1 min-h-0"
-          style={{ color: "var(--bpm-text-primary)" }}
+          style={{ background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
         >
           {children}
         </div>

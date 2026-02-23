@@ -55,12 +55,14 @@ export function Tabs({
           <button
             key={tab.key ?? index}
             type="button"
-            className={`bpm-tab-button inline-flex items-center py-3 px-2 text-sm whitespace-nowrap flex-shrink-0 border-b-2 transition-colors ${
+            className={`bpm-tab-button inline-flex items-center py-3 px-2 text-sm whitespace-nowrap flex-shrink-0 border-b transition-colors ${
               activeTab === index ? "bpm-tab-active font-medium" : ""
             }`}
             style={{
+              borderBottomWidth: activeTab === index ? 2 : 1,
+              marginBottom: activeTab === index ? -1 : 0,
               borderBottomColor:
-                activeTab === index ? "var(--bpm-accent)" : "var(--bpm-border)",
+                activeTab === index ? "var(--bpm-accent)" : "transparent",
               color:
                 activeTab === index
                   ? "var(--bpm-accent)"
@@ -73,7 +75,7 @@ export function Tabs({
           </button>
         ))}
         <div
-          className="flex-1 min-w-px border-b-2"
+          className="flex-1 min-w-px border-b"
           style={{ borderBottomColor: "var(--bpm-border)" }}
           aria-hidden
         />

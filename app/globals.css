@@ -58,6 +58,15 @@ body {
 [data-theme="dark"] .bpm-table-hover tbody tr:hover {
   background: rgba(255, 255, 255, 0.06);
 }
+.bpm-table-clickable tbody tr {
+  cursor: pointer;
+}
+.bpm-table-clickable tbody tr:hover {
+  background: rgba(26, 75, 143, 0.12);
+}
+[data-theme="dark"] .bpm-table-clickable tbody tr:hover {
+  background: rgba(26, 75, 143, 0.35);
+}
 
 /* Title levels (bpm.title) */
 .bpm-title-level-1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }

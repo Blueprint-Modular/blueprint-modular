@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import type { MetricValueLocale } from "./Metric";
 
 export interface TableColumn {
   key: string;
@@ -8,6 +9,8 @@ export interface TableColumn {
   align?: "left" | "center" | "right";
   className?: string;
   render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
+  /** Décimales pour cette colonne (surcharge valueDecimals du tableau). */
+  decimals?: number;
 }
 
 export interface TableProps {
@@ -21,6 +24,12 @@ export interface TableProps {
   name?: string | null;
   keyColumn?: string | null;
   className?: string;
+  /** Locale pour formater les nombres (ex. "fr-FR", "en-US"). */
+  valueLocale?: MetricValueLocale;
+  /** Nombre de décimales par défaut pour les cellules numériques. */
+  valueDecimals?: number;
+  /** Séparateur de milliers (true = 1 000,50). */
+  valueGrouping?: boolean;
 }
 
 function getSortValue(val: unknown): string | number {
@@ -31,6 +40,30 @@ function getSortValue(val: unknown): string | number {
   const num = parseFloat(String(val));
   if (!Number.isNaN(num) && isFinite(num)) return num;
   return String(val).toLowerCase();
+}
+
+/** Alignement par défaut : nombre → droite, sinon gauche. Surchargeable via col.align. */
+function getColumnAlign(
+  col: TableColumn,
+  data: Record<string, unknown>[]
+): "left" | "center" | "right" {
+  if (col.align) return col.align;
+  const val = data[0]?.[col.key];
+  if (val != null && typeof val === "number" && Number.isFinite(val)) return "right";
+  if (val != null && typeof val === "string" && /^-?\d+([.,]\d+)?\s*%?$/.test(val.trim())) return "right";
+  return "left";
+}
+
+function isNumericValue(val: unknown): val is number {
+  if (val == null) return false;
+  if (typeof val === "number" && Number.isFinite(val)) return true;
+  if (typeof val === "string" && /^-?\d+([.,]\d+)?\s*%?$/.test(val.trim())) return true;
+  return false;
+}
+
+function toNumber(val: unknown): number {
+  if (typeof val === "number") return val;
+  return parseFloat(String(val).replace(",", ".")) || 0;
 }
 
 export function Table({
@@ -44,9 +77,30 @@ export function Table({
   name = null,
   keyColumn = null,
   className = "",
+  valueLocale = "fr-FR",
+  valueDecimals = 0,
+  valueGrouping = true,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState<string | null>(defaultSortColumn);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(defaultSortDirection);
+
+  const locale = valueLocale ?? "fr-FR";
+  const formatNumber = (n: number, decimals: number) =>
+    n.toLocaleString(locale, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+      useGrouping: valueGrouping,
+    });
+
+  const formatCellValue = (val: unknown, col: TableColumn): React.ReactNode => {
+    if (val == null) return "—";
+    if (isNumericValue(val)) {
+      const num = toNumber(val);
+      const decimals = col.decimals ?? valueDecimals;
+      return formatNumber(num, decimals);
+    }
+    return String(val);
+  };
 
   const handleSort = (columnKey: string) => {
     if (sortColumn === columnKey) {
@@ -90,20 +144,20 @@ export function Table({
         <table
           className={`bpm-table w-full border-collapse ${
             striped ? "bpm-table-striped" : ""
-          } ${hover ? "bpm-table-hover" : ""}`}
+          } ${hover ? "bpm-table-hover" : ""} ${onRowClick ? "bpm-table-clickable" : ""}`}
         >
           <thead>
             <tr>
               {columns.map((col, idx) => (
                 <th
                   key={col.key || idx}
-                  className={`bpm-table-th px-4 py-3 text-left text-sm font-medium whitespace-nowrap border ${
+                  className={`bpm-table-th px-4 py-3 text-sm font-medium whitespace-nowrap border ${
                     sortColumn === col.key
                       ? `bpm-table-sorted bpm-table-sorted-${sortDirection}`
                       : ""
                   } ${col.className ?? ""}`}
                   style={{
-                    textAlign: col.align || "left",
+                    textAlign: getColumnAlign(col, data),
                     cursor: col.key ? "pointer" : "default",
                     backgroundColor: "var(--bpm-bg-secondary)",
                     borderColor: "var(--bpm-border)",
@@ -140,13 +194,13 @@ export function Table({
                     key={col.key || colIdx}
                     className={`px-4 py-3 text-sm border ${col.className ?? ""}`}
                     style={{
-                      textAlign: col.align || "left",
+                      textAlign: getColumnAlign(col, data),
                       borderColor: "var(--bpm-border)",
                     }}
                   >
                     {col.render
                       ? col.render(row[col.key], row)
-                      : String(row[col.key] ?? "—")}
+                      : formatCellValue(row[col.key], col)}
                   </td>
                 ))}
               </tr>

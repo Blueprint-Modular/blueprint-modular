@@ -70,34 +70,36 @@ export function WikiEditorToolbar({
         background: "var(--bpm-bg)",
       }}
     >
-      <Button
-        type="button"
-        variant="outline"
-        size="small"
-        disabled={disabled}
-        onClick={handleBold}
-        title="Gras"
-      >
-        <strong>G</strong>
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        size="small"
-        disabled={disabled}
-        onClick={handleItalic}
-        title="Italique"
-      >
-        <em>I</em>
-      </Button>
-      <div className="relative inline-block" ref={colorPopoverRef}>
+      <span title="Gras">
         <Button
           type="button"
           variant="outline"
           size="small"
           disabled={disabled}
-          title="Couleur du texte"
-          onClick={() => {
+          onClick={handleBold}
+        >
+          <strong>G</strong>
+        </Button>
+      </span>
+      <span title="Italique">
+        <Button
+          type="button"
+          variant="outline"
+          size="small"
+          disabled={disabled}
+          onClick={handleItalic}
+        >
+          <em>I</em>
+        </Button>
+      </span>
+      <div className="relative inline-block" ref={colorPopoverRef}>
+        <span title="Couleur du texte">
+          <Button
+            type="button"
+            variant="outline"
+            size="small"
+            disabled={disabled}
+            onClick={() => {
             const el = colorPopoverRef.current?.querySelector(".wiki-toolbar-colors");
             if (el instanceof HTMLElement) el.hidden = !el.hidden;
           }}
@@ -106,6 +108,7 @@ export function WikiEditorToolbar({
             A
           </span>
         </Button>
+        </span>
         <div
           className="wiki-toolbar-colors absolute left-0 top-full mt-1 p-2 rounded border shadow z-10 hidden"
           style={{

@@ -9,6 +9,11 @@ import type { User } from "@prisma/client";
 /** Si true, les modules Contrats / Documents / Wiki acceptent les requêtes sans session (utilisateur de test en base). Pour tests uniquement. */
 const SKIP_AUTH_FOR_TEST = process.env.SKIP_AUTH_FOR_TEST === "true";
 
+/** Pour la Sandbox « Par IA » : si true, la génération est autorisée même sans session ni utilisateur en base (évite 401 en démo). */
+export function isSkipAuthForTest(): boolean {
+  return SKIP_AUTH_FOR_TEST;
+}
+
 /**
  * Retourne l'utilisateur courant (session) ou, si SKIP_AUTH_FOR_TEST=true et pas de session,
  * le premier utilisateur en base (pour tester les modules sans se connecter).

@@ -195,9 +195,9 @@ export function AIChat({
   }, [newDiscussionTrigger]);
 
   useEffect(() => {
-    if (!historyOpen || !session) return;
+    if (!historyOpen) return;
     setHistoryOpenAnimationActive(true);
-  }, [historyOpen, session]);
+  }, [historyOpen]);
   useEffect(() => {
     if (!historyOpen) setHistoryOpenAnimationActive(false);
   }, [historyOpen]);
@@ -213,10 +213,10 @@ export function AIChat({
   };
 
   useEffect(() => {
-    if (!historyOpen || !session?.user?.email) return;
+    if (!historyOpen) return;
     setHistoryLoading(true);
     setSelectedHistoryId(null);
-    fetch("/api/ai/conversations")
+    fetch("/api/ai/conversations", { credentials: "include" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: typeof historyConversations) => {
         setHistoryConversations(Array.isArray(data) ? data : []);
@@ -229,11 +229,11 @@ export function AIChat({
       })
       .catch(() => setHistoryConversations([]))
       .finally(() => setHistoryLoading(false));
-  }, [historyOpen, session]);
+  }, [historyOpen]);
 
   useEffect(() => {
-    if (!session) return;
-    fetch("/api/ai/providers")
+    if (status === "loading") return;
+    fetch("/api/ai/providers", { credentials: "include" })
       .then((r) => (r.ok ? r.json() : {}))
       .then((data: { providers?: { provider_name: string; label: string; color?: string }[]; default_provider?: string }) => {
         const list = data?.providers ?? PROVIDERS_LIST.map((p) => ({ provider_name: p.id, label: p.shortLabel, color: p.color }));
@@ -243,7 +243,7 @@ export function AIChat({
         }
       })
       .catch(() => setConfiguredProviders(PROVIDERS_LIST.map((p) => ({ provider_name: p.id, label: p.shortLabel, color: p.color }))));
-  }, [session]);
+  }, [status]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -302,6 +302,7 @@ export function AIChat({
           discussion_id: currentDiscussionId ?? undefined,
         }),
         signal: abortRef.current.signal,
+        credentials: "include",
       });
       if (res.status === 401) {
         removeLastAssistant();
@@ -368,13 +369,7 @@ export function AIChat({
       </div>
     );
   }
-  if (!session) {
-    return (
-      <div className="p-4" style={{ color: "var(--bpm-text-secondary)" }}>
-        Connectez-vous pour utiliser l&apos;assistant IA.
-      </div>
-    );
-  }
+  /* Plus de blocage si pas de session : l’API utilise getSessionOrTestUser / SKIP_AUTH_FOR_TEST. */
 
   return (
     <div className="bpm-ai-chat">
@@ -402,7 +397,7 @@ export function AIChat({
                     if (!window.confirm(`Effacer tout l'historique des échanges avec ${assistantName} ?`)) return;
                     Promise.all(
                       historyConversations.map((d) =>
-                        fetch(`/api/ai/conversations/${encodeURIComponent(d.id)}`, { method: "DELETE" })
+                        fetch(`/api/ai/conversations/${encodeURIComponent(d.id)}`, { method: "DELETE", credentials: "include" })
                       )
                     ).then(() => {
                       setHistoryConversations([]);
@@ -532,7 +527,7 @@ export function AIChat({
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!window.confirm("Supprimer cette discussion de l'historique ?")) return;
-                            fetch(`/api/ai/conversations/${encodeURIComponent(d.id)}`, { method: "DELETE" }).then((res) => {
+                            fetch(`/api/ai/conversations/${encodeURIComponent(d.id)}`, { method: "DELETE", credentials: "include" }).then((res) => {
                               if (res.status === 204 || res.ok) {
                                 setHistoryConversations((prev) => prev.filter((c) => c.id !== d.id));
                                 if (selectedHistoryId === d.id) setSelectedHistoryId(null);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fondamentaux — Blueprint Modular</title>
+  <title>Fondamentaux Â— Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -16,10 +16,10 @@
     <a href="../get-started/why-bpm.html">Pourquoi BPM</a>
     <a href="../get-started/installation.html">Installation</a>
     <a href="../components.html">Composants</a>
-    <a href="../api-reference/text.html">Référence API</a>
-    <a href="../deploy/concepts.html">Déployer</a>
+    <a href="../api-reference/text.html">RÃ©fÃ©rence API</a>
+    <a href="../deploy/concepts.html">DÃ©ployer</a>
     <a href="https://blueprint-modular.com/modules.html">Modules</a>
-    <a href="../cheat-sheet.html">Aide-mémoire</a>
+    <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
     <a href="https://app.blueprint-modular.com/dashboard" class="doc-nav-app" target="_blank" rel="noopener">Ouvrir l'app</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
@@ -27,25 +27,25 @@
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
       <a href="../index.html">Accueil</a>
-      <h3>Démarrage</h3>
+      <h3>DÃ©marrage</h3>
       <a href="why-bpm.html">Pourquoi BPM</a>
       <a href="installation.html">Installation</a>
       <a href="fundamentals.html" class="active">Fondamentaux</a>
-      <a href="first-app.html">Première app</a>
+      <a href="first-app.html">PremiÃ¨re app</a>
       <h3>Composants</h3>
       <a href="../components.html">Catalogue des composants</a>
       <a href="../api-reference/text.html">Texte</a>
-      <a href="../api-reference/data.html">Données</a>
-      <a href="../api-reference/metrics.html">Métriques</a>
+      <a href="../api-reference/data.html">DonnÃ©es</a>
+      <a href="../api-reference/metrics.html">MÃ©triques</a>
       <a href="../api-reference/charts.html">Graphiques</a>
       <a href="../api-reference/inputs.html">Saisie</a>
       <a href="../api-reference/layout.html">Mise en page</a>
       <a href="../api-reference/panels.html">Panneaux</a>
-      <a href="../api-reference/media.html">Médias</a>
+      <a href="../api-reference/media.html">MÃ©dias</a>
       <a href="../api-reference/status.html">Statut</a>
       <a href="../api-reference/chat.html">Chat</a>
       <a href="../api-reference/config.html">Config</a>
-      <a href="../api-reference/connection.html">Connexion aux données</a>
+      <a href="../api-reference/connection.html">Connexion aux donnÃ©es</a>
       <h3>Modules</h3>
       <a href="https://blueprint-modular.com/modules.html">Catalogue des modules</a>
       <a href="../modules/wiki.html">Module Wiki</a>
@@ -53,54 +53,54 @@
       <a href="../modules/veille.html">Module Veille</a>
       <a href="../modules/ibkr.html">Module IBKR</a>
       <a href="../modules/analyse-document.html">Module Documents</a>
-      <h3>Déployer</h3>
+      <h3>DÃ©ployer</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Plateformes</a>
       <h3>Base de connaissances</h3>
       <a href="../knowledge-base/faq.html">FAQ</a>
-      <a href="../knowledge-base/troubleshooting.html">Dépannage</a>
-      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+      <a href="../knowledge-base/troubleshooting.html">DÃ©pannage</a>
+      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
       <h3>Ressources</h3>
-      <a href="../cheat-sheet.html">Aide-mémoire</a>
+      <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
       <a href="../versions.html">Versions</a>
     </aside>
     <main class="doc-main">
       <nav class="breadcrumb">
-        <a href="../index.html">Accueil</a> › <a href="installation.html">Démarrage</a> › Fondamentaux
+        <a href="../index.html">Accueil</a> Â› <a href="installation.html">DÃ©marrage</a> Â› Fondamentaux
       </nav>
 
       <h1>Fondamentaux</h1>
-      <p class="lead">Le modèle mental BPM, le cycle de rendu, les refs et le design system.</p>
+      <p class="lead">Le modÃ¨le mental BPM, le cycle de rendu, les refs et le design system.</p>
 
-      <h2>Le modèle mental BPM</h2>
-      <p>BPM fonctionne comme une <strong>déclaration</strong> : vous décrivez ce que vous voulez afficher, BPM s'occupe du rendu. Pas de HTML, pas de callbacks manuels.</p>
+      <h2>Le modÃ¨le mental BPM</h2>
+      <p>BPM fonctionne comme une <strong>dÃ©claration</strong> : vous dÃ©crivez ce que vous voulez afficher, BPM s'occupe du rendu. Pas de HTML, pas de callbacks manuels.</p>
 
       <h2>Le cycle de rendu</h2>
       <ul>
-        <li><strong>Au lancement</strong> — <code>bpm run</code> exécute <code>app.py</code> de haut en bas. Chaque appel (<code>bpm.title</code>, <code>bpm.button</code>, etc.) enregistre un nœud de rendu.</li>
-        <li><strong>À chaque interaction</strong> — Clic sur un bouton ? requête HTTP avec <code>?clicked=&lt;key&gt;</code> ? mise à jour de <code>bpm.session_state</code> ? re-run du script. Seuls les composants concernés peuvent être rafraîchis (réactivité granulaire prévue ; aujourd'hui re-run complet comme Streamlit).</li>
-        <li><strong>Différence avec Streamlit</strong> — BPM vise à terme une mise à jour ciblée sans re-exécuter tout le script (refs réactives, store côté front).</li>
+        <li><strong>Au lancement</strong> Â— <code>bpm run</code> exÃ©cute <code>app.py</code> de haut en bas. Chaque appel (<code>bpm.title</code>, <code>bpm.button</code>, etc.) enregistre un nÂœud de rendu.</li>
+        <li><strong>Ã€ chaque interaction</strong> Â— Clic sur un bouton ? requÃªte HTTP avec <code>?clicked=&lt;key&gt;</code> ? mise Ã  jour de <code>bpm.session_state</code> ? re-run du script. Seuls les composants concernÃ©s peuvent Ãªtre rafraÃ®chis (rÃ©activitÃ© granulaire prÃ©vue ; aujourd'hui re-run complet comme Streamlit).</li>
+        <li><strong>DiffÃ©rence avec Streamlit</strong> Â— BPM vise Ã  terme une mise Ã  jour ciblÃ©e sans re-exÃ©cuter tout le script (refs rÃ©actives, store cÃ´tÃ© front).</li>
       </ul>
-      <div class="preview-placeholder" style="min-height:180px;">[ Diagramme du cycle : lancement ? exécution script ? nœuds ? HTML ; clic ? requête ? session_state ? re-run ]</div>
+      <div class="preview-placeholder" style="min-height:180px;">[ Diagramme du cycle : lancement ? exÃ©cution script ? nÂœuds ? HTML ; clic ? requÃªte ? session_state ? re-run ]</div>
 
-      <h2>Les refs réactives ($)</h2>
-      <p>Les refs permettent de garder un état réactif : seule la partie de l'interface qui lit la ref se met à jour.</p>
+      <h2>Les refs rÃ©actives ($)</h2>
+      <p>Les refs permettent de garder un Ã©tat rÃ©actif : seule la partie de l'interface qui lit la ref se met Ã  jour.</p>
       <pre><code class="language-python">import bpm
 
 counter = bpm.ref("counter", default=0)
 bpm.metric("Clics", counter.get())
 
-if bpm.button("Incrémenter"):
+if bpm.button("IncrÃ©menter"):
     counter.set(counter.get() + 1)
 
-# Seul le bpm.metric se rafraîchit, pas toute la page.</code></pre>
+# Seul le bpm.metric se rafraÃ®chit, pas toute la page.</code></pre>
       <div class="alert alert-info">
         <span class="alert-icon"></span>
-        <div class="alert-body"><strong>Note</strong> — Aujourd'hui, chaque clic déclenche un re-run complet du script (comme Streamlit). Un mode WebSocket ou SSE est prévu pour mettre à jour uniquement les composants concernés, sans rechargement complet.</div>
+        <div class="alert-body"><strong>Note</strong> Â— Aujourd'hui, chaque clic dÃ©clenche un re-run complet du script (comme Streamlit). Un mode WebSocket ou SSE est prÃ©vu pour mettre Ã  jour uniquement les composants concernÃ©s, sans rechargement complet.</div>
       </div>
 
-      <h2>Les décorateurs (@)</h2>
-      <p>BPM prévoit des décorateurs pour structurer l'app : pages, sidebar, cache.</p>
+      <h2>Les dÃ©corateurs (@)</h2>
+      <p>BPM prÃ©voit des dÃ©corateurs pour structurer l'app : pages, sidebar, cache.</p>
       <pre><code class="language-python">@bpm.page("rapport")
 def rapport():
     bpm.title("Rapport mensuel")
@@ -112,27 +112,27 @@ def navigation():
       <p>Ces APIs sont en cours d'alignement entre le runtime Python et le frontend.</p>
 
       <h2>Le fichier app.config.js</h2>
-      <p>Pour les apps qui utilisent le frontend React BPM, la configuration se fait via <code>app.config.js</code>. Les 4 clés principales : <code>title</code>, <code>theme</code>, <code>sidebar</code>, <code>pages</code>. Voir <a href="../api-reference/config.html">Config</a>.</p>
+      <p>Pour les apps qui utilisent le frontend React BPM, la configuration se fait via <code>app.config.js</code>. Les 4 clÃ©s principales : <code>title</code>, <code>theme</code>, <code>sidebar</code>, <code>pages</code>. Voir <a href="../api-reference/config.html">Config</a>.</p>
 
       <h2>Design system bpm.*</h2>
-      <p>Tous les composants partagent les mêmes tokens CSS (couleur primaire, espacements, typo). Personnaliser via <code>bpm.theme(primary_color="#d4af37")</code> ou en surchargeant les variables dans <code>theme.css</code> (ou <code>doc.css</code>).</p>
+      <p>Tous les composants partagent les mÃªmes tokens CSS (couleur primaire, espacements, typo). Personnaliser via <code>bpm.theme(primary_color="#d4af37")</code> ou en surchargeant les variables dans <code>theme.css</code> (ou <code>doc.css</code>).</p>
 
       <nav class="doc-pagination">
-        <a class="prev" href="installation.html">? Précédent : Installation</a>
-        <a class="next" href="first-app.html">Suivant : Première app ?</a>
+        <a class="prev" href="installation.html">? PrÃ©cÃ©dent : Installation</a>
+        <a class="next" href="first-app.html">Suivant : PremiÃ¨re app ?</a>
       </nav>
 
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="first-app.html">Première app</a> — Tutoriel dashboard pas à pas</li>
+          <li><a href="first-app.html">PremiÃ¨re app</a> Â— Tutoriel dashboard pas Ã  pas</li>
           <li><a href="../components.html">Catalogue des composants</a></li>
-          <li><a href="../api-reference/config.html">Config</a> — Thème et configuration</li>
+          <li><a href="../api-reference/config.html">Config</a> Â— ThÃ¨me et configuration</li>
         </ul>
       </section>
 
       <section class="help-cta">
-        <p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</p>
+        <p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p>
       </section>
 
       <footer class="site-footer" style="margin-top:2rem;">
@@ -140,10 +140,10 @@ def navigation():
           <a href="../index.html">Accueil</a>
           <a href="../components.html">Composants</a>
           <a href="https://blueprint-modular.com/modules.html">Modules</a>
-          <a href="../cheat-sheet.html">Aide-mémoire</a>
+          <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
           <a href="../versions.html">Versions</a>
           <a href="../knowledge-base/faq.html">FAQ</a>
-          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
         </div>
         <div class="footer-meta">Blueprint Modular v0.1.11</div>
       </footer>

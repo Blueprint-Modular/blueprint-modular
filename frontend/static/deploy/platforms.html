@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Déployer — Plateformes — Blueprint Modular</title>
+  <title>DÃ©ployer Â— Plateformes Â— Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -14,10 +14,10 @@
     <a href="../get-started/why-bpm.html">Pourquoi BPM</a>
     <a href="../get-started/installation.html">Installation</a>
     <a href="../components.html">Composants</a>
-    <a href="../api-reference/text.html">Référence API</a>
-    <a href="concepts.html">Déployer</a>
+    <a href="../api-reference/text.html">RÃ©fÃ©rence API</a>
+    <a href="concepts.html">DÃ©ployer</a>
     <a href="https://blueprint-modular.com/modules.html">Modules</a>
-    <a href="../cheat-sheet.html">Aide-mémoire</a>
+    <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
     <a href="https://app.blueprint-modular.com/dashboard" class="doc-nav-app" target="_blank" rel="noopener">Ouvrir l'app</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
@@ -25,25 +25,25 @@
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
       <a href="../index.html">Accueil</a>
-      <h3>Démarrage</h3>
+      <h3>DÃ©marrage</h3>
       <a href="../get-started/why-bpm.html">Pourquoi BPM</a>
       <a href="../get-started/installation.html">Installation</a>
       <a href="../get-started/fundamentals.html">Fondamentaux</a>
-      <a href="../get-started/first-app.html">Première app</a>
+      <a href="../get-started/first-app.html">PremiÃ¨re app</a>
       <h3>Composants</h3>
       <a href="../components.html">Catalogue des composants</a>
       <a href="../api-reference/text.html">Texte</a>
-      <a href="../api-reference/data.html">Données</a>
-      <a href="../api-reference/metrics.html">Métriques</a>
+      <a href="../api-reference/data.html">DonnÃ©es</a>
+      <a href="../api-reference/metrics.html">MÃ©triques</a>
       <a href="../api-reference/charts.html">Graphiques</a>
       <a href="../api-reference/inputs.html">Saisie</a>
       <a href="../api-reference/layout.html">Mise en page</a>
       <a href="../api-reference/panels.html">Panneaux</a>
-      <a href="../api-reference/media.html">Médias</a>
+      <a href="../api-reference/media.html">MÃ©dias</a>
       <a href="../api-reference/status.html">Statut</a>
       <a href="../api-reference/chat.html">Chat</a>
       <a href="../api-reference/config.html">Config</a>
-      <a href="../api-reference/connection.html">Connexion aux données</a>
+      <a href="../api-reference/connection.html">Connexion aux donnÃ©es</a>
       <h3>Modules</h3>
       <a href="https://blueprint-modular.com/modules.html">Catalogue des modules</a>
       <a href="../modules/wiki.html">Module Wiki</a>
@@ -51,49 +51,49 @@
       <a href="../modules/veille.html">Module Veille</a>
       <a href="../modules/ibkr.html">Module IBKR</a>
       <a href="../modules/analyse-document.html">Module Documents</a>
-      <h3>Déployer</h3>
+      <h3>DÃ©ployer</h3>
       <a href="concepts.html">Concepts</a>
       <a href="platforms.html" class="active">Plateformes</a>
       <h3>Base de connaissances</h3>
       <a href="../knowledge-base/faq.html">FAQ</a>
-      <a href="../knowledge-base/troubleshooting.html">Dépannage</a>
-      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+      <a href="../knowledge-base/troubleshooting.html">DÃ©pannage</a>
+      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
       <h3>Ressources</h3>
-      <a href="../cheat-sheet.html">Aide-mémoire</a>
+      <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
       <a href="../versions.html">Versions</a>
     </aside>
     <main class="doc-main">
-      <nav class="breadcrumb"><a href="../index.html">Accueil</a> › <a href="concepts.html">Déployer</a> › Plateformes</nav>
+      <nav class="breadcrumb"><a href="../index.html">Accueil</a> Â› <a href="concepts.html">DÃ©ployer</a> Â› Plateformes</nav>
       <h1>Plateformes</h1>
-      <p class="lead">Guides de déploiement : VPS Ubuntu + Nginx + systemd (principal), Docker.</p>
+      <p class="lead">Guides de dÃ©ploiement : VPS Ubuntu + Nginx + systemd (principal), Docker.</p>
       <div class="platform-grid">
         <a class="platform-card" href="#vps">
           <span class="platform-card-icon" aria-hidden="true">
             <img src="../img/nginx.svg" alt="" width="32" height="32" />
           </span>
           <h3>VPS + Nginx</h3>
-          <p>Contrôle total, recommandé pour la production.</p>
+          <p>ContrÃ´le total, recommandÃ© pour la production.</p>
         </a>
         <a class="platform-card" href="#docker">
           <span class="platform-card-icon" aria-hidden="true">
             <img src="../img/docker.svg" alt="" width="32" height="32" />
           </span>
           <h3>Docker</h3>
-          <p>Isolation et portabilité. Idéal pour les équipes.</p>
+          <p>Isolation et portabilitÃ©. IdÃ©al pour les Ã©quipes.</p>
         </a>
       </div>
       <h2 id="vps">VPS Ubuntu + Nginx + systemd</h2>
-      <p><strong>Recommandé</strong> pour héberger une app BPM sur un serveur dédié.</p>
-      <h3>Étape 1 — Installer BPM sur le serveur</h3>
-      <p>Le dépôt GitHub est privé. Utilisez <code>pip install blueprint-modular</code> (PyPI) pour installer BPM sur le serveur. Si vous avez accès au dépôt, vous pouvez aussi cloner et faire <code>pip install -e .</code>.</p>
+      <p><strong>RecommandÃ©</strong> pour hÃ©berger une app BPM sur un serveur dÃ©diÃ©.</p>
+      <h3>Ã‰tape 1 Â— Installer BPM sur le serveur</h3>
+      <p>Le dÃ©pÃ´t GitHub est privÃ©. Utilisez <code>pip install blueprint-modular</code> (PyPI) pour installer BPM sur le serveur. Si vous avez accÃ¨s au dÃ©pÃ´t, vous pouvez aussi cloner et faire <code>pip install -e .</code>.</p>
       <pre><code>python3 -m venv .venv
 source .venv/bin/activate
 pip install blueprint-modular</code></pre>
-      <p>Créez ensuite un <code>app.py</code> (ou utilisez <code>bpm init</code>) dans un répertoire de déploiement, par ex. <code>/var/www/blueprint-modular</code>, et pointez <code>WorkingDirectory</code> vers ce dossier (voir Étape 2).</p>
-      <h3>Étape 2 — Configurer systemd</h3>
-      <p>Créer <code>/etc/systemd/system/blueprint-modular.service</code> :</p>
+      <p>CrÃ©ez ensuite un <code>app.py</code> (ou utilisez <code>bpm init</code>) dans un rÃ©pertoire de dÃ©ploiement, par ex. <code>/var/www/blueprint-modular</code>, et pointez <code>WorkingDirectory</code> vers ce dossier (voir Ã‰tape 2).</p>
+      <h3>Ã‰tape 2 Â— Configurer systemd</h3>
+      <p>CrÃ©er <code>/etc/systemd/system/blueprint-modular.service</code> :</p>
       <pre><code>[Unit]
-Description=Blueprint Modular — app BPM
+Description=Blueprint Modular Â— app BPM
 After=network.target
 
 [Service]
@@ -107,12 +107,12 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target</code></pre>
       <p>Puis : <code>systemctl daemon-reload</code>, <code>systemctl enable blueprint-modular</code>, <code>systemctl start blueprint-modular</code>.</p>
-      <h3>Étape 3 — Configurer Nginx (reverse proxy)</h3>
+      <h3>Ã‰tape 3 Â— Configurer Nginx (reverse proxy)</h3>
       <p>Vhost Nginx qui proxy vers <code>http://127.0.0.1:8501</code>. Voir <code>deploy/nginx.conf</code> ou exemples dans le repo.</p>
-      <h3>Étape 4 — SSL avec Certbot</h3>
+      <h3>Ã‰tape 4 Â— SSL avec Certbot</h3>
       <p><code>certbot --nginx -d votre-domaine.com</code></p>
-      <h3>Étape 5 — Déployer les mises à jour</h3>
-      <p>Avec PyPI : <code>source .venv/bin/activate && pip install --upgrade blueprint-modular && systemctl restart blueprint-modular</code>. Si vous déployez depuis le dépôt (accès requis) : <code>git pull</code> puis redémarrage, ou <code>deploy/deploy-from-git.sh</code>.</p>
+      <h3>Ã‰tape 5 Â— DÃ©ployer les mises Ã  jour</h3>
+      <p>Avec PyPI : <code>source .venv/bin/activate && pip install --upgrade blueprint-modular && systemctl restart blueprint-modular</code>. Si vous dÃ©ployez depuis le dÃ©pÃ´t (accÃ¨s requis) : <code>git pull</code> puis redÃ©marrage, ou <code>deploy/deploy-from-git.sh</code>.</p>
 
       <h2 id="docker">Docker</h2>
       <p><strong>Dockerfile</strong> minimal :</p>
@@ -125,31 +125,31 @@ EXPOSE 8501
 CMD ["python", "-m", "bpm.cli", "run", "app.py", "--port", "8501", "--host", "0.0.0.0"]</code></pre>
       <p><strong>docker-compose.yml</strong> avec Nginx (optionnel) : reverse proxy + SSL. Voir exemples dans le repo.</p>
       <p><strong>Commandes</strong> : <code>docker build -t bpm-app .</code>, <code>docker run -p 8501:8501 bpm-app</code>.</p>
-      <p><small>Il n'existe pas de plateforme « BPM Cloud » pour l'instant.</small></p>
+      <p><small>Il n'existe pas de plateforme Â« BPM Cloud Â» pour l'instant.</small></p>
 
       <nav class="doc-pagination">
-        <a class="prev" href="concepts.html">? Précédent : Concepts</a>
+        <a class="prev" href="concepts.html">? PrÃ©cÃ©dent : Concepts</a>
         <span></span>
       </nav>
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="../knowledge-base/troubleshooting.html">Dépannage</a> — Erreurs courantes</li>
-          <li><a href="../get-started/installation.html">Installation</a> — Rappel des commandes</li>
+          <li><a href="../knowledge-base/troubleshooting.html">DÃ©pannage</a> Â— Erreurs courantes</li>
+          <li><a href="../get-started/installation.html">Installation</a> Â— Rappel des commandes</li>
         </ul>
       </section>
       <section class="help-cta">
-        <p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</p>
+        <p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p>
       </section>
       <footer class="site-footer" style="margin-top:2rem;">
         <div class="footer-links">
           <a href="../index.html">Accueil</a>
           <a href="../components.html">Composants</a>
           <a href="https://blueprint-modular.com/modules.html">Modules</a>
-          <a href="../cheat-sheet.html">Aide-mémoire</a>
+          <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
           <a href="../versions.html">Versions</a>
           <a href="../knowledge-base/faq.html">FAQ</a>
-          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
         </div>
         <div class="footer-meta">Blueprint Modular v0.1.11</div>
       </footer>

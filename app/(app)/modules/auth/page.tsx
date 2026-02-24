@@ -40,35 +40,9 @@ export default function AuthModulePage() {
 
       <h2 className="text-lg font-semibold mt-8 mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modèles de page de connexion</h2>
       <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-        Trois modèles par défaut sont proposés. Celui utilisé dans cette app correspond au modèle 1 ; le modèle 2 est un exemple type « formulaire + visuel » (split layout).
+        L&apos;app utilise le <strong>modèle split</strong> (formulaire à gauche, visuel à droite). Trois variantes sont documentées ci-dessous.
       </p>
       <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
-        <div
-          className="p-4 rounded-xl border"
-          style={{
-            background: "var(--bpm-bg-primary)",
-            borderColor: "var(--bpm-border)",
-          }}
-        >
-          <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
-            1. Modèle Blueprint Modular (actuel)
-          </h3>
-          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-            Carte centrée, titre + sous-titre, choix E-mail ou Google, formulaire email avec Retour / Se connecter, footer avec lien accueil et Connexion.
-          </p>
-          <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
-            <li>Composant <code className="text-xs">LoginPage</code> (Next.js)</li>
-            <li>Style <code className="text-xs">LoginPage.module.css</code></li>
-            <li>Utilisé sur <strong>/login</strong> dans cette app</li>
-          </ul>
-          <Link
-            href="/login"
-            className="text-sm font-medium"
-            style={{ color: "var(--bpm-accent-cyan)" }}
-          >
-            Aperçu
-          </Link>
-        </div>
         <div
           className="p-4 rounded-xl border overflow-hidden"
           style={{
@@ -77,10 +51,10 @@ export default function AuthModulePage() {
           }}
         >
           <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
-            2. Modèle split (formulaire + visuel)
+            1. Modèle split (actuel)
           </h3>
           <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-            Layout en deux panneaux : à gauche le formulaire (Create an account, Full name, Email, Password, Submit, Apple / Google), à droite une image de fond (équipe, collaboration) avec possibilité d&apos;overlays type calendrier ou cartes de réunion.
+            Layout en deux panneaux : à gauche le formulaire (connexion ou création de compte), à droite une image de fond (équipe, collaboration) avec overlay type carte de réunion.
           </p>
           <div className="rounded-lg border mb-3 overflow-hidden" style={{ borderColor: "var(--bpm-border)", aspectRatio: "16/10" }}>
             <Image
@@ -92,16 +66,34 @@ export default function AuthModulePage() {
             />
           </div>
           <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
-            <li>Formulaire à gauche, image ou visuel à droite (ratio 50/50 ou 40/60)</li>
-            <li>Image gratuite (ex. Unsplash) en attendant le visuel final</li>
-            <li>Boutons sociaux (Apple, Google), lien « Sign in » et Terms &amp; Conditions en footer</li>
+            <li>Composants <code className="text-xs">LoginPage</code>, <code className="text-xs">RegisterPage</code>, <code className="text-xs">AuthSplitLayout</code></li>
+            <li>Styles partagés <code className="text-xs">AuthForm.module.css</code></li>
+            <li><strong>/login</strong> et <strong>/register</strong>, footer Sign in / Terms &amp; Conditions</li>
           </ul>
-          <Link
-            href="/login"
-            className="text-sm font-medium"
-            style={{ color: "var(--bpm-accent-cyan)" }}
-          >
-            Aperçu
+          <div className="flex gap-2 flex-wrap">
+            <Link href="/login" className="text-sm font-medium" style={{ color: "var(--bpm-accent-cyan)" }}>Connexion</Link>
+            <Link href="/register" className="text-sm font-medium" style={{ color: "var(--bpm-accent-cyan)" }}>Inscription</Link>
+          </div>
+        </div>
+        <div
+          className="p-4 rounded-xl border"
+          style={{
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          }}
+        >
+          <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
+            2. Modèle carte centrée (historique)
+          </h3>
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Carte centrée, titre + sous-titre, choix E-mail ou Google, formulaire email avec Retour / Se connecter, footer avec lien accueil et Connexion. Non utilisé dans cette version.
+          </p>
+          <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
+            <li>Même composant <code className="text-xs">LoginPage</code> sans <code className="text-xs">AuthSplitLayout</code></li>
+            <li>Styles <code className="text-xs">AuthForm.module.css</code></li>
+          </ul>
+          <Link href="/login" className="text-sm font-medium" style={{ color: "var(--bpm-accent-cyan)" }}>
+            Aperçu login
           </Link>
         </div>
         <div

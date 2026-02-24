@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FAQ — Blueprint Modular</title>
+  <title>FAQ Â— Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -14,10 +14,10 @@
     <a href="../get-started/why-bpm.html">Pourquoi BPM</a>
     <a href="../get-started/installation.html">Installation</a>
     <a href="../components.html">Composants</a>
-    <a href="../api-reference/text.html">Référence API</a>
-    <a href="../deploy/concepts.html">Déployer</a>
+    <a href="../api-reference/text.html">RÃ©fÃ©rence API</a>
+    <a href="../deploy/concepts.html">DÃ©ployer</a>
     <a href="https://blueprint-modular.com/modules.html">Modules</a>
-    <a href="../cheat-sheet.html">Aide-mémoire</a>
+    <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
     <a href="https://app.blueprint-modular.com/dashboard" class="doc-nav-app" target="_blank" rel="noopener">Ouvrir l'app</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
@@ -25,25 +25,25 @@
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
       <a href="../index.html">Accueil</a>
-      <h3>Démarrage</h3>
+      <h3>DÃ©marrage</h3>
       <a href="../get-started/why-bpm.html">Pourquoi BPM</a>
       <a href="../get-started/installation.html">Installation</a>
       <a href="../get-started/fundamentals.html">Fondamentaux</a>
-      <a href="../get-started/first-app.html">Première app</a>
+      <a href="../get-started/first-app.html">PremiÃ¨re app</a>
       <h3>Composants</h3>
       <a href="../components.html">Catalogue des composants</a>
       <a href="../api-reference/text.html">Texte</a>
-      <a href="../api-reference/data.html">Données</a>
-      <a href="../api-reference/metrics.html">Métriques</a>
+      <a href="../api-reference/data.html">DonnÃ©es</a>
+      <a href="../api-reference/metrics.html">MÃ©triques</a>
       <a href="../api-reference/charts.html">Graphiques</a>
       <a href="../api-reference/inputs.html">Saisie</a>
       <a href="../api-reference/layout.html">Mise en page</a>
       <a href="../api-reference/panels.html">Panneaux</a>
-      <a href="../api-reference/media.html">Médias</a>
+      <a href="../api-reference/media.html">MÃ©dias</a>
       <a href="../api-reference/status.html">Statut</a>
       <a href="../api-reference/chat.html">Chat</a>
       <a href="../api-reference/config.html">Config</a>
-      <a href="../api-reference/connection.html">Connexion aux données</a>
+      <a href="../api-reference/connection.html">Connexion aux donnÃ©es</a>
       <h3>Modules</h3>
       <a href="https://blueprint-modular.com/modules.html">Catalogue des modules</a>
       <a href="../modules/wiki.html">Module Wiki</a>
@@ -51,74 +51,74 @@
       <a href="../modules/veille.html">Module Veille</a>
       <a href="../modules/ibkr.html">Module IBKR</a>
       <a href="../modules/analyse-document.html">Module Documents</a>
-      <h3>Déployer</h3>
+      <h3>DÃ©ployer</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Plateformes</a>
       <h3>Base de connaissances</h3>
       <a href="faq.html" class="active">FAQ</a>
-      <a href="troubleshooting.html">Dépannage</a>
-      <a href="reste-a-faire.html">Ce qu'il reste à faire</a>
+      <a href="troubleshooting.html">DÃ©pannage</a>
+      <a href="reste-a-faire.html">Ce qu'il reste Ã  faire</a>
       <h3>Ressources</h3>
-      <a href="../cheat-sheet.html">Aide-mémoire</a>
+      <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
       <a href="../versions.html">Versions</a>
     </aside>
     <main class="doc-main">
-      <nav class="breadcrumb"><a href="../index.html">Accueil</a> › <a href="faq.html">Base de connaissances</a> › FAQ</nav>
+      <nav class="breadcrumb"><a href="../index.html">Accueil</a> Â› <a href="faq.html">Base de connaissances</a> Â› FAQ</nav>
       <h1>FAQ</h1>
-      <p class="lead">Questions fréquentes sur Blueprint Modular.</p>
+      <p class="lead">Questions frÃ©quentes sur Blueprint Modular.</p>
 
       <details class="faq-item">
         <summary>BPM est-il compatible avec Streamlit ?</summary>
-        <div class="faq-answer"><p>Non. BPM est une <strong>alternative</strong> à Streamlit : même idée (Python uniquement, pas de HTML/JS), mais architecture et APIs différentes (refs, design system, config-driven layout). Vous ne pouvez pas mélanger du code Streamlit et BPM dans la même app.</p></div>
+        <div class="faq-answer"><p>Non. BPM est une <strong>alternative</strong> Ã  Streamlit : mÃªme idÃ©e (Python uniquement, pas de HTML/JS), mais architecture et APIs diffÃ©rentes (refs, design system, config-driven layout). Vous ne pouvez pas mÃ©langer du code Streamlit et BPM dans la mÃªme app.</p></div>
       </details>
       <details class="faq-item">
-        <summary>Puis-je utiliser BPM avec une base de données SQL ?</summary>
-        <div class="faq-answer"><p>Oui. Connectez-vous à votre base depuis Python (sqlite3, psycopg2, etc.) et passez les résultats à <code>bpm.table</code>, <code>bpm.dataframe</code> ou à des graphiques. Pour éviter de rouvrir la connexion à chaque rerun, utilisez <code>bpm.connection()</code> ou <code>@bpm.cache_resource</code> (quand disponible).</p></div>
+        <summary>Puis-je utiliser BPM avec une base de donnÃ©es SQL ?</summary>
+        <div class="faq-answer"><p>Oui. Connectez-vous Ã  votre base depuis Python (sqlite3, psycopg2, etc.) et passez les rÃ©sultats Ã  <code>bpm.table</code>, <code>bpm.dataframe</code> ou Ã  des graphiques. Pour Ã©viter de rouvrir la connexion Ã  chaque rerun, utilisez <code>bpm.connection()</code> ou <code>@bpm.cache_resource</code> (quand disponible).</p></div>
       </details>
       <details class="faq-item">
-        <summary>Comment gérer l'authentification ?</summary>
-        <div class="faq-answer"><p>BPM ne fournit pas de composant login intégré. Vous pouvez : (1) mettre un reverse proxy (Nginx) qui fait l'auth en amont ; (2) vérifier un token/session dans <code>app.py</code> (cookie, header) et afficher une page de connexion avec des inputs BPM ; (3) utiliser un service externe (OAuth, Auth0). Les templates (ex. page de connexion) seront documentés dans la section Components.</p></div>
+        <summary>Comment gÃ©rer l'authentification ?</summary>
+        <div class="faq-answer"><p>BPM ne fournit pas de composant login intÃ©grÃ©. Vous pouvez : (1) mettre un reverse proxy (Nginx) qui fait l'auth en amont ; (2) vÃ©rifier un token/session dans <code>app.py</code> (cookie, header) et afficher une page de connexion avec des inputs BPM ; (3) utiliser un service externe (OAuth, Auth0). Les templates (ex. page de connexion) seront documentÃ©s dans la section Components.</p></div>
       </details>
       <details class="faq-item">
         <summary>BPM fonctionne-t-il avec Jupyter ?</summary>
-        <div class="faq-answer"><p>Pas nativement. BPM est conçu pour des apps servies par <code>bpm run app.py</code> (cycle requête ? exécution script ? rendu HTML). Dans un notebook Jupyter, le modèle d'exécution est différent (cellules, noyau). Pour du prototypage rapide en notebook, utilisez les librairies habituelles (pandas, matplotlib, ipywidgets).</p></div>
+        <div class="faq-answer"><p>Pas nativement. BPM est conÃ§u pour des apps servies par <code>bpm run app.py</code> (cycle requÃªte ? exÃ©cution script ? rendu HTML). Dans un notebook Jupyter, le modÃ¨le d'exÃ©cution est diffÃ©rent (cellules, noyau). Pour du prototypage rapide en notebook, utilisez les librairies habituelles (pandas, matplotlib, ipywidgets).</p></div>
       </details>
       <details class="faq-item">
-        <summary>Quelle est la différence entre <code>bpm.table</code> et <code>bpm.dataframe</code> ?</summary>
-        <div class="faq-answer"><p><code>bpm.table</code> affiche un tableau simple (liste de listes ou DataFrame) avec style cohérent au design system. <code>bpm.dataframe</code> est prévu pour des DataFrames pandas avec tri, pagination, formatage des colonnes. Les deux enregistrent un nœud de rendu ; l’implémentation actuelle peut ne pas encore distinguer les deux côté front — voir <a href="../api-reference/data.html">API Reference — Data</a>.</p></div>
+        <summary>Quelle est la diffÃ©rence entre <code>bpm.table</code> et <code>bpm.dataframe</code> ?</summary>
+        <div class="faq-answer"><p><code>bpm.table</code> affiche un tableau simple (liste de listes ou DataFrame) avec style cohÃ©rent au design system. <code>bpm.dataframe</code> est prÃ©vu pour des DataFrames pandas avec tri, pagination, formatage des colonnes. Les deux enregistrent un nÂœud de rendu ; lÂ’implÃ©mentation actuelle peut ne pas encore distinguer les deux cÃ´tÃ© front Â— voir <a href="../api-reference/data.html">API Reference Â— Data</a>.</p></div>
       </details>
       <details class="faq-item">
         <summary>Comment personnaliser les couleurs ?</summary>
-        <div class="faq-answer"><p>Via <code>bpm.theme(primary_color="#d4af37")</code> (ou équivalent) ou en surchargeant les variables CSS dans votre feuille de thème (<code>theme.css</code> ou <code>doc.css</code>). Les tokens (couleur primaire, fond, bordure) sont documentés dans <a href="../api-reference/config.html">Config</a>.</p></div>
+        <div class="faq-answer"><p>Via <code>bpm.theme(primary_color="#d4af37")</code> (ou Ã©quivalent) ou en surchargeant les variables CSS dans votre feuille de thÃ¨me (<code>theme.css</code> ou <code>doc.css</code>). Les tokens (couleur primaire, fond, bordure) sont documentÃ©s dans <a href="../api-reference/config.html">Config</a>.</p></div>
       </details>
       <details class="faq-item">
         <summary>BPM est-il open source ?</summary>
-        <div class="faq-answer"><p>Oui. Le code est dans le dépôt du projet (voir <a href="reste-a-faire.html">Ce qu'il reste à faire</a> pour le lien quand le repo est public).</p></div>
+        <div class="faq-answer"><p>Oui. Le code est dans le dÃ©pÃ´t du projet (voir <a href="reste-a-faire.html">Ce qu'il reste Ã  faire</a> pour le lien quand le repo est public).</p></div>
       </details>
       <details class="faq-item">
-        <summary>Où signaler un bug ?</summary>
-        <div class="faq-answer"><p>Quand le dépôt sera public, utilisez les issues GitHub pour signaler un bug (en décrivant le problème, la version de Python et les étapes pour reproduire). En attendant, consultez la <a href="reste-a-faire.html">Ce qu'il reste à faire</a>.</p></div>
+        <summary>OÃ¹ signaler un bug ?</summary>
+        <div class="faq-answer"><p>Quand le dÃ©pÃ´t sera public, utilisez les issues GitHub pour signaler un bug (en dÃ©crivant le problÃ¨me, la version de Python et les Ã©tapes pour reproduire). En attendant, consultez la <a href="reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p></div>
       </details>
 
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="troubleshooting.html">Dépannage</a> — Problèmes courants et solutions</li>
-          <li><a href="reste-a-faire.html">Ce qu'il reste à faire</a> — Roadmap</li>
+          <li><a href="troubleshooting.html">DÃ©pannage</a> Â— ProblÃ¨mes courants et solutions</li>
+          <li><a href="reste-a-faire.html">Ce qu'il reste Ã  faire</a> Â— Roadmap</li>
         </ul>
       </section>
       <section class="help-cta">
-        <p>Une question ? Consultez la <a href="reste-a-faire.html">Ce qu'il reste à faire</a>.</p>
+        <p>Une question ? Consultez la <a href="reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p>
       </section>
       <footer class="site-footer" style="margin-top:2rem;">
         <div class="footer-links">
           <a href="../index.html">Accueil</a>
           <a href="../components.html">Composants</a>
           <a href="https://blueprint-modular.com/modules.html">Modules</a>
-          <a href="../cheat-sheet.html">Aide-mémoire</a>
+          <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
           <a href="../versions.html">Versions</a>
           <a href="../knowledge-base/faq.html">FAQ</a>
-          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
         </div>
         <div class="footer-meta">Blueprint Modular v0.1.11</div>
       </footer>

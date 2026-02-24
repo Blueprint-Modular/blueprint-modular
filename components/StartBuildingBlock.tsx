@@ -31,27 +31,25 @@ export function StartBuildingBlock() {
 
   return (
     <div
-      className="rounded-xl border p-6 mb-8"
+      className="rounded-xl p-8 mb-12 max-w-2xl mx-auto text-center"
       style={{
         background: "var(--bpm-bg-primary)",
-        borderColor: "var(--bpm-border)",
       }}
     >
-      <h2 className="text-xl font-bold mb-2" style={{ color: "var(--bpm-text-primary)" }}>
+      <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: "var(--bpm-text-primary)" }}>
         Commencer à construire votre application
       </h2>
-      <p className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
-        Installez le package Python BPM, puis créez votre première app avec <code className="text-xs px-1.5 py-0.5 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>bpm run</code>.
+      <p className="text-base mb-5" style={{ color: "var(--bpm-text-secondary)" }}>
+        Installez le package Python BPM, puis créez votre première app avec <code className="text-sm px-1.5 py-0.5 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>bpm run</code>.
       </p>
       <div
-        className="flex items-center gap-3 rounded-lg border px-4 py-3 font-mono text-sm"
+        className="flex items-center justify-center gap-3 rounded-lg px-4 py-3 font-mono text-sm mx-auto max-w-md"
         style={{
           background: "var(--bpm-bg-secondary)",
-          borderColor: "var(--bpm-border)",
           color: "var(--bpm-text-primary)",
         }}
       >
-        <code id="start-building-command" className="flex-1 break-all">
+        <code id="start-building-command" className="break-all">
           {COMMAND}
         </code>
         <button
@@ -77,7 +75,7 @@ export function StartBuildingBlock() {
           )}
         </button>
       </div>
-      <p className="text-xs mt-2" style={{ color: "var(--bpm-text-secondary)" }}>
+      <p className="text-sm mt-3" style={{ color: "var(--bpm-text-secondary)" }}>
         Collez cette commande dans votre terminal, ou consultez la{" "}
         <Link href="/docs/getting-started" className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>
           documentation

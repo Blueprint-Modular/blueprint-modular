@@ -44,16 +44,6 @@ const resources = [
 export default function DashboardPage() {
   return (
     <div className="doc-page">
-      <div className="doc-page-header">
-        <h1>Accueil</h1>
-        <p className="doc-description">
-          Bienvenue sur Blueprint Modular. Accédez rapidement à la documentation, à la sandbox et aux modules.
-        </p>
-        <div className="doc-meta">
-          <span className="doc-badge doc-badge-category">Tableau de bord</span>
-        </div>
-      </div>
-
       <StartBuildingBlock />
 
       <h2 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>

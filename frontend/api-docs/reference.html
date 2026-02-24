@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width:device-width, initial-scale=1" />
-  <title>API Reference — Components Blueprint Modular</title>
-  <meta name="description" content="Référence API des composants Blueprint Modular (BPM). Signature, paramètres et exemples." />
+  <title>API Reference â Components Blueprint Modular</title>
+  <meta name="description" content="RÃ©fÃ©rence API des composants Blueprint Modular (BPM). Signature, paramÃ¨tres et exemples." />
   <link rel="icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -174,7 +174,7 @@
       <!-- Metric -->
       <section id="metric">
         <h1>Metric</h1>
-        <p class="lead">Affiche un indicateur avec un libellé, une valeur et un delta optionnel (variation positive/négative).</p>
+        <p class="lead">Affiche un indicateur avec un libellÃ©, une valeur et un delta optionnel (variation positive/nÃ©gative).</p>
 
         <h2>Signature</h2>
         <pre><code>import { Metric } from './bpm';
@@ -193,21 +193,21 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td>—</td><td>Titre ou en-tête de la métrique.</td></tr>
-            <tr><td>value</td><td>number, string, or None</td><td>—</td><td>Valeur affichée. <code>null</code> ou non défini est rendu comme un tiret long.</td></tr>
-            <tr><td>delta</td><td>number or None</td><td>—</td><td>Variation affichée avec une flèche (▲ si positif, ▼ si négatif). Couleur selon <code>deltaType</code>. Si <code>null</code>, pas de flèche.</td></tr>
-            <tr><td>deltaType</td><td>str</td><td>"normal"</td><td><strong>"normal"</strong> : positif = vert, négatif = rouge. <strong>"inverse"</strong> : positif = rouge, négatif = vert (ex. coûts).</td></tr>
-            <tr><td>deltaDecimals</td><td>number</td><td>0</td><td>Nombre de décimales pour l'affichage du delta.</td></tr>
-            <tr><td>currency</td><td>str</td><td>"EUR"</td><td>Symbole pour le delta (EUR, USD, GBP, JPY, CHF, CAD, AUD). Chaîne vide pour un pourcentage.</td></tr>
-            <tr><td>help</td><td>str or None</td><td>null</td><td>Info-bulle affichée à côté du libellé (icône ⓘ).</td></tr>
+            <tr><td>label</td><td>str</td><td>â</td><td>Titre ou en-tÃªte de la mÃ©trique.</td></tr>
+            <tr><td>value</td><td>number, string, or None</td><td>â</td><td>Valeur affichÃ©e. <code>null</code> ou non dÃ©fini est rendu comme un tiret long.</td></tr>
+            <tr><td>delta</td><td>number or None</td><td>â</td><td>Variation affichÃ©e avec une flÃ¨che (â² si positif, â¼ si nÃ©gatif). Couleur selon <code>deltaType</code>. Si <code>null</code>, pas de flÃ¨che.</td></tr>
+            <tr><td>deltaType</td><td>str</td><td>"normal"</td><td><strong>"normal"</strong> : positif = vert, nÃ©gatif = rouge. <strong>"inverse"</strong> : positif = rouge, nÃ©gatif = vert (ex. coÃ»ts).</td></tr>
+            <tr><td>deltaDecimals</td><td>number</td><td>0</td><td>Nombre de dÃ©cimales pour l'affichage du delta.</td></tr>
+            <tr><td>currency</td><td>str</td><td>"EUR"</td><td>Symbole pour le delta (EUR, USD, GBP, JPY, CHF, CAD, AUD). ChaÃ®ne vide pour un pourcentage.</td></tr>
+            <tr><td>help</td><td>str or None</td><td>null</td><td>Info-bulle affichÃ©e Ã  cÃ´tÃ© du libellÃ© (icÃ´ne â).</td></tr>
           </tbody>
         </table>
 
         <h2>Examples</h2>
-        <p class="example-title">Example 1: Afficher une métrique</p>
+        <p class="example-title">Example 1: Afficher une mÃ©trique</p>
         <pre><code>&lt;Metric label="Valorisation" value={12345.67} delta={+250.5} currency="EUR" /&gt;</code></pre>
 
-        <p class="example-title">Example 2: Plusieurs métriques côte à côte</p>
+        <p class="example-title">Example 2: Plusieurs mÃ©triques cÃ´te Ã  cÃ´te</p>
         <pre><code>import { Metric } from './bpm';
 
 &lt;div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}&gt;
@@ -217,9 +217,9 @@
 &lt;/div&gt;</code></pre>
 
         <p class="example-title">Example 3: Inverser la couleur du delta</p>
-        <p>Pour un indicateur où une baisse est positive (ex. coût), utilisez <code>deltaType="inverse"</code>.</p>
+        <p>Pour un indicateur oÃ¹ une baisse est positive (ex. coÃ»t), utilisez <code>deltaType="inverse"</code>.</p>
         <pre><code>&lt;Metric
-  label="Coût"
+  label="CoÃ»t"
   value={4200}
   delta={-150}
   deltaType="inverse"
@@ -252,7 +252,7 @@
           <tbody>
             <tr><td>variant</td><td>str</td><td>"primary"</td><td><strong>primary</strong> : accent. <strong>secondary</strong> : neutre. <strong>danger</strong> : suppression.</td></tr>
             <tr><td>size</td><td>str</td><td>"medium"</td><td>small, medium, large.</td></tr>
-            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le bouton.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>DÃ©sactive le bouton.</td></tr>
             <tr><td>fullWidth</td><td>bool</td><td>false</td><td>Le bouton occupe toute la largeur disponible.</td></tr>
             <tr><td>type</td><td>str</td><td>"button"</td><td>type HTML : button ou submit.</td></tr>
           </tbody>
@@ -269,7 +269,7 @@
       <!-- Selectbox -->
       <section id="selectbox">
         <h1>Selectbox</h1>
-        <p class="lead">Liste déroulante avec options, label, aide et placeholder. Gère le clic extérieur et Escape.</p>
+        <p class="lead">Liste dÃ©roulante avec options, label, aide et placeholder. GÃ¨re le clic extÃ©rieur et Escape.</p>
 
         <h2>Signature</h2>
         <pre><code>import { Selectbox } from './bpm';
@@ -279,7 +279,7 @@
   options={Array&lt;{ value, label }&gt;}
   value={any}
   onChange={function}
-  placeholder="Sélectionner..."
+  placeholder="SÃ©lectionner..."
   disabled={boolean}
   required={boolean}
   help={string|null}
@@ -289,13 +289,13 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td>—</td><td>Libellé au-dessus du champ.</td></tr>
-            <tr><td>options</td><td>array</td><td>[]</td><td>Tableau d’objets <code>{ value, label }</code>.</td></tr>
-            <tr><td>value</td><td>any</td><td>—</td><td>Valeur sélectionnée (contrôlée).</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur lors du changement.</td></tr>
-            <tr><td>placeholder</td><td>str</td><td>"Sélectionner..."</td><td>Texte affiché quand aucune valeur n’est sélectionnée.</td></tr>
-            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le select.</td></tr>
-            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte d’aide.</td></tr>
+            <tr><td>label</td><td>str</td><td>â</td><td>LibellÃ© au-dessus du champ.</td></tr>
+            <tr><td>options</td><td>array</td><td>[]</td><td>Tableau dâobjets <code>{ value, label }</code>.</td></tr>
+            <tr><td>value</td><td>any</td><td>â</td><td>Valeur sÃ©lectionnÃ©e (contrÃ´lÃ©e).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>â</td><td>AppelÃ© avec la nouvelle valeur lors du changement.</td></tr>
+            <tr><td>placeholder</td><td>str</td><td>"SÃ©lectionner..."</td><td>Texte affichÃ© quand aucune valeur nâest sÃ©lectionnÃ©e.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>DÃ©sactive le select.</td></tr>
+            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte dâaide.</td></tr>
           </tbody>
         </table>
 
@@ -312,7 +312,7 @@
       <!-- Table -->
       <section id="table">
         <h1>Table</h1>
-        <p class="lead">Tableau triable. Colonnes avec <code>key</code>, <code>label</code>, optionnellement <code>align</code>. Données = tableau d’objets.</p>
+        <p class="lead">Tableau triable. Colonnes avec <code>key</code>, <code>label</code>, optionnellement <code>align</code>. DonnÃ©es = tableau dâobjets.</p>
 
         <h2>Signature</h2>
         <pre><code>import { Table } from './bpm';
@@ -333,32 +333,32 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>columns</td><td>array</td><td>—</td><td><code>{ key, label, align? }</code>. <code>key</code> utilisé pour le tri si présent.</td></tr>
-            <tr><td>data</td><td>array</td><td>—</td><td>Lignes (objets). Les clés doivent correspondre aux <code>key</code> des colonnes.</td></tr>
-            <tr><td>striped</td><td>bool</td><td>true</td><td>Lignes alternées.</td></tr>
+            <tr><td>columns</td><td>array</td><td>â</td><td><code>{ key, label, align? }</code>. <code>key</code> utilisÃ© pour le tri si prÃ©sent.</td></tr>
+            <tr><td>data</td><td>array</td><td>â</td><td>Lignes (objets). Les clÃ©s doivent correspondre aux <code>key</code> des colonnes.</td></tr>
+            <tr><td>striped</td><td>bool</td><td>true</td><td>Lignes alternÃ©es.</td></tr>
             <tr><td>hover</td><td>bool</td><td>true</td><td>Surbrillance au survol.</td></tr>
-            <tr><td>onRowClick</td><td>function</td><td>—</td><td>Appelé avec la ligne (row) au clic.</td></tr>
+            <tr><td>onRowClick</td><td>function</td><td>â</td><td>AppelÃ© avec la ligne (row) au clic.</td></tr>
             <tr><td>defaultSortColumn</td><td>str or null</td><td>null</td><td>Colonne de tri initiale.</td></tr>
             <tr><td>defaultSortDirection</td><td>str</td><td>"asc"</td><td>asc ou desc.</td></tr>
           </tbody>
         </table>
       </section>
 
-      <!-- NumberInput, DateInput, ColorPicker, Tabs (résumés) -->
+      <!-- NumberInput, DateInput, ColorPicker, Tabs (rÃ©sumÃ©s) -->
       <section id="numberinput">
         <h1>NumberInput</h1>
-        <p class="lead">Champ numérique avec label, min/max/step, aide. Contrôlé ou non contrôlé.</p>
+        <p class="lead">Champ numÃ©rique avec label, min/max/step, aide. ContrÃ´lÃ© ou non contrÃ´lÃ©.</p>
         <h2>Signature</h2>
         <pre><code>&lt;NumberInput label="Montant" value={n} onChange={setN} min={0} max={100} step={1} disabled={false} help={null} /&gt;</code></pre>
         <h2>Parameters</h2>
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
-            <tr><td>value</td><td>number</td><td>—</td><td>Valeur (contrôlée).</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur (number ou string en mode contrôlé).</td></tr>
+            <tr><td>label</td><td>str</td><td>â</td><td>LibellÃ©.</td></tr>
+            <tr><td>value</td><td>number</td><td>â</td><td>Valeur (contrÃ´lÃ©e).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>â</td><td>AppelÃ© avec la nouvelle valeur (number ou string en mode contrÃ´lÃ©).</td></tr>
             <tr><td>min, max, step</td><td>number or null</td><td>null, null, 1</td><td>Contraintes et pas.</td></tr>
-            <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le champ.</td></tr>
+            <tr><td>disabled</td><td>bool</td><td>false</td><td>DÃ©sactive le champ.</td></tr>
             <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle.</td></tr>
           </tbody>
         </table>
@@ -366,33 +366,33 @@
 
       <section id="dateinput">
         <h1>DateInput</h1>
-        <p class="lead">Sélecteur de date (type date) avec label, min/max et aide.</p>
+        <p class="lead">SÃ©lecteur de date (type date) avec label, min/max et aide.</p>
         <h2>Signature</h2>
         <pre><code>&lt;DateInput label="Date" value={date} onChange={setDate} min={minDate} max={maxDate} disabled={false} /&gt;</code></pre>
         <h2>Parameters</h2>
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
-            <tr><td>value</td><td>Date or string</td><td>—</td><td>Valeur (objet Date ou chaîne ISO).</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec Date ou null.</td></tr>
-            <tr><td>min, max</td><td>Date or string</td><td>null</td><td>Bornes du sélecteur.</td></tr>
+            <tr><td>label</td><td>str</td><td>â</td><td>LibellÃ©.</td></tr>
+            <tr><td>value</td><td>Date or string</td><td>â</td><td>Valeur (objet Date ou chaÃ®ne ISO).</td></tr>
+            <tr><td>onChange</td><td>function</td><td>â</td><td>AppelÃ© avec Date ou null.</td></tr>
+            <tr><td>min, max</td><td>Date or string</td><td>null</td><td>Bornes du sÃ©lecteur.</td></tr>
           </tbody>
         </table>
       </section>
 
       <section id="colorpicker">
         <h1>ColorPicker</h1>
-        <p class="lead">Sélecteur de couleur (input color) avec label et valeur hex.</p>
+        <p class="lead">SÃ©lecteur de couleur (input color) avec label et valeur hex.</p>
         <h2>Signature</h2>
         <pre><code>&lt;ColorPicker label="Couleur" value={color} onChange={setColor} disabled={false} help={null} /&gt;</code></pre>
         <h2>Parameters</h2>
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td>—</td><td>Libellé.</td></tr>
-            <tr><td>value</td><td>str</td><td>"#000000"</td><td>Couleur hexadécimale.</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur hex.</td></tr>
+            <tr><td>label</td><td>str</td><td>â</td><td>LibellÃ©.</td></tr>
+            <tr><td>value</td><td>str</td><td>"#000000"</td><td>Couleur hexadÃ©cimale.</td></tr>
+            <tr><td>onChange</td><td>function</td><td>â</td><td>AppelÃ© avec la nouvelle valeur hex.</td></tr>
           </tbody>
         </table>
       </section>
@@ -407,8 +407,8 @@
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
             <tr><td>tabs</td><td>array</td><td>[]</td><td><code>{ label, content }</code> ou string (label seul).</td></tr>
-            <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de l’onglet actif au montage.</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec l’index lors du changement d’onglet.</td></tr>
+            <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de lâonglet actif au montage.</td></tr>
+            <tr><td>onChange</td><td>function</td><td>â</td><td>AppelÃ© avec lâindex lors du changement dâonglet.</td></tr>
           </tbody>
         </table>
       </section>
@@ -423,18 +423,18 @@
 
       <section id="modal">
         <h1>Modal</h1>
-        <p class="lead">Fenêtre modale avec titre, fermeture Escape et clic sur le fond. Rendu en portail.</p>
+        <p class="lead">FenÃªtre modale avec titre, fermeture Escape et clic sur le fond. Rendu en portail.</p>
         <h2>Signature</h2>
         <pre><code>&lt;Modal isOpen={open} onClose={() => setOpen(false)} title="Titre" size="medium" | "small" | "large" showCloseButton={true}&gt;{children}&lt;/Modal&gt;</code></pre>
       </section>
 
       <section id="toast">
         <h1>Toast</h1>
-        <p class="lead">Notifications toast. Envelopper l’app avec <code>ToastProvider</code> et utiliser le hook <code>useToast()</code>.</p>
+        <p class="lead">Notifications toast. Envelopper lâapp avec <code>ToastProvider</code> et utiliser le hook <code>useToast()</code>.</p>
         <h2>Signature</h2>
         <pre><code>import { ToastProvider, useToast } from './bpm';
 
-// À la racine
+// Ã la racine
 &lt;ToastProvider&gt;{children}&lt;/ToastProvider&gt;
 
 // Dans un composant
@@ -459,37 +459,37 @@ showToast(message, type, duration, title, pageName, pageIcon);</code></pre>
       <!-- Layout & Structure -->
       <section id="title">
         <h1>Title</h1>
-        <p class="lead">Titre avec niveaux 1–4. Niveau 1 affiche le logo (optionnel <code>onLogoClick</code>). Exporte Title1, Title2, Title3, Title4.</p>
+        <p class="lead">Titre avec niveaux 1â4. Niveau 1 affiche le logo (optionnel <code>onLogoClick</code>). Exporte Title1, Title2, Title3, Title4.</p>
         <h2>Signature</h2>
         <pre><code>&lt;Title level={1|2|3|4} onLogoClick={function|null}&gt;{children}&lt;/Title&gt;
 // ou
-&lt;Title1&gt;Mon écran&lt;/Title1&gt;
+&lt;Title1&gt;Mon Ã©cran&lt;/Title1&gt;
 &lt;Title2&gt;Sous-titre&lt;/Title2&gt;</code></pre>
       </section>
 
       <section id="panel">
         <h1>Panel</h1>
-        <p class="lead">Panneau informatif (alertes, états). Variantes : info, warning, error, success.</p>
+        <p class="lead">Panneau informatif (alertes, Ã©tats). Variantes : info, warning, error, success.</p>
         <h2>Signature</h2>
         <pre><code>&lt;Panel variant="info" | "warning" | "error" | "success" title="Titre" icon={node|false}&gt;{children}&lt;/Panel&gt;</code></pre>
       </section>
 
       <section id="box">
         <h1>Box</h1>
-        <p class="lead">Bloc avec titre, statut, détails. Optionnel <code>isConnected</code> pour style vert/rouge.</p>
+        <p class="lead">Bloc avec titre, statut, dÃ©tails. Optionnel <code>isConnected</code> pour style vert/rouge.</p>
         <h2>Signature</h2>
         <pre><code>&lt;Box title="Connexion" status="..." details="..." isConnected={boolean} actions={node} /&gt;</code></pre>
       </section>
 
       <section id="expander">
         <h1>Expander</h1>
-        <p class="lead">Bloc repliable avec titre. <code>defaultExpanded</code> pour ouvrir par défaut.</p>
+        <p class="lead">Bloc repliable avec titre. <code>defaultExpanded</code> pour ouvrir par dÃ©faut.</p>
         <h2>Signature</h2>
-        <pre><code>&lt;Expander title="Détails" defaultExpanded={false}&gt;{children}&lt;/Expander&gt;</code></pre>
+        <pre><code>&lt;Expander title="DÃ©tails" defaultExpanded={false}&gt;{children}&lt;/Expander&gt;</code></pre>
       </section>
     </main>
   </div>
 
-  <p class="footer">BEAM Consulting · <a href="https://beam-consulting.fr">beam-consulting.fr</a></p>
+  <p class="footer">BEAM Consulting Â· <a href="https://beam-consulting.fr">beam-consulting.fr</a></p>
 </body>
 </html>

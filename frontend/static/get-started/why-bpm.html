@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pourquoi BPM — Blueprint Modular</title>
-  <meta name="description" content="Pourquoi Blueprint Modular est la meilleure solution : réactivité granulaire, design system, registry $ et @, layout piloté par config." />
+  <title>Pourquoi BPM Â— Blueprint Modular</title>
+  <meta name="description" content="Pourquoi Blueprint Modular est la meilleure solution : rÃ©activitÃ© granulaire, design system, registry $ et @, layout pilotÃ© par config." />
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -15,10 +15,10 @@
     <a href="why-bpm.html">Pourquoi BPM</a>
     <a href="installation.html">Installation</a>
     <a href="../components.html">Composants</a>
-    <a href="../api-reference/text.html">Référence API</a>
-    <a href="../deploy/concepts.html">Déployer</a>
+    <a href="../api-reference/text.html">RÃ©fÃ©rence API</a>
+    <a href="../deploy/concepts.html">DÃ©ployer</a>
     <a href="https://blueprint-modular.com/modules.html">Modules</a>
-    <a href="../cheat-sheet.html">Aide-mémoire</a>
+    <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
     <a href="https://app.blueprint-modular.com/dashboard" class="doc-nav-app" target="_blank" rel="noopener">Ouvrir l'app</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
@@ -26,25 +26,25 @@
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
       <a href="../index.html">Accueil</a>
-      <h3>Démarrage</h3>
+      <h3>DÃ©marrage</h3>
       <a href="why-bpm.html" class="active">Pourquoi BPM</a>
       <a href="installation.html">Installation</a>
       <a href="fundamentals.html">Fondamentaux</a>
-      <a href="first-app.html">Première app</a>
+      <a href="first-app.html">PremiÃ¨re app</a>
       <h3>Composants</h3>
       <a href="../components.html">Catalogue des composants</a>
       <a href="../api-reference/text.html">Texte</a>
-      <a href="../api-reference/data.html">Données</a>
-      <a href="../api-reference/metrics.html">Métriques</a>
+      <a href="../api-reference/data.html">DonnÃ©es</a>
+      <a href="../api-reference/metrics.html">MÃ©triques</a>
       <a href="../api-reference/charts.html">Graphiques</a>
       <a href="../api-reference/inputs.html">Saisie</a>
       <a href="../api-reference/layout.html">Mise en page</a>
       <a href="../api-reference/panels.html">Panneaux</a>
-      <a href="../api-reference/media.html">Médias</a>
+      <a href="../api-reference/media.html">MÃ©dias</a>
       <a href="../api-reference/status.html">Statut</a>
       <a href="../api-reference/chat.html">Chat</a>
       <a href="../api-reference/config.html">Config</a>
-      <a href="../api-reference/connection.html">Connexion aux données</a>
+      <a href="../api-reference/connection.html">Connexion aux donnÃ©es</a>
       <h3>Modules</h3>
       <a href="https://blueprint-modular.com/modules.html">Catalogue des modules</a>
       <a href="../modules/wiki.html">Module Wiki</a>
@@ -52,62 +52,62 @@
       <a href="../modules/veille.html">Module Veille</a>
       <a href="../modules/ibkr.html">Module IBKR</a>
       <a href="../modules/analyse-document.html">Module Documents</a>
-      <h3>Déployer</h3>
+      <h3>DÃ©ployer</h3>
       <a href="../deploy/concepts.html">Concepts</a>
       <a href="../deploy/platforms.html">Plateformes</a>
       <h3>Base de connaissances</h3>
       <a href="../knowledge-base/faq.html">FAQ</a>
-      <a href="../knowledge-base/troubleshooting.html">Dépannage</a>
-      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+      <a href="../knowledge-base/troubleshooting.html">DÃ©pannage</a>
+      <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
       <h3>Ressources</h3>
-      <a href="../cheat-sheet.html">Aide-mémoire</a>
+      <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
       <a href="../versions.html">Versions</a>
     </aside>
     <main class="doc-main">
-      <nav class="breadcrumb"><a href="../index.html">Accueil</a> › <a href="installation.html">Démarrage</a> › Pourquoi BPM</nav>
+      <nav class="breadcrumb"><a href="../index.html">Accueil</a> Â› <a href="installation.html">DÃ©marrage</a> Â› Pourquoi BPM</nav>
       <h1>Pourquoi BPM</h1>
-      <p class="lead">Blueprint Modular combine une <strong>syntaxe simple</strong> (tout en Python, pas de front à câbler) avec des <strong>atouts que les autres frameworks ne proposent pas nativement</strong>.</p>
+      <p class="lead">Blueprint Modular combine une <strong>syntaxe simple</strong> (tout en Python, pas de front Ã  cÃ¢bler) avec des <strong>atouts que les autres frameworks ne proposent pas nativement</strong>.</p>
 
       <h2>Les quatre atouts BPM</h2>
 
-      <h3>1. Réactivité granulaire + syntaxe simple</h3>
-      <p>Les frameworks classiques opposent soit la simplicité (tout le script se réexécute à chaque clic), soit la réactivité ciblée (callbacks explicites partout). BPM vise les deux : une syntaxe aussi simple que possible, avec des <strong>réfs réactives</strong> (<code>bpm.ref("x")</code>) pour que seuls les composants concernés se mettent à jour — pas de re-run complet de la page.</p>
-      <p>Côté frontend, un <strong>store réactif</strong> et un hook <code>useReactive(key)</code> permettent déjà des interfaces réactives sans tout recharger.</p>
+      <h3>1. RÃ©activitÃ© granulaire + syntaxe simple</h3>
+      <p>Les frameworks classiques opposent soit la simplicitÃ© (tout le script se rÃ©exÃ©cute Ã  chaque clic), soit la rÃ©activitÃ© ciblÃ©e (callbacks explicites partout). BPM vise les deux : une syntaxe aussi simple que possible, avec des <strong>rÃ©fs rÃ©actives</strong> (<code>bpm.ref("x")</code>) pour que seuls les composants concernÃ©s se mettent Ã  jour Â— pas de re-run complet de la page.</p>
+      <p>CÃ´tÃ© frontend, un <strong>store rÃ©actif</strong> et un hook <code>useReactive(key)</code> permettent dÃ©jÃ  des interfaces rÃ©actives sans tout recharger.</p>
 
-      <h3>2. Design system cohérent (<code>bpm.*</code>)</h3>
-      <p>Tous les composants BPM partagent les mêmes <strong>tokens</strong> (couleurs, espacements, typo) via <code>theme.css</code>. Vous personnalisez l’app en surchargeant des variables CSS, sans toucher au code des composants. Aucun autre framework Python pour la data n’offre un vrai design system natif.</p>
+      <h3>2. Design system cohÃ©rent (<code>bpm.*</code>)</h3>
+      <p>Tous les composants BPM partagent les mÃªmes <strong>tokens</strong> (couleurs, espacements, typo) via <code>theme.css</code>. Vous personnalisez lÂ’app en surchargeant des variables CSS, sans toucher au code des composants. Aucun autre framework Python pour la data nÂ’offre un vrai design system natif.</p>
 
       <h3>3. Registry <code>$</code> et <code>@</code></h3>
-      <p>BPM introduit une <strong>registry</strong> avec deux idées clés :</p>
+      <p>BPM introduit une <strong>registry</strong> avec deux idÃ©es clÃ©s :</p>
       <ul>
-        <li><strong><code>$</code></strong> — Réfs réactives : état nommé (<code>bpm.ref("compteur")</code>) avec <code>.get()</code>, <code>.set()</code>, <code>.subscribe()</code>. Seuls les widgets qui lisent cette ref se rafraîchissent.</li>
-        <li><strong><code>@</code></strong> — Inscription de blocs : <code>@bpm.page("rapports")</code>, <code>@bpm.sidebar</code>, <code>@bpm.cache_data</code>. Le layout peut rendre « le bloc enregistré sous ce nom ».</li>
+        <li><strong><code>$</code></strong> Â— RÃ©fs rÃ©actives : Ã©tat nommÃ© (<code>bpm.ref("compteur")</code>) avec <code>.get()</code>, <code>.set()</code>, <code>.subscribe()</code>. Seuls les widgets qui lisent cette ref se rafraÃ®chissent.</li>
+        <li><strong><code>@</code></strong> Â— Inscription de blocs : <code>@bpm.page("rapports")</code>, <code>@bpm.sidebar</code>, <code>@bpm.cache_data</code>. Le layout peut rendre Â« le bloc enregistrÃ© sous ce nom Â».</li>
       </ul>
-      <p>Aucun concurrent ne propose cette double sémantique en natif.</p>
+      <p>Aucun concurrent ne propose cette double sÃ©mantique en natif.</p>
 
-      <h3>4. Layout piloté par config (<code>app.config.js</code>)</h3>
-      <p>Sidebar, header, pages et liens sont décrits dans <strong>un seul fichier de config</strong>. Dupliquer une app = copier le projet et modifier ce fichier. Pas besoin de toucher au code des pages ni au Layout. Aucun autre framework ne permet de cloner une app en ne changeant qu’un fichier.</p>
+      <h3>4. Layout pilotÃ© par config (<code>app.config.js</code>)</h3>
+      <p>Sidebar, header, pages et liens sont dÃ©crits dans <strong>un seul fichier de config</strong>. Dupliquer une app = copier le projet et modifier ce fichier. Pas besoin de toucher au code des pages ni au Layout. Aucun autre framework ne permet de cloner une app en ne changeant quÂ’un fichier.</p>
 
       <h2>Ce qui est inclus</h2>
       <ul>
-        <li><strong>Composants</strong> — Texte, données, graphiques, inputs, layout, feedback (Message, Modal, Toast, Spinner, Progress, Skeleton, EmptyState…), structure (Card, Accordion, Stepper, Drawer, FAB, Grid, TopNav, TreeView, Timeline, Breadcrumb, Chip, Avatar…). Tous avec une prop <code>className</code> pour vos styles.</li>
-        <li><strong>Documentation</strong> — Installation, fondamentaux, première app, référence API, déploiement VPS/Docker, FAQ, cheat sheet.</li>
-        <li><strong>Déploiement</strong> — Guides pour VPS (Nginx, systemd), Docker, et scripts de déploiement depuis Git.</li>
+        <li><strong>Composants</strong> Â— Texte, donnÃ©es, graphiques, inputs, layout, feedback (Message, Modal, Toast, Spinner, Progress, Skeleton, EmptyStateÂ…), structure (Card, Accordion, Stepper, Drawer, FAB, Grid, TopNav, TreeView, Timeline, Breadcrumb, Chip, AvatarÂ…). Tous avec une prop <code>className</code> pour vos styles.</li>
+        <li><strong>Documentation</strong> Â— Installation, fondamentaux, premiÃ¨re app, rÃ©fÃ©rence API, dÃ©ploiement VPS/Docker, FAQ, cheat sheet.</li>
+        <li><strong>DÃ©ploiement</strong> Â— Guides pour VPS (Nginx, systemd), Docker, et scripts de dÃ©ploiement depuis Git.</li>
       </ul>
 
-      <h2>En résumé</h2>
-      <p>BPM est la solution qui vous donne : <strong>Python uniquement</strong>, <strong>syntaxe simple</strong>, <strong>réactivité ciblée</strong>, <strong>design system cohérent</strong>, <strong>registry</strong> pour état et blocs, et <strong>layout config-driven</strong> pour dupliquer une app en un fichier. Le tout documenté et déployable sans lock-in.</p>
-      <p><strong>Suivant :</strong> <a href="installation.html">Installation</a> — Installer BPM et lancer votre première commande.</p>
-      <section class="help-cta"><p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</p></section>
+      <h2>En rÃ©sumÃ©</h2>
+      <p>BPM est la solution qui vous donne : <strong>Python uniquement</strong>, <strong>syntaxe simple</strong>, <strong>rÃ©activitÃ© ciblÃ©e</strong>, <strong>design system cohÃ©rent</strong>, <strong>registry</strong> pour Ã©tat et blocs, et <strong>layout config-driven</strong> pour dupliquer une app en un fichier. Le tout documentÃ© et dÃ©ployable sans lock-in.</p>
+      <p><strong>Suivant :</strong> <a href="installation.html">Installation</a> Â— Installer BPM et lancer votre premiÃ¨re commande.</p>
+      <section class="help-cta"><p>Une question ? Consultez la <a href="../knowledge-base/faq.html">FAQ</a> et la <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p></section>
       <footer class="site-footer" style="margin-top:2rem;">
         <div class="footer-links">
           <a href="../index.html">Accueil</a>
           <a href="../components.html">Composants</a>
           <a href="https://blueprint-modular.com/modules.html">Modules</a>
-          <a href="../cheat-sheet.html">Aide-mémoire</a>
+          <a href="../cheat-sheet.html">Aide-mÃ©moire</a>
           <a href="../versions.html">Versions</a>
           <a href="../knowledge-base/faq.html">FAQ</a>
-          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+          <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
         </div>
         <div class="footer-meta">Blueprint Modular v0.1.11</div>
       </footer>

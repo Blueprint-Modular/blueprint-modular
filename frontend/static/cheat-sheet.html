@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cheat sheet — Blueprint Modular</title>
+  <title>Cheat sheet Â— Blueprint Modular</title>
   <link rel="icon" href="favicon.ico" />
   <link rel="icon" type="image/png" href="img/logo-bpm.png" />
   <link rel="stylesheet" href="doc.css" />
@@ -14,10 +14,10 @@
     <a href="get-started/why-bpm.html">Pourquoi BPM</a>
     <a href="get-started/installation.html">Installation</a>
     <a href="components.html">Composants</a>
-    <a href="api-reference/text.html">Référence API</a>
-    <a href="deploy/concepts.html">Déployer</a>
+    <a href="api-reference/text.html">RÃ©fÃ©rence API</a>
+    <a href="deploy/concepts.html">DÃ©ployer</a>
     <a href="https://blueprint-modular.com/modules.html">Modules</a>
-    <a href="cheat-sheet.html">Aide-mémoire</a>
+    <a href="cheat-sheet.html">Aide-mÃ©moire</a>
     <a href="https://app.blueprint-modular.com/dashboard" class="doc-nav-app" target="_blank" rel="noopener">Ouvrir l'app</a>
     <button class="nav-burger" aria-label="Menu" id="nav-burger-btn"><span></span><span></span><span></span></button>
   </nav>
@@ -25,25 +25,25 @@
     <aside class="doc-sidebar">
       <h3>Accueil</h3>
       <a href="index.html">Accueil</a>
-      <h3>Démarrage</h3>
+      <h3>DÃ©marrage</h3>
       <a href="get-started/why-bpm.html">Pourquoi BPM</a>
       <a href="get-started/installation.html">Installation</a>
       <a href="get-started/fundamentals.html">Fondamentaux</a>
-      <a href="get-started/first-app.html">Première app</a>
+      <a href="get-started/first-app.html">PremiÃ¨re app</a>
       <h3>Composants</h3>
       <a href="components.html">Catalogue des composants</a>
       <a href="api-reference/text.html">Texte</a>
-      <a href="api-reference/data.html">Données</a>
-      <a href="api-reference/metrics.html">Métriques</a>
+      <a href="api-reference/data.html">DonnÃ©es</a>
+      <a href="api-reference/metrics.html">MÃ©triques</a>
       <a href="api-reference/charts.html">Graphiques</a>
       <a href="api-reference/inputs.html">Saisie</a>
       <a href="api-reference/layout.html">Mise en page</a>
       <a href="api-reference/panels.html">Panneaux</a>
-      <a href="api-reference/media.html">Médias</a>
+      <a href="api-reference/media.html">MÃ©dias</a>
       <a href="api-reference/status.html">Statut</a>
       <a href="api-reference/chat.html">Chat</a>
       <a href="api-reference/config.html">Config</a>
-      <a href="api-reference/connection.html">Connexion aux données</a>
+      <a href="api-reference/connection.html">Connexion aux donnÃ©es</a>
       <h3>Modules</h3>
       <a href="https://blueprint-modular.com/modules.html">Catalogue des modules</a>
       <a href="modules/wiki.html">Module Wiki</a>
@@ -51,21 +51,21 @@
       <a href="modules/veille.html">Module Veille</a>
       <a href="modules/ibkr.html">Module IBKR</a>
       <a href="modules/analyse-document.html">Module Documents</a>
-      <h3>Déployer</h3>
+      <h3>DÃ©ployer</h3>
       <a href="deploy/concepts.html">Concepts</a>
       <a href="deploy/platforms.html">Plateformes</a>
       <h3>Base de connaissances</h3>
       <a href="knowledge-base/faq.html">FAQ</a>
-      <a href="knowledge-base/troubleshooting.html">Dépannage</a>
-      <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+      <a href="knowledge-base/troubleshooting.html">DÃ©pannage</a>
+      <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
       <h3>Ressources</h3>
-      <a href="cheat-sheet.html" class="active">Aide-mémoire</a>
+      <a href="cheat-sheet.html" class="active">Aide-mÃ©moire</a>
       <a href="versions.html">Versions</a>
     </aside>
     <main class="doc-main">
-      <nav class="breadcrumb"><a href="index.html">Accueil</a> › <a href="versions.html">Ressources</a> › Aide-mémoire</nav>
+      <nav class="breadcrumb"><a href="index.html">Accueil</a> Â› <a href="versions.html">Ressources</a> Â› Aide-mÃ©moire</nav>
       <h1>Cheat sheet</h1>
-      <p class="lead">Toutes les fonctions BPM en un coup d'œil. Copier-collable directement dans un script.</p>
+      <p class="lead">Toutes les fonctions BPM en un coup d'Âœil. Copier-collable directement dans un script.</p>
       <pre><code>import bpm
 
 # Texte
@@ -74,13 +74,13 @@ bpm.header("Section")
 bpm.subheader("Sous-section")
 bpm.markdown("Du **markdown**")
 bpm.write("Texte ou objet Python")
-bpm.caption("Légende")
+bpm.caption("LÃ©gende")
 bpm.code("snippet", language="python")
 bpm.latex(r"e^{i\\pi}+1=0")
 bpm.badge("Nouveau", type="info")
 bpm.html("&lt;p&gt;HTML brut&lt;/p&gt;")
 
-# Données
+# DonnÃ©es
 bpm.metric("Valeur", 142500, delta=3200)
 bpm.dataframe(df)
 bpm.table(df)
@@ -90,7 +90,7 @@ bpm.json({"a": 1})
 col1, col2 = bpm.columns(2)
 tab1, tab2 = bpm.tabs(["Onglet 1", "Onglet 2"])
 with bpm.sidebar:
-    bpm.select("Page", ["Accueil", "Données"])
+    bpm.select("Page", ["Accueil", "DonnÃ©es"])
 with bpm.expander("Voir plus"):
     bpm.write("Contenu")
 with bpm.form("f"):
@@ -113,7 +113,7 @@ bpm.date_input("Date")
 bpm.time_input("Heure")
 bpm.datetime_input("Date et heure")
 bpm.file_uploader("Fichier")
-bpm.download_button("Télécharger", data=bytes(), file_name="out.csv")
+bpm.download_button("TÃ©lÃ©charger", data=bytes(), file_name="out.csv")
 bpm.color_picker("Couleur")
 
 # Charts
@@ -130,10 +130,10 @@ bpm.chart.pyplot(fig)
 bpm.panel("Info importante", variant="info")
 bpm.panel("Attention", variant="warning")
 bpm.panel("Erreur", variant="error")
-bpm.panel("Succès", variant="success")
+bpm.panel("SuccÃ¨s", variant="success")
 
-# Médias
-bpm.image(url_or_path, caption="Légende")
+# MÃ©dias
+bpm.image(url_or_path, caption="LÃ©gende")
 bpm.audio(src)
 bpm.video(src)
 bpm.pdf(src)
@@ -143,18 +143,18 @@ bpm.logo()
 with bpm.spinner("Chargement..."):
     time.sleep(2)
 bpm.progress(0.75, text="75 %")
-bpm.toast("Terminé !")
+bpm.toast("TerminÃ© !")
 bpm.balloons()
 bpm.snow()
 with bpm.status("Traitement"):
-    bpm.write("Étape 1...")
+    bpm.write("Ã‰tape 1...")
 bpm.exception(e)
 
 # Chat
 with bpm.chat.message("user"):
     bpm.write("Message")
 with bpm.chat.message("assistant"):
-    bpm.write("Réponse")
+    bpm.write("RÃ©ponse")
 bpm.chat.input("Placeholder")
 bpm.write_stream(generator)
 
@@ -169,17 +169,17 @@ bpm.rerun()
 bpm.stop()
 bpm.switch_page("other")
 bpm.query_params["key"] = "value"</code></pre>
-      <p><small>Groupé par catégorie : Texte, Données, Layout, Inputs, Charts, Panels, Médias, Status, Chat, Config.</small></p>
-      <section class="help-cta"><p>Une question ? Consultez la <a href="knowledge-base/faq.html">FAQ</a> et la <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</p></section>
+      <p><small>GroupÃ© par catÃ©gorie : Texte, DonnÃ©es, Layout, Inputs, Charts, Panels, MÃ©dias, Status, Chat, Config.</small></p>
+      <section class="help-cta"><p>Une question ? Consultez la <a href="knowledge-base/faq.html">FAQ</a> et la <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>.</p></section>
       <footer class="site-footer" style="margin-top:2rem;">
         <div class="footer-links">
           <a href="index.html">Accueil</a>
           <a href="components.html">Composants</a>
           <a href="https://blueprint-modular.com/modules.html">Modules</a>
-          <a href="cheat-sheet.html">Aide-mémoire</a>
+          <a href="cheat-sheet.html">Aide-mÃ©moire</a>
           <a href="versions.html">Versions</a>
           <a href="knowledge-base/faq.html">FAQ</a>
-          <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
+          <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste Ã  faire</a>
         </div>
         <div class="footer-meta">Blueprint Modular v0.1.11</div>
       </footer>

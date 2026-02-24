@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deploy — Platforms — Blueprint Modular</title>
+  <title>Deploy â Platforms â Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../doc.css" />
@@ -47,16 +47,16 @@
     </aside>
     <main class="doc-main">
       <h1>Platforms</h1>
-      <p class="lead">Guides de déploiement : VPS Ubuntu + Nginx + systemd (principal), Docker.</p>
+      <p class="lead">Guides de dÃ©ploiement : VPS Ubuntu + Nginx + systemd (principal), Docker.</p>
       <h2>VPS Ubuntu + Nginx + systemd</h2>
-      <p><strong>Recommandé</strong> pour héberger une app BPM sur un serveur dédié.</p>
+      <p><strong>RecommandÃ©</strong> pour hÃ©berger une app BPM sur un serveur dÃ©diÃ©.</p>
       <ul>
         <li><strong>Serveur</strong> : Ubuntu (ou Debian), Python 3.9+, <code>pip install blueprint-modular</code>.</li>
-        <li><strong>Service systemd</strong> : unit file pour lancer <code>bpm run app.py</code> au démarrage.</li>
-        <li><strong>Nginx</strong> : vhost en reverse proxy vers le port où BPM écoute (ex. 8501), avec proxy WebSocket si nécessaire.</li>
+        <li><strong>Service systemd</strong> : unit file pour lancer <code>bpm run app.py</code> au dÃ©marrage.</li>
+        <li><strong>Nginx</strong> : vhost en reverse proxy vers le port oÃ¹ BPM Ã©coute (ex. 8501), avec proxy WebSocket si nÃ©cessaire.</li>
         <li><strong>SSL</strong> : Certbot (Let's Encrypt) pour HTTPS.</li>
       </ul>
-      <pre><code># Exemple unit systemd (résumé)
+      <pre><code># Exemple unit systemd (rÃ©sumÃ©)
 [Service]
 ExecStart=/usr/bin/python3 -m bpm run /var/www/myapp/app.py
 WorkingDirectory=/var/www/myapp</code></pre>
@@ -69,8 +69,8 @@ RUN pip install -r requirements.txt blueprint-modular
 COPY . .
 EXPOSE 8501
 CMD ["bpm", "run", "app.py", "--server.port=8501"]</code></pre>
-      <p><small>Il n'existe pas de plateforme « BPM Cloud » pour l'instant.</small></p>
-      <p>Voir aussi le guide détaillé dans le repo : <strong>DEPLOIEMENT_DOMAINE.md</strong> (DNS, Nginx, Certbot, scripts de déploiement).</p>
+      <p><small>Il n'existe pas de plateforme Â« BPM Cloud Â» pour l'instant.</small></p>
+      <p>Voir aussi le guide dÃ©taillÃ© dans le repo : <strong>DEPLOIEMENT_DOMAINE.md</strong> (DNS, Nginx, Certbot, scripts de dÃ©ploiement).</p>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>

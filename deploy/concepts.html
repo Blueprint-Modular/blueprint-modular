@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deploy — Concepts — Blueprint Modular</title>
+  <title>Deploy â Concepts â Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../doc.css" />
@@ -51,17 +51,17 @@
       <h2>Architecture</h2>
       <p>En production, une app BPM repose sur :</p>
       <ul>
-        <li><strong>Processus Python</strong> : exécute votre script (<code>bpm run app.py</code> ou équivalent via systemd/supervisor).</li>
+        <li><strong>Processus Python</strong> : exÃ©cute votre script (<code>bpm run app.py</code> ou Ã©quivalent via systemd/supervisor).</li>
         <li><strong>Serveur HTTP</strong> : BPM sert l'UI et les assets.</li>
         <li><strong>Reverse proxy (optionnel)</strong> : Nginx (ou autre) devant pour SSL, domaine, load balancing.</li>
       </ul>
       <h2>Variables d'environnement</h2>
-      <p>Utilisez des variables d'environnement pour la configuration (ports, chemins). Les <strong>secrets</strong> (clés API, mots de passe) : utilisez <code>bpm.secrets</code> ou des variables injectées par le déploiement.</p>
+      <p>Utilisez des variables d'environnement pour la configuration (ports, chemins). Les <strong>secrets</strong> (clÃ©s API, mots de passe) : utilisez <code>bpm.secrets</code> ou des variables injectÃ©es par le dÃ©ploiement.</p>
       <pre><code>import os
 port = int(os.environ.get("BPM_PORT", 8501))</code></pre>
-      <h2>Connexions et état</h2>
-      <p>Pour les connexions DB ou APIs, privilégiez <code>bpm.connection()</code> et le cache (<code>@bpm.cache_resource</code>) pour ne pas rouvrir une connexion à chaque rerun.</p>
-      <p><strong>Suivant :</strong> <a href="platforms.html">Platforms</a> — VPS, Docker, Nginx.</p>
+      <h2>Connexions et Ã©tat</h2>
+      <p>Pour les connexions DB ou APIs, privilÃ©giez <code>bpm.connection()</code> et le cache (<code>@bpm.cache_resource</code>) pour ne pas rouvrir une connexion Ã  chaque rerun.</p>
+      <p><strong>Suivant :</strong> <a href="platforms.html">Platforms</a> â VPS, Docker, Nginx.</p>
       <footer class="doc-footer"><a href="https://github.com/remigit55/blueprint-modular">Voir sur GitHub</a></footer>
     </main>
   </div>

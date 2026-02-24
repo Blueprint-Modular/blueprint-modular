@@ -29,27 +29,22 @@ cd mon-app
 bpm run app.py`;
 
   return (
-    <div className="max-w-3xl">
-      <nav className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
-        <Link href="/docs">Docs</Link>
-        <span className="mx-2">/</span>
-        <span>Getting Started</span>
-      </nav>
-      <h1 className="text-2xl font-bold mb-6" style={{ color: "var(--bpm-accent)" }}>
-        Démarrage
-      </h1>
+    <div className="doc-page">
+      <div className="doc-page-header">
+        <h1>Démarrage</h1>
+      </div>
 
-      <div className="flex gap-2 mb-8">
+      <div className="flex flex-wrap gap-2 mb-8">
         {STEPS.map((s) => (
           <button
             key={s.id}
             type="button"
             onClick={() => setStep(s.id)}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
             style={{
               background: step === s.id ? "var(--bpm-accent)" : "var(--bpm-bg-secondary)",
               color: step === s.id ? "#fff" : "var(--bpm-text-primary)",
-              border: step === s.id ? "none" : "1px solid var(--bpm-border)",
+              borderColor: step === s.id ? "var(--bpm-accent)" : "var(--bpm-border)",
             }}
           >
             {s.id}. {s.title}
@@ -62,13 +57,13 @@ bpm run app.py`;
           <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>
             Choisis ton cas d&apos;usage
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {USE_CASES.map((u) => (
               <button
                 key={u.id}
                 type="button"
                 onClick={() => setUseCase(u.id)}
-                className="p-4 rounded-lg border text-left"
+                className="p-4 rounded-lg border text-left transition-colors"
                 style={{
                   borderColor: useCase === u.id ? "var(--bpm-accent)" : "var(--bpm-border)",
                   background: useCase === u.id ? "var(--bpm-accent-light)" : "var(--bpm-surface)",
@@ -122,8 +117,12 @@ bpm run app.py`;
         </section>
       )}
 
-      <p className="mt-8 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-        <Link href="/docs" className="underline">
+      <p className="mt-8 text-sm">
+        <Link
+          href="/docs"
+          className="hover:underline"
+          style={{ color: "var(--bpm-accent-cyan)", textDecoration: "none" }}
+        >
           Retour à la documentation
         </Link>
       </p>

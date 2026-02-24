@@ -60,10 +60,15 @@ function AIHeaderIconButtons() {
 function getBreadcrumbFromPathname(pathname: string): { label: string; href?: string }[] {
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length === 0) return [];
-  if (segments[0] === "docs" && segments[1] === "components") {
-    const slug = segments[2];
-    if (slug) return [{ label: "Composants", href: "/docs/components" }, { label: `bpm.${slug}` }];
-    return [{ label: "Composants" }];
+  if (segments[0] === "docs") {
+    if (segments[1] === "getting-started")
+      return [{ label: "Docs", href: "/docs" }, { label: "Démarrage" }];
+    if (segments[1] === "components") {
+      const slug = segments[2];
+      if (slug) return [{ label: "Composants", href: "/docs/components" }, { label: `bpm.${slug}` }];
+      return [{ label: "Composants" }];
+    }
+    return [{ label: "Docs" }];
   }
   if (segments[0] === "modules") {
     if (segments.length === 1) return [{ label: "Modules" }];

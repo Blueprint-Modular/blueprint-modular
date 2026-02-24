@@ -33,7 +33,7 @@ export function WikiEditorToolbar({
     const start = ta.selectionStart;
     const end = ta.selectionEnd;
     const selected = value.slice(start, end);
-    const text = selected || placeholder;
+    const text = selected || (placeholder ?? "texte");
     const newValue = value.slice(0, start) + before + text + after + value.slice(end);
     const newStart = start + before.length;
     const newEnd = newStart + text.length;

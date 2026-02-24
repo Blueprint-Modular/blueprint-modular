@@ -269,7 +269,10 @@ function SandboxContent() {
   const theme = (searchParams.get("theme") || searchParams.get("th") || "light").toLowerCase();
   const isDark = theme === "dark";
   const [tableSelectedRow, setTableSelectedRow] = useState<Record<string, unknown> | null>(null);
-  const [mode, setMode] = useState<"selector" | "code">("code");
+  const [mode, setMode] = useState<"selector" | "code" | "ai">("code");
+  const [aiDescription, setAiDescription] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   const [code, setCode] = useState(DEFAULT_CODE);
   const [completionOpen, setCompletionOpen] = useState(false);
   const [completionPrefix, setCompletionPrefix] = useState("");
@@ -878,6 +881,64 @@ function SandboxContent() {
   const hasVariant = component === "panel" || component === "message";
   const hasTitle = component === "panel" || component === "message";
 
+  const generateFromAI = useCallback(async () => {
+    if (!aiDescription.trim() || aiGenerating) return;
+    setAiGenerating(true);
+    setAiError(null);
+    setCode("# Génération en cours…");
+
+    try {
+      const res = await fetch("/api/sandbox/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: aiDescription }),
+      });
+
+      if (!res.ok) {
+        setAiError(`Erreur ${res.status}`);
+        setCode("");
+        return;
+      }
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let full = "";
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          for (const line of chunk.split("\n")) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const data = JSON.parse(line.slice(6)) as { type: string; t?: string; message?: string };
+              if (data.type === "chunk" && data.t) {
+                full += data.t;
+                // Filtre les lignes non-bpm en temps réel
+                const validLines = full
+                  .split("\n")
+                  .filter((l) => l.trim().startsWith("bpm.") || l.trim() === "" || l.trim().startsWith("#"))
+                  .join("\n");
+                setCode(validLines);
+              }
+              if (data.type === "error") {
+                setAiError(data.message ?? "Erreur inconnue");
+              }
+            } catch { /* ignore */ }
+          }
+        }
+      }
+      // Bascule automatiquement en mode code pour voir le résultat
+      setMode("code");
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : "Erreur réseau");
+      setCode("");
+    } finally {
+      setAiGenerating(false);
+    }
+  }, [aiDescription, aiGenerating]);
+
   return (
     <div
       className={isDark ? "theme-dark" : ""}
@@ -942,6 +1003,18 @@ function SandboxContent() {
             }}
           >
             Par composant
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("ai")}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium transition"
+            style={{
+              background: mode === "ai" ? "var(--bpm-accent-cyan)" : "var(--bpm-bg-primary)",
+              color: mode === "ai" ? "#fff" : "var(--bpm-text-primary)",
+              border: "1px solid var(--bpm-border)",
+            }}
+          >
+            ✦ Par IA
           </button>
         </div>
 
@@ -1120,6 +1193,77 @@ function SandboxContent() {
           {content}
         </div>
           </>
+        )}
+
+        {mode === "ai" && (
+          <div
+            className="rounded-lg border p-4 mb-4"
+            style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)" }}
+          >
+            <label
+              className="block text-xs font-semibold mb-2"
+              style={{ color: "var(--bpm-text-secondary)" }}
+            >
+              Décrivez la page que vous voulez générer
+            </label>
+            <textarea
+              value={aiDescription}
+              onChange={(e) => setAiDescription(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  generateFromAI();
+                }
+              }}
+              placeholder={
+                "Exemples :\n" +
+                "• Un dashboard avec le CA mensuel, le taux de marge et un graphique de tendance\n" +
+                "• Une page de suivi de contrats avec statut et date d'échéance\n" +
+                "• Un formulaire de saisie de commande fournisseur"
+              }
+              rows={4}
+              className="w-full rounded border px-3 py-2 text-sm resize-none mb-3"
+              style={{
+                borderColor: "var(--bpm-border)",
+                background: "var(--bpm-bg-secondary)",
+                color: "var(--bpm-text-primary)",
+              }}
+            />
+            {aiError && (
+              <p className="text-sm mb-3" style={{ color: "var(--bpm-accent)" }}>
+                ⚠ {aiError}
+              </p>
+            )}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={generateFromAI}
+                disabled={aiGenerating || !aiDescription.trim()}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition"
+                style={{
+                  background: aiGenerating || !aiDescription.trim()
+                    ? "var(--bpm-border)"
+                    : "var(--bpm-accent-cyan)",
+                  color: aiGenerating || !aiDescription.trim()
+                    ? "var(--bpm-text-secondary)"
+                    : "#fff",
+                  cursor: aiGenerating || !aiDescription.trim() ? "not-allowed" : "pointer",
+                }}
+              >
+                {aiGenerating ? "Génération…" : "✦ Générer"}
+              </button>
+              {aiGenerating && (
+                <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
+                  Qwen2.5 génère votre page (~30-60s)…
+                </span>
+              )}
+              {!aiGenerating && (
+                <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
+                  Cmd+Entrée pour lancer · Le résultat s&apos;ouvrira en mode &quot;Par code&quot;
+                </span>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

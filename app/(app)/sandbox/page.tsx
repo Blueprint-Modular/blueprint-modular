@@ -903,7 +903,13 @@ function SandboxContent() {
       });
 
       if (!res.ok) {
-        setAiError(`Erreur ${res.status}`);
+        const errBody = await res.text();
+        let msg = `Erreur ${res.status}`;
+        try {
+          const data = JSON.parse(errBody) as { error?: string };
+          if (data.error) msg = data.error;
+        } catch { /* garder msg par défaut */ }
+        setAiError(msg);
         setCode("");
         return;
       }
@@ -931,7 +937,12 @@ function SandboxContent() {
                 setCode(validLines);
               }
               if (data.type === "error") {
-                setAiError(data.message ?? "Erreur inconnue");
+                const raw = data.message ?? "Erreur inconnue";
+                const friendly =
+                  /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
+                    ? "Impossible de joindre le service de génération. Vérifiez votre connexion et que le service IA (Qwen) est démarré."
+                    : raw;
+                setAiError(friendly);
               }
             } catch { /* ignore */ }
           }
@@ -940,7 +951,12 @@ function SandboxContent() {
       // Bascule automatiquement en mode code pour voir le résultat
       setMode("code");
     } catch (err) {
-      setAiError(err instanceof Error ? err.message : "Erreur réseau");
+      const raw = err instanceof Error ? err.message : "Erreur réseau";
+      const friendly =
+        /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
+          ? "Impossible de joindre le service de génération. Vérifiez votre connexion et que le service IA (Qwen) est démarré."
+          : raw;
+      setAiError(friendly);
       setCode("");
     } finally {
       setAiGenerating(false);

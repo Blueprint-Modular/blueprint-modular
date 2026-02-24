@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
 import { Panel, Button } from "@/components/bpm";
 import { getGuestArticleBySlug, getGuestWikiArticles, deleteGuestArticle } from "@/lib/wiki-guest";
 
@@ -102,14 +103,6 @@ export default function WikiArticlePage() {
 
   return (
     <div>
-      <div className="doc-breadcrumb" style={{ marginBottom: 8 }}>
-        <Link href="/modules">Modules</Link> → <Link href="/modules/wiki">Wiki</Link> → {article.title}
-      </div>
-      <nav className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
-        <Link href="/modules/wiki">← Wiki</Link>
-        <span className="mx-2">/</span>
-        <span>{article.title}</span>
-      </nav>
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
           {article.title}
@@ -141,7 +134,7 @@ export default function WikiArticlePage() {
           color: "var(--bpm-text-primary)",
         }}
       >
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight]}>
           {article.content || "*Aucun contenu.*"}
         </ReactMarkdown>
       </div>

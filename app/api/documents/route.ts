@@ -31,22 +31,42 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!result) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   const { user } = result;
 
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
+  }
   const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) return NextResponse.json({ error: "file required" }, { status: 400 });
+  if (!file || file.size === 0) return NextResponse.json({ error: "Aucun fichier fourni" }, { status: 400 });
   if (file.type !== "application/pdf")
-    return NextResponse.json({ error: "Only PDF files are accepted" }, { status: 400 });
+    return NextResponse.json({ error: "Seuls les fichiers PDF sont acceptés" }, { status: 400 });
+
   const mime = file.type;
   const ext = path.extname(file.name) || ".pdf";
   const baseDir = path.join(process.cwd(), "uploads", user.id);
-  await mkdir(baseDir, { recursive: true });
   const docId = crypto.randomUUID();
   const filePath = path.join(baseDir, `${docId}${ext}`);
-  const buf = Buffer.from(await file.arrayBuffer());
-  await writeFile(filePath, buf);
+  let buf: Buffer;
+  try {
+    buf = Buffer.from(await file.arrayBuffer());
+  } catch {
+    return NextResponse.json({ error: "Impossible de lire le fichier" }, { status: 400 });
+  }
+
+  try {
+    await mkdir(baseDir, { recursive: true });
+    await writeFile(filePath, buf);
+  } catch (err) {
+    console.error("[documents] Write file failed:", err instanceof Error ? err.message : String(err));
+    return NextResponse.json(
+      { error: "Impossible d'enregistrer le fichier (droits ou espace disque). Contactez l'administrateur." },
+      { status: 500 }
+    );
+  }
 
   let doc = await prisma.document.create({
     data: {
@@ -139,3 +159,4 @@ Ne retourne rien d'autre que ce JSON. Pas de texte avant ou après. Pas de balis
 
   return NextResponse.json(doc);
 }
+

@@ -8,6 +8,9 @@ import { analyzeContract, type ContractType } from "@/lib/ai/contract-analyzer";
 
 export const dynamic = "force-dynamic";
 
+/** Si vous obtenez 413 (Payload Too Large), la limite peut venir du proxy/serveur (ex. 1 Mo).
+ *  Augmentez la limite côté hébergement (ex. client_max_body_size dans nginx) si besoin. */
+
 const ALLOWED_MIMES = [
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -63,25 +66,36 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!result) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   const { user } = result;
 
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
+  }
   const file = formData.get("file") as File | null;
   const workspace = (formData.get("workspace") as string) || "nxtfood";
   const contractType = (formData.get("contractType") as string) || "other";
 
-  if (!file || file.size === 0) return NextResponse.json({ error: "file required" }, { status: 400 });
-  if (file.size > MAX_FILE_BYTES) return NextResponse.json({ error: "File too large" }, { status: 400 });
+  if (!file || file.size === 0) return NextResponse.json({ error: "Aucun fichier fourni" }, { status: 400 });
+  if (file.size > MAX_FILE_BYTES)
+    return NextResponse.json({ error: `Fichier trop volumineux (max ${MAX_FILE_SIZE_MB} Mo)` }, { status: 400 });
   if (!ALLOWED_MIMES.includes(file.type))
-    return NextResponse.json({ error: "Only PDF, DOCX and TXT are accepted" }, { status: 400 });
+    return NextResponse.json({ error: "Seuls PDF, DOCX et TXT sont acceptés" }, { status: 400 });
   if (!["nxtfood", "beam"].includes(workspace))
-    return NextResponse.json({ error: "workspace must be nxtfood or beam" }, { status: 400 });
+    return NextResponse.json({ error: "Workspace invalide (nxtfood ou beam)" }, { status: 400 });
   const ct = contractType as ContractType;
   if (!["supplier", "cgv", "other"].includes(ct))
-    return NextResponse.json({ error: "contractType must be supplier, cgv or other" }, { status: 400 });
+    return NextResponse.json({ error: "Type de contrat invalide (supplier, cgv, other)" }, { status: 400 });
 
-  const buf = Buffer.from(await file.arrayBuffer());
+  let buf: Buffer;
+  try {
+    buf = Buffer.from(await file.arrayBuffer());
+  } catch {
+    return NextResponse.json({ error: "Impossible de lire le fichier" }, { status: 400 });
+  }
   const fileHash = computeFileHash(buf);
   const existing = await prisma.contract.findFirst({
     where: { fileHash, uploadedById: user.id },
@@ -89,9 +103,19 @@ export async function POST(request: Request) {
   if (existing) return NextResponse.json({ error: "Un contrat avec le même fichier existe déjà" }, { status: 409 });
 
   const baseDir = path.join(process.cwd(), "uploads", "contracts", user.id);
-  await mkdir(baseDir, { recursive: true });
   const ext = path.extname(file.name) || ".pdf";
   const title = path.basename(file.name, ext) || file.name;
+
+  try {
+    await mkdir(baseDir, { recursive: true });
+  } catch (err) {
+    console.error("[contracts] mkdir failed:", err instanceof Error ? err.message : String(err));
+    return NextResponse.json(
+      { error: "Impossible de créer le dossier d'upload. Contactez l'administrateur." },
+      { status: 500 }
+    );
+  }
+
   const contract = await prisma.contract.create({
     data: {
       title,
@@ -107,7 +131,17 @@ export async function POST(request: Request) {
     },
   });
   const filePath = path.join(baseDir, `${contract.id}${ext}`);
-  await writeFile(filePath, buf);
+  try {
+    await writeFile(filePath, buf);
+  } catch (err) {
+    console.error("[contracts] writeFile failed:", err instanceof Error ? err.message : String(err));
+    await prisma.contract.update({
+      where: { id: contract.id },
+      data: { status: "error", analysisProgress: 0 },
+    });
+    const updated = await prisma.contract.findUniqueOrThrow({ where: { id: contract.id } });
+    return NextResponse.json(updated);
+  }
   await prisma.contract.update({
     where: { id: contract.id },
     data: { filePath },
@@ -129,7 +163,8 @@ export async function POST(request: Request) {
         analyzedAt: new Date(),
       },
     });
-  } catch {
+  } catch (err) {
+    console.error("[contracts] analyse failed:", err instanceof Error ? err.message : String(err));
     await prisma.contract.update({
       where: { id: contract.id },
       data: { status: "error", analysisProgress: 0 },

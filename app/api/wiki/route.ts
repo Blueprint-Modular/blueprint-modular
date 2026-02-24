@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionOrTestUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { normalizeSlug } from "@/lib/slug";
 
 export async function GET(request: Request) {
   const result = await getSessionOrTestUser();
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
   if (!title || !slug) {
     return NextResponse.json({ error: "title and slug required" }, { status: 400 });
   }
-  const normalizedSlug = slug.replace(/\s+/g, "-").toLowerCase().replace(/[^a-z0-9-]/g, "");
+  const normalizedSlug = normalizeSlug(slug);
   const existing = await prisma.wikiArticle.findUnique({ where: { slug: normalizedSlug } });
   if (existing) {
     return NextResponse.json({ error: "slug already exists" }, { status: 409 });

@@ -25,7 +25,7 @@ export default function ModulesPage() {
           <span className="doc-badge doc-badge-category">Vue d&apos;ensemble</span>
         </div>
       </div>
-      <div className="grid gap-4 mb-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 mb-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
         {modules.map((mod) => {
           const Icon = mod.icon;
           const hasSimulatorDoc = "simulatorAndDoc" in mod && (mod as { simulatorAndDoc?: boolean }).simulatorAndDoc;
@@ -42,21 +42,22 @@ export default function ModulesPage() {
                   {mod.label}
                 </span>
               </div>
-              <p className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: "52px" }}>
-                {mod.description}
-              </p>
-              <div className="flex flex-wrap gap-3 mt-3" style={{ marginLeft: "52px" }}>
+              <div className="flex flex-col flex-1 min-h-0">
+                <p className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: "52px" }}>
+                  {mod.description}
+                </p>
+                <div className="flex flex-wrap gap-3 mt-auto pt-3" style={{ marginLeft: "52px" }}>
                 {hasSimulatorDoc ? (
                   <>
                     <Link
-                      href={mod.href}
+                      href={`${mod.href}/simulateur`}
                       className="text-sm font-medium"
                       style={{ color: "var(--bpm-accent-cyan)" }}
                     >
                       Simulateur
                     </Link>
                     <Link
-                      href={`${mod.href}#documentation`}
+                      href={`${mod.href}/documentation`}
                       className="text-sm font-medium"
                       style={{ color: "var(--bpm-accent-cyan)" }}
                     >
@@ -72,18 +73,21 @@ export default function ModulesPage() {
                     Ouvrir →
                   </Link>
                 )}
+                </div>
               </div>
             </>
           );
+          const cardClassName = "flex flex-col p-4 rounded-xl border transition hover:border-[var(--bpm-accent-cyan)] hover:shadow-md min-h-[140px]";
+          const cardStyle = {
+            background: "var(--bpm-bg-primary)",
+            borderColor: "var(--bpm-border)",
+          };
           if (hasSimulatorDoc) {
             return (
               <div
                 key={mod.href}
-                className="block p-4 rounded-xl border transition hover:border-[var(--bpm-accent-cyan)] hover:shadow-md"
-                style={{
-                  background: "var(--bpm-bg-primary)",
-                  borderColor: "var(--bpm-border)",
-                }}
+                className={`block ${cardClassName}`}
+                style={cardStyle}
               >
                 {cardContent}
               </div>
@@ -93,10 +97,9 @@ export default function ModulesPage() {
             <Link
               key={mod.href}
               href={mod.href}
-              className="block p-4 rounded-xl border transition hover:border-[var(--bpm-accent-cyan)] hover:shadow-md"
+              className={`block ${cardClassName}`}
               style={{
-                background: "var(--bpm-bg-primary)",
-                borderColor: "var(--bpm-border)",
+                ...cardStyle,
                 color: "inherit",
                 textDecoration: "none",
               }}

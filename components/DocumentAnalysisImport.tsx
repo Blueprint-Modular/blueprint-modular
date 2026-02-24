@@ -162,11 +162,7 @@ export function DocumentAnalysisImport({
             type="button"
             onClick={handleSubmit}
             disabled={disabled || selectedFiles.length === 0}
-            className="px-4 py-2 rounded-lg font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed doc-import-analyze-button"
-            style={{
-              background: "var(--bpm-accent-cyan)",
-              color: "var(--bpm-bg)",
-            }}
+            className="btn-secondary px-4 py-2 rounded-lg font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed doc-import-analyze-button"
           >
             {disabled ? "Analyse en cours..." : buttonLabel}
           </button>

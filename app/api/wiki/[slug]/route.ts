@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionOrTestUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { normalizeSlug } from "@/lib/slug";
 
 export async function GET(
   _request: Request,
@@ -9,7 +10,8 @@ export async function GET(
   const result = await getSessionOrTestUser();
   if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { user } = result;
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({
     where: user
       ? { slug, OR: [{ isPublished: true }, { authorId: user.id }] }
@@ -30,7 +32,8 @@ export async function PUT(
   const result = await getSessionOrTestUser();
   if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { user } = result;
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({ where: { slug, authorId: user.id } });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const body = (await request.json()) as { title?: string; content?: string; isPublished?: boolean };
@@ -59,7 +62,8 @@ export async function DELETE(
   const result = await getSessionOrTestUser();
   if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { user } = result;
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({ where: { slug } });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const canDelete = article.authorId === user.id || user.role === "ADMIN" || user.role === "OWNER";

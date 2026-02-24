@@ -230,7 +230,7 @@
   40% { transform: scale(1.2); opacity: 1; }
 }
 
-.bpm-ai-chat-input-wrap { flex-shrink: 0; padding: 0.5rem 1rem 0.75rem; background: transparent; position: relative; }
+.bpm-ai-chat-input-wrap { flex-shrink: 0; padding: 0.5rem 0 0.75rem; background: transparent; position: relative; }
 .bpm-ai-suggestions-tooltip {
   position: absolute; bottom: 100%; left: 0; right: 0; margin-bottom: 6px; max-height: 280px; overflow-y: auto;
   padding: 4px 0; background: var(--bpm-bg-primary); border: 1px solid var(--bpm-border); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
@@ -260,14 +260,12 @@
   border: 1px solid var(--bpm-border); border-radius: 10px; background: var(--bpm-bg-primary); overflow: hidden;
 }
 /* Focus subtil (comme Oliver) : bordure neutre qui se renforce légèrement + halo discret couleur principale */
-/* Focus : couleur principale + légère ombre grise (comme Oliver, sans décalage de mise en page) */
+/* Focus : bordure même bleu que le bouton Envoyer actif (--bpm-accent-cyan) */
 .bpm-ai-chat-input-box:focus-within {
   border-color: var(--bpm-accent-cyan);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 [data-theme="dark"] .bpm-ai-chat-input-box:focus-within {
   border-color: var(--bpm-accent-cyan);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 .bpm-ai-chat-input-wrap-inner { flex: 1; position: relative; display: flex; align-items: flex-end; min-height: 70px; }
 .bpm-ai-chat-input-highlight {

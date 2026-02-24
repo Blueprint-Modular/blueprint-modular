@@ -114,8 +114,12 @@ export default function ContractsPage() {
           const created = await res.json();
           setContracts((prev) => [flattenContract(created as ContractRow), ...prev]);
         } else {
+          if (res.status === 413) {
+            alert("Fichier trop volumineux pour l'upload (limite du serveur). Réduisez la taille du fichier ou compressez le PDF.");
+            continue;
+          }
           const err = await res.json().catch(() => ({}));
-          alert(err.error ?? "Erreur upload");
+          alert((err as { error?: string }).error ?? "Erreur upload");
         }
       }
     } finally {

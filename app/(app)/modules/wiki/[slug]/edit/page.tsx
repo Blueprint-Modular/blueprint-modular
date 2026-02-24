@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Panel, Toggle } from "@/components/bpm";
+import { WikiEditorToolbar } from "@/components/wiki/WikiEditorToolbar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 export default function WikiEditPage() {
   const params = useParams();
@@ -23,6 +25,8 @@ export default function WikiEditPage() {
   const [aiNotes, setAiNotes] = useState("");
   const [aiArticleType, setAiArticleType] = useState<"guide" | "procedure" | "best-practice" | "reference">("guide");
   const [aiWorkspace, setAiWorkspace] = useState<"nxtfood" | "beam" | "shared">("shared");
+
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const streamWikiGenerate = async (body: Record<string, unknown>) => {
     setAiLoading(true);
@@ -159,23 +163,12 @@ export default function WikiEditPage() {
           <Toggle label="Publié" value={isPublished} onChange={setIsPublished} />
         </div>
 
-        <div className="flex flex-wrap gap-2 border-b pb-2" style={{ borderColor: "var(--bpm-border)" }}>
-          <button
-            type="button"
-            onClick={() => setPreview(false)}
-            className={`px-3 py-1 rounded text-sm ${!preview ? "btn-primary" : ""}`}
-            style={preview ? { background: "transparent", color: "var(--bpm-text-secondary)" } : undefined}
-          >
-            Écrire
-          </button>
-          <button
-            type="button"
-            onClick={() => setPreview(true)}
-            className={`px-3 py-1 rounded text-sm ${preview ? "btn-primary" : ""}`}
-            style={!preview ? { background: "transparent", color: "var(--bpm-text-secondary)" } : undefined}
-          >
-            Prévisualiser
-          </button>
+        <div className="flex flex-wrap items-center gap-2 border-b pb-2" style={{ borderColor: "var(--bpm-border)" }}>
+          <Toggle
+            label={preview ? "Prévisualisation : oui" : "Prévisualisation : non"}
+            value={preview}
+            onChange={setPreview}
+          />
           <button
             type="button"
             onClick={() => setAiPanelOpen((v) => !v)}
@@ -256,16 +249,24 @@ export default function WikiEditPage() {
             className="min-h-[400px] p-4 rounded border prose prose-sm max-w-none"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content || "*Aucun contenu.*"}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{content || "*Aucun contenu.*"}</ReactMarkdown>
           </div>
         ) : (
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={18}
-            className="w-full px-3 py-2 rounded border font-mono text-sm min-h-[400px]"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-          />
+          <>
+            <WikiEditorToolbar
+              textareaRef={contentTextareaRef}
+              value={content}
+              onChange={setContent}
+            />
+            <textarea
+              ref={contentTextareaRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={18}
+              className="w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            />
+          </>
         )}
 
         <div className="flex gap-3">

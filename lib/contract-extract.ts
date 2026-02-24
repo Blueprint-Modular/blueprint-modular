@@ -1,5 +1,6 @@
 /**
  * Extraction de texte depuis PDF et DOCX (côté serveur).
+ * pdf-parse v2 : PDFParse({ data }) + getText() → TextResult.text
  */
 
 export async function extractTextFromBuffer(
@@ -8,20 +9,25 @@ export async function extractTextFromBuffer(
   filename: string
 ): Promise<string> {
   if (mimeType === "application/pdf" || filename.toLowerCase().endsWith(".pdf")) {
-    const pdfParse = (await import("pdf-parse")) as {
-      PDFParse?: new (opts: { data: Buffer }) => { getText: () => Promise<{ text: string }> };
-      default?: (buf: Buffer) => Promise<{ text: string }>;
-    };
-    if (pdfParse.PDFParse) {
-      const parser = new pdfParse.PDFParse({ data: buffer });
-      const result = await parser.getText();
-      return result?.text ?? "";
+    try {
+      const pdf = (await import("pdf-parse")) as {
+        PDFParse?: new (opts: { data: Buffer | Uint8Array }) => { getText: () => Promise<{ text: string }> };
+        default?: (buf: Buffer) => Promise<{ text?: string }>;
+      };
+      if (pdf?.PDFParse) {
+        const parser = new pdf.PDFParse({ data: buffer });
+        const result = await parser.getText();
+        return (result as { text?: string })?.text ?? "";
+      }
+      if (typeof pdf?.default === "function") {
+        const data = await pdf.default(buffer);
+        return data?.text ?? "";
+      }
+    } catch (err) {
+      console.error("[contract-extract] PDF extraction failed:", err instanceof Error ? err.message : String(err));
+      return "";
     }
-    if (pdfParse.default) {
-      const data = await pdfParse.default(buffer);
-      return data?.text ?? "";
-    }
-    throw new Error("pdf-parse API non reconnue");
+    return "";
   }
 
   if (

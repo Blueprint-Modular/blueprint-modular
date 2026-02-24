@@ -146,8 +146,8 @@ export function Sidebar() {
       >
         {/* Header : logo + collapse (style type PortfolioManagement : logo centré en haut) */}
         <div
-          className="relative flex flex-col items-center justify-center px-4 pb-5 border-b shrink-0"
-          style={{ borderColor: "var(--bpm-sidebar-border)", paddingTop: "2.5rem" }}
+          className="relative flex flex-col items-center justify-center px-4 pb-5 shrink-0"
+          style={{ paddingTop: "2.5rem" }}
         >
           <Link href="/dashboard" className="flex flex-col items-center justify-center w-full min-h-[2.5rem] gap-1">
             {collapsed ? (
@@ -196,7 +196,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation avec titre "Navigation" */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-0.5">
+        <nav className="flex-1 overflow-y-auto p-3 pt-5 space-y-0.5">
           {!collapsed && (
             <h3 className="text-xs font-normal uppercase tracking-wider mb-2 px-3" style={{ color: "var(--bpm-sidebar-text-muted)" }}>
               Navigation

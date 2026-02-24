@@ -31,13 +31,12 @@ export function StartBuildingBlock() {
 
   return (
     <div
-      className="rounded-xl p-8 mb-12 max-w-2xl mx-auto text-center"
+      className="rounded-xl p-8 mb-12 max-w-2xl mx-auto text-center mt-[4rem] md:mt-[8rem]"
       style={{
         background: "var(--bpm-bg-primary)",
-        marginTop: "8rem",
       }}
     >
-      <h2 className="font-bold" style={{ color: "var(--bpm-text-primary)", fontSize: "3rem", lineHeight: "3rem", marginTop: "13rem", marginBottom: "2rem" }}>
+      <h2 className="font-bold mt-[6.5rem] md:mt-[13rem]" style={{ color: "var(--bpm-text-primary)", fontSize: "3rem", lineHeight: "3rem", marginBottom: "2rem" }}>
         Commencer à construire votre application avec <code className="px-2.5 py-1.5 rounded align-middle text-xl font-medium" style={{ background: "var(--bpm-bg-secondary)" }}>bpm.*</code>
       </h2>
       <div

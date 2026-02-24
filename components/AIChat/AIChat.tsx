@@ -537,7 +537,7 @@ export function AIChat({
               <code>$</code> Données : <code>$wiki</code>, <code>$doc</code>, <code>$metric</code>, <code>$table</code>, <code>$chart</code>.
             </p>
             <p>
-              <code>#</code> Filtres : <code>#Energie</code>, <code>#Minier</code>…
+              <code>#</code> Filtres : <code>#Carrefour</code>, <code>#Signé</code>…
             </p>
           </div>
         )}

@@ -27,7 +27,7 @@ export default function IAPage() {
           </div>
           <h1 style={{ margin: 0 }}>{ASSISTANT_NAME}</h1>
           <p className="doc-description" style={{ margin: "0.25rem 0 0" }}>
-            Assistant conversationnel (Qwen par défaut, Claude en fallback). Contexte Wiki et Documents. Qwen ⏱ 1 min) &gt; Voir exactement ce que l&apos;on a fait pour Oliver dans Portfolio Manager
+            Assistant conversationnel. Contexte Wiki et Documents.
           </p>
           <div className="doc-meta" style={{ marginTop: 4 }}>
             <span className="doc-badge doc-badge-category">Qwen</span>

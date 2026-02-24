@@ -260,13 +260,14 @@
   border: 1px solid var(--bpm-border); border-radius: 10px; background: var(--bpm-bg-primary); overflow: hidden;
 }
 /* Focus subtil (comme Oliver) : bordure neutre qui se renforce légèrement + halo discret couleur principale */
+/* Focus : couleur principale + légère ombre grise (comme Oliver, sans décalage de mise en page) */
 .bpm-ai-chat-input-box:focus-within {
-  border-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0 2px rgba(0, 163, 224, 0.1);
+  border-color: var(--bpm-accent-cyan);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 [data-theme="dark"] .bpm-ai-chat-input-box:focus-within {
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 0 2px rgba(0, 163, 224, 0.15);
+  border-color: var(--bpm-accent-cyan);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 .bpm-ai-chat-input-wrap-inner { flex: 1; position: relative; display: flex; align-items: flex-end; min-height: 70px; }
 .bpm-ai-chat-input-highlight {
@@ -278,7 +279,7 @@
 .bpm-ai-chat-input-highlight::-webkit-scrollbar { display: none; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="openai"] { color: #10A37F; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="claude"] { color: #F97316; }
-.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="vllm"] { color: #10A37F; }
+.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="vllm"] { color: #6037DB; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="qwen"] { color: #6037DB; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="mistral"] { color: #FA4C0A; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="gemini"] { color: #4285F4; }
@@ -307,8 +308,8 @@
 .bpm-ai-chat-pj-button svg { width: 24px; height: 24px; pointer-events: none; }
 .bpm-ai-chat-send-arrow {
   display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0.5rem;
-  border: none; border-radius: 8px; background: var(--bpm-bg-secondary); color: #1f1f1f; cursor: pointer; flex-shrink: 0;
+  border: none; border-radius: 8px; background: var(--bpm-accent-cyan); color: #fff; cursor: pointer; flex-shrink: 0;
 }
-.bpm-ai-chat-send-arrow:hover:not(:disabled) { filter: brightness(0.96); }
-.bpm-ai-chat-send-arrow:disabled { opacity: 0.5; cursor: not-allowed; }
+.bpm-ai-chat-send-arrow:hover:not(:disabled) { filter: brightness(1.08); }
+.bpm-ai-chat-send-arrow:disabled { opacity: 0.45; cursor: not-allowed; }
 .bpm-ai-chat-send-arrow svg { width: 24px; height: 24px; pointer-events: none; }

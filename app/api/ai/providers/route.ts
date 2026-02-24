@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionOrTestUser } from "@/lib/auth";
 
 const PROVIDERS = [
-  { provider_name: "vllm", label: "Qwen", color: "#10A37F", is_configured: true, is_active: true },
+  { provider_name: "vllm", label: "Qwen", color: "#6037DB", is_configured: true, is_active: true },
   { provider_name: "qwen", label: "Qwen", color: "#6037DB", is_configured: true, is_active: true },
   { provider_name: "mistral", label: "Mistral", color: "#FA4C0A", is_configured: true, is_active: true },
   { provider_name: "claude", label: "Claude", color: "#F97316", is_configured: !!process.env.ANTHROPIC_API_KEY, is_active: true },

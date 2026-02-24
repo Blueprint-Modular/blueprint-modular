@@ -18,7 +18,7 @@ const PROVIDER_ALIAS: Record<string, string> = {
 
 const AT_COLORS: Record<string, string> = {
   claude: "#F97316",
-  vllm: "#10A37F",
+  vllm: "#6037DB", /* Qwen : violet */
   qwen: "#6037DB",
   mistral: "#FA4C0A",
 };

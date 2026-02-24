@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSessionOrTestUser } from "@/lib/auth";
 import { vllmClient } from "@/lib/ai/vllm-client";
 
 export const dynamic = "force-dynamic";
@@ -60,8 +59,8 @@ Règles strictes :
 - Maximum 15 lignes de code`;
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) return new Response("Unauthorized", { status: 401 });
+  const result = await getSessionOrTestUser();
+  if (!result) return new Response("Unauthorized", { status: 401 });
 
   const { description } = (await req.json().catch(() => ({}))) as { description?: string };
   if (!description?.trim()) {

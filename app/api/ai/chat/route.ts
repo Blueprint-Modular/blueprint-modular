@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSessionOrTestUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Anthropic from "@anthropic-ai/sdk";
 import { vllmClient } from "@/lib/ai/vllm-client";
@@ -37,12 +36,9 @@ async function saveConversationTurn(
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-  const user = await prisma.user.findUnique({ where: { email: session.user.email } });
-  if (!user) return new Response("Unauthorized", { status: 401 });
+  const result = await getSessionOrTestUser();
+  if (!result) return new Response("Unauthorized", { status: 401 });
+  const { user } = result;
 
   const body = await req.json().catch(() => ({}));
   const {

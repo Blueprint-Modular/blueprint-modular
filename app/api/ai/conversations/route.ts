@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSessionOrTestUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const user = await prisma.user.findUnique({ where: { email: session.user.email } });
-  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const result = await getSessionOrTestUser();
+  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user } = result;
   const list = await prisma.aiConversation.findMany({
     where: { userId: user.id },
     orderBy: { updatedAt: "desc" },
@@ -27,10 +25,9 @@ export async function GET() {
 }
 
 export async function POST() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const user = await prisma.user.findUnique({ where: { email: session.user.email } });
-  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const result = await getSessionOrTestUser();
+  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user } = result;
   const conv = await prisma.aiConversation.create({
     data: { userId: user.id },
   });

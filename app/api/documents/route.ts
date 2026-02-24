@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionOrTestUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { vllmClient } from "@/lib/ai/vllm-client";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
@@ -80,39 +81,54 @@ Ne retourne rien d'autre que ce JSON. Pas de texte avant ou après. Pas de balis
     });
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (apiKey && rawText.length > 0) {
-      const Anthropic = (await import("@anthropic-ai/sdk")).default;
-      const client = new Anthropic({ apiKey });
-      const message = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 2048,
-        messages: [{ role: "user", content: `${extractPrompt}\n\n---\nDocument:\n${rawText.slice(0, 80000)}` }],
-      });
-      const textBlock = message.content.find((b) => b.type === "text") as { type: "text"; text: string } | undefined;
-      const jsonStr = textBlock?.text ?? "";
-      const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
-      const parsed = jsonMatch ? (JSON.parse(jsonMatch[0]) as Record<string, unknown>) : null;
-      if (parsed) {
-        const contractDate = parsed.contract_date ? new Date(String(parsed.contract_date)) : null;
-        const signatureDate = parsed.signature_date ? new Date(String(parsed.signature_date)) : null;
-        const terminationDate = parsed.termination_date ? new Date(String(parsed.termination_date)) : null;
-        doc = await prisma.document.update({
-          where: { id: doc.id },
-          data: {
-            analysisStatus: "done",
-            supplier: typeof parsed.supplier === "string" ? parsed.supplier : null,
-            client: typeof parsed.client === "string" ? parsed.client : null,
-            contractDate: contractDate && !Number.isNaN(contractDate.getTime()) ? contractDate : null,
-            signatureDate: signatureDate && !Number.isNaN(signatureDate.getTime()) ? signatureDate : null,
-            terminationDate: terminationDate && !Number.isNaN(terminationDate.getTime()) ? terminationDate : null,
-            summary: typeof parsed.summary === "string" ? parsed.summary : null,
-            keyPoints: Array.isArray(parsed.key_points) ? JSON.stringify(parsed.key_points) : null,
-            commitments: Array.isArray(parsed.commitments) ? JSON.stringify(parsed.commitments) : null,
-          },
+    let parsed: Record<string, unknown> | null = null;
+
+    if (rawText.length > 0) {
+      if (apiKey) {
+        const Anthropic = (await import("@anthropic-ai/sdk")).default;
+        const client = new Anthropic({ apiKey });
+        const message = await client.messages.create({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 2048,
+          messages: [{ role: "user", content: `${extractPrompt}\n\n---\nDocument:\n${rawText.slice(0, 80000)}` }],
         });
+        const textBlock = message.content.find((b) => b.type === "text") as { type: "text"; text: string } | undefined;
+        const jsonStr = textBlock?.text ?? "";
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+        parsed = jsonMatch ? (JSON.parse(jsonMatch[0]) as Record<string, unknown>) : null;
       } else {
-        await prisma.document.update({ where: { id: doc.id }, data: { analysisStatus: "done" } });
+        // Fallback : analyse via Ollama (Qwen2.5) si pas de clé Anthropic
+        try {
+          const { content } = await vllmClient.chat(
+            [{ role: "user", content: `${extractPrompt}\n\n---\nDocument:\n${rawText.slice(0, 40000)}` }],
+            { timeout: 120_000 }
+          );
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          parsed = jsonMatch ? (JSON.parse(jsonMatch[0]) as Record<string, unknown>) : null;
+        } catch {
+          parsed = null;
+        }
       }
+    }
+
+    if (parsed) {
+      const contractDate = parsed.contract_date ? new Date(String(parsed.contract_date)) : null;
+      const signatureDate = parsed.signature_date ? new Date(String(parsed.signature_date)) : null;
+      const terminationDate = parsed.termination_date ? new Date(String(parsed.termination_date)) : null;
+      doc = await prisma.document.update({
+        where: { id: doc.id },
+        data: {
+          analysisStatus: "done",
+          supplier: typeof parsed.supplier === "string" ? parsed.supplier : null,
+          client: typeof parsed.client === "string" ? parsed.client : null,
+          contractDate: contractDate && !Number.isNaN(contractDate.getTime()) ? contractDate : null,
+          signatureDate: signatureDate && !Number.isNaN(signatureDate.getTime()) ? signatureDate : null,
+          terminationDate: terminationDate && !Number.isNaN(terminationDate.getTime()) ? terminationDate : null,
+          summary: typeof parsed.summary === "string" ? parsed.summary : null,
+          keyPoints: Array.isArray(parsed.key_points) ? JSON.stringify(parsed.key_points) : null,
+          commitments: Array.isArray(parsed.commitments) ? JSON.stringify(parsed.commitments) : null,
+        },
+      });
     } else {
       await prisma.document.update({ where: { id: doc.id }, data: { analysisStatus: "done" } });
     }

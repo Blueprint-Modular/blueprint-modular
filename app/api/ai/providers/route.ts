@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSessionOrTestUser } from "@/lib/auth";
 
 const PROVIDERS = [
   { provider_name: "vllm", label: "Ollama", color: "#10A37F", is_configured: true, is_active: true },
@@ -13,7 +12,7 @@ const PROVIDERS = [
 ];
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const result = await getSessionOrTestUser();
+  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   return NextResponse.json({ providers: PROVIDERS, default_provider: "vllm" });
 }

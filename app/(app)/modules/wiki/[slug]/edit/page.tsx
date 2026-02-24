@@ -199,7 +199,7 @@ export default function WikiEditPage() {
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+                size="small"
                 disabled={aiLoading || !content.trim()}
                 onClick={handleFormatWithAi}
               >
@@ -240,7 +240,7 @@ export default function WikiEditPage() {
                 </select>
                 <Button
                   type="button"
-                  size="sm"
+                  size="small"
                   disabled={aiLoading || !aiNotes.trim()}
                   onClick={handleGenerateFromNotes}
                 >

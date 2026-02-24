@@ -11,6 +11,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { getGuestWikiArticles, addGuestArticle } from "@/lib/wiki-guest";
 import { normalizeSlug } from "@/lib/slug";
+import { VoiceRecorder } from "@/components/ai/VoiceRecorder";
 
 function slugFromTitle(title: string): string {
   return normalizeSlug(title);
@@ -28,6 +29,10 @@ export default function WikiNewPage() {
   const [parents, setParents] = useState<{ id: string; title: string; slug: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [articleType, setArticleType] = useState<"guide" | "procedure" | "best-practice" | "reference">("procedure");
+  const [workspace, setWorkspace] = useState<"nxtfood" | "beam" | "shared">("nxtfood");
+  const [generating, setGenerating] = useState(false);
 
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -91,6 +96,50 @@ export default function WikiNewPage() {
     }
   };
 
+  const handleVoiceTranscription = async (transcription: string) => {
+    setVoiceError(null);
+    setGenerating(true);
+    setContent("# Génération en cours…\n\n");
+
+    try {
+      const res = await fetch("/api/wiki/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: transcription, articleType, workspace }),
+      });
+      if (!res.ok) throw new Error(`Erreur génération ${res.status}`);
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let full = "";
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          for (const line of decoder.decode(value, { stream: true }).split("\n")) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const data = JSON.parse(line.slice(6)) as { type: string; t?: string };
+              if (data.type === "chunk" && data.t) {
+                full += data.t;
+                setContent(full);
+              }
+            } catch { /* ignore */ }
+          }
+        }
+      }
+      if (!title.trim()) {
+        const firstH1 = full.split("\n").find((l) => l.startsWith("# "));
+        if (firstH1) handleTitleChange(firstH1.replace(/^#+\s*/, "").trim());
+      }
+    } catch (err) {
+      setVoiceError(err instanceof Error ? err.message : "Erreur génération");
+      setContent("");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <div>
       <div className="doc-breadcrumb" style={{ marginBottom: 8 }}>
@@ -110,6 +159,64 @@ export default function WikiNewPage() {
           {error}
         </Panel>
       )}
+
+      {/* Bloc vocal */}
+      <div
+        className="rounded-lg border p-4 mb-6"
+        style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)" }}
+      >
+        <p className="text-sm font-semibold mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+          ✦ Générer depuis une note vocale
+        </p>
+        <div className="flex gap-3 mb-3 flex-wrap">
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Type</label>
+            <select
+              value={articleType}
+              onChange={(e) => setArticleType(e.target.value as typeof articleType)}
+              className="px-2 py-1.5 rounded border text-sm"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-primary)" }}
+            >
+              <option value="procedure">Procédure</option>
+              <option value="guide">Guide</option>
+              <option value="best-practice">Bonne pratique</option>
+              <option value="reference">Référence</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Workspace</label>
+            <select
+              value={workspace}
+              onChange={(e) => setWorkspace(e.target.value as typeof workspace)}
+              className="px-2 py-1.5 rounded border text-sm"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-primary)" }}
+            >
+              <option value="nxtfood">NXTFOOD</option>
+              <option value="beam">BEAM</option>
+              <option value="shared">Partagé</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <VoiceRecorder
+            onTranscription={handleVoiceTranscription}
+            onError={setVoiceError}
+            label="Dicter l'article"
+            disabled={generating}
+          />
+          {generating && (
+            <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+              ✦ Génération Qwen3…
+            </span>
+          )}
+        </div>
+        {voiceError && (
+          <p className="text-sm mt-2" style={{ color: "var(--bpm-accent)" }}>⚠ {voiceError}</p>
+        )}
+        <p className="text-xs mt-2" style={{ color: "var(--bpm-text-secondary)" }}>
+          Décrivez oralement votre procédure ou guide → Whisper transcrit → Qwen3 structure l&apos;article.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl">
         <label className="block">

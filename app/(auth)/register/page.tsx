@@ -1,19 +1,22 @@
-import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth";
+import { RegisterPage } from "@/components/auth";
 
-export default function RegisterPage() {
+type Props = { searchParams: Promise<{ callbackUrl?: string }> };
+
+export default async function RegisterPageRoute({ searchParams }: Props) {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/dashboard");
+
+  const params = await searchParams;
+  const callbackUrl = params?.callbackUrl ? decodeURIComponent(params.callbackUrl) : null;
+
   return (
-    <main className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}>
-      <div className="w-full max-w-sm space-y-6">
-        <h1 className="text-2xl font-bold text-center" style={{ color: "var(--bpm-accent)" }}>
-          Inscription
-        </h1>
-        <p className="text-center text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-          Utilisez la connexion Google pour créer un compte.
-        </p>
-        <p className="text-center text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-          <Link href="/login" className="underline">Aller à la connexion</Link>
-        </p>
-      </div>
-    </main>
+    <RegisterPage
+      title="Blueprint Modular"
+      logoSrc="/img/logo-bpm-nom.jpg"
+      callbackUrl={callbackUrl}
+    />
   );
 }

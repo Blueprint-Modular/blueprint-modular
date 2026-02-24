@@ -1,0 +1,254 @@
+/* Styles partagés formulaire auth (login / register) — utilisé dans le panneau gauche du split */
+
+.formBlock {
+  text-align: left;
+  width: 100%;
+}
+
+.logo {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.logo img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.title {
+  color: var(--bpm-text-primary, #1a1a1a);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--bpm-text-secondary, #666);
+  font-size: 0.9375rem;
+  margin: 0 0 1.75rem;
+  line-height: 1.4;
+}
+
+.methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0 0 1.5rem;
+}
+
+.methodButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--bpm-border, #e0e0e0);
+  border-radius: 10px;
+  background: var(--bpm-surface, #fff);
+  color: var(--bpm-text-primary, #363636);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.methodButton:hover {
+  background: var(--bpm-bg-secondary, #f6f6f6);
+  border-color: var(--bpm-border, #ddd);
+}
+
+.methodButtonGoogle {
+  background: #fff;
+  color: #1f1f1f;
+  border-color: #dadce0;
+}
+
+.methodButtonGoogle:hover {
+  background: #f8f9fa;
+  border-color: #dadce0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.methodButtonApple {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.methodButtonApple:hover {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+.methodButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 0.75rem 0;
+  color: var(--bpm-text-secondary, #7f8c8d);
+  font-size: 0.8125rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--bpm-border, #e8e8e8);
+}
+
+.divider span {
+  padding: 0 1rem;
+}
+
+.form {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.formGroup {
+  margin-bottom: 1.125rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--bpm-text-primary, #2c3e50);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--bpm-border, #e0e0e0);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: var(--bpm-bg-primary, #fff);
+  color: var(--bpm-text-primary);
+  box-sizing: border-box;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--bpm-accent, #1a4b8f);
+  box-shadow: 0 0 0 3px rgba(26, 75, 143, 0.12);
+}
+
+.formGroup input::placeholder {
+  color: var(--bpm-text-secondary, #999);
+}
+
+.formGroup input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.formActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.backButton,
+.submitButton {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.backButton {
+  background: var(--bpm-bg-secondary, #f5f5f5);
+  color: var(--bpm-text-primary, #2c3e50);
+  border: 1px solid var(--bpm-border, #e0e0e0);
+}
+
+.backButton:hover:not(:disabled) {
+  background: var(--bpm-bg-secondary, #eee);
+}
+
+.submitButton {
+  background: var(--bpm-accent, #1a4b8f);
+  color: #fff;
+  border: none;
+}
+
+.submitButton:hover:not(:disabled) {
+  opacity: 0.95;
+  filter: brightness(1.05);
+}
+
+.submitButton:disabled,
+.backButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  background: rgba(220, 53, 69, 0.08);
+  color: #b02a37;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid rgba(220, 53, 69, 0.25);
+}
+
+.footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bpm-border, #eee);
+  text-align: center;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.footerLink {
+  color: var(--bpm-text-secondary, #666);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+  color: var(--bpm-accent, #1a4b8f);
+}
+
+.footerSep {
+  color: var(--bpm-border, #ccc);
+  font-size: 0.875rem;
+}
+
+.terms {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--bpm-text-secondary, #888);
+  line-height: 1.4;
+}
+
+.terms a {
+  color: var(--bpm-text-secondary, #666);
+  text-decoration: underline;
+}
+
+.terms a:hover {
+  color: var(--bpm-accent, #1a4b8f);
+}

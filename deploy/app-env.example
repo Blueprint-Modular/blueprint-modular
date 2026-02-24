@@ -21,3 +21,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/blueprint_modular
 # Optionnel : autres OAuth, clés IA, etc.
 # APPLE_ID= ...
 # ANTHROPIC_API_KEY= ...
+
+# Service Whisper (transcription vocale — Wiki, Assistant IA)
+# URL du micro-service faster-whisper (port 9000 sur le VPS)
+# WHISPER_SERVICE_URL=http://localhost:9000

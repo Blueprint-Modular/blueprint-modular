@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Boxes, FolderOpen, Settings, ExternalLink, Sparkles } from "lucide-react";
 import { SandboxIcon } from "@/components/icons/SandboxIcon";
+import { StartBuildingBlock } from "@/components/StartBuildingBlock";
 
 const quickLinks = [
   {
@@ -52,6 +53,8 @@ export default function DashboardPage() {
           <span className="doc-badge doc-badge-category">Tableau de bord</span>
         </div>
       </div>
+
+      <StartBuildingBlock />
 
       <h2 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>
         Accès rapide

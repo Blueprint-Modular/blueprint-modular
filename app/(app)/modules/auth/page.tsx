@@ -34,12 +34,12 @@ export default function AuthModulePage() {
       </div>
 
       <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
-      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
+      <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
         Le module auth utilise NextAuth (providers Google, credentials). La session est disponible dans toute l&apos;app ; les pages protégées redirigent vers la page de connexion si l&apos;utilisateur n&apos;est pas connecté.
       </p>
 
       <h2 className="text-lg font-semibold mt-8 mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modèles de page de connexion</h2>
-      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         Trois modèles par défaut sont proposés. Celui utilisé dans cette app correspond au modèle 1 ; le modèle 2 est un exemple type « formulaire + visuel » (split layout).
       </p>
       <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>

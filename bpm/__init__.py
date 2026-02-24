@@ -3,7 +3,7 @@ BPM — Blueprint Modular runtime.
 Registry $ (refs réactives) et @ (inscription / décorateurs).
 APIs composants (title, button, write, metric, etc.) pour bpm run app.py.
 """
-__version__ = "0.1.12"
+__version__ = "0.1.13"
 
 from typing import Any, Callable, Optional, TypeVar
 

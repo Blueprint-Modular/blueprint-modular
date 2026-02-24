@@ -11,6 +11,7 @@ import {
 } from "@/components/bpm";
 import { moduleRegistry } from "@/lib/ai/module-registry";
 import { useAssistant } from "@/lib/ai/assistant-context";
+import { VoiceRecorder } from "@/components/ai/VoiceRecorder";
 
 type MessageRole = "user" | "assistant";
 type ChatMessage = { role: MessageRole; content: string };
@@ -38,6 +39,7 @@ export function AIAssistant() {
   const [selectedModuleIds, setSelectedModuleIds] = useState<string[]>([]);
   const [modules, setModules] = useState(moduleRegistry.getAllModules());
   const [health, setHealth] = useState<HealthState | null>(null);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -286,6 +288,22 @@ export function AIAssistant() {
                   color: "var(--bpm-text-primary)",
                 }}
               />
+              <div className="flex items-center gap-2 mb-2">
+                <VoiceRecorder
+                  onTranscription={(text) => {
+                    setInput((prev) => (prev ? `${prev} ${text}` : text));
+                    setVoiceError(null);
+                  }}
+                  onError={setVoiceError}
+                  label="Dicter"
+                  disabled={streaming}
+                />
+                {voiceError && (
+                  <span className="text-xs" style={{ color: "var(--bpm-accent)" }}>
+                    ⚠ {voiceError}
+                  </span>
+                )}
+              </div>
               <Button type="submit" disabled={streaming || !input.trim()}>
                 {streaming ? "Envoi…" : "Envoyer"}
               </Button>

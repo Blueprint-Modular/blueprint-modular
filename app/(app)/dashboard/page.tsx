@@ -48,7 +48,7 @@ export default function DashboardPage() {
     <div className="doc-page" data-page-description="Tableau de bord Blueprint Modular — installation du package Python BPM, accès aux composants, modules et sandbox.">
       <StartBuildingBlock />
 
-      <h2 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>
+      <h2 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)", marginTop: "5rem" }}>
         Accès rapide
       </h2>
       <div

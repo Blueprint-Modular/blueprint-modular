@@ -37,8 +37,8 @@ export function StartBuildingBlock() {
         marginTop: "8rem",
       }}
     >
-      <h2 className="font-bold" style={{ color: "var(--bpm-text-primary)", fontSize: "3rem", lineHeight: "3rem", marginBottom: "2rem" }}>
-        Commencer à construire votre application avec <code className="px-2 py-1 rounded align-middle text-lg font-medium" style={{ background: "var(--bpm-bg-secondary)" }}>bpm.*</code>
+      <h2 className="font-bold" style={{ color: "var(--bpm-text-primary)", fontSize: "3rem", lineHeight: "3rem", marginTop: "13rem", marginBottom: "2rem" }}>
+        Commencer à construire votre application avec <code className="px-2.5 py-1.5 rounded align-middle text-xl font-medium" style={{ background: "var(--bpm-bg-secondary)" }}>bpm.*</code>
       </h2>
       <div
         className="group flex items-center justify-center gap-3 rounded-lg px-4 py-3 font-mono text-sm mx-auto max-w-md"

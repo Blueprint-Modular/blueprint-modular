@@ -139,6 +139,29 @@ Produis un article Markdown complet avec exactement cette structure :
 ## Références
 [Documents liés, contacts, liens utiles si mentionnés dans les notes]`;
 
+/** Mise en forme / amélioration d'un texte existant pour le wiki */
+export const TEMPLATE_WIKI_FORMAT = ({
+  content,
+  title,
+}: {
+  content: string;
+  title?: string;
+}) => `${SYSTEM_PROMPT_BASE}
+
+Tu dois améliorer et mettre en forme le texte suivant pour en faire un article wiki clair en Markdown.
+${title ? `Titre suggéré ou contexte : ${title}` : ""}
+
+Texte à améliorer :
+---
+${content}
+---
+
+Règles :
+- Conserve le sens et les informations importantes.
+- Structure en titres (##, ###), listes, paragraphes courts.
+- Utilise du Markdown valide (listes, gras, liens si pertinent).
+- Réponds UNIQUEMENT avec le contenu de l'article amélioré, sans commentaire avant ou après.`;
+
 /** Synthèse stratégique */
 export const TEMPLATE_SYNTHESE_STRATEGIQUE = ({
   context,

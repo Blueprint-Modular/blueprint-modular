@@ -18,6 +18,69 @@ export default function WikiEditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aiPanelOpen, setAiPanelOpen] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiNotes, setAiNotes] = useState("");
+  const [aiArticleType, setAiArticleType] = useState<"guide" | "procedure" | "best-practice" | "reference">("guide");
+  const [aiWorkspace, setAiWorkspace] = useState<"nxtfood" | "beam" | "shared">("shared");
+
+  const streamWikiGenerate = async (body: Record<string, unknown>) => {
+    setAiLoading(true);
+    setError(null);
+    let accumulated = "";
+    const updateContent = (chunk: string) => {
+      accumulated += chunk;
+      setContent(accumulated);
+    };
+    try {
+      const res = await fetch("/api/wiki/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error ?? "Erreur API");
+      }
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("Pas de flux");
+      const decoder = new TextDecoder();
+      let buffer = "";
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6)) as { type: string; t?: string; message?: string };
+              if (data.type === "chunk" && typeof data.t === "string") updateContent(data.t);
+              if (data.type === "error") throw new Error(data.message ?? "Erreur IA");
+            } catch (e) {
+              if (e instanceof SyntaxError) continue;
+              throw e;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erreur lors de la génération");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleFormatWithAi = () => {
+    if (!content.trim()) return;
+    streamWikiGenerate({ action: "format", content, title: title || undefined });
+  };
+
+  const handleGenerateFromNotes = () => {
+    if (!aiNotes.trim()) return;
+    streamWikiGenerate({ notes: aiNotes.trim(), articleType: aiArticleType, workspace: aiWorkspace });
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -96,7 +159,7 @@ export default function WikiEditPage() {
           <Toggle label="Publié" value={isPublished} onChange={setIsPublished} />
         </div>
 
-        <div className="flex gap-2 border-b pb-2" style={{ borderColor: "var(--bpm-border)" }}>
+        <div className="flex flex-wrap gap-2 border-b pb-2" style={{ borderColor: "var(--bpm-border)" }}>
           <button
             type="button"
             onClick={() => setPreview(false)}
@@ -113,7 +176,80 @@ export default function WikiEditPage() {
           >
             Prévisualiser
           </button>
+          <button
+            type="button"
+            onClick={() => setAiPanelOpen((v) => !v)}
+            className="px-3 py-1 rounded text-sm border"
+            style={{
+              borderColor: "var(--bpm-border)",
+              background: aiPanelOpen ? "var(--bpm-accent)" : "transparent",
+              color: aiPanelOpen ? "var(--bpm-surface)" : "var(--bpm-text-secondary)",
+            }}
+          >
+            Aide IA
+          </button>
         </div>
+
+        {aiPanelOpen && (
+          <div className="p-4 rounded border space-y-4" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)" }}>
+            <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+              Utiliser l&apos;IA pour rédiger ou mettre en forme le contenu de l&apos;article.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={aiLoading || !content.trim()}
+                onClick={handleFormatWithAi}
+              >
+                {aiLoading ? "Génération…" : "Mettre en forme le contenu actuel"}
+              </Button>
+            </div>
+            <div className="pt-2 border-t" style={{ borderColor: "var(--bpm-border)" }}>
+              <span className="block text-sm mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Générer un article depuis des notes</span>
+              <textarea
+                value={aiNotes}
+                onChange={(e) => setAiNotes(e.target.value)}
+                placeholder="Collez ici vos notes brutes…"
+                rows={3}
+                className="w-full px-3 py-2 rounded border font-mono text-sm mb-2"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg)", color: "var(--bpm-text-primary)" }}
+              />
+              <div className="flex flex-wrap gap-2 items-center mb-2">
+                <select
+                  value={aiArticleType}
+                  onChange={(e) => setAiArticleType(e.target.value as typeof aiArticleType)}
+                  className="px-2 py-1 rounded border text-sm"
+                  style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg)", color: "var(--bpm-text-primary)" }}
+                >
+                  <option value="guide">Guide</option>
+                  <option value="procedure">Procédure</option>
+                  <option value="best-practice">Bonnes pratiques</option>
+                  <option value="reference">Référence</option>
+                </select>
+                <select
+                  value={aiWorkspace}
+                  onChange={(e) => setAiWorkspace(e.target.value as typeof aiWorkspace)}
+                  className="px-2 py-1 rounded border text-sm"
+                  style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg)", color: "var(--bpm-text-primary)" }}
+                >
+                  <option value="nxtfood">NXTFOOD</option>
+                  <option value="beam">BEAM Consulting</option>
+                  <option value="shared">Partagé</option>
+                </select>
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={aiLoading || !aiNotes.trim()}
+                  onClick={handleGenerateFromNotes}
+                >
+                  Générer l&apos;article
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {preview ? (
           <div

@@ -12,20 +12,20 @@ export function ModuleRegistryInit() {
     moduleRegistry.register("wiki", {
       label: "Wiki",
       tags: ["wiki", "documentation", "connaissance"],
-      description: "Articles du wiki interne (guides, procédures).",
+      description: "Articles du wiki interne (guides, procédures). Contenu des articles récents inclus pour que l'assistant puisse s'appuyer sur le texte.",
       getData: async () => {
         try {
-          const res = await fetch("/api/wiki");
+          const res = await fetch("/api/wiki?withContent=true&limit=15");
           if (!res.ok) return { raw: "Wiki : non disponible." };
-          const articles = (await res.json()) as { title: string; slug: string }[];
-          return {
-            dataframes: [
-              {
-                label: "Articles récents",
-                rows: articles.slice(0, 20).map((a) => ({ titre: a.title, slug: a.slug })),
-              },
-            ],
-          };
+          const articles = (await res.json()) as { title: string; slug: string; content?: string }[];
+          const dataframes = [
+            { label: "Articles récents", rows: articles.slice(0, 20).map((a) => ({ titre: a.title, slug: a.slug })) },
+          ];
+          const raw = articles
+            .filter((a) => a.content != null && a.content.trim().length > 0)
+            .map((a) => `## ${a.title} (${a.slug})\n${(a.content ?? "").trim()}`)
+            .join("\n\n");
+          return { dataframes, raw: raw || "Aucun contenu d'article disponible." };
         } catch {
           return { raw: "Wiki : erreur de chargement." };
         }

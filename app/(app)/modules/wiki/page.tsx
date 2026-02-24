@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { getGuestWikiArticles, deleteGuestArticle, type GuestWikiArticle } from "@/lib/wiki-guest";
 
@@ -18,41 +19,61 @@ function TreeNode({
   depth = 0,
   selectedParent,
   onSelect,
+  onOpenArticle,
 }: {
   node: WikiArticle;
   depth?: number;
   selectedParent: string | null;
   onSelect: (id: string | null) => void;
+  onOpenArticle: (slug: string) => void;
 }) {
   const [open, setOpen] = useState(depth === 0);
   const hasChildren = node.children && node.children.length > 0;
+
+  const handleClick = () => {
+    if (hasChildren) {
+      onSelect(node.id);
+      setOpen(!open);
+    } else {
+      onOpenArticle(node.slug);
+    }
+  };
 
   return (
     <div style={{ paddingLeft: depth * 16 }}>
       <div
         className={`wiki-tree-node ${selectedParent === node.id ? "active" : ""}`}
-        onClick={() => {
-          onSelect(node.id);
-          if (hasChildren) setOpen(!open);
-        }}
+        onClick={handleClick}
+        role={hasChildren ? "button" : "link"}
+        aria-label={hasChildren ? `Section ${node.title}, ${node.children!.length} article(s)` : `Ouvrir l'article ${node.title}`}
       >
-        {hasChildren && <span>{open ? "▼" : "▶"}</span>}
+        {hasChildren ? <span aria-hidden>{open ? "▼" : "▶"}</span> : <span className="wiki-tree-doc" aria-hidden>📄</span>}
         <span>{node.title}</span>
         {hasChildren && <span className="wiki-tree-count">({node.children!.length})</span>}
       </div>
       {open && hasChildren && node.children!.map((child) => (
-        <TreeNode key={child.id} node={child} depth={depth + 1} selectedParent={selectedParent} onSelect={onSelect} />
+        <TreeNode
+          key={child.id}
+          node={child}
+          depth={depth + 1}
+          selectedParent={selectedParent}
+          onSelect={onSelect}
+          onOpenArticle={onOpenArticle}
+        />
       ))}
     </div>
   );
 }
 
 export default function WikiPage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [articles, setArticles] = useState<WikiArticle[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedParent, setSelectedParent] = useState<string | null>(null);
+
+  const openArticle = (slug: string) => router.push(`/modules/wiki/${slug}`);
 
   const fetchArticles = useCallback(() => {
     setLoading(true);
@@ -100,7 +121,7 @@ export default function WikiPage() {
 
   return (
     <div className="wiki-page doc-page">
-      <div className="doc-page-header">
+      <div id="documentation" className="doc-page-header">
         <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Wiki</div>
         <h1>Wiki</h1>
         <p className="doc-description">
@@ -143,7 +164,13 @@ export default function WikiPage() {
               📁 Tous les articles
             </div>
             {tree.map((node) => (
-              <TreeNode key={node.id} node={node} selectedParent={selectedParent} onSelect={setSelectedParent} />
+              <TreeNode
+                key={node.id}
+                node={node}
+                selectedParent={selectedParent}
+                onSelect={setSelectedParent}
+                onOpenArticle={openArticle}
+              />
             ))}
           </aside>
           <main className="wiki-content">

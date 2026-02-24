@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { Panel, Button } from "@/components/bpm";
+import { getGuestArticleBySlug, getGuestWikiArticles, deleteGuestArticle } from "@/lib/wiki-guest";
 
 type Article = {
   id: string;
@@ -17,15 +18,34 @@ type Article = {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
-  author: { name: string | null; email: string };
+  author: { name: string | null; email?: string };
   children: { id: string; title: string; slug: string }[];
+  canEdit?: boolean;
 };
+
+function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | null {
+  if (!g) return null;
+  const all = getGuestWikiArticles();
+  const children = all.filter((a) => a.parentId === g.id).map((c) => ({ id: c.id, title: c.title, slug: c.slug }));
+  return {
+    id: g.id,
+    title: g.title,
+    slug: g.slug,
+    content: g.content ?? "",
+    isPublished: g.isPublished ?? true,
+    createdAt: g.updatedAt,
+    updatedAt: g.updatedAt,
+    author: g.author ?? { name: null },
+    children,
+    canEdit: g.canEdit,
+  };
+}
 
 export default function WikiArticlePage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +53,17 @@ export default function WikiArticlePage() {
 
   useEffect(() => {
     if (!slug) return;
-    fetch(`/api/wiki/${encodeURIComponent(slug)}`)
+    if (status === "loading") return;
+
+    if (!session) {
+      const guest = getGuestArticleBySlug(slug);
+      setArticle(guestToArticle(guest));
+      setError(guest ? null : "Article introuvable");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`/api/wiki/${encodeURIComponent(slug)}`, { credentials: "include" })
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
         return r.json();
@@ -41,13 +71,18 @@ export default function WikiArticlePage() {
       .then(setArticle)
       .catch(() => setError("Article introuvable"))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, session, status]);
 
   const handleDelete = async () => {
     if (!confirm("Supprimer cet article ?")) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, { method: "DELETE" });
+      if (!session) {
+        if (deleteGuestArticle(slug)) router.push("/modules/wiki");
+        else setError("Impossible de supprimer");
+        return;
+      }
+      const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, { method: "DELETE", credentials: "include" });
       if (res.ok) router.push("/modules/wiki");
       else setError("Impossible de supprimer");
     } finally {
@@ -82,7 +117,7 @@ export default function WikiArticlePage() {
         <div className="flex items-center gap-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
           Mis à jour le {new Date(article.updatedAt).toLocaleDateString("fr-FR")}
           {article.author?.name && ` · ${article.author.name}`}
-          {session && (
+          {(session || article.canEdit) && (
             <>
               <Link href={`/modules/wiki/${article.slug}/edit`}>
                 <Button variant="outline" size="small">Modifier</Button>

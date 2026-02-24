@@ -1,6 +1,6 @@
 import { getSessionOrTestUser } from "@/lib/auth";
 import { vllmClient } from "@/lib/ai/vllm-client";
-import { TEMPLATE_WIKI_GENERATION } from "@/lib/ai/prompt-templates";
+import { TEMPLATE_WIKI_GENERATION, TEMPLATE_WIKI_FORMAT } from "@/lib/ai/prompt-templates";
 
 export const dynamic = "force-dynamic";
 
@@ -24,33 +24,46 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const { notes, articleType, workspace } = body as {
+  const { notes, articleType, workspace, action, content, title } = body as {
     notes?: string;
     articleType?: string;
     workspace?: string;
+    action?: string;
+    content?: string;
+    title?: string;
   };
 
-  if (!notes || typeof notes !== "string" || notes.trim().length === 0) {
-    return new Response(JSON.stringify({ error: "notes requis et non vide" }), { status: 400 });
-  }
-  if (!articleType || !isArticleType(articleType)) {
-    return new Response(
-      JSON.stringify({ error: "articleType invalide (guide, procedure, best-practice, reference)" }),
-      { status: 400 }
-    );
-  }
-  if (!workspace || !isWorkspace(workspace)) {
-    return new Response(
-      JSON.stringify({ error: "workspace invalide (nxtfood, beam, shared)" }),
-      { status: 400 }
-    );
-  }
+  const isFormat = action === "format";
+  let prompt: string;
 
-  const prompt = TEMPLATE_WIKI_GENERATION({
-    notes: notes.trim(),
-    articleType,
-    workspace,
-  });
+  if (isFormat) {
+    const text = typeof content === "string" ? content.trim() : "";
+    if (!text) {
+      return new Response(JSON.stringify({ error: "content requis pour l'action format" }), { status: 400 });
+    }
+    prompt = TEMPLATE_WIKI_FORMAT({ content: text, title: typeof title === "string" ? title.trim() : undefined });
+  } else {
+    if (!notes || typeof notes !== "string" || notes.trim().length === 0) {
+      return new Response(JSON.stringify({ error: "notes requis et non vide" }), { status: 400 });
+    }
+    if (!articleType || !isArticleType(articleType)) {
+      return new Response(
+        JSON.stringify({ error: "articleType invalide (guide, procedure, best-practice, reference)" }),
+        { status: 400 }
+      );
+    }
+    if (!workspace || !isWorkspace(workspace)) {
+      return new Response(
+        JSON.stringify({ error: "workspace invalide (nxtfood, beam, shared)" }),
+        { status: 400 }
+      );
+    }
+    prompt = TEMPLATE_WIKI_GENERATION({
+      notes: notes.trim(),
+      articleType,
+      workspace,
+    });
+  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

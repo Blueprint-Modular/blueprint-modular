@@ -162,6 +162,7 @@ export default function ContractsPage() {
 
   return (
     <div className="doc-page contracts-page">
+      <div id="documentation">
       <DocumentAnalysisImport
         title="Base contractuelle"
         description="Importez des documents PDF (contrats fournisseurs, CGV, analyses) pour générer automatiquement une synthèse actionnable grâce à Claude. Les analyses sont stockées en base de données et peuvent être réexploitées dans d'autres onglets."
@@ -172,6 +173,7 @@ export default function ContractsPage() {
         disabled={uploading}
         onAnalyze={handleAnalyze}
       />
+      </div>
       {uploading && (
         <div className="flex items-center justify-center gap-2 py-4" style={{ color: "var(--bpm-text-secondary)" }}>
           <Spinner size="small" text="Analyse en cours..." />

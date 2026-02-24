@@ -11,7 +11,7 @@ export default function IAPage() {
 
   return (
     <div style={{ height: "calc(100vh - 64px)", display: "flex", flexDirection: "column" }}>
-      <div className="doc-page-header" style={{ flexShrink: 0 }}>
+      <div id="documentation" className="doc-page-header" style={{ flexShrink: 0 }}>
         <div>
           <div className="doc-breadcrumb">
             <Link href="/modules">Modules</Link> → IA

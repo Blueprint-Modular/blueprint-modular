@@ -36,7 +36,7 @@ const quickLinks = [
 ];
 
 const resources = [
-  { href: "https://docs.blueprint-modular.com/", label: "Documentation (doc statique)", external: true },
+  { href: "https://docs.blueprint-modular.com/", label: "Documentation", external: true },
   { href: "https://pypi.org/project/blueprint-modular/", label: "PyPI — blueprint-modular", external: true },
 ];
 

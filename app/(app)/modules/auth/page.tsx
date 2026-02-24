@@ -40,7 +40,7 @@ export default function AuthModulePage() {
 
       <h2 className="text-lg font-semibold mt-8 mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modèles de page de connexion</h2>
       <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
-        Trois modèles par défaut sont proposés. Celui utilisé dans cette app correspond au modèle 1 ; le modèle 2 est celui de myportfolio.beam-consulting.
+        Trois modèles par défaut sont proposés. Celui utilisé dans cette app correspond au modèle 1 ; le modèle 2 est un exemple type « formulaire + visuel » (split layout).
       </p>
       <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
         <div
@@ -70,27 +70,32 @@ export default function AuthModulePage() {
           </Link>
         </div>
         <div
-          className="p-4 rounded-xl border"
+          className="p-4 rounded-xl border overflow-hidden"
           style={{
             background: "var(--bpm-bg-primary)",
             borderColor: "var(--bpm-border)",
           }}
         >
           <h3 className="font-semibold mb-1" style={{ color: "var(--bpm-text-primary)", fontSize: "1rem" }}>
-            2. Modèle BEAM (myportfolio.beam-consulting)
+            2. Modèle split (formulaire + visuel)
           </h3>
           <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-            Logo en haut, titre type « Portfolio Manager », sous-titre, choix « Se connecter avec e-mail » ou « Se connecter avec Google », formulaire email avec Retour, footer Conditions d&apos;utilisation et Contact.
+            Layout en deux panneaux : à gauche le formulaire (Create an account, Full name, Email, Password, Submit, Apple / Google), à droite une image de fond (équipe, collaboration) avec possibilité d&apos;overlays type calendrier ou cartes de réunion.
           </p>
+          <div className="rounded-lg border mb-3 overflow-hidden" style={{ borderColor: "var(--bpm-border)", aspectRatio: "16/10" }}>
+            <Image
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80"
+              alt="Exemple visuel : équipe en collaboration (Unsplash)"
+              width={400}
+              height={250}
+              className="w-full h-full object-cover"
+            />
+          </div>
           <ul className="text-xs mb-3 pl-4 list-disc" style={{ color: "var(--bpm-text-secondary)" }}>
-            <li><code className="text-xs">LoginPage.jsx</code> + <code className="text-xs">LoginPage.css</code></li>
-            <li>Fond gris clair, carte blanche border-radius 24px</li>
-            <li>Bouton Google bleu #4285f4, bouton principal couleur accent</li>
-            <li>Thème sombre supporté (html.theme-dark)</li>
+            <li>Formulaire à gauche, image ou visuel à droite (ratio 50/50 ou 40/60)</li>
+            <li>Image gratuite (ex. Unsplash) en attendant le visuel final</li>
+            <li>Boutons sociaux (Apple, Google), lien « Sign in » et Terms &amp; Conditions en footer</li>
           </ul>
-          <span className="text-sm block mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-            Utilisé dans le projet myportfolio.beam-consulting
-          </span>
           <Link
             href="/login"
             className="text-sm font-medium"

@@ -369,12 +369,17 @@ export default function CalendrierSimulateurPage() {
           {/* Vue Jour — Timeline verticale (P5) + événements simultanés (P12) */}
           {view === "jour" && (
             <div className="text-sm">
-              <p className="text-xs font-medium mb-2" style={{ color: "var(--bpm-text-secondary)" }}>
+              <p
+                className="text-xs font-medium mb-2 px-3 py-2 rounded-lg"
+                style={
+                  focusKey === todayKey
+                    ? { background: "var(--bpm-accent)", color: "#fff" }
+                    : { color: "var(--bpm-text-secondary)" }
+                }
+              >
                 {formatTitle("jour", focusDate)}
                 {focusKey === todayKey && (
-                  <span className="ml-2 px-1.5 py-0.5 rounded text-xs" style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}>
-                    Aujourd&apos;hui
-                  </span>
+                  <span className="ml-2 opacity-90">Aujourd&apos;hui</span>
                 )}
               </p>
               <div className="flex gap-0 min-w-0">
@@ -437,13 +442,36 @@ export default function CalendrierSimulateurPage() {
                   minWidth: 0,
                 }}
               >
-                <div style={{ gridColumn: 1 }} />
+                {/* Coin haut gauche : numéro de semaine + période (ex. Semaine 9 - du 23 févr.…) */}
+                <div
+                  className="py-1 pr-1 text-xs font-medium border-b border-r truncate flex items-center"
+                  style={{ gridColumn: 1, gridRow: 1, borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)", background: "var(--bpm-bg-secondary)" }}
+                  title={formatTitle("semaine", focusDate)}
+                >
+                  {(() => {
+                    const { start, end } = getWeekRange(focusDate);
+                    const weekNum = getISOWeekNumber(focusDate);
+                    const fmt = (x: Date) => `${x.getDate()} ${MONTHS[x.getMonth()].slice(0, 3)}.`;
+                    return `S. ${weekNum} - du ${fmt(start)}…`;
+                  })()}
+                </div>
                 {[0, 1, 2, 3, 4, 5, 6].map((dayOffset) => {
                   const { start } = getWeekRange(focusDate);
                   const d = new Date(start);
                   d.setDate(start.getDate() + dayOffset);
+                  const dateKey = formatDateKey(d);
+                  const isToday = dateKey === todayKey;
                   return (
-                    <div key={dayOffset} className="py-1 text-center font-medium border-b truncate text-xs sm:text-sm" style={{ gridColumn: dayOffset + 2, borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)" }} title={`${WEEKDAYS_FULL[dayOffset]} ${d.getDate()}`}>
+                    <div
+                      key={dayOffset}
+                      className={`py-1 text-center font-medium border-b truncate text-xs sm:text-sm ${isToday ? "rounded-t" : ""}`}
+                      style={{
+                        gridColumn: dayOffset + 2,
+                        borderColor: "var(--bpm-border)",
+                        ...(isToday ? { background: "var(--bpm-accent)", color: "#fff" } : { color: "var(--bpm-text-secondary)" }),
+                      }}
+                      title={`${WEEKDAYS_FULL[dayOffset]} ${d.getDate()}`}
+                    >
                       <span className="hidden sm:inline">{WEEKDAYS_FULL[dayOffset]} </span>{d.getDate()}
                     </div>
                   );
@@ -500,6 +528,9 @@ export default function CalendrierSimulateurPage() {
           {view === "mois" && (
             <div className="text-sm">
               <div className="inline-grid grid-cols-7 gap-1.5 text-center w-full max-w-full sm:max-w-[480px]">
+                <div className="col-span-7 text-sm font-semibold py-1.5 pb-2" style={{ color: "var(--bpm-text-primary)" }}>
+                  {MONTHS[month]} {year}
+                </div>
                 {WEEKDAYS_LABELS.map((d) => (
                   <span key={d} className="text-xs font-medium py-1" style={{ color: "var(--bpm-text-secondary)" }}>{d}</span>
                 ))}
@@ -518,7 +549,7 @@ export default function CalendrierSimulateurPage() {
                       type="button"
                       className="p-1.5 rounded-md text-sm text-center hover:bg-[var(--bpm-bg-secondary)] transition-colors"
                       style={{
-                        background: isToday ? "var(--bpm-accent-cyan)" : hasEvent ? "rgba(0,163,226,0.1)" : "transparent",
+                        background: isToday ? "var(--bpm-accent)" : hasEvent ? "rgba(0,163,226,0.1)" : "transparent",
                         color: isToday ? "#fff" : "var(--bpm-text-primary)",
                         fontWeight: isToday ? 600 : undefined,
                       }}

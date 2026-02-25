@@ -924,6 +924,10 @@ function SandboxContent() {
           <Spinner size="medium" text="Pulse" variant="pulse" />
           <Spinner size="medium" text="" variant="bars" />
           <Spinner size="medium" text="Bars" variant="bars" />
+          <Spinner size="medium" text="" variant="dualRing" />
+          <Spinner size="medium" text="Dual ring" variant="dualRing" />
+          <Spinner size="medium" text="" variant="dotsRing" />
+          <Spinner size="medium" text="Dots ring" variant="dotsRing" />
         </div>
       );
     }

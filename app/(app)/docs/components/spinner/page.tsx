@@ -2,11 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Spinner, CodeBlock } from "@/components/bpm";
+import { Spinner, Selectbox, Input, CodeBlock } from "@/components/bpm";
 import { getPrevNext } from "@/lib/docPages";
 
 type SpinnerSize = "small" | "medium" | "large";
-type SpinnerVariant = "circle" | "dot";
+type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars" | "dualRing" | "dotsRing";
+
+const VARIANT_OPTIONS: { value: SpinnerVariant; label: string }[] = [
+  { value: "circle", label: "circle" },
+  { value: "dot", label: "dot" },
+  { value: "wheel", label: "wheel" },
+  { value: "pulse", label: "pulse" },
+  { value: "bars", label: "bars" },
+  { value: "dualRing", label: "dualRing" },
+  { value: "dotsRing", label: "dotsRing" },
+];
+
+const SIZE_OPTIONS: { value: SpinnerSize; label: string }[] = [
+  { value: "small", label: "small" },
+  { value: "medium", label: "medium" },
+  { value: "large", label: "large" },
+];
 
 export default function DocSpinnerPage() {
   const [text, setText] = useState("Chargement...");
@@ -24,7 +40,7 @@ export default function DocSpinnerPage() {
         <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.spinner</div>
         <h1>bpm.spinner</h1>
         <p className="doc-description">
-          Indicateur de chargement : Circle (cercle tournant) ou Dot (3 points animés, comme en IA).
+          Indicateur de chargement : circle (cercle tournant), dot (3 points), wheel, pulse, bars, dualRing, dotsRing. Tous utilisent la couleur d&apos;accent.
         </p>
         <div className="doc-meta">
           <span className="doc-badge doc-badge-stable">Stable</span>
@@ -39,23 +55,26 @@ export default function DocSpinnerPage() {
         </div>
         <div className="sandbox-controls">
           <div className="sandbox-control-group">
-            <label>variant</label>
-            <select value={variant} onChange={(e) => setVariant(e.target.value as SpinnerVariant)}>
-              <option value="circle">circle</option>
-              <option value="dot">dot</option>
-            </select>
+            <label>Variant</label>
+            <Selectbox
+              options={VARIANT_OPTIONS}
+              value={variant}
+              onChange={(v) => setVariant(v as SpinnerVariant)}
+              placeholder="Choisir"
+            />
           </div>
           <div className="sandbox-control-group">
-            <label>text</label>
-            <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+            <label>Text</label>
+            <Input type="text" value={text} onChange={setText} />
           </div>
           <div className="sandbox-control-group">
-            <label>size</label>
-            <select value={size} onChange={(e) => setSize(e.target.value as SpinnerSize)}>
-              <option value="small">small</option>
-              <option value="medium">medium</option>
-              <option value="large">large</option>
-            </select>
+            <label>Size</label>
+            <Selectbox
+              options={SIZE_OPTIONS}
+              value={size}
+              onChange={(v) => setSize(v as SpinnerSize)}
+              placeholder="Choisir"
+            />
           </div>
         </div>
         <div className="sandbox-code">
@@ -80,10 +99,10 @@ export default function DocSpinnerPage() {
         <tbody>
           <tr>
             <td><code>variant</code></td>
-            <td><code>&#39;circle&#39; | &#39;dot&#39;</code></td>
+            <td><code>&#39;circle&#39; | &#39;dot&#39; | &#39;wheel&#39; | &#39;pulse&#39; | &#39;bars&#39; | &#39;dualRing&#39; | &#39;dotsRing&#39;</code></td>
             <td><code>&#39;circle&#39;</code></td>
             <td>Non</td>
-            <td>Style : circle (cercle tournant) ou dot (3 points animés, comme en IA).</td>
+            <td>Style du spinner (couleur d&apos;accent).</td>
           </tr>
           <tr>
             <td><code>text</code></td>
@@ -100,6 +119,13 @@ export default function DocSpinnerPage() {
             <td>Taille du spinner.</td>
           </tr>
           <tr>
+            <td><code>neutral</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+            <td>Non</td>
+            <td>Si true, utilise la couleur texte (gris) au lieu de l&apos;accent.</td>
+          </tr>
+          <tr>
             <td><code>className</code></td>
             <td><code>string</code></td>
             <td>—</td>
@@ -112,6 +138,7 @@ export default function DocSpinnerPage() {
       <h2 className="text-lg font-semibold mt-8 mb-2">Exemples</h2>
       <CodeBlock code={'bpm.spinner(text="Analyse en cours...", size="large")'} language="python" />
       <CodeBlock code={'bpm.spinner(variant="dot", text="Chargement…")'} language="python" />
+      <CodeBlock code={'bpm.spinner(variant="dualRing", size="medium")'} language="python" />
       <CodeBlock code="bpm.spinner()  # Circle, texte par défaut, taille medium" language="python" />
 
       <nav className="doc-pagination">

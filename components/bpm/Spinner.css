@@ -9,6 +9,9 @@
   background: var(--bpm-accent, var(--bpm-accent-cyan));
   animation: bpm-spinner-dot-bounce 1.2s ease-in-out infinite;
 }
+.bpm-spinner-dots--neutral .bpm-spinner-dot {
+  background: var(--bpm-text-secondary);
+}
 .bpm-spinner-dot:nth-child(2) {
   animation-delay: 0.15s;
 }
@@ -104,4 +107,81 @@
   50% {
     transform: scaleY(1);
   }
+}
+
+/* Variant Dual Ring (inspiré css-loaders.com) : deux anneaux tournant en sens inverse, couleur accent */
+.bpm-spinner-dual-ring {
+  position: relative;
+  display: inline-block;
+}
+.bpm-spinner-dual-ring-outer,
+.bpm-spinner-dual-ring-inner {
+  position: absolute;
+  box-sizing: border-box;
+  inset: 0;
+}
+.bpm-spinner-dual-ring-inner {
+  inset: 15%;
+  animation-direction: reverse;
+  animation-duration: 0.85s;
+}
+.bpm-spinner-dual-ring--small {
+  width: 20px;
+  height: 20px;
+}
+.bpm-spinner-dual-ring--small .bpm-spinner-dual-ring-outer { border-width: 2px; }
+.bpm-spinner-dual-ring--small .bpm-spinner-dual-ring-inner { border-width: 2px; }
+.bpm-spinner-dual-ring--medium {
+  width: 32px;
+  height: 32px;
+}
+.bpm-spinner-dual-ring--medium .bpm-spinner-dual-ring-outer { border-width: 2px; }
+.bpm-spinner-dual-ring--medium .bpm-spinner-dual-ring-inner { border-width: 2px; }
+.bpm-spinner-dual-ring--large {
+  width: 40px;
+  height: 40px;
+}
+.bpm-spinner-dual-ring--large .bpm-spinner-dual-ring-outer { border-width: 3px; }
+.bpm-spinner-dual-ring--large .bpm-spinner-dual-ring-inner { border-width: 3px; }
+
+/* Variant Dots Ring (inspiré css-loaders.com) : 3 points sur un cercle, opacité en séquence */
+.bpm-spinner-dots-ring {
+  position: relative;
+  display: inline-block;
+}
+.bpm-spinner-dots-ring-dot {
+  position: absolute;
+  border-radius: 50%;
+  animation: bpm-spinner-dots-ring-pulse 1s ease-in-out infinite;
+}
+.bpm-spinner-dots-ring-dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
+.bpm-spinner-dots-ring-dot:nth-child(2) { top: 50%; right: 0; transform: translateY(-50%); animation-delay: 0.15s; }
+.bpm-spinner-dots-ring-dot:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); animation-delay: 0.3s; }
+.bpm-spinner-dots-ring--small {
+  width: 20px;
+  height: 20px;
+}
+.bpm-spinner-dots-ring--small .bpm-spinner-dots-ring-dot {
+  width: 4px;
+  height: 4px;
+}
+.bpm-spinner-dots-ring--medium {
+  width: 32px;
+  height: 32px;
+}
+.bpm-spinner-dots-ring--medium .bpm-spinner-dots-ring-dot {
+  width: 6px;
+  height: 6px;
+}
+.bpm-spinner-dots-ring--large {
+  width: 40px;
+  height: 40px;
+}
+.bpm-spinner-dots-ring--large .bpm-spinner-dots-ring-dot {
+  width: 8px;
+  height: 8px;
+}
+@keyframes bpm-spinner-dots-ring-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }

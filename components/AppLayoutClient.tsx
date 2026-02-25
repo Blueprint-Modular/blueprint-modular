@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -57,80 +56,7 @@ function AIHeaderIconButtons() {
   );
 }
 
-function getBreadcrumbFromPathname(pathname: string): { label: string; href?: string }[] {
-  const segments = pathname.split("/").filter(Boolean);
-  if (segments.length === 0) return [];
-  if (segments[0] === "docs") {
-    if (segments[1] === "getting-started")
-      return [{ label: "Documentation", href: "/docs" }, { label: "Démarrage" }];
-    if (segments[1] === "components") {
-      const slug = segments[2];
-      if (slug) return [{ label: "Composants", href: "/docs/components" }, { label: `bpm.${slug}` }];
-      return [{ label: "Composants" }];
-    }
-    return [{ label: "Documentation" }];
-  }
-  if (segments[0] === "modules") {
-    if (segments.length === 1) return [{ label: "Modules" }];
-    const second = segments[1];
-    const labels: Record<string, string> = {
-      auth: "Auth",
-      "audit-log": "Audit / Log",
-      calendrier: "Calendrier",
-      "catalogue-produits": "Catalogue produits",
-      commentaires: "Commentaires",
-      connecteurs: "Connecteurs",
-      contracts: "Base contractuelle",
-      documents: "Analyse de documents",
-      "devis-facturation": "Devis / Facturation",
-      "export-planifie": "Export planifié",
-      "formulaire-dynamique": "Formulaire dynamique",
-      ia: "IA",
-      "multi-langue": "Multi-langue",
-      notification: "Notification",
-      "notifications-ciblees": "Notifications ciblées",
-      rapports: "Rapports",
-      referentiels: "Référentiels",
-      "reservation-creneaux": "Réservation / Créneaux",
-      taches: "Tâches",
-      "tableau-blanc": "Tableau blanc",
-      "tableaux-de-bord": "Tableaux de bord",
-      templates: "Templates",
-      themes: "Thèmes",
-      veille: "Veille",
-      webhooks: "Webhooks",
-      wiki: "Wiki",
-      workflow: "Workflow",
-      ibkr: "IBKR",
-      "analyse-document": "Analyse de documents",
-    };
-    const base = [
-      { label: "Modules", href: "/modules" },
-      { label: labels[second] ?? second, href: second ? `/modules/${second}` : undefined },
-    ];
-    if (second === "wiki" && segments.length >= 3) {
-      const third = segments[2];
-      if (third === "new") {
-        return [...base, { label: "Nouvel article" }];
-      }
-      const slugHref = `/modules/wiki/${third}`;
-      if (segments.length >= 4 && segments[3] === "edit") {
-        return [...base, { label: third, href: slugHref }, { label: "Modifier" }];
-      }
-      return [...base, { label: third, href: slugHref }];
-    }
-    return base;
-  }
-  if (segments[0] === "settings") return [{ label: "Paramètres" }];
-  if (segments[0] === "dashboard") return [];
-  if (segments[0] === "sandbox") return [{ label: "Sandbox" }];
-  if (segments[0] === "demo") return [{ label: "Demo" }];
-  return [];
-}
-
 function AppLayoutInner({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const breadcrumbItems = getBreadcrumbFromPathname(pathname ?? "");
   const sidebar = useSidebar();
   const collapsed = sidebar?.collapsed ?? false;
 
@@ -151,29 +77,9 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
         className={`app-content-column flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"}`}
       >
           <header
-            className="pwa-title-bar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between px-3 sm:px-4 gap-2"
+            className="pwa-title-bar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2"
             style={{ background: "var(--bpm-bg-primary)" }}
           >
-            <nav aria-label="Fil d'Ariane" className="doc-breadcrumb doc-breadcrumb-header text-sm truncate min-w-0">
-              {breadcrumbItems.length > 0 ? (
-                <>
-                  {breadcrumbItems.map((item, i) => (
-                    <span key={i}>
-                      {i > 0 && <span className="opacity-70"> → </span>}
-                      {item.href ? (
-                        <Link href={item.href} className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
-                          {item.label}
-                        </Link>
-                      ) : (
-                        <span style={{ color: "var(--bpm-text-secondary)" }}>{item.label}</span>
-                      )}
-                    </span>
-                  ))}
-                </>
-              ) : (
-                <Link href="/dashboard" className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>Accueil</Link>
-              )}
-            </nav>
             <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--bpm-text-primary)" }}>
               <AIHeaderIconButtons />
               <NotificationBell />

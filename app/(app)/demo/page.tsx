@@ -15,7 +15,6 @@ import {
   Progress,
   Badge,
   Card,
-  Breadcrumb,
   Divider,
   LineChart,
   BarChart,
@@ -309,8 +308,7 @@ export default function DemoPage() {
 
   return (
     <div className="doc-page" style={{ maxWidth: 1000, margin: "0 auto" }}>
-      <Breadcrumb items={[{ label: "Demo", href: "/demo" }]} />
-      <Title level={1}>Suivi commercial</Title>
+      <Title level={1}>Demo - Suivi commercial</Title>
       <p className="doc-description" style={{ marginTop: 8, marginBottom: 24 }}>
         Démo d’une petite application de suivi commercial : tableau de bord, clients, commandes, produits et équipe.
         Tout est construit avec les composants <code>bpm.*</code>.

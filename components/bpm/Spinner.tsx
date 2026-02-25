@@ -4,7 +4,7 @@ import React from "react";
 import "./Spinner.css";
 
 export type SpinnerSize = "small" | "medium" | "large";
-export type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars";
+export type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars" | "dualRing" | "dotsRing";
 
 export interface SpinnerProps {
   text?: string;
@@ -41,7 +41,7 @@ export function Spinner({
   if (variant === "dot") {
     return (
       <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
-        <div className={`bpm-spinner-dots bpm-spinner-dots--${size}`} aria-hidden>
+        <div className={`bpm-spinner-dots bpm-spinner-dots--${size} ${neutral ? "bpm-spinner-dots--neutral" : ""}`} aria-hidden>
           <span className="bpm-spinner-dot" />
           <span className="bpm-spinner-dot" />
           <span className="bpm-spinner-dot" />
@@ -88,6 +88,39 @@ export function Spinner({
           <span className="bpm-spinner-bar" style={{ background: accentColor(neutral) }} />
           <span className="bpm-spinner-bar" style={{ background: accentColor(neutral) }} />
           <span className="bpm-spinner-bar" style={{ background: accentColor(neutral) }} />
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "dualRing") {
+    const color = accentColor(neutral);
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-dual-ring bpm-spinner-dual-ring--${size}`} aria-hidden>
+          <div
+            className="bpm-spinner-dual-ring-outer rounded-full border-solid border-2 border-transparent animate-spin"
+            style={{ borderTopColor: color, borderRightColor: color }}
+          />
+          <div
+            className="bpm-spinner-dual-ring-inner rounded-full border-solid border-2 border-transparent animate-spin"
+            style={{ borderBottomColor: color, borderLeftColor: color }}
+          />
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "dotsRing") {
+    const color = accentColor(neutral);
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-dots-ring bpm-spinner-dots-ring--${size}`} aria-hidden>
+          <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
+          <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
+          <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
         </div>
         {content}
       </div>

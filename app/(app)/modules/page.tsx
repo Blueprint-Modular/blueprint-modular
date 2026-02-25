@@ -22,6 +22,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], { href: strin
   "Contenu & productivité": [
     { href: "/modules/calendrier", label: "Calendrier", description: "Agenda jour / semaine / mois, événements et rappels.", icon: Calendar, simulatorAndDoc: true },
     { href: "/modules/commentaires", label: "Commentaires", description: "Commentaires et annotations sur une entité (document, ligne, projet).", icon: MessageSquare, simulatorAndDoc: true },
+    { href: "/modules/skeleton", label: "Skeleton", description: "Assemblages de bpm.skeleton pour un chargement de page complet (header, métriques, tableau).", icon: LayoutDashboard, simulatorAndDoc: true },
     { href: "/modules/tableau-blanc", label: "Tableau blanc", description: "Post-it et zones de texte pour rétros ou ateliers.", icon: StickyNote, simulatorAndDoc: true },
     { href: "/modules/templates", label: "Templates", description: "Bibliothèque de modèles (rapports, fiches, emails) avec champs à remplir.", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true },

@@ -18,19 +18,39 @@ async function getContractAndCheckAuth(id: string) {
 
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> | { id: string } }
 ) {
-  const { id } = await params;
+  const params = context.params;
+  const id = typeof (params as Promise<{ id: string }>).then === "function"
+    ? (await (params as Promise<{ id: string }>)).id
+    : (params as { id: string }).id;
+  if (!id) return NextResponse.json({ error: "Bad request" }, { status: 400 });
   const result = await getContractAndCheckAuth(id);
   if ("error" in result) return result.error;
-  return NextResponse.json(result.contract);
+  const c = result.contract;
+  return NextResponse.json({
+    id: c.id,
+    title: c.title,
+    contractType: c.contractType,
+    workspace: c.workspace,
+    originalFilename: c.originalFilename,
+    status: c.status,
+    analysisProgress: c.analysisProgress,
+    extractedData: c.extractedData,
+    createdAt: c.createdAt.toISOString(),
+    analyzedAt: c.analyzedAt?.toISOString() ?? null,
+  });
 }
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> | { id: string } }
 ) {
-  const { id } = await params;
+  const params = context.params;
+  const id = typeof (params as Promise<{ id: string }>).then === "function"
+    ? (await (params as Promise<{ id: string }>)).id
+    : (params as { id: string }).id;
+  if (!id) return NextResponse.json({ error: "Bad request" }, { status: 400 });
   const result = await getContractAndCheckAuth(id);
   if ("error" in result) return result.error;
   const { contract } = result;

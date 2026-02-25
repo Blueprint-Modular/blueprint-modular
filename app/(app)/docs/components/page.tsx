@@ -178,7 +178,7 @@ export default function DocsComponentsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <h1>Composants BPM</h1>
+        <h1>Composants</h1>
         <p className="doc-description">
           Référence des composants avec sandbox live. La liste est alimentée par le package Python{" "}
           <code className="text-sm">blueprint-modular</code> (pip install). Cliquez sur une carte pour la documentation.

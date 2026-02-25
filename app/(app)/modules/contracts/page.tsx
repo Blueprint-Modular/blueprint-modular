@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Table, Spinner, Selectbox, Panel } from "@/components/bpm";
+import { Table, Spinner, Selectbox, Panel, Button } from "@/components/bpm";
 import { DocumentAnalysisImport } from "@/components/DocumentAnalysisImport";
 
 type Extracted = { supplier_name?: string; contract_date?: string; end_date?: string; overall_risk_level?: string };
@@ -69,6 +69,7 @@ export default function ContractsPage() {
   const [workspace, setWorkspace] = useState("");
   const [contractType, setContractType] = useState("");
   const [status, setStatus] = useState("");
+  const [reanalyzingId, setReanalyzingId] = useState<string | null>(null);
 
   const fetchContracts = useCallback(() => {
     const params = new URLSearchParams();
@@ -98,6 +99,17 @@ export default function ContractsPage() {
     const interval = setInterval(fetchContracts, 3000);
     return () => clearInterval(interval);
   }, [contracts, fetchContracts]);
+
+  const handleReanalyze = async (id: string) => {
+    if (reanalyzingId) return;
+    setReanalyzingId(id);
+    try {
+      const res = await fetch(`/api/contracts/${id}/reanalyze`, { method: "POST", credentials: "include" });
+      if (res.ok) fetchContracts();
+    } finally {
+      setReanalyzingId(null);
+    }
+  };
 
   const handleAnalyze = async (files: File[]) => {
     if (files.length === 0) return;
@@ -156,7 +168,32 @@ export default function ContractsPage() {
         );
       },
     },
-    { key: "status", label: "Statut" },
+    {
+      key: "status",
+      label: "Statut",
+      render: (val: unknown, row: Record<string, unknown>) => {
+        const s = String(val ?? "");
+        const id = row.id as string | undefined;
+        const isError = s === "error";
+        const isReanalyzing = id && reanalyzingId === id;
+        const statusLabel = isError ? "Erreur" : s;
+        return (
+          <span className="flex items-center gap-2 flex-wrap">
+            <span className={isError ? "rounded px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800" : ""}>{statusLabel}</span>
+            {isError && id && (
+              <Button
+                size="small"
+                variant="secondary"
+                disabled={!!reanalyzingId}
+                onClick={(e) => { e.stopPropagation(); handleReanalyze(id); }}
+              >
+                {isReanalyzing ? "…" : "Relancer l'analyse"}
+              </Button>
+            )}
+          </span>
+        );
+      },
+    },
   ];
 
   const data = contracts.map((c) => ({
@@ -167,7 +204,7 @@ export default function ContractsPage() {
     contract_date: c.contract_date ?? "-",
     end_date: c.end_date ?? "-",
     overall_risk_level: c.overall_risk_level ?? "-",
-    status: c.status === "analyzing" ? `${c.status} (${c.analysisProgress}%)` : c.status,
+    status: c.status === "analyzing" ? `En cours (${c.analysisProgress}%)` : c.status === "done" ? "Analysé" : c.status === "pending" ? "En attente" : c.status === "error" ? "error" : c.status,
   }));
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Button } from "@/components/bpm";
 
 export interface DocumentAnalysisImportProps {
   /** Titre de la section (ex. "Analyse de documents") */
@@ -158,14 +159,15 @@ export function DocumentAnalysisImport({
           </div>
         </div>
         <div className="mt-4">
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={handleSubmit}
             disabled={disabled || selectedFiles.length === 0}
-            className="btn-secondary px-4 py-2 rounded-lg font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed doc-import-analyze-button"
+            className="doc-import-analyze-button"
           >
             {disabled ? "Analyse en cours..." : buttonLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </>

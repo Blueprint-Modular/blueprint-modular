@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: DEFAULT_DESC,
   applicationName: "Blueprint Modular",
   manifest: "/manifest",
-  // Favicon : app/icon.svg (convention Next.js, lien injecté automatiquement)
+  icons: { icon: "/img/logo-bpm.png", apple: "/img/logo-bpm.png" },
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },

@@ -22,6 +22,7 @@ const PROVIDERS = ["OpenAI", "Anthropic", "Google", "Groq", "Other"];
 
 const BPM_ACCENT_STORAGE = "bpm-accent-color";
 const NOTIFICATION_LEVEL_STORAGE = "bpm-notification-level";
+export const BPM_ASSISTANT_NAME_STORAGE = "bpm-assistant-name";
 
 function useStoredAccent(defaultHex: string) {
   const [accent, setAccent] = useState(defaultHex);
@@ -71,11 +72,36 @@ function useNotificationLevel() {
   return [level, setLevelAndStore] as const;
 }
 
+function useStoredAssistantName() {
+  const [name, setName] = useState("Assistant");
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(BPM_ASSISTANT_NAME_STORAGE);
+      if (stored && stored.trim()) setName(stored.trim());
+    } catch {
+      // ignore
+    }
+  }, []);
+  const setNameAndStore = (value: string) => {
+    const v = value.trim() || "Assistant";
+    setName(v);
+    try {
+      localStorage.setItem(BPM_ASSISTANT_NAME_STORAGE, v);
+      if (typeof window !== "undefined")
+        window.dispatchEvent(new CustomEvent("bpm-assistant-name-updated", { detail: v }));
+    } catch {
+      // ignore
+    }
+  };
+  return [name, setNameAndStore] as const;
+}
+
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const { theme, toggleTheme } = useTheme();
   const [accentColor, setAccentColor] = useStoredAccent("#00a3e2");
   const [notificationLevel, setNotificationLevel] = useNotificationLevel();
+  const [assistantName, setAssistantName] = useStoredAssistantName();
 
   const [keys, setKeys] = useState<ApiKeyRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -285,6 +311,17 @@ export default function SettingsPage() {
                   Filtre les notifications affichées dans la cloche
                 </p>
               </div>
+              <div className="p-4 rounded-xl border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+                <Input
+                  label="Nom de l'assistant IA"
+                  value={assistantName}
+                  onChange={(e) => setAssistantName(e.target.value)}
+                  placeholder="Assistant"
+                />
+                <p className="text-sm mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+                  Libellé affiché pendant la génération de page (ex. &quot;Assistant génère votre page…&quot;)
+                </p>
+              </div>
             </div>
           </div>
         ),
@@ -297,6 +334,7 @@ export default function SettingsPage() {
       theme,
       accentColor,
       notificationLevel,
+      assistantName,
       keys,
       loading,
       provider,

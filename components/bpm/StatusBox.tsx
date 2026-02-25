@@ -14,8 +14,8 @@ export interface StatusBoxProps {
 export function StatusBox(p: StatusBoxProps) {
   const { label, state = "running", children, defaultExpanded = true, className = "" } = p;
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const icon = state === "running" ? <Spinner size="small" /> : state === "complete" ? "\u2713" : "x";
-  const iconColor = state === "running" ? "var(--bpm-accent-cyan)" : state === "complete" ? "var(--bpm-accent-mint)" : "var(--bpm-accent)";
+  const icon = state === "running" ? <Spinner size="small" neutral /> : state === "complete" ? "\u2713" : "x";
+  const iconColor = state === "running" ? "var(--bpm-text-secondary)" : state === "complete" ? "var(--bpm-accent-mint)" : "var(--bpm-accent)";
   return (
     <div className={"bpm-status-box rounded-lg border " + className} style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}>
       <button type="button" onClick={() => setExpanded((e) => !e)} className="w-full flex items-center gap-2 px-4 py-3 text-left" style={{ color: "var(--bpm-text-primary)" }}>

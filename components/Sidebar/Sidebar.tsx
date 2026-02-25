@@ -52,11 +52,20 @@ function IconParametres({ className }: { className?: string }) {
   );
 }
 
+function IconDemo({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" className={className}>
+      <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 42-63.5 95T384-480q0 112 78.5 190.5T653-211q-5 15-7.5 28.5T643-150q-14 2-27.5 3t-27.5 1Zm0-60q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Zm234 360q-26 0-47-12.5T615-174q-22-5-41.5-13t-38.5-20q-39 11-79.5 17t-80.5 6q-139 0-239.5-100.5T120-480q0-139 100.5-239.5T460-820q139 0 239.5 100.5T800-480q0 41-6 81t-17 79q-11 20-19 39.5t-13 41.5q11 21 23.5 33.5T704-90Z" />
+    </svg>
+  );
+}
+
 const navItems = [
   { href: "/dashboard", label: "Accueil", icon: IconAccueil },
   { href: "/docs/components", label: "Composants", icon: IconComposants },
   { href: "/modules", label: "Modules", icon: IconModules },
   { href: "/sandbox", label: "Sandbox", icon: SandboxIcon },
+  { href: "/demo", label: "Demo", icon: IconDemo },
   { href: "/settings", label: "Paramètres", icon: IconParametres },
 ];
 

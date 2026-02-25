@@ -10,6 +10,8 @@ export interface SpinnerProps {
   text?: string;
   size?: SpinnerSize;
   variant?: SpinnerVariant;
+  /** Utilise la couleur texte (gris) au lieu de l'accent pour homogénéiser avec flèches/icônes neutres */
+  neutral?: boolean;
   className?: string;
 }
 
@@ -19,6 +21,7 @@ export function Spinner({
   text = "Chargement...",
   size = "medium",
   variant = "circle",
+  neutral = false,
   className = "",
 }: SpinnerProps) {
   if (variant === "dot") {
@@ -49,7 +52,7 @@ export function Spinner({
         className={`bpm-spinner rounded-full border-solid border-t-transparent animate-spin ${sizeMap[size]}`}
         style={{
           borderColor: "var(--bpm-border)",
-          borderTopColor: "var(--bpm-accent)",
+          borderTopColor: neutral ? "var(--bpm-text-secondary)" : "var(--bpm-accent)",
         }}
       />
       {text && (

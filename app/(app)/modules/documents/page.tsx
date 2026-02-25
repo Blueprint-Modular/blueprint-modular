@@ -177,16 +177,18 @@ export default function DocumentsPage() {
           <p style={{ color: "var(--bpm-text-secondary)" }}>Aucun document analysé pour l&apos;instant.</p>
         </div>
       ) : (
-        <Table
-          columns={columns}
-          data={tableData}
-          striped
-          hover
-          onRowClick={(row) => {
-            const id = (row as { id?: string }).id;
-            if (id) window.location.href = `/modules/documents/${id}`;
-          }}
-        />
+        <div className="documents-table-scroll" style={{ marginBottom: 24 }}>
+          <Table
+            columns={columns}
+            data={tableData}
+            striped
+            hover
+            onRowClick={(row) => {
+              const id = (row as { id?: string }).id;
+              if (id) window.location.href = `/modules/documents/${id}`;
+            }}
+          />
+        </div>
       )}
     </div>
   );

@@ -30,6 +30,7 @@ bpm.checkbox("Label", checked=True)
 bpm.toggle("Label", value=True)
 bpm.selectbox("Label", options="A,B,C")
 bpm.accordion("Titre1|Contenu1;Titre2|Contenu2")
+bpm.tabs("Onglet1 | Onglet2 | Onglet3")
 bpm.expander("Titre", expanded=False)
 bpm.avatar(name="AB", size="medium")
 bpm.slider("Label", min=0, max=100, value=50)
@@ -58,6 +59,7 @@ Règles strictes :
 - Pour les métriques financières, utilise des valeurs vraisemblables (ex: "142 500 €")
 - Pour les graphiques, génère 4-6 points de données cohérents
 - Commence toujours par bpm.title() pour nommer la page
+- Pour une appli multi-onglets : utilise bpm.tabs("Label1 | Label2 | Label3") puis, pour chaque onglet, les lignes bpm.* correspondantes en les séparant par une ligne vide (la première série de lignes = onglet 1, ligne vide, deuxième série = onglet 2, etc.). N'utilise PAS bpm.tabview (n'existe pas).
 - Maximum 15 lignes de code`;
 
 export async function POST(req: Request) {

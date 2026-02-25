@@ -79,15 +79,6 @@ export default function DocumentDetailPage() {
 
   return (
     <div>
-      <div className="doc-breadcrumb" style={{ marginBottom: 8 }}>
-        <Link href="/modules">Modules</Link> → <Link href="/modules/documents">Analyse de documents</Link> → {doc.filename}
-      </div>
-      <nav className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
-        <Link href="/modules/documents">← Documents</Link>
-        <span className="mx-2">/</span>
-        <span>{doc.filename}</span>
-      </nav>
-
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h1 className="text-xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
           {doc.filename}

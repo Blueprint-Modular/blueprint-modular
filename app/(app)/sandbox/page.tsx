@@ -458,10 +458,63 @@ function parseChartData(str: string | undefined): { x: string; y: number }[] {
 
 function parseCodeToPreview(code: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
-  code.split("\n").forEach((line, i) => {
+  const lines = code.split("\n");
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const tabsMatch = trimmed.match(/bpm\.tabs\s*\(\s*["']([^"']*)["']\s*\)/);
+    if (tabsMatch) {
+      const labels = tabsMatch[1].split(/\s*\|\s*/).map((s) => s.trim()).filter(Boolean);
+      let idx = i + 1;
+      const tabBlocks: string[][] = [];
+      for (let t = 0; t < labels.length; t++) {
+        const block: string[] = [];
+        while (idx < lines.length) {
+          const tTrimmed = lines[idx].trim();
+          if (tTrimmed === "") {
+            idx++;
+            if (block.length > 0) break;
+            continue;
+          }
+          if (tTrimmed.startsWith("bpm.") || tTrimmed.startsWith("#")) {
+            block.push(lines[idx]);
+            idx++;
+          } else {
+            if (block.length > 0) break;
+            idx++;
+          }
+        }
+        tabBlocks.push(block);
+      }
+      while (tabBlocks.length < labels.length) tabBlocks.push([]);
+      // Si un seul bloc avec plusieurs lignes (pas de lignes vides), répartir en N onglets
+      if (tabBlocks.length === 1 && tabBlocks[0].length >= labels.length && labels.length > 1) {
+        const all = tabBlocks[0];
+        const perTab = Math.ceil(all.length / labels.length);
+        tabBlocks.length = 0;
+        for (let t = 0; t < labels.length; t++) {
+          tabBlocks.push(
+            all.slice(t * perTab, t === labels.length - 1 ? all.length : (t + 1) * perTab)
+          );
+        }
+      }
+      const tabContents = labels.map((label, j) => ({
+        label,
+        content: (
+          <div key={j} className="flex flex-col gap-3">
+            {tabBlocks[j].map((l, k) => parseBpmLine(l, (i + 1) * 10000 + j * 1000 + k)).filter(Boolean)}
+          </div>
+        ),
+      }));
+      nodes.push(<Tabs key={i} tabs={tabContents} />);
+      i = idx;
+      continue;
+    }
     const node = parseBpmLine(line, i);
     if (node) nodes.push(node);
-  });
+    i++;
+  }
   return nodes;
 }
 
@@ -554,6 +607,7 @@ function SandboxContent() {
   const [aiGenerating, setAiGenerating] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiHealth, setAiHealth] = useState<{ available: boolean; model?: string; latencyMs?: number } | null>(null);
+  const [assistantName, setAssistantName] = useState("Assistant");
   const [code, setCode] = useState(DEFAULT_CODE);
   const [completionOpen, setCompletionOpen] = useState(false);
   const [completionPrefix, setCompletionPrefix] = useState("");
@@ -570,6 +624,20 @@ function SandboxContent() {
   useEffect(() => {
     setCompletionIndex((i) => Math.min(i, Math.max(0, completionList.length - 1)));
   }, [completionList.length]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("bpm-assistant-name");
+      if (stored?.trim()) setAssistantName(stored.trim());
+    } catch {
+      // ignore
+    }
+    const onUpdate = (e: CustomEvent<string>) => {
+      if (e.detail?.trim()) setAssistantName(e.detail.trim());
+    };
+    window.addEventListener("bpm-assistant-name-updated", onUpdate as EventListener);
+    return () => window.removeEventListener("bpm-assistant-name-updated", onUpdate as EventListener);
+  }, []);
 
   useEffect(() => {
     try {
@@ -1590,7 +1658,7 @@ function SandboxContent() {
               {aiGenerating && (
                 <span className="inline-flex items-center gap-2" style={{ color: "var(--bpm-text-secondary)" }}>
                   <Spinner size="small" text="" className="shrink-0" />
-                  <span className="text-xs">Qwen3 génère votre page (~30-60s)…</span>
+                  <span className="text-xs">{assistantName} génère votre page (~30-60s)…</span>
                 </span>
               )}
               {!aiGenerating && (

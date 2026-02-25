@@ -104,6 +104,7 @@ function getBreadcrumbFromPathname(pathname: string): { label: string; href?: st
   if (segments[0] === "settings") return [{ label: "Paramètres" }];
   if (segments[0] === "dashboard") return [];
   if (segments[0] === "sandbox") return [{ label: "Sandbox" }];
+  if (segments[0] === "demo") return [{ label: "Demo" }];
   return [];
 }
 

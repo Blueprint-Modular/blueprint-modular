@@ -278,8 +278,8 @@
 .bpm-ai-chat-input-highlight::-webkit-scrollbar { display: none; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="openai"] { color: #10A37F; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="claude"] { color: #F97316; }
-.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="vllm"] { color: #6037DB; }
-.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="qwen"] { color: #6037DB; }
+.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="vllm"] { color: var(--bpm-accent); }
+.bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="qwen"] { color: var(--bpm-accent); }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="mistral"] { color: #FA4C0A; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="gemini"] { color: #4285F4; }
 .bpm-ai-chat-input-highlight .bpm-ai-at-mention[data-provider="grok"] { color: #626262; }

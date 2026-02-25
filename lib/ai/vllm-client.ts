@@ -36,6 +36,42 @@ function mockChatResponse(messages: ChatMessage[]): string {
   if (question.includes("contrat") || question.includes("contract")) {
     return `En mode mock, les données de contrats ne sont pas chargées. En production, l'assistant a accès aux métadonnées des contrats (fournisseur, dates, engagements, niveau de risque) pour répondre à vos questions.`;
   }
+  // Extraction de documents (Analyse de documents) : retourner un JSON valide pour que l'UI affiche des données en mode démo
+  if (
+    question.includes('"supplier"') &&
+    question.includes('"client"') &&
+    (question.includes("Document") || question.includes("extrait texte"))
+  ) {
+    return JSON.stringify({
+      supplier: "Fournisseur exemple (mode démo)",
+      client: "Client exemple (mode démo)",
+      contract_date: "2025-01-15",
+      signature_date: "2025-01-20",
+      termination_date: "2026-01-19",
+      summary: "Contrat type en mode démo. Configurez Ollama ou ANTHROPIC_API_KEY pour une analyse réelle.",
+      key_points: ["Point clé 1 (démo)", "Point clé 2 (démo)"],
+      commitments: ["Engagement exemple (démo)"],
+    });
+  }
+  // Base contractuelle (analyse de contrat) : retourner un JSON valide pour éviter l'erreur 500 en mode démo
+  if (
+    question.includes("supplier_name") &&
+    question.includes("executive_summary") &&
+    (question.includes("Contrat à analyser") || question.includes("overall_risk_level"))
+  ) {
+    return JSON.stringify({
+      supplier_name: "Fournisseur exemple (mode démo)",
+      buyer_name: "Client exemple (mode démo)",
+      contract_date: "2025-01-15",
+      end_date: "2026-01-14",
+      executive_summary: "Contrat type en mode démo. Configurez Ollama pour une analyse réelle.",
+      key_risks: ["Risque exemple (démo)"],
+      key_opportunities: ["Opportunité exemple (démo)"],
+      overall_risk_level: "medium",
+      commitments: [],
+      signatories: [],
+    });
+  }
   return `Réponse mockée (AI_MOCK=true). Vous avez demandé : « ${question.slice(0, 80)}${question.length > 80 ? "…" : ""} ». Configurez AI_MOCK=false et pointez AI_SERVER_URL vers Ollama pour des réponses réelles.`;
 }
 

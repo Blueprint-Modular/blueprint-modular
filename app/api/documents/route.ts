@@ -78,18 +78,12 @@ export async function POST(request: Request) {
     },
   });
 
-  const extractPrompt = `Tu es un assistant spécialisé dans l'analyse de contrats. Analyse ce document et retourne UNIQUEMENT un objet JSON valide avec exactement ces champs :
-{
-  "supplier": "nom du fournisseur ou null",
-  "client": "nom du client ou null",
-  "contract_date": "YYYY-MM-DD ou null",
-  "signature_date": "YYYY-MM-DD ou null",
-  "termination_date": "YYYY-MM-DD ou null",
-  "summary": "synthèse en 2-3 phrases maximum",
-  "key_points": ["point clé 1", "point clé 2", "point clé 3"],
-  "commitments": ["engagement 1", "engagement 2"]
-}
-Ne retourne rien d'autre que ce JSON. Pas de texte avant ou après. Pas de balises markdown.`;
+  const extractPrompt = `Tu es un assistant d'extraction de données. Tu dois analyser le document fourni et répondre par UN SEUL objet JSON valide, sans aucun texte avant ou après, sans balises markdown (\`\`\`).
+
+Format exact à respecter (copie cette structure et remplis les valeurs à partir du document ; mets null si l'information est absente) :
+{"supplier":"nom du fournisseur ou null","client":"nom du client ou null","contract_date":"YYYY-MM-DD ou null","signature_date":"YYYY-MM-DD ou null","termination_date":"YYYY-MM-DD ou null","summary":"synthèse courte en 2-3 phrases","key_points":["point 1","point 2"],"commitments":["engagement 1","engagement 2"]}
+
+Règles : supplier = partie qui fournit le service ; client = partie qui le reçoit ; dates au format ISO YYYY-MM-DD si présentes dans le document. Réponds uniquement par l'objet JSON.`;
 
   try {
     const rawText = (await extractTextFromBuffer(buf, mime, file.name)).slice(0, 50000);
@@ -101,33 +95,51 @@ Ne retourne rien d'autre que ce JSON. Pas de texte avant ou après. Pas de balis
     const apiKey = process.env.ANTHROPIC_API_KEY;
     let parsed: Record<string, unknown> | null = null;
 
+    function extractJsonFromResponse(text: string): Record<string, unknown> | null {
+      if (!text || typeof text !== "string") return null;
+      const stripped = text.replace(/^[\s\S]*?```(?:json)?\s*/i, "").replace(/\s*```[\s\S]*$/i, "").trim();
+      const match = stripped.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+      try {
+        return JSON.parse(match[0]) as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    }
+
     if (rawText.length > 0) {
       if (apiKey) {
+        const documentPayload = `${extractPrompt}\n\n---\nDocument (extrait texte) :\n${rawText.slice(0, 80000)}`;
         const Anthropic = (await import("@anthropic-ai/sdk")).default;
         const client = new Anthropic({ apiKey });
         const message = await client.messages.create({
           model: "claude-sonnet-4-20250514",
           max_tokens: 2048,
-          messages: [{ role: "user", content: `${extractPrompt}\n\n---\nDocument:\n${rawText.slice(0, 80000)}` }],
+          messages: [{ role: "user", content: documentPayload }],
         });
         const textBlock = message.content.find((b) => b.type === "text") as { type: "text"; text: string } | undefined;
-        const jsonStr = textBlock?.text ?? "";
-        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
-        parsed = jsonMatch ? (JSON.parse(jsonMatch[0]) as Record<string, unknown>) : null;
+        parsed = extractJsonFromResponse(textBlock?.text ?? "");
       } else {
-        // Fallback : analyse via Ollama (Qwen3) si pas de clé Anthropic
+        const documentPayloadOllama = `${extractPrompt}\n\n---\nDocument (extrait texte) :\n${rawText.slice(0, 40000)}`;
         try {
           const { content } = await vllmClient.chat(
-            [{ role: "user", content: `${extractPrompt}\n\n---\nDocument:\n${rawText.slice(0, 40000)}` }],
+            [{ role: "user", content: documentPayloadOllama }],
             { timeout: 120_000 }
           );
-          const jsonMatch = content.match(/\{[\s\S]*\}/);
-          parsed = jsonMatch ? (JSON.parse(jsonMatch[0]) as Record<string, unknown>) : null;
+          parsed = extractJsonFromResponse(content);
         } catch (ollamaErr) {
           console.error("[documents] Analyse Ollama échouée:", ollamaErr instanceof Error ? ollamaErr.message : String(ollamaErr));
           parsed = null;
         }
       }
+    } else {
+      console.warn("[documents] Aucun texte extrait du PDF (fichier vide ou PDF image-only).");
+      await prisma.document.update({
+        where: { id: doc.id },
+        data: { analysisStatus: "error" },
+      });
+      doc = await prisma.document.findUniqueOrThrow({ where: { id: doc.id } });
+      return NextResponse.json(doc);
     }
 
     if (parsed) {
@@ -149,7 +161,11 @@ Ne retourne rien d'autre que ce JSON. Pas de texte avant ou après. Pas de balis
         },
       });
     } else {
-      await prisma.document.update({ where: { id: doc.id }, data: { analysisStatus: "done" } });
+      await prisma.document.update({
+        where: { id: doc.id },
+        data: { analysisStatus: "error" },
+      });
+      doc = await prisma.document.findUniqueOrThrow({ where: { id: doc.id } });
     }
   } catch (err) {
     console.error("[documents] Erreur analyse document:", err instanceof Error ? err.message : String(err));

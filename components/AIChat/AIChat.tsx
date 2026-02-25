@@ -19,15 +19,15 @@ const PROVIDER_ALIAS: Record<string, string> = {
 
 const AT_COLORS: Record<string, string> = {
   claude: "#F97316",
-  vllm: "#6037DB", /* Qwen : violet */
-  qwen: "#6037DB",
+  vllm: "var(--bpm-accent)",
+  qwen: "var(--bpm-accent)",
   mistral: "#FA4C0A",
 };
 
-/** Modèles disponibles (sans GPT, Gemini, Grok). */
+/** Modèles disponibles (sans GPT, Gemini, Grok). Libellé affiché pour l'assistant = prop assistantName (paramétrable). */
 const PROVIDERS_LIST = [
-  { id: "vllm", shortLabel: "Qwen", color: AT_COLORS.vllm },
-  { id: "qwen", shortLabel: "Qwen", color: AT_COLORS.qwen },
+  { id: "vllm", shortLabel: "Assistant", color: AT_COLORS.vllm },
+  { id: "qwen", shortLabel: "Assistant", color: AT_COLORS.qwen },
   { id: "mistral", shortLabel: "Mistral", color: AT_COLORS.mistral },
   { id: "claude", shortLabel: "Claude", color: AT_COLORS.claude },
 ];
@@ -78,13 +78,11 @@ function MessageBubble({
   assistantName: string;
 }) {
   if (message.role === "assistant") {
-    const label = PROVIDERS_LIST.find((p) => p.id === message.provider)?.shortLabel ?? message.provider ?? assistantName;
-    const color = PROVIDERS_LIST.find((p) => p.id === message.provider)?.color ?? AT_COLORS[message.provider ?? ""] ?? "var(--bpm-text-secondary)";
     return (
       <div className="bpm-ai-message bpm-ai-message--assistant">
         <div className="bpm-ai-message-header">
-          <span className="bpm-ai-message-provider" style={{ color }}>
-            {label}:
+          <span className="bpm-ai-message-provider" style={{ color: "var(--bpm-accent)" }}>
+            {assistantName}:
           </span>
         </div>
         <div className="bpm-ai-message-body">
@@ -371,8 +369,10 @@ export function AIChat({
   };
 
   const selectedConversation = selectedHistoryId ? historyConversations.find((c) => c.id === selectedHistoryId) : null;
-  const providerLabel = (name: string) => PROVIDERS_LIST.find((p) => p.id === name)?.shortLabel ?? name;
-  const providerColor = (name: string) => PROVIDERS_LIST.find((p) => p.id === name)?.color ?? AT_COLORS[name] ?? "var(--bpm-text-secondary)";
+  const providerLabel = (name: string) =>
+    name === "vllm" || name === "qwen" ? assistantName : (PROVIDERS_LIST.find((p) => p.id === name)?.shortLabel ?? name);
+  const providerColor = (name: string) =>
+    name === "vllm" || name === "qwen" ? "var(--bpm-accent)" : (PROVIDERS_LIST.find((p) => p.id === name)?.color ?? AT_COLORS[name] ?? "var(--bpm-text-secondary)");
 
   if (status === "loading") {
     return (

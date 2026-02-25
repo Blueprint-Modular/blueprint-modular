@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Button, Panel, Spinner } from "@/components/bpm";
 import { useAssistant } from "@/lib/ai/assistant-context";
 
@@ -67,7 +66,6 @@ function buildContractContextForAssistant(data: ExtractedData | null, title: str
 
 export default function ContractDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const id = params?.id as string;
   const [contract, setContract] = useState<Contract | null>(null);
   const [loading, setLoading] = useState(true);
@@ -116,11 +114,6 @@ export default function ContractDetailPage() {
     <div className="doc-page">
       <div className="doc-page-header flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link href="/modules/contracts" className="text-sm" style={{ color: "var(--bpm-accent-cyan)" }}>
-              ← Base contractuelle
-            </Link>
-          </div>
           <h1>{contract.originalFilename}</h1>
           <p className="doc-description">
             {contract.workspace} · {contract.contractType} · Statut : {contract.status}

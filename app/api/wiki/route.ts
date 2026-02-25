@@ -31,7 +31,9 @@ export async function GET(request: Request) {
     : null;
 
   const tagCondition = tag ? { tags: { has: tag } } : null;
-  const conditions = [visibility, searchCondition, tagCondition].filter(Boolean);
+  const conditions = [visibility, searchCondition, tagCondition].filter(
+    (c): c is NonNullable<typeof c> => c != null
+  );
   const where = conditions.length > 1 ? { AND: conditions } : conditions[0] ?? visibility;
 
   const rawArticles = await prisma.wikiArticle.findMany({

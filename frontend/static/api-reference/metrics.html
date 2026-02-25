@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>metric  API Reference  Blueprint Modular</title>
+  <title>metric  —  API Reference  —  Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -89,8 +89,8 @@
       <table>
         <thead><tr><th>Paramètre</th><th>Type</th><th>Défaut</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>label</td><td>str</td><td></td><td>Titre de la métrique.</td></tr>
-          <tr><td>value</td><td>number | str</td><td></td><td>Valeur affichée.</td></tr>
+          <tr><td>label</td><td>str</td><td> — </td><td>Titre de la métrique.</td></tr>
+          <tr><td>value</td><td>number | str</td><td> — </td><td>Valeur affichée.</td></tr>
           <tr><td>delta</td><td>number | None</td><td>None</td><td>Variation (? positif, ? négatif).</td></tr>
           <tr><td>delta_fmt</td><td>str | None</td><td>None</td><td>Format d'affichage du delta (ex. devise).</td></tr>
           <tr><td>help</td><td>str | None</td><td>None</td><td>Info-bulle à côté du libellé.</td></tr>
@@ -102,7 +102,7 @@
 bpm.metric("Valeur", 142500, delta=3200)
 bpm.metric("Taux", "12.5 %", delta=-1.2)</code></pre>
       <h2>Preview live</h2>
-      <p><a href="../components.html">Catalogue des composants</a>  Metric, SparklineMetric.</p>
+      <p><a href="../components.html">Catalogue des composants</a>  —  Metric, SparklineMetric.</p>
       <h2>Variantes</h2>
       <p><strong>Delta inverse</strong> : pour un indicateur où une baisse est positive (ex. coût). <strong>Devise</strong> : passer <code>delta_fmt</code> pour formater le delta.</p>
       <p><small>Variables CSS : <code>--bpm-metric-value-color</code>, <code>--bpm-delta-up</code>, <code>--bpm-delta-down</code>.</small></p>

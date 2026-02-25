@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width:device-width, initial-scale=1" />
-  <title>API Reference  Components Blueprint Modular</title>
+  <title>API Reference  —  Components Blueprint Modular</title>
   <meta name="description" content="Référence API des composants Blueprint Modular (BPM). Signature, paramètres et exemples." />
   <link rel="icon" href="favicon.ico" />
   <link rel="icon" type="image/png" href="img/logo-bpm.png" />
@@ -94,9 +94,9 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td></td><td>Titre ou en-tête de la métrique.</td></tr>
-            <tr><td>value</td><td>number, string, or None</td><td></td><td>Valeur affichée. <code>null</code> ou non défini est rendu comme un tiret long.</td></tr>
-            <tr><td>delta</td><td>number or None</td><td></td><td>Variation affichée avec une flèche (? si positif, ? si négatif). Couleur selon <code>deltaType</code>. Si <code>null</code>, pas de flèche.</td></tr>
+            <tr><td>label</td><td>str</td><td> — </td><td>Titre ou en-tête de la métrique.</td></tr>
+            <tr><td>value</td><td>number, string, or None</td><td> — </td><td>Valeur affichée. <code>null</code> ou non défini est rendu comme un tiret long.</td></tr>
+            <tr><td>delta</td><td>number or None</td><td> — </td><td>Variation affichée avec une flèche (? si positif, ? si négatif). Couleur selon <code>deltaType</code>. Si <code>null</code>, pas de flèche.</td></tr>
             <tr><td>deltaType</td><td>str</td><td>"normal"</td><td><strong>"normal"</strong> : positif = vert, négatif = rouge. <strong>"inverse"</strong> : positif = rouge, négatif = vert (ex. coûts).</td></tr>
             <tr><td>deltaDecimals</td><td>number</td><td>0</td><td>Nombre de décimales pour l'affichage du delta.</td></tr>
             <tr><td>currency</td><td>str</td><td>"EUR"</td><td>Symbole pour le delta (EUR, USD, GBP, JPY, CHF, CAD, AUD). Chaîne vide pour un pourcentage.</td></tr>
@@ -190,10 +190,10 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td></td><td>Libellé au-dessus du champ.</td></tr>
+            <tr><td>label</td><td>str</td><td> — </td><td>Libellé au-dessus du champ.</td></tr>
             <tr><td>options</td><td>array</td><td>[]</td><td>Tableau dobjets <code>{ value, label }</code>.</td></tr>
-            <tr><td>value</td><td>any</td><td></td><td>Valeur sélectionnée (contrôlée).</td></tr>
-            <tr><td>onChange</td><td>function</td><td></td><td>Appelé avec la nouvelle valeur lors du changement.</td></tr>
+            <tr><td>value</td><td>any</td><td> — </td><td>Valeur sélectionnée (contrôlée).</td></tr>
+            <tr><td>onChange</td><td>function</td><td> — </td><td>Appelé avec la nouvelle valeur lors du changement.</td></tr>
             <tr><td>placeholder</td><td>str</td><td>"Sélectionner..."</td><td>Texte affiché quand aucune valeur nest sélectionnée.</td></tr>
             <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le select.</td></tr>
             <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte daide.</td></tr>
@@ -234,11 +234,11 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>columns</td><td>array</td><td></td><td><code>{ key, label, align? }</code>. <code>key</code> utilisé pour le tri si présent.</td></tr>
-            <tr><td>data</td><td>array</td><td></td><td>Lignes (objets). Les clés doivent correspondre aux <code>key</code> des colonnes.</td></tr>
+            <tr><td>columns</td><td>array</td><td> — </td><td><code>{ key, label, align? }</code>. <code>key</code> utilisé pour le tri si présent.</td></tr>
+            <tr><td>data</td><td>array</td><td> — </td><td>Lignes (objets). Les clés doivent correspondre aux <code>key</code> des colonnes.</td></tr>
             <tr><td>striped</td><td>bool</td><td>true</td><td>Lignes alternées.</td></tr>
             <tr><td>hover</td><td>bool</td><td>true</td><td>Surbrillance au survol.</td></tr>
-            <tr><td>onRowClick</td><td>function</td><td></td><td>Appelé avec la ligne (row) au clic.</td></tr>
+            <tr><td>onRowClick</td><td>function</td><td> — </td><td>Appelé avec la ligne (row) au clic.</td></tr>
             <tr><td>defaultSortColumn</td><td>str or null</td><td>null</td><td>Colonne de tri initiale.</td></tr>
             <tr><td>defaultSortDirection</td><td>str</td><td>"asc"</td><td>asc ou desc.</td></tr>
           </tbody>
@@ -255,9 +255,9 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td></td><td>Libellé.</td></tr>
-            <tr><td>value</td><td>number</td><td></td><td>Valeur (contrôlée).</td></tr>
-            <tr><td>onChange</td><td>function</td><td></td><td>Appelé avec la nouvelle valeur (number ou string en mode contrôlé).</td></tr>
+            <tr><td>label</td><td>str</td><td> — </td><td>Libellé.</td></tr>
+            <tr><td>value</td><td>number</td><td> — </td><td>Valeur (contrôlée).</td></tr>
+            <tr><td>onChange</td><td>function</td><td> — </td><td>Appelé avec la nouvelle valeur (number ou string en mode contrôlé).</td></tr>
             <tr><td>min, max, step</td><td>number or null</td><td>null, null, 1</td><td>Contraintes et pas.</td></tr>
             <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le champ.</td></tr>
             <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle.</td></tr>
@@ -274,9 +274,9 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td></td><td>Libellé.</td></tr>
-            <tr><td>value</td><td>Date or string</td><td></td><td>Valeur (objet Date ou chaîne ISO).</td></tr>
-            <tr><td>onChange</td><td>function</td><td></td><td>Appelé avec Date ou null.</td></tr>
+            <tr><td>label</td><td>str</td><td> — </td><td>Libellé.</td></tr>
+            <tr><td>value</td><td>Date or string</td><td> — </td><td>Valeur (objet Date ou chaîne ISO).</td></tr>
+            <tr><td>onChange</td><td>function</td><td> — </td><td>Appelé avec Date ou null.</td></tr>
             <tr><td>min, max</td><td>Date or string</td><td>null</td><td>Bornes du sélecteur.</td></tr>
           </tbody>
         </table>
@@ -291,9 +291,9 @@
         <table>
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>label</td><td>str</td><td></td><td>Libellé.</td></tr>
+            <tr><td>label</td><td>str</td><td> — </td><td>Libellé.</td></tr>
             <tr><td>value</td><td>str</td><td>"#000000"</td><td>Couleur hexadécimale.</td></tr>
-            <tr><td>onChange</td><td>function</td><td></td><td>Appelé avec la nouvelle valeur hex.</td></tr>
+            <tr><td>onChange</td><td>function</td><td> — </td><td>Appelé avec la nouvelle valeur hex.</td></tr>
           </tbody>
         </table>
       </section>
@@ -309,7 +309,7 @@
           <tbody>
             <tr><td>tabs</td><td>array</td><td>[]</td><td><code>{ label, content }</code> ou string (label seul).</td></tr>
             <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de longlet actif au montage.</td></tr>
-            <tr><td>onChange</td><td>function</td><td></td><td>Appelé avec lindex lors du changement donglet.</td></tr>
+            <tr><td>onChange</td><td>function</td><td> — </td><td>Appelé avec lindex lors du changement donglet.</td></tr>
           </tbody>
         </table>
       </section>

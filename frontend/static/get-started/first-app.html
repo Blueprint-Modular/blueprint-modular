@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Première app  Blueprint Modular</title>
+  <title>Première app  —  Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -76,11 +76,11 @@
       <p>Un dashboard de ventes avec 3 métriques, un tableau et un graphique d'évolution du CA.</p>
       <div class="preview-placeholder" style="min-height:280px;">[ Screenshot résultat final : dashboard ventes ]</div>
 
-      <h2>Étape 1  Créer le fichier</h2>
+      <h2>Étape 1  —  Créer le fichier</h2>
       <pre><code class="language-bash">mkdir mon-dashboard &amp;&amp; cd mon-dashboard
 touch app.py</code></pre>
 
-      <h2>Étape 2  Écrire l'app</h2>
+      <h2>Étape 2  —  Écrire l'app</h2>
       <pre><code class="language-python">import bpm
 import pandas as pd
 
@@ -109,10 +109,10 @@ bpm.subheader("Détail par mois")
 bpm.table(df)</code></pre>
       <div class="alert alert-info">
         <span class="alert-icon"></span>
-        <div class="alert-body"><strong>Note</strong>  <code>bpm.columns</code> et <code>bpm.chart.line</code> sont prévus dans l'API ; l'implémentation actuelle propose <code>bpm.metric</code>, <code>bpm.table</code>, <code>bpm.title</code>, <code>bpm.write</code>, <code>bpm.button</code>, <code>bpm.panel</code>. Voir <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</div>
+        <div class="alert-body"><strong>Note</strong>  —  <code>bpm.columns</code> et <code>bpm.chart.line</code> sont prévus dans l'API ; l'implémentation actuelle propose <code>bpm.metric</code>, <code>bpm.table</code>, <code>bpm.title</code>, <code>bpm.write</code>, <code>bpm.button</code>, <code>bpm.panel</code>. Voir <a href="../knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>.</div>
       </div>
 
-      <h2>Étape 3  Lancer</h2>
+      <h2>Étape 3  —  Lancer</h2>
       <pre><code class="language-bash">bpm run app.py</code></pre>
       <p>Ouvrez <code>http://localhost:8501</code> dans votre navigateur.</p>
 
@@ -127,9 +127,9 @@ bpm.table(df)</code></pre>
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="../components.html">Catalogue des composants</a>  Découvrir tous les widgets</li>
-          <li><a href="../api-reference/metrics.html">API Reference  Metrics</a></li>
-          <li><a href="../deploy/concepts.html">Déployer</a>  Mettre en production</li>
+          <li><a href="../components.html">Catalogue des composants</a>  —  Découvrir tous les widgets</li>
+          <li><a href="../api-reference/metrics.html">API Reference  —  Metrics</a></li>
+          <li><a href="../deploy/concepts.html">Déployer</a>  —  Mettre en production</li>
         </ul>
       </section>
 

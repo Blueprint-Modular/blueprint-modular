@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Déployer  Plateformes  Blueprint Modular</title>
+  <title>Déployer  —  Plateformes  —  Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -84,16 +84,16 @@
       </div>
       <h2 id="vps">VPS Ubuntu + Nginx + systemd</h2>
       <p><strong>Recommandé</strong> pour héberger une app BPM sur un serveur dédié.</p>
-      <h3>Étape 1  Installer BPM sur le serveur</h3>
+      <h3>Étape 1  —  Installer BPM sur le serveur</h3>
       <p>Le dépôt GitHub est privé. Utilisez <code>pip install blueprint-modular</code> (PyPI) pour installer BPM sur le serveur. Si vous avez accès au dépôt, vous pouvez aussi cloner et faire <code>pip install -e .</code>.</p>
       <pre><code>python3 -m venv .venv
 source .venv/bin/activate
 pip install blueprint-modular</code></pre>
       <p>Créez ensuite un <code>app.py</code> (ou utilisez <code>bpm init</code>) dans un répertoire de déploiement, par ex. <code>/var/www/blueprint-modular</code>, et pointez <code>WorkingDirectory</code> vers ce dossier (voir Étape 2).</p>
-      <h3>Étape 2  Configurer systemd</h3>
+      <h3>Étape 2  —  Configurer systemd</h3>
       <p>Créer <code>/etc/systemd/system/blueprint-modular.service</code> :</p>
       <pre><code>[Unit]
-Description=Blueprint Modular  app BPM
+Description=Blueprint Modular  —  app BPM
 After=network.target
 
 [Service]
@@ -107,11 +107,11 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target</code></pre>
       <p>Puis : <code>systemctl daemon-reload</code>, <code>systemctl enable blueprint-modular</code>, <code>systemctl start blueprint-modular</code>.</p>
-      <h3>Étape 3  Configurer Nginx (reverse proxy)</h3>
+      <h3>Étape 3  —  Configurer Nginx (reverse proxy)</h3>
       <p>Vhost Nginx qui proxy vers <code>http://127.0.0.1:8501</code>. Voir <code>deploy/nginx.conf</code> ou exemples dans le repo.</p>
-      <h3>Étape 4  SSL avec Certbot</h3>
+      <h3>Étape 4  —  SSL avec Certbot</h3>
       <p><code>certbot --nginx -d votre-domaine.com</code></p>
-      <h3>Étape 5  Déployer les mises à jour</h3>
+      <h3>Étape 5  —  Déployer les mises à jour</h3>
       <p>Avec PyPI : <code>source .venv/bin/activate && pip install --upgrade blueprint-modular && systemctl restart blueprint-modular</code>. Si vous déployez depuis le dépôt (accès requis) : <code>git pull</code> puis redémarrage, ou <code>deploy/deploy-from-git.sh</code>.</p>
 
       <h2 id="docker">Docker</h2>
@@ -134,8 +134,8 @@ CMD ["python", "-m", "bpm.cli", "run", "app.py", "--port", "8501", "--host", "0.
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="../knowledge-base/troubleshooting.html">Dépannage</a>  Erreurs courantes</li>
-          <li><a href="../get-started/installation.html">Installation</a>  Rappel des commandes</li>
+          <li><a href="../knowledge-base/troubleshooting.html">Dépannage</a>  —  Erreurs courantes</li>
+          <li><a href="../get-started/installation.html">Installation</a>  —  Rappel des commandes</li>
         </ul>
       </section>
       <section class="help-cta">

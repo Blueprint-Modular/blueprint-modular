@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Boxes, FolderOpen, Settings, Sparkles } from "lucide-react";
+import { Boxes, FolderOpen, Sparkles } from "lucide-react";
 import { SandboxIcon } from "@/components/icons/SandboxIcon";
 import { StartBuildingBlock } from "@/components/StartBuildingBlock";
 import type { Metadata } from "next";
@@ -34,12 +34,6 @@ const quickLinks = [
     label: "Modules",
     description: "Wiki, IA, Documents, Veille — modules prêts à l'emploi",
     icon: FolderOpen,
-  },
-  {
-    href: "/settings",
-    label: "Paramètres",
-    description: "Thème, clés API, notifications et préférences",
-    icon: Settings,
   },
 ];
 

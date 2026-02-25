@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fondamentaux  Blueprint Modular</title>
+  <title>Fondamentaux  —  Blueprint Modular</title>
   <link rel="icon" href="../favicon.ico" />
   <link rel="icon" type="image/png" href="../img/logo-bpm.png" />
   <link rel="stylesheet" href="../doc.css" />
@@ -77,9 +77,9 @@
 
       <h2>Le cycle de rendu</h2>
       <ul>
-        <li><strong>Au lancement</strong>  <code>bpm run</code> exécute <code>app.py</code> de haut en bas. Chaque appel (<code>bpm.title</code>, <code>bpm.button</code>, etc.) enregistre un nud de rendu.</li>
-        <li><strong>À chaque interaction</strong>  Clic sur un bouton ? requête HTTP avec <code>?clicked=&lt;key&gt;</code> ? mise à jour de <code>bpm.session_state</code> ? re-run du script. Seuls les composants concernés peuvent être rafraîchis (réactivité granulaire prévue ; aujourd'hui re-run complet comme Streamlit).</li>
-        <li><strong>Différence avec Streamlit</strong>  BPM vise à terme une mise à jour ciblée sans re-exécuter tout le script (refs réactives, store côté front).</li>
+        <li><strong>Au lancement</strong>  —  <code>bpm run</code> exécute <code>app.py</code> de haut en bas. Chaque appel (<code>bpm.title</code>, <code>bpm.button</code>, etc.) enregistre un nud de rendu.</li>
+        <li><strong>À chaque interaction</strong>  —  Clic sur un bouton ? requête HTTP avec <code>?clicked=&lt;key&gt;</code> ? mise à jour de <code>bpm.session_state</code> ? re-run du script. Seuls les composants concernés peuvent être rafraîchis (réactivité granulaire prévue ; aujourd'hui re-run complet comme Streamlit).</li>
+        <li><strong>Différence avec Streamlit</strong>  —  BPM vise à terme une mise à jour ciblée sans re-exécuter tout le script (refs réactives, store côté front).</li>
       </ul>
       <div class="preview-placeholder" style="min-height:180px;">[ Diagramme du cycle : lancement ? exécution script ? nuds ? HTML ; clic ? requête ? session_state ? re-run ]</div>
 
@@ -96,7 +96,7 @@ if bpm.button("Incrémenter"):
 # Seul le bpm.metric se rafraîchit, pas toute la page.</code></pre>
       <div class="alert alert-info">
         <span class="alert-icon"></span>
-        <div class="alert-body"><strong>Note</strong>  Aujourd'hui, chaque clic déclenche un re-run complet du script (comme Streamlit). Un mode WebSocket ou SSE est prévu pour mettre à jour uniquement les composants concernés, sans rechargement complet.</div>
+        <div class="alert-body"><strong>Note</strong>  —  Aujourd'hui, chaque clic déclenche un re-run complet du script (comme Streamlit). Un mode WebSocket ou SSE est prévu pour mettre à jour uniquement les composants concernés, sans rechargement complet.</div>
       </div>
 
       <h2>Les décorateurs (@)</h2>
@@ -125,9 +125,9 @@ def navigation():
       <section class="whats-next">
         <h2>Et maintenant ?</h2>
         <ul>
-          <li><a href="first-app.html">Première app</a>  Tutoriel dashboard pas à pas</li>
+          <li><a href="first-app.html">Première app</a>  —  Tutoriel dashboard pas à pas</li>
           <li><a href="../components.html">Catalogue des composants</a></li>
-          <li><a href="../api-reference/config.html">Config</a>  Thème et configuration</li>
+          <li><a href="../api-reference/config.html">Config</a>  —  Thème et configuration</li>
         </ul>
       </section>
 

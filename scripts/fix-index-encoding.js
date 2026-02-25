@@ -48,6 +48,8 @@ function fixMojibake(s) {
   s = s.replace(/nÅ/g, "nœ");
   // Em dash mojibake: â + 0x80 0x94 (UTF-8 for U+2014)
   s = s.replace(/â\u0080\u0094/g, "—");
+  // U+0097 (control) utilisé par erreur comme séparateur → tiret cadratin
+  s = s.replace(/\u0097/g, " — ");
   return s;
 }
 

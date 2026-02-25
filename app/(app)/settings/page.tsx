@@ -22,7 +22,7 @@ const PROVIDERS = ["OpenAI", "Anthropic", "Google", "Groq", "Other"];
 
 const BPM_ACCENT_STORAGE = "bpm-accent-color";
 const NOTIFICATION_LEVEL_STORAGE = "bpm-notification-level";
-export const BPM_ASSISTANT_NAME_STORAGE = "bpm-assistant-name";
+const BPM_ASSISTANT_NAME_STORAGE = "bpm-assistant-name";
 
 function useStoredAccent(defaultHex: string) {
   const [accent, setAccent] = useState(defaultHex);

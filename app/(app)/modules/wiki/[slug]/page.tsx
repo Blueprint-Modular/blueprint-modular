@@ -254,12 +254,14 @@ export default function WikiArticlePage() {
             rehypePlugins={[rehypeRaw, rehypeHighlight]}
             components={{
               h2: ({ node, children, ...props }) => {
-                const text = typeof children?.[0] === "string" ? children[0] : "";
+                const first = Array.isArray(children) ? children[0] : children;
+                const text = typeof first === "string" ? first : "";
                 const id = text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
                 return <h2 id={id || undefined} {...props}>{children}</h2>;
               },
               h3: ({ node, children, ...props }) => {
-                const text = typeof children?.[0] === "string" ? children[0] : "";
+                const first = Array.isArray(children) ? children[0] : children;
+                const text = typeof first === "string" ? first : "";
                 const id = text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
                 return <h3 id={id || undefined} {...props}>{children}</h3>;
               },

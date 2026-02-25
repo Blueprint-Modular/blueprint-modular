@@ -15,10 +15,7 @@ export const metadata: Metadata = {
   description: DEFAULT_DESC,
   applicationName: "Blueprint Modular",
   manifest: "/manifest",
-  icons: {
-    icon: "/img/icon-pwa-192.png",
-    apple: "/img/icon-pwa-512.png",
-  },
+  // Favicon : app/icon.svg (convention Next.js, lien injecté automatiquement)
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
@@ -49,7 +46,6 @@ export default function RootLayout({
   return (
     <html lang="fr" dir="ltr" suppressHydrationWarning>
       <head>
-        <link rel="apple-touch-icon" href="/img/icon-pwa-512.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="theme-color" content="#00a3e2" />

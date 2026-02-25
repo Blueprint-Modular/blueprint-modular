@@ -175,6 +175,9 @@ export default function DocumentsPage() {
       ) : documents.length === 0 ? (
         <div className="documents-empty py-6">
           <p style={{ color: "var(--bpm-text-secondary)" }}>Aucun document analysé pour l&apos;instant.</p>
+          <Link href="/modules/documents#documentation" className="text-sm mt-2 inline-block" style={{ color: "var(--bpm-accent-cyan)" }}>
+            Analyser un document →
+          </Link>
         </div>
       ) : (
         <div className="documents-table-scroll" style={{ marginBottom: 24 }}>
@@ -190,6 +193,11 @@ export default function DocumentsPage() {
           />
         </div>
       )}
+
+      <nav className="doc-pagination mt-8">
+        <Link href="/modules/documents#documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Analyser un document</Link>
+        <Link href="/modules/documents/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
+      </nav>
     </div>
   );
 }

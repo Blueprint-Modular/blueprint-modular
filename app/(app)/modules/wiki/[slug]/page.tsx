@@ -116,6 +116,11 @@ export default function WikiArticlePage() {
         <div className="flex items-center gap-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
           Mis à jour le {new Date(article.updatedAt).toLocaleDateString("fr-FR")}
           {article.author?.name && ` · ${article.author.name}`}
+          {!session && article.canEdit === false && (
+            <span className="text-xs px-2 py-0.5 rounded border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+              Lecture seule
+            </span>
+          )}
           {(session || article.canEdit) && (
             <>
               <Link href={`/modules/wiki/${article.slug}/edit`}>
@@ -164,7 +169,7 @@ export default function WikiArticlePage() {
 
       <nav className="doc-pagination mt-8">
         <Link href="/modules/wiki" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour au Wiki</Link>
-        <span />
+        <Link href="/modules/wiki/new" style={{ color: "var(--bpm-accent-cyan)" }}>Créer un article</Link>
       </nav>
     </div>
   );

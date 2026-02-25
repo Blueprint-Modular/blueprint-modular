@@ -15,7 +15,14 @@ export async function GET(
     where: { id, uploadedById: user.id },
   });
   if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(doc);
+  const payload = {
+    ...doc,
+    createdAt: doc.createdAt.toISOString(),
+    contractDate: doc.contractDate?.toISOString() ?? null,
+    signatureDate: doc.signatureDate?.toISOString() ?? null,
+    terminationDate: doc.terminationDate?.toISOString() ?? null,
+  };
+  return NextResponse.json(payload);
 }
 
 export async function DELETE(

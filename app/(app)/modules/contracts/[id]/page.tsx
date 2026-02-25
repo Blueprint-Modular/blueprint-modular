@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Button, Panel, Spinner } from "@/components/bpm";
 import { useAssistant } from "@/lib/ai/assistant-context";
@@ -236,6 +237,11 @@ export default function ContractDetailPage() {
           </Panel>
         </div>
       </div>
+
+      <nav className="doc-pagination mt-8">
+        <Link href="/modules/contracts" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour à la Base contractuelle</Link>
+        <Link href="/modules/contracts#documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Importer un contrat</Link>
+      </nav>
     </div>
   );
 }

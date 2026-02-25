@@ -193,7 +193,7 @@ function computeLanes<T extends { heure: string; duree?: number }>(events: T[]):
     let lane = 0;
     while (true) {
       let ok = true;
-      for (const [other, l] of lanes) {
+      for (const [other, l] of Array.from(lanes)) {
         if (l !== lane) continue;
         const oStart = hourStringToMinutes(other.heure);
         const oEnd = oStart + (other.duree ?? 60);

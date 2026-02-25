@@ -105,6 +105,7 @@ if [ -f "$REPO_DIR/package.json" ] && [ -f "$REPO_DIR/next.config.mjs" ]; then
   else
     npm install
     npx prisma generate
+    rm -rf .next
     npm run build
     mkdir -p .next/standalone/.next
     cp -r .next/static .next/standalone/.next/ 2>/dev/null || true

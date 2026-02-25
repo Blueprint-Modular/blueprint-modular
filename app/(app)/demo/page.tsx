@@ -143,7 +143,7 @@ export default function DemoPage() {
               label="Recherche"
               placeholder="Client ou contact…"
               value={searchClient}
-              onChange={(e) => setSearchClient(e.target.value)}
+              onChange={(value) => setSearchClient(value)}
             />
             <Selectbox
               label="Statut"

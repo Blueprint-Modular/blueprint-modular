@@ -78,6 +78,7 @@ body {
     padding-left: var(--bpm-sidebar-width, 0);
     -webkit-app-region: drag;
     app-region: drag;
+    background: #fff !important;
   }
   .pwa-title-bar button,
   .pwa-title-bar a {

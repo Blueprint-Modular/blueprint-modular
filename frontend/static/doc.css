@@ -148,6 +148,7 @@ body {
 .doc-main .lead { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; }
 .doc-main h2 { font-size: 1.1rem; font-weight: 600; margin: 2rem 0 0.75rem; }
 .doc-main p { margin-bottom: 0.75rem; font-size: 0.95rem; }
+.doc-main p strong { display: inline; }
 .doc-main table { width: 100%; font-size: 0.9rem; border-collapse: collapse; margin: 0.75rem 0 1.5rem; }
 .doc-main th, .doc-main td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
 .doc-main th { background: var(--bg-code); color: var(--muted); font-weight: 500; }
@@ -165,6 +166,8 @@ body {
 .doc-main code { background: var(--bg-code); color: var(--fg); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
 .doc-main .example-title { font-weight: 600; margin: 1.25rem 0 0.5rem; font-size: 0.95rem; }
 .doc-main .info-box { background: var(--bg-card); border-left: 4px solid var(--accent); padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+/* Éviter les retours à la ligne intempestifs dans des expressions (ex. "L'app de démo", "Côté runtime Python (bpm run)") */
+.doc-main .no-break { white-space: nowrap; }
 .doc-main ul { margin: 0.5rem 0 1rem 1.5rem; }
 .doc-footer { margin-top: 3rem; padding-top: 1rem; font-size: 0.875rem; color: var(--muted); border-top: 1px solid var(--border); }
 .doc-footer a { color: var(--accent); text-decoration: none; }
@@ -347,7 +350,8 @@ body {
 .alert-tip { background: #f0fdf4; border-left: 4px solid #22c55e; }
 .alert-icon { flex-shrink: 0; }
 .alert-body { flex: 1; }
-.alert-body strong { display: block; margin-bottom: 0.25rem; }
+.alert-body strong { display: inline; }
+.alert-body strong:first-of-type { display: block; margin-bottom: 0.25rem; }
 @media (prefers-color-scheme: dark) {
   .alert-important { background: #422006; border-left-color: #f59e0b; color: #fef3c7; }
   .alert-info { background: #1e3a5f; border-left-color: #60a5fa; color: #bfdbfe; }

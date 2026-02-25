@@ -65,9 +65,6 @@ export default function ModulesPage() {
         <p className="doc-description">
           Modules disponibles, classés par catégorie. Chaque module dispose d&apos;une page avec Documentation et Simulateur pour tester en ligne.
         </p>
-        <div className="doc-meta">
-          <span className="doc-badge doc-badge-category">Vue d&apos;ensemble</span>
-        </div>
       </div>
 
       {CATEGORY_ORDER.map((category) => {

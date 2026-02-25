@@ -150,37 +150,35 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
       <div
         className={`app-content-column flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"}`}
       >
-          {pathname !== "/dashboard" && (
-            <header
-              className="pwa-title-bar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between px-3 sm:px-4 gap-2"
-              style={{ background: "var(--bpm-bg-primary)" }}
-            >
-              <nav aria-label="Fil d'Ariane" className="doc-breadcrumb doc-breadcrumb-header text-sm truncate min-w-0">
-                {breadcrumbItems.length > 0 ? (
-                  <>
-                    {breadcrumbItems.map((item, i) => (
-                      <span key={i}>
-                        {i > 0 && <span className="opacity-70"> → </span>}
-                        {item.href ? (
-                          <Link href={item.href} className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
-                            {item.label}
-                          </Link>
-                        ) : (
-                          <span style={{ color: "var(--bpm-text-secondary)" }}>{item.label}</span>
-                        )}
-                      </span>
-                    ))}
-                  </>
-                ) : (
-                  <span>&nbsp;</span>
-                )}
-              </nav>
-              <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--bpm-text-primary)" }}>
-                <AIHeaderIconButtons />
-                <NotificationBell />
-              </div>
-            </header>
-          )}
+          <header
+            className="pwa-title-bar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between px-3 sm:px-4 gap-2"
+            style={{ background: "var(--bpm-bg-primary)" }}
+          >
+            <nav aria-label="Fil d'Ariane" className="doc-breadcrumb doc-breadcrumb-header text-sm truncate min-w-0">
+              {breadcrumbItems.length > 0 ? (
+                <>
+                  {breadcrumbItems.map((item, i) => (
+                    <span key={i}>
+                      {i > 0 && <span className="opacity-70"> → </span>}
+                      {item.href ? (
+                        <Link href={item.href} className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <span style={{ color: "var(--bpm-text-secondary)" }}>{item.label}</span>
+                      )}
+                    </span>
+                  ))}
+                </>
+              ) : (
+                <Link href="/dashboard" className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>Accueil</Link>
+              )}
+            </nav>
+            <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--bpm-text-primary)" }}>
+              <AIHeaderIconButtons />
+              <NotificationBell />
+            </div>
+          </header>
           <main id="main-content" className="app-main flex-1 pt-4 pb-6 md:pb-4 px-3 sm:px-4 min-h-0" role="main">
             {children}
           </main>
@@ -190,7 +188,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
             role="contentinfo"
           >
             <div className="flex flex-wrap items-center justify-between gap-4 max-w-[1400px] mx-auto">
-              <span>Blueprint Modular v0.1.16</span>
+              <span>Blueprint Modular v0.1.18</span>
               <span className="flex flex-wrap gap-4">
                 <a href="https://docs.blueprint-modular.com/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>Documentation</a>
                 <a href="https://pypi.org/project/blueprint-modular/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>PyPI</a>

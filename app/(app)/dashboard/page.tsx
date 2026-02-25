@@ -32,7 +32,7 @@ const quickLinks = [
   {
     href: "/modules",
     label: "Modules",
-    description: "Wiki, IA, Documents, Veille — modules prêts à l'emploi",
+    description: "Wiki, IA, Analyse de documents, Veille, découvrez les modules prêts à l'emploi",
     icon: FolderOpen,
   },
 ];

@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Sélection de langue et textes traduisibles pour l&apos;UI et les contenus.
     </p>
-    <CodeBlock code="bpm.title(\"Multi-langue\")" language="python" />
+    <CodeBlock code={'bpm.title("Multi-langue")'} language="python" />
   </>
 );
 

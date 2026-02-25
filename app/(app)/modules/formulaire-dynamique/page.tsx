@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Formulaires dont les champs dépendent d&apos;un type ou d&apos;un référentiel.
     </p>
-    <CodeBlock code="bpm.title(\"Formulaire dynamique\")" language="python" />
+    <CodeBlock code={'bpm.title("Formulaire dynamique")'} language="python" />
   </>
 );
 

@@ -18,7 +18,7 @@ export default function CalendrierDocumentationPage() {
         Le module Calendrier affiche et gère des événements avec vues jour, semaine et mois. Données depuis un store local ou une API.
       </p>
       <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>Exemple</h2>
-      <CodeBlock code="bpm.title(\"Agenda\")\n# Événements : date, titre, heure, durée" language="python" />
+      <CodeBlock code={'bpm.title("Agenda")\n# Événements : date, titre, heure, durée'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/calendrier/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

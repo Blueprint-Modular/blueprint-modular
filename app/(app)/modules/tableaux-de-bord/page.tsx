@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Tableaux de bord personnalisables : disposition de widgets (métriques, graphiques, tableaux) par l&apos;utilisateur.
     </p>
-    <CodeBlock code="bpm.title(\"Mon tableau de bord\")\nbpm.metric(\"CA\", 142500, delta=3200)" language="python" />
+    <CodeBlock code={'bpm.title("Mon tableau de bord")\nbpm.metric("CA", 142500, delta=3200)'} language="python" />
   </>
 );
 

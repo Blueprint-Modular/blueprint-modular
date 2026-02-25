@@ -186,7 +186,6 @@ export default function DemoPage() {
                 data={clientsFiltres}
                 striped
                 hover
-                onRowClick={(row) => console.log("Client", row)}
               />
             ) : (
               <EmptyState title="Aucun client" description="Modifiez les filtres pour afficher des résultats." />

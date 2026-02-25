@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Création de rapports à partir de données : sélection de champs, filtres et graphiques prédéfinis. Export PDF ou CSV.
     </p>
-    <CodeBlock code="bpm.title(\"Rapports\")\nbpm.selectbox(options=types_rapport, label=\"Type\")" language="python" />
+    <CodeBlock code={'bpm.title("Rapports")\nbpm.selectbox(options=types_rapport, label="Type")'} language="python" />
   </>
 );
 

@@ -17,7 +17,7 @@ export default function TableauBlancDocumentationPage() {
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         Tableau blanc simple avec post-it (cartes) et zones de texte. Idéal pour rétros ou brainstormings. Données en local ou API.
       </p>
-      <CodeBlock code="bpm.title(\"Rétro\")\nbpm.panel(\"Post-it\", zone_texte)" language="python" />
+      <CodeBlock code={'bpm.title("Rétro")\nbpm.panel("Post-it", zone_texte)'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/tableau-blanc/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

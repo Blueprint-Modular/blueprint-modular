@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Choix de thème, logo et couleurs par instance ou client (white-label).
     </p>
-    <CodeBlock code="bpm.title(\"Themes\")\n# Couleur accent, logo, nom" language="python" />
+    <CodeBlock code={'bpm.title("Themes")\n# Couleur accent, logo, nom'} language="python" />
   </>
 );
 

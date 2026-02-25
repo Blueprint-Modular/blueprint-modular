@@ -79,4 +79,22 @@ COMPONENT_DOC: list[ComponentDoc] = [
     # Utilitaires
     {"slug": "modal", "name": "bpm.modal", "description": "Fenêtre modale.", "category": "Utilitaires"},
     {"slug": "codeblock", "name": "bpm.codeblock", "description": "Bloc de code avec Copier.", "category": "Utilitaires"},
+    # Navigation (suite)
+    {"slug": "topnav", "name": "bpm.topnav", "description": "Barre de navigation supérieure (titre + liens).", "category": "Navigation"},
+    {"slug": "fab", "name": "bpm.fab", "description": "Bouton d'action flottant (FAB).", "category": "Interaction"},
+    {"slug": "treeview", "name": "bpm.treeview", "description": "Arbre de nœuds repliables et sélectionnables.", "category": "Affichage de données"},
+    {"slug": "timeline", "name": "bpm.timeline", "description": "Frise chronologique (étapes, statuts).", "category": "Affichage de données"},
+    {"slug": "image", "name": "bpm.image", "description": "Image avec alt, dimensions et object-fit.", "category": "Média"},
+    {"slug": "pdf", "name": "bpm.pdf", "description": "Visualiseur PDF (iframe).", "category": "Média"},
+    {"slug": "autocomplete", "name": "bpm.autocomplete", "description": "Champ de saisie avec suggestions.", "category": "Interaction"},
+    {"slug": "plotly", "name": "bpm.plotly", "description": "Graphique Plotly (iframe ou placeholder).", "category": "Graphiques"},
+    {"slug": "map", "name": "bpm.map", "description": "Carte (OpenStreetMap iframe).", "category": "Média"},
+    {"slug": "altair", "name": "bpm.altair", "description": "Graphique Altair / Vega-Lite.", "category": "Graphiques"},
+    # Identification & traçabilité
+    {"slug": "barcode", "name": "bpm.barcode", "description": "Code-barres (EAN-13, Code 128).", "category": "Identification & traçabilité"},
+    {"slug": "qrcode", "name": "bpm.qrcode", "description": "QR Code (URL, vCard, texte).", "category": "Identification & traçabilité"},
+    {"slug": "nfcbadge", "name": "bpm.nfcbadge", "description": "Badge / tag NFC (statut Scannable, etc.).", "category": "Identification & traçabilité"},
+    # Mise en page / Feedback
+    {"slug": "drawer", "name": "bpm.drawer", "description": "Tiroir / panneau latéral (détail, formulaire, filtres).", "category": "Mise en page"},
+    {"slug": "pagination", "name": "bpm.pagination", "description": "Pagination (page, taille, total) pour listes et tableaux.", "category": "Affichage de données"},
 ]

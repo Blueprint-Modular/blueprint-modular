@@ -13,7 +13,7 @@ export default function ExportPlanifieDocumentationPage() {
       </div>
       <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>Planifier l&apos;envoi d&apos;un rapport (fréquence + destinataires).</p>
-      <CodeBlock code="bpm.title(\"Export planifié\")" language="python" />
+      <CodeBlock code={'bpm.title("Export planifié")'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}><Link href="/modules/export-planifie/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link></p>
     </div>
   );

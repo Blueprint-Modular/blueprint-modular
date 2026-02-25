@@ -17,7 +17,7 @@ export default function WorkflowDocumentationPage() {
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         Workflow léger : définir des états et des transitions autorisées. Historique (qui, quand, quel état). Idéal pour documents, demandes, validations.
       </p>
-      <CodeBlock code="bpm.title(\"Workflow\")\n# États : brouillon, validé, archivé" language="python" />
+      <CodeBlock code={'bpm.title("Workflow")\n# États : brouillon, validé, archivé'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/workflow/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

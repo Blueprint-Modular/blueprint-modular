@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Le module <strong>Workflow</strong> gère des états et transitions (ex. brouillon → validé → archivé) avec historique des changements.
     </p>
-    <CodeBlock code="bpm.title(\"Workflow\")\n# États : brouillon, validé, archivé. Transitions selon droits." language="python" />
+    <CodeBlock code={'bpm.title("Workflow")\n# États : brouillon, validé, archivé. Transitions selon droits.'} language="python" />
   </>
 );
 

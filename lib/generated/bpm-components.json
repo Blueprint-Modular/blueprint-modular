@@ -351,7 +351,7 @@
     {
       "slug": "treeview",
       "name": "bpm.treeview",
-      "description": "Arbre de noeuds repliables et sélectionnables.",
+      "description": "Arbre de nœuds repliables et sélectionnables.",
       "category": "Affichage de données"
     },
     {
@@ -399,7 +399,7 @@
     {
       "slug": "barcode",
       "name": "bpm.barcode",
-      "description": "Code-barres (affichage EAN-13, Code 128, etc.).",
+      "description": "Code-barres (EAN-13, Code 128).",
       "category": "Identification & traçabilité"
     },
     {
@@ -411,20 +411,20 @@
     {
       "slug": "nfcbadge",
       "name": "bpm.nfcbadge",
-      "description": "Badge / tag NFC (affichage statut, ex. Scannable).",
+      "description": "Badge / tag NFC (statut Scannable, etc.).",
       "category": "Identification & traçabilité"
     },
     {
       "slug": "drawer",
       "name": "bpm.drawer",
       "description": "Tiroir / panneau latéral (détail, formulaire, filtres).",
-      "category": "Feedback"
+      "category": "Mise en page"
     },
     {
       "slug": "pagination",
       "name": "bpm.pagination",
       "description": "Pagination (page, taille, total) pour listes et tableaux.",
-      "category": "Données & tableaux"
+      "category": "Affichage de données"
     }
   ]
 }

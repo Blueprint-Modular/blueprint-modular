@@ -11,7 +11,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       CRUD pour listes métier (devises, pays, types) utilisables dans les formulaires.
     </p>
-    <CodeBlock code="bpm.title(\"Référentiels\")\nbpm.table(columns=cols, data=ref)" language="python" />
+    <CodeBlock code={'bpm.title("Référentiels")\nbpm.table(columns=cols, data=ref)'} language="python" />
   </>
 );
 

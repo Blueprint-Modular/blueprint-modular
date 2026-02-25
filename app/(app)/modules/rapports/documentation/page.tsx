@@ -13,7 +13,7 @@ export default function RapportsDocumentationPage() {
       </div>
       <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>Définir des modèles de rapport (champs, filtres, graphiques), puis générer des rapports (PDF/CSV) à la demande.</p>
-      <CodeBlock code="bpm.title(\"Rapports\")\nbpm.selectbox(options=types_rapport, label=\"Type\")" language="python" />
+      <CodeBlock code={'bpm.title("Rapports")\nbpm.selectbox(options=types_rapport, label="Type")'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}><Link href="/modules/rapports/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link></p>
     </div>
   );

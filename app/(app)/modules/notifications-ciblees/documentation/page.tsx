@@ -13,7 +13,7 @@ export default function NotificationsCibleesDocumentationPage() {
       </div>
       <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>Définir des règles : si tel événement alors notifier telle liste de destinataires (emails, rôles).</p>
-      <CodeBlock code="bpm.title(\"Notifications ciblées\")" language="python" />
+      <CodeBlock code={'bpm.title("Notifications ciblées")'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}><Link href="/modules/notifications-ciblees/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link></p>
     </div>
   );

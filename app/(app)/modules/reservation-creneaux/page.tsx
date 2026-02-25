@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Choix de créneaux ou de ressources avec disponibilités.
     </p>
-    <CodeBlock code="bpm.title(\"Reservation Creneaux\")" language="python" />
+    <CodeBlock code={'bpm.title("Reservation Creneaux")'} language="python" />
   </>
 );
 

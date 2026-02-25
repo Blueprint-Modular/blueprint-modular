@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Configuration de sources (API, SFTP, base) pour alimenter des données.
     </p>
-    <CodeBlock code="bpm.title(\"Connecteurs\")" language="python" />
+    <CodeBlock code={'bpm.title("Connecteurs")'} language="python" />
   </>
 );
 

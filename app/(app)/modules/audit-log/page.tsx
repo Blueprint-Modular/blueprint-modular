@@ -11,7 +11,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Consultation des changements sur une entité (qui, quand, quoi). Historique d&apos;audit.
     </p>
-    <CodeBlock code="bpm.title(\"Audit\")\nbpm.table(columns=audit_cols, data=log)" language="python" />
+    <CodeBlock code={'bpm.title("Audit")\nbpm.table(columns=audit_cols, data=log)'} language="python" />
   </>
 );
 

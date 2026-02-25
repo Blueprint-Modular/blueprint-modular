@@ -17,7 +17,7 @@ export default function TemplatesDocumentationPage() {
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         Modèles prédéfinis (rapports, fiches, emails). L&apos;utilisateur choisit un modèle puis remplit les champs ; le document est généré (PDF, HTML ou enregistré en base).
       </p>
-      <CodeBlock code="bpm.title(\"Modèles\")\nbpm.selectbox(options=modeles, label=\"Choisir un modèle\")" language="python" />
+      <CodeBlock code={'bpm.title("Modèles")\nbpm.selectbox(options=modeles, label="Choisir un modèle")'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/templates/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

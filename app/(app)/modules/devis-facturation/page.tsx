@@ -11,7 +11,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Lignes, totaux, PDF, statuts (brouillon, envoyé, payé).
     </p>
-    <CodeBlock code="bpm.title(\"Devis / Facturation\")" language="python" />
+    <CodeBlock code={'bpm.title("Devis / Facturation")'} language="python" />
   </>
 );
 

@@ -11,7 +11,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Fiche produit, variantes, prix, stock. Codes-barres et QR optionnels.
     </p>
-    <CodeBlock code="bpm.title(\"Catalogue\")" language="python" />
+    <CodeBlock code={'bpm.title("Catalogue")'} language="python" />
   </>
 );
 

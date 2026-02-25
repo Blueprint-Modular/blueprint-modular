@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Le module <strong>Tableau blanc</strong> fournit des post-it et zones de texte pour rétrospectives ou ateliers. Contenu sauvegardé en local ou en base.
     </p>
-    <CodeBlock code="# bpm — tableau blanc : post-it et zones de texte\nbpm.title(\"Rétro\")\nbpm.panel(\"Post-it\", zone_texte)" language="python" />
+    <CodeBlock code={'# bpm — tableau blanc : post-it et zones de texte\nbpm.title("Rétro")\nbpm.panel("Post-it", zone_texte)'} language="python" />
   </>
 );
 

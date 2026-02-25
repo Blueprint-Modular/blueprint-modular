@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Le module <strong>Templates</strong> propose une bibliothèque de modèles (rapports, fiches, emails) avec champs à remplir. Création de documents à partir d&apos;un modèle.
     </p>
-    <CodeBlock code="bpm.title(\"Modèles\")\nbpm.selectbox(options=modeles, label=\"Choisir un modèle\")" language="python" />
+    <CodeBlock code={'bpm.title("Modèles")\nbpm.selectbox(options=modeles, label="Choisir un modèle")'} language="python" />
   </>
 );
 

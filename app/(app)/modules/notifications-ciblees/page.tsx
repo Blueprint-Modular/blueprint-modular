@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Règles événement vers destinataires et message. Notifications ciblées.
     </p>
-    <CodeBlock code="bpm.title(\"Notifications ciblées\")" language="python" />
+    <CodeBlock code={'bpm.title("Notifications ciblées")'} language="python" />
   </>
 );
 

@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Envoi périodique par email de rapports ou exports (PDF/CSV). Planification (quotidien, hebdo, mensuel) et liste de destinataires.
     </p>
-    <CodeBlock code="bpm.title(\"Export planifié\")\n# Fréquence + rapport + destinataires" language="python" />
+    <CodeBlock code={'bpm.title("Export planifié")\n# Fréquence + rapport + destinataires'} language="python" />
   </>
 );
 

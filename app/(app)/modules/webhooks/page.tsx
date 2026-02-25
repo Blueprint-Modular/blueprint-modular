@@ -9,7 +9,7 @@ const docContent = (
     <p className="mb-6" style={{ color: "var(--bpm-text-secondary)", maxWidth: "60ch" }}>
       Émission d&apos;événements vers des URLs externes (validation, création).
     </p>
-    <CodeBlock code="bpm.title(\"Webhooks\")" language="python" />
+    <CodeBlock code={'bpm.title("Webhooks")'} language="python" />
   </>
 );
 

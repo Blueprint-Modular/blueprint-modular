@@ -17,7 +17,7 @@ export default function CommentairesDocumentationPage() {
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         Fil de commentaires avec auteur, date et contenu. Les commentaires sont liés à une entité (id + type). Stockage en base ou en état selon votre implémentation.
       </p>
-      <CodeBlock code="bpm.title(\"Commentaires\")\nbpm.panel(\"Nouveau commentaire\", input_area)" language="python" />
+      <CodeBlock code={'bpm.title("Commentaires")\nbpm.panel("Nouveau commentaire", input_area)'} language="python" />
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/commentaires/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

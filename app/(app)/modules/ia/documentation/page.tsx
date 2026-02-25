@@ -190,7 +190,7 @@ npm run dev
         <li><code>GET /api/ai/conversations/[id]/messages</code> — Détail des messages d&apos;une conversation (si exposé).</li>
         <li><code>GET /api/ai/health</code> — Santé du serveur Ollama (disponibilité, latence).</li>
         <li><code>GET /api/ai/providers</code> — Liste des providers (vllm, qwen, mistral, claude, etc.) et indicateur de configuration (ex. ANTHROPIC_API_KEY pour Claude).</li>
-        <li><code>POST /api/wiki/transcribe</code> — Transcription vocale (Whisper). Utilisée par le bouton Micro de la zone de saisie IA et par le Wiki (nouvel article par dictée). Body : <code>multipart/form-data</code> avec champ <code>audio</code> (fichier webm/mp4). Réponse : <code>{ transcription: string }</code>. Prérequis : micro-service Whisper démarré (ex. port 9000, variable <code>WHISPER_SERVICE_URL</code> dans <code>.env</code>).</li>
+        <li><code>POST /api/wiki/transcribe</code> — Transcription vocale (Whisper). Utilisée par le bouton Micro de la zone de saisie IA et par le Wiki (nouvel article par dictée). Body : <code>multipart/form-data</code> avec champ <code>audio</code> (fichier webm/mp4). Réponse : <code>&#123; transcription: string &#125;</code>. Prérequis : micro-service Whisper démarré (ex. port 9000, variable <code>WHISPER_SERVICE_URL</code> dans <code>.env</code>).</li>
       </ul>
 
       <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>

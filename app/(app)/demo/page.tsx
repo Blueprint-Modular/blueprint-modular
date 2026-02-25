@@ -179,7 +179,7 @@ export default function DemoPage() {
                     key: "statut",
                     label: "Statut",
                     render: (_, row) => (
-                      <Badge variant={row.statut === "Actif" ? "primary" : "secondary"}>{String(row.statut)}</Badge>
+                      <Badge variant={row.statut === "Actif" ? "primary" : "default"}>{String(row.statut)}</Badge>
                     ),
                   },
                 ]}
@@ -210,7 +210,7 @@ export default function DemoPage() {
                 label: "Statut",
                 render: (_, row) => {
                   const s = String(row.statut);
-                  const v = s === "Livrée" ? "primary" : s === "En préparation" ? "secondary" : "secondary";
+                  const v = s === "Livrée" ? "primary" : "default";
                   return <Badge variant={v}>{s}</Badge>;
                 },
               },
@@ -253,7 +253,7 @@ export default function DemoPage() {
             {PRODUITS.map((p) => (
               <Card key={p.id} title={p.nom} variant="outlined">
                 <div className="flex flex-wrap items-center gap-2 mt-1">
-                  <Badge variant="secondary">{p.type}</Badge>
+                  <Badge variant="default">{p.type}</Badge>
                   {p.stock !== "—" && (
                     <Tooltip text="Stock disponible">
                       <span>
@@ -291,7 +291,7 @@ export default function DemoPage() {
                   const r = Number(row.realise);
                   const pct = o ? Math.round((r / o) * 100) : 0;
                   return (
-                    <Badge variant={pct >= 100 ? "primary" : "secondary"}>
+                    <Badge variant={pct >= 100 ? "primary" : "default"}>
                       {pct} %
                     </Badge>
                   );

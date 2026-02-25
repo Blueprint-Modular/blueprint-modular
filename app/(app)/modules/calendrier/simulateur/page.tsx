@@ -327,12 +327,7 @@ export default function CalendrierSimulateurPage() {
             </Button>
           </div>
           <p className="text-sm font-medium m-0 flex-1 min-w-0 truncate text-center px-2" style={{ color: "var(--bpm-text-primary)" }} title={formatTitle(view, focusDate)}>
-            {view === "semaine" ? (
-              <>
-                <span className="sm:hidden">S. {getISOWeekNumber(focusDate)}</span>
-                <span className="hidden sm:inline">{formatTitle(view, focusDate)}</span>
-              </>
-            ) : view === "jour" ? null : view === "mois" ? null : formatTitle(view, focusDate)}
+            {view === "semaine" ? `S${getISOWeekNumber(focusDate)}` : view === "jour" || view === "mois" ? null : formatTitle(view, focusDate)}
           </p>
           <div className="w-4 flex-shrink-0 sm:w-10" />
         </div>
@@ -538,12 +533,9 @@ export default function CalendrierSimulateurPage() {
           {view === "mois" && (
             <div className="text-sm">
               <div className="inline-grid grid-cols-7 gap-1.5 text-center w-full max-w-full sm:max-w-[480px]">
-                {Array.from({ length: startPad }, (_, i) => (
-                  <span key={`month-pad-${i}`} className="p-1.5" aria-hidden />
-                ))}
                 <div
-                  className="text-sm font-semibold py-1.5 pb-2 flex items-center justify-center"
-                  style={{ color: "var(--bpm-text-primary)", gridColumn: `${startPad + 1} / span ${7 - startPad}` }}
+                  className="text-sm font-semibold py-1.5 pb-2 col-span-full flex items-center justify-center"
+                  style={{ color: "var(--bpm-text-primary)" }}
                 >
                   {MONTHS[month].charAt(0).toUpperCase() + MONTHS[month].slice(1)} {year}
                 </div>

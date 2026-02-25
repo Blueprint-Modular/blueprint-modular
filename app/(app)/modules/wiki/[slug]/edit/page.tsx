@@ -3,15 +3,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Button, Panel, Toggle, Selectbox } from "@/components/bpm";
 import { WikiEditorToolbar } from "@/components/wiki/WikiEditorToolbar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { getGuestArticleBySlug, updateGuestArticle } from "@/lib/wiki-guest";
 
 export default function WikiEditPage() {
   const params = useParams();
   const router = useRouter();
+  const { data: session, status } = useSession();
   const slug = params.slug as string;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -20,6 +23,7 @@ export default function WikiEditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isGuestArticle, setIsGuestArticle] = useState(false);
   const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiNotes, setAiNotes] = useState("");
@@ -88,7 +92,24 @@ export default function WikiEditPage() {
 
   useEffect(() => {
     if (!slug) return;
-    fetch(`/api/wiki/${encodeURIComponent(slug)}`)
+    if (status === "loading") return;
+
+    if (!session) {
+      const guest = getGuestArticleBySlug(slug);
+      if (guest?.canEdit) {
+        setTitle(guest.title);
+        setContent(guest.content ?? "");
+        setIsPublished(guest.isPublished ?? false);
+        setIsGuestArticle(true);
+        setLoading(false);
+        return;
+      }
+      setError("Article introuvable ou non modifiable en mode invité");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`/api/wiki/${encodeURIComponent(slug)}`, { credentials: "include" })
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
         return r.json();
@@ -100,17 +121,24 @@ export default function WikiEditPage() {
       })
       .catch(() => setError("Article introuvable"))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, session, status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSaving(true);
     try {
+      if (isGuestArticle) {
+        const updated = updateGuestArticle(slug, { title, content, isPublished });
+        if (updated) router.push(`/modules/wiki/${slug}`);
+        else setError("Impossible de sauvegarder (article invité)");
+        return;
+      }
       const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content, isPublished }),
+        credentials: "include",
       });
       if (!res.ok) throw new Error("Erreur");
       router.push(`/modules/wiki/${slug}`);
@@ -159,21 +187,23 @@ export default function WikiEditPage() {
             value={preview}
             onChange={setPreview}
           />
-          <button
-            type="button"
-            onClick={() => setAiPanelOpen((v) => !v)}
-            className="px-3 py-1 rounded text-sm border"
-            style={{
-              borderColor: "var(--bpm-border)",
-              background: aiPanelOpen ? "var(--bpm-accent)" : "transparent",
-              color: aiPanelOpen ? "var(--bpm-surface)" : "var(--bpm-text-secondary)",
-            }}
-          >
-            Aide IA
-          </button>
+          {!isGuestArticle && (
+            <button
+              type="button"
+              onClick={() => setAiPanelOpen((v) => !v)}
+              className="px-3 py-1 rounded text-sm border"
+              style={{
+                borderColor: "var(--bpm-border)",
+                background: aiPanelOpen ? "var(--bpm-accent)" : "transparent",
+                color: aiPanelOpen ? "var(--bpm-surface)" : "var(--bpm-text-secondary)",
+              }}
+            >
+              Aide IA
+            </button>
+          )}
         </div>
 
-        {aiPanelOpen && (
+        {aiPanelOpen && !isGuestArticle && (
           <div className="p-4 rounded border space-y-4" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)" }}>
             <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
               Utiliser l&apos;IA pour rédiger ou mettre en forme le contenu de l&apos;article.

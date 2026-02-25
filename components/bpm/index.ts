@@ -53,7 +53,7 @@ export type { SliderProps } from "./Slider";
 export { Progress } from "./Progress";
 export type { ProgressProps } from "./Progress";
 export { Skeleton } from "./Skeleton";
-export type { SkeletonProps, SkeletonVariant } from "./Skeleton";
+export type { SkeletonProps, SkeletonVariant, SkeletonRounded } from "./Skeleton";
 export { Checkbox } from "./Checkbox";
 export type { CheckboxProps } from "./Checkbox";
 export { RadioGroup } from "./RadioGroup";

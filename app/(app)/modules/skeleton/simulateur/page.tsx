@@ -24,9 +24,11 @@ export default function SkeletonSimulateurPage() {
 
       {/* ========== Skeleton : page complète ========== */}
       <div
-        className="rounded-xl border p-6"
+        className="bpm-skeleton-container rounded-xl border p-6"
         style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}
+        role="status"
         aria-busy
+        aria-live="polite"
         aria-label="Chargement"
       >
         {/* Header (barre type app) */}

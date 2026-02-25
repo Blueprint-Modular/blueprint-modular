@@ -42,6 +42,12 @@ function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | 
   };
 }
 
+/** Transforme #mot (hashtags en milieu de ligne) en spans tag pour le rendu, sans casser les titres Markdown (# en début de ligne). */
+function contentWithHashtagTags(content: string): string {
+  if (!content) return content;
+  return content.replace(/\s#([a-zA-Z0-9_\u00C0-\u024F-]+)/g, ' <span class="bpm-wiki-tag">$1</span>');
+}
+
 export default function WikiArticlePage() {
   const params = useParams();
   const router = useRouter();
@@ -135,7 +141,7 @@ export default function WikiArticlePage() {
         }}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight]}>
-          {article.content || "*Aucun contenu.*"}
+          {contentWithHashtagTags(article.content) || "*Aucun contenu.*"}
         </ReactMarkdown>
       </div>
 

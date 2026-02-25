@@ -61,6 +61,16 @@ function riskColor(level: string | null): string {
   return "var(--bpm-accent-cyan)";
 }
 
+function statusBadgeStyle(s: string): { bg: string; label: string } {
+  switch (s) {
+    case "pending": return { bg: "var(--bpm-accent-amber, #f59e0b)", label: "En attente" };
+    case "analyzing": return { bg: "var(--bpm-accent-cyan)", label: "En cours" };
+    case "done": return { bg: "var(--bpm-accent-mint)", label: "Analysé" };
+    case "error": return { bg: "var(--bpm-accent)", label: "Erreur" };
+    default: return { bg: "var(--bpm-text-secondary)", label: s };
+  }
+}
+
 export default function ContractsPage() {
   const router = useRouter();
   const [contracts, setContracts] = useState<ContractRow[]>([]);
@@ -69,6 +79,7 @@ export default function ContractsPage() {
   const [workspace, setWorkspace] = useState("");
   const [contractType, setContractType] = useState("");
   const [status, setStatus] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [reanalyzingId, setReanalyzingId] = useState<string | null>(null);
 
   const fetchContracts = useCallback(() => {
@@ -172,14 +183,21 @@ export default function ContractsPage() {
       key: "status",
       label: "Statut",
       render: (val: unknown, row: Record<string, unknown>) => {
+        const statusKey = (row.statusKey as string) ?? String(val ?? "");
         const s = String(val ?? "");
         const id = row.id as string | undefined;
-        const isError = s === "error";
+        const isError = statusKey === "error";
         const isReanalyzing = id && reanalyzingId === id;
-        const statusLabel = isError ? "Erreur" : s;
+        const { bg, label } = statusBadgeStyle(statusKey);
+        const displayLabel = s.startsWith("En cours (") ? s : label;
         return (
           <span className="flex items-center gap-2 flex-wrap">
-            <span className={isError ? "rounded px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800" : ""}>{statusLabel}</span>
+            <span
+              className="rounded px-2 py-0.5 text-xs font-medium"
+              style={{ backgroundColor: bg, color: "var(--bpm-bg)" }}
+            >
+              {displayLabel}
+            </span>
             {isError && id && (
               <span onClick={(e) => e.stopPropagation()}>
                 <Button
@@ -198,7 +216,13 @@ export default function ContractsPage() {
     },
   ];
 
-  const data = contracts.map((c) => ({
+  const filteredContracts = searchText.trim()
+    ? contracts.filter((c) =>
+        c.originalFilename.toLowerCase().includes(searchText.trim().toLowerCase())
+      )
+    : contracts;
+
+  const data = filteredContracts.map((c) => ({
     id: c.id,
     originalFilename: c.originalFilename,
     supplier_name: c.supplier_name ?? "-",
@@ -206,6 +230,7 @@ export default function ContractsPage() {
     contract_date: c.contract_date ?? "-",
     end_date: c.end_date ?? "-",
     overall_risk_level: c.overall_risk_level ?? "-",
+    statusKey: c.status,
     status: c.status === "analyzing" ? `En cours (${c.analysisProgress}%)` : c.status === "done" ? "Analysé" : c.status === "pending" ? "En attente" : c.status === "error" ? "error" : c.status,
   }));
 
@@ -249,6 +274,22 @@ export default function ContractsPage() {
         />
       </div>
 
+      <div className="flex flex-wrap items-center gap-2 mt-4 mb-2">
+        <input
+          type="search"
+          placeholder="Rechercher par nom de fichier…"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="px-3 py-2 rounded border text-sm max-w-xs"
+          style={{
+            borderColor: "var(--bpm-border)",
+            background: "var(--bpm-surface)",
+            color: "var(--bpm-text-primary)",
+          }}
+          aria-label="Rechercher par nom de fichier"
+        />
+      </div>
+
       {loading ? (
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
@@ -256,6 +297,10 @@ export default function ContractsPage() {
       ) : contracts.length === 0 ? (
         <Panel variant="info" title="Aucun contrat">
           Uploadez un fichier PDF, DOCX ou TXT pour lancer l&apos;analyse IA.
+        </Panel>
+      ) : filteredContracts.length === 0 ? (
+        <Panel variant="info" title="Aucun résultat">
+          Aucun contrat ne correspond à &quot;{searchText}&quot;. Modifiez la recherche ou les filtres.
         </Panel>
       ) : (
         <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>

@@ -1,0 +1,39 @@
+/* Variant Dot : 3 points horizontaux avec animation bounce (comme IA > en PJ) */
+.bpm-spinner-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.bpm-spinner-dot {
+  border-radius: 50%;
+  background: var(--bpm-accent, var(--bpm-accent-cyan));
+  animation: bpm-spinner-dot-bounce 1.2s ease-in-out infinite;
+}
+.bpm-spinner-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.bpm-spinner-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes bpm-spinner-dot-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+.bpm-spinner-dots--small .bpm-spinner-dot {
+  width: 6px;
+  height: 6px;
+}
+.bpm-spinner-dots--medium .bpm-spinner-dot {
+  width: 8px;
+  height: 8px;
+}
+.bpm-spinner-dots--large .bpm-spinner-dot {
+  width: 10px;
+  height: 10px;
+}

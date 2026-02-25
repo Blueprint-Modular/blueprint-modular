@@ -6,7 +6,7 @@ import { Audio } from "@/components/bpm";
 import { getPrevNext } from "@/lib/docPages";
 
 export default function DocAudioPage() {
-  const [src, setSrc] = useState("/api/health");
+  const [src, setSrc] = useState("https://www.w3schools.com/html/horse.mp3");
   const [controls, setControls] = useState(true);
   const [loop, setLoop] = useState(false);
   const pythonCode = "bpm.audio(src=\"" + src + "\", controls=" + controls + ", loop=" + loop + ")";

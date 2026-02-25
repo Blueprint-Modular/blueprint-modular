@@ -37,6 +37,10 @@ export default function AuthModulePage() {
         <Link href="/modules/auth/documentation" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
           Documentation complète (implémentation, choix du modèle, code pour charger et utiliser Auth) →
         </Link>
+        {" · "}
+        <Link href="/modules/auth/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+          Simulateur (tester les 3 modèles)
+        </Link>
       </p>
       <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>À propos</h2>
       <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>

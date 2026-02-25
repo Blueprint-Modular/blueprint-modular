@@ -129,9 +129,11 @@ function parseBpmLine(line: string, key: number): React.ReactNode {
     return <Message key={key} type={type}>{messageMatch[1]}</Message>;
   }
 
-  const spinnerMatch = trimmed.match(/bpm\.spinner\s*\(\s*(?:text\s*=\s*["']([^"']*)["'])?\s*\)/);
+  const spinnerMatch = trimmed.match(/bpm\.spinner\s*\(\s*(?:text\s*=\s*["']([^"']*)["']\s*)?(?:(?:,\s*)?variant\s*=\s*["'](circle|dot)["'])?\s*\)/);
   if (spinnerMatch) {
-    return <Spinner key={key} size="medium" text={spinnerMatch[1] ?? ""} />;
+    const text = spinnerMatch[1] ?? "";
+    const variant = (spinnerMatch[2] === "dot" ? "dot" : "circle") as "circle" | "dot";
+    return <Spinner key={key} size="medium" text={text} variant={variant} />;
   }
 
   const codeblockMatch = trimmed.match(/bpm\.codeblock\s*\(\s*["']([^"']*)["']\s*(?:,\s*language\s*=\s*["'](\w+)["'])?\s*\)/);
@@ -732,9 +734,11 @@ function SandboxContent() {
     }
     if (component === "spinner") {
       return (
-        <div style={{ padding: 16, display: "flex", gap: 16, alignItems: "center" }}>
-          <Spinner size="small" text="" />
-          <Spinner size="medium" text="Chargement…" />
+        <div style={{ padding: 16, display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
+          <Spinner size="small" text="" variant="circle" />
+          <Spinner size="medium" text="Chargement…" variant="circle" />
+          <Spinner size="medium" text="" variant="dot" />
+          <Spinner size="large" text="Dot…" variant="dot" />
         </div>
       );
     }
@@ -1224,7 +1228,7 @@ function SandboxContent() {
                 const raw = data.message ?? "Erreur inconnue";
                 const friendly =
                   /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
-                    ? "Impossible de joindre le service de génération. Vérifiez votre connexion et que le service IA (Qwen) est démarré."
+                    ? "Impossible de joindre le service de génération. Vérifiez que Ollama est démarré (http://localhost:11434) ou définissez AI_MOCK=true dans .env.local pour le mode démo."
                     : raw;
                 setAiError(friendly);
               }
@@ -1238,7 +1242,7 @@ function SandboxContent() {
       const raw = err instanceof Error ? err.message : "Erreur réseau";
       const friendly =
         /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
-          ? "Impossible de joindre le service de génération. Vérifiez votre connexion et que le service IA (Qwen) est démarré."
+          ? "Impossible de joindre le service de génération. Vérifiez que Ollama est démarré (http://localhost:11434) ou définissez AI_MOCK=true dans .env.local pour le mode démo."
           : raw;
       setAiError(friendly);
       setCode("");

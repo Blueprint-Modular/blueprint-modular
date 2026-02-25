@@ -166,6 +166,10 @@ function MyComponent() {
           <Link href="/modules/notification/documentation" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
             Documentation complète (fonctionnement, installation, paramétrage, code) →
           </Link>
+          {" · "}
+          <Link href="/modules/notification/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+            Simulateur (tester les notifications)
+          </Link>
         </p>
       </div>
 

@@ -181,7 +181,12 @@ export default function SettingsWizardPage() {
                 setAiCode(validLines);
               }
               if (data.type === "error") {
-                setAiError(data.message ?? "Erreur inconnue");
+                const raw = data.message ?? "Erreur inconnue";
+                const friendly =
+                  /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
+                    ? "Impossible de joindre le service de génération. Vérifiez que Ollama est démarré (http://localhost:11434) ou définissez AI_MOCK=true dans .env.local pour le mode démo."
+                    : raw;
+                setAiError(friendly);
               }
             } catch {
               /* ignore */
@@ -192,8 +197,8 @@ export default function SettingsWizardPage() {
     } catch (err) {
       const raw = err instanceof Error ? err.message : "Erreur réseau";
       const friendly =
-        /network error|failed to fetch|econnrefused|econnreset/i.test(raw)
-          ? "Impossible de joindre le service de génération. Vérifiez votre connexion et que le service IA (Qwen) est démarré."
+        /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
+          ? "Impossible de joindre le service de génération. Vérifiez que Ollama est démarré (http://localhost:11434) ou définissez AI_MOCK=true dans .env.local pour le mode démo."
           : raw;
       setAiError(friendly);
       setAiCode("");

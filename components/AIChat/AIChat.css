@@ -258,11 +258,12 @@
 .bpm-ai-chat-input-box {
   flex: 1; display: flex; flex-direction: column; min-height: 0;
   border: 1px solid var(--bpm-border); border-radius: 10px; background: var(--bpm-bg-primary); overflow: hidden;
+  outline: none;
 }
-/* Focus subtil (comme Oliver) : bordure neutre qui se renforce légèrement + halo discret couleur principale */
-/* Focus : bordure même bleu que le bouton Envoyer actif (--bpm-accent-cyan) */
+/* Focus : pas de trait noir (outline), bordure discrète en couleur accent */
 .bpm-ai-chat-input-box:focus-within {
   border-color: var(--bpm-accent-cyan);
+  outline: none;
 }
 [data-theme="dark"] .bpm-ai-chat-input-box:focus-within {
   border-color: var(--bpm-accent-cyan);
@@ -292,6 +293,10 @@
   font-size: 0.875rem; border: none; background: transparent; color: var(--bpm-text-primary); resize: none;
   font-family: inherit; line-height: 1.5; overflow-y: auto; box-sizing: border-box; position: relative; z-index: 1;
   scrollbar-width: none;
+  outline: none;
+}
+.bpm-ai-chat-input:focus {
+  outline: none;
 }
 .bpm-ai-chat-input::-webkit-scrollbar { display: none; }
 .bpm-ai-chat-input-actions {

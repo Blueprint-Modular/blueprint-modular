@@ -290,12 +290,12 @@
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
             <tr><td>label</td><td>str</td><td>—</td><td>Libellé au-dessus du champ.</td></tr>
-            <tr><td>options</td><td>array</td><td>[]</td><td>Tableau dâobjets <code>{ value, label }</code>.</td></tr>
+            <tr><td>options</td><td>array</td><td>[]</td><td>Tableau d’objets <code>{ value, label }</code>.</td></tr>
             <tr><td>value</td><td>any</td><td>—</td><td>Valeur sélectionnée (contrôlée).</td></tr>
             <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec la nouvelle valeur lors du changement.</td></tr>
-            <tr><td>placeholder</td><td>str</td><td>"Sélectionner..."</td><td>Texte affiché quand aucune valeur nâest sélectionnée.</td></tr>
+            <tr><td>placeholder</td><td>str</td><td>"Sélectionner..."</td><td>Texte affiché quand aucune valeur n’est sélectionnée.</td></tr>
             <tr><td>disabled</td><td>bool</td><td>false</td><td>Désactive le select.</td></tr>
-            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte dâaide.</td></tr>
+            <tr><td>help</td><td>str or null</td><td>null</td><td>Info-bulle ou texte d’aide.</td></tr>
           </tbody>
         </table>
 
@@ -312,7 +312,7 @@
       <!-- Table -->
       <section id="table">
         <h1>Table</h1>
-        <p class="lead">Tableau triable. Colonnes avec <code>key</code>, <code>label</code>, optionnellement <code>align</code>. Données = tableau dâobjets.</p>
+        <p class="lead">Tableau triable. Colonnes avec <code>key</code>, <code>label</code>, optionnellement <code>align</code>. Données = tableau d’objets.</p>
 
         <h2>Signature</h2>
         <pre><code>import { Table } from './bpm';
@@ -407,8 +407,8 @@
           <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
           <tbody>
             <tr><td>tabs</td><td>array</td><td>[]</td><td><code>{ label, content }</code> ou string (label seul).</td></tr>
-            <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de lâonglet actif au montage.</td></tr>
-            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec lâindex lors du changement dâonglet.</td></tr>
+            <tr><td>defaultTab</td><td>number</td><td>0</td><td>Index de l’onglet actif au montage.</td></tr>
+            <tr><td>onChange</td><td>function</td><td>—</td><td>Appelé avec l’index lors du changement d’onglet.</td></tr>
           </tbody>
         </table>
       </section>
@@ -430,11 +430,11 @@
 
       <section id="toast">
         <h1>Toast</h1>
-        <p class="lead">Notifications toast. Envelopper lâapp avec <code>ToastProvider</code> et utiliser le hook <code>useToast()</code>.</p>
+        <p class="lead">Notifications toast. Envelopper l’app avec <code>ToastProvider</code> et utiliser le hook <code>useToast()</code>.</p>
         <h2>Signature</h2>
         <pre><code>import { ToastProvider, useToast } from './bpm';
 
-// Ã la racine
+// À la racine
 &lt;ToastProvider&gt;{children}&lt;/ToastProvider&gt;
 
 // Dans un composant

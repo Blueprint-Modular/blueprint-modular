@@ -27,9 +27,15 @@ function fixMojibake(s) {
   s = s.replace(/Ã¹/g, "ù");
   s = s.replace(/Ã»/g, "û");
   s = s.replace(/Ã®/g, "î");
+  // À (U+00C0) : UTF-8 C3 80 lu comme Latin-1 → Ã (C3) + U+0080
+  s = s.replace(/\u00C3\u0080/g, "\u00C0");
   // Guillemets et ponctuation (mojibake)
   s = s.replace(/Â«/g, "«");
   s = s.replace(/Â»/g, "»");
+  // Apostrophe typographique U+2019 (UTF-8 E2 80 99 lu comme Latin-1 → â + 0x80 + 0x99)
+  s = s.replace(/\u00E2\u0080\u0099/g, "\u2019");
+  // Guillemet simple droit › U+203A (UTF-8 E2 80 BA lu comme Latin-1 → âº)
+  s = s.replace(/\u00E2\u0080\u00BA/g, "\u203A");
   s = s.replace(/\u2013/g, "–"); // en dash
   s = s.replace(/\u2014/g, "—"); // em dash
   // Orphan bytes (UTF-8 continuation bytes read as Latin-1)

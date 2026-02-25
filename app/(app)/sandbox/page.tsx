@@ -553,6 +553,7 @@ function SandboxContent() {
   const [aiDescription, setAiDescription] = useState("");
   const [aiGenerating, setAiGenerating] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [aiHealth, setAiHealth] = useState<{ available: boolean; model?: string; latencyMs?: number } | null>(null);
   const [code, setCode] = useState(DEFAULT_CODE);
   const [completionOpen, setCompletionOpen] = useState(false);
   const [completionPrefix, setCompletionPrefix] = useState("");
@@ -582,6 +583,16 @@ function SandboxContent() {
       /* ignore */
     }
   }, []);
+
+  useEffect(() => {
+    if (mode !== "ai") return;
+    fetch("/api/ai/health", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : { available: false }))
+      .then((data: { available?: boolean; model?: string; latencyMs?: number }) =>
+        setAiHealth({ available: !!data.available, model: data.model, latencyMs: data.latencyMs })
+      )
+      .catch(() => setAiHealth({ available: false }));
+  }, [mode]);
 
   const applyCompletion = useCallback(
     (method: string) => {
@@ -1521,9 +1532,15 @@ function SandboxContent() {
             >
               Décrivez la page que vous voulez générer
             </label>
-            <p className="text-xs mb-2" style={{ color: "var(--bpm-text-secondary)" }}>
-              Vérifiez qu&apos;Ollama est démarré (http://localhost:11434) pour la génération.
-            </p>
+            {aiHealth && (
+              <p className="text-xs mb-2" style={{ color: "var(--bpm-text-secondary)" }}>
+                {aiHealth.available
+                  ? (aiHealth.model
+                      ? `Service IA disponible (${aiHealth.model}${aiHealth.latencyMs != null ? `, ${aiHealth.latencyMs} ms` : ""}).`
+                      : "Service IA disponible.")
+                  : "Vérifiez qu'Ollama est démarré (ex. http://localhost:11434) ou définissez AI_MOCK=true dans .env pour le mode démo."}
+              </p>
+            )}
             <textarea
               value={aiDescription}
               onChange={(e) => setAiDescription(e.target.value)}

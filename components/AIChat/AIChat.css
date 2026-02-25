@@ -314,8 +314,22 @@
 }
 .bpm-ai-chat-mic-wrap button {
   width: 36px; height: 36px; min-width: 36px; min-height: 36px;
+  /* Aligné sur le bouton + : même fond/couleur inactif, accent au survol (override inline) */
+  background: var(--bpm-bg-secondary) !important;
+  color: var(--bpm-text-primary) !important;
 }
-.bpm-ai-chat-mic-wrap button:hover:not(:disabled) { color: var(--bpm-accent-cyan); filter: brightness(0.96); }
+.bpm-ai-chat-mic-wrap button:hover:not(:disabled) {
+  color: var(--bpm-accent-cyan) !important;
+  filter: brightness(0.96);
+}
+.bpm-ai-chat-mic-wrap button:active:not(:disabled) {
+  filter: brightness(0.92);
+}
+/* État enregistrement : garder l’accent (override par spécificité) */
+.bpm-ai-chat-mic-wrap button[data-recording="true"] {
+  background: var(--bpm-accent) !important;
+  color: #fff !important;
+}
 .bpm-ai-chat-mic-wrap button svg { width: 24px; height: 24px; pointer-events: none; }
 .bpm-ai-chat-send-arrow {
   display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0.5rem;

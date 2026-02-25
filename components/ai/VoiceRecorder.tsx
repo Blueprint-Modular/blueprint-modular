@@ -143,6 +143,7 @@ export function VoiceRecorder({
       onClick={handleClick}
       disabled={state === "transcribing" || disabled}
       style={buttonStyle}
+      data-recording={state === "recording" ? "true" : undefined}
       aria-label={state === "idle" ? (label || "Dicter") : state === "recording" ? "Arrêter l'enregistrement" : "Transcription en cours"}
       title={state === "idle" ? "Dicter (Whisper)" : state === "recording" ? "Arrêter" : "Transcription…"}
     >

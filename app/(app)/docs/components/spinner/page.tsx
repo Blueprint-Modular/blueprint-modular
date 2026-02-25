@@ -6,7 +6,7 @@ import { Spinner, Selectbox, Input, CodeBlock } from "@/components/bpm";
 import { getPrevNext } from "@/lib/docPages";
 
 type SpinnerSize = "small" | "medium" | "large";
-type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars" | "dualRing" | "dotsRing";
+type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars" | "dualRing" | "dotsRing" | "isoBlocks" | "modularRings" | "hexSegments" | "modularGrid";
 
 const VARIANT_OPTIONS: { value: SpinnerVariant; label: string }[] = [
   { value: "circle", label: "circle" },
@@ -16,6 +16,10 @@ const VARIANT_OPTIONS: { value: SpinnerVariant; label: string }[] = [
   { value: "bars", label: "bars" },
   { value: "dualRing", label: "dualRing" },
   { value: "dotsRing", label: "dotsRing" },
+  { value: "isoBlocks", label: "isoBlocks" },
+  { value: "modularRings", label: "modularRings" },
+  { value: "hexSegments", label: "hexSegments" },
+  { value: "modularGrid", label: "modularGrid" },
 ];
 
 const SIZE_OPTIONS: { value: SpinnerSize; label: string }[] = [
@@ -40,7 +44,7 @@ export default function DocSpinnerPage() {
         <div className="doc-breadcrumb"><Link href="/docs/components">Composants</Link> → bpm.spinner</div>
         <h1>bpm.spinner</h1>
         <p className="doc-description">
-          Indicateur de chargement : circle (cercle tournant), dot (3 points), wheel, pulse, bars, dualRing, dotsRing. Tous utilisent la couleur d&apos;accent.
+          Indicateur de chargement : circle, dot, wheel, pulse, bars, dualRing, dotsRing, isoBlocks, modularRings, hexSegments, modularGrid. Tous utilisent la couleur d&apos;accent (sauf neutral).
         </p>
         <div className="doc-meta">
           <span className="doc-badge doc-badge-stable">Stable</span>
@@ -99,7 +103,7 @@ export default function DocSpinnerPage() {
         <tbody>
           <tr>
             <td><code>variant</code></td>
-            <td><code>&#39;circle&#39; | &#39;dot&#39; | &#39;wheel&#39; | &#39;pulse&#39; | &#39;bars&#39; | &#39;dualRing&#39; | &#39;dotsRing&#39;</code></td>
+            <td><code>&#39;circle&#39; | &#39;dot&#39; | &#39;wheel&#39; | &#39;pulse&#39; | &#39;bars&#39; | &#39;dualRing&#39; | &#39;dotsRing&#39; | &#39;isoBlocks&#39; | &#39;modularRings&#39; | &#39;hexSegments&#39; | &#39;modularGrid&#39;</code></td>
             <td><code>&#39;circle&#39;</code></td>
             <td>Non</td>
             <td>Style du spinner (couleur d&apos;accent).</td>
@@ -139,6 +143,8 @@ export default function DocSpinnerPage() {
       <CodeBlock code={'bpm.spinner(text="Analyse en cours...", size="large")'} language="python" />
       <CodeBlock code={'bpm.spinner(variant="dot", text="Chargement…")'} language="python" />
       <CodeBlock code={'bpm.spinner(variant="dualRing", size="medium")'} language="python" />
+      <CodeBlock code={'bpm.spinner(variant="isoBlocks", text="Chargement…")'} language="python" />
+      <CodeBlock code={'bpm.spinner(variant="modularGrid", size="large")'} language="python" />
       <CodeBlock code="bpm.spinner()  # Circle, texte par défaut, taille medium" language="python" />
 
       <nav className="doc-pagination">

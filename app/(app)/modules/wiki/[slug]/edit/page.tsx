@@ -173,7 +173,7 @@ export default function WikiEditPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full px-3 py-2 rounded border"
+            className="bpm-input w-full px-3 py-2 rounded border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           />
         </label>
@@ -226,7 +226,7 @@ export default function WikiEditPage() {
                 onChange={(e) => setAiNotes(e.target.value)}
                 placeholder="Collez ici vos notes brutes…"
                 rows={3}
-                className="w-full px-3 py-2 rounded border font-mono text-sm mb-2"
+                className="bpm-textarea w-full px-3 py-2 rounded border font-mono text-sm mb-2"
                 style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg)", color: "var(--bpm-text-primary)" }}
               />
               <div className="flex flex-wrap gap-2 items-center mb-2">
@@ -285,7 +285,7 @@ export default function WikiEditPage() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={18}
-              className="w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
+              className="bpm-textarea w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
               style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
             />
           </>

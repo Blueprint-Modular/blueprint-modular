@@ -4,7 +4,18 @@ import React from "react";
 import "./Spinner.css";
 
 export type SpinnerSize = "small" | "medium" | "large";
-export type SpinnerVariant = "circle" | "dot" | "wheel" | "pulse" | "bars" | "dualRing" | "dotsRing";
+export type SpinnerVariant =
+  | "circle"
+  | "dot"
+  | "wheel"
+  | "pulse"
+  | "bars"
+  | "dualRing"
+  | "dotsRing"
+  | "isoBlocks"
+  | "modularRings"
+  | "hexSegments"
+  | "modularGrid";
 
 export interface SpinnerProps {
   text?: string;
@@ -121,6 +132,80 @@ export function Spinner({
           <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
           <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
           <span className="bpm-spinner-dots-ring-dot" style={{ background: color }} />
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "isoBlocks") {
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-iso-blocks bpm-spinner-iso-blocks--${size}`} aria-hidden>
+          <div className="bpm-spinner-iso-block">
+            <div className="bpm-spinner-iso-top" />
+            <div className="bpm-spinner-iso-left" />
+            <div className="bpm-spinner-iso-right" />
+          </div>
+          <div className="bpm-spinner-iso-block">
+            <div className="bpm-spinner-iso-top" />
+            <div className="bpm-spinner-iso-left" />
+            <div className="bpm-spinner-iso-right" />
+          </div>
+          <div className="bpm-spinner-iso-block">
+            <div className="bpm-spinner-iso-top" />
+            <div className="bpm-spinner-iso-left" />
+            <div className="bpm-spinner-iso-right" />
+          </div>
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "modularRings") {
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-modular-rings bpm-spinner-modular-rings--${size}`} aria-hidden>
+          <div className="bpm-spinner-mring bpm-spinner-mring-1" />
+          <div className="bpm-spinner-mring bpm-spinner-mring-2" />
+          <div className="bpm-spinner-mring bpm-spinner-mring-3" />
+          <div className="bpm-spinner-mring-dot" />
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "hexSegments") {
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-hex-segments bpm-spinner-hex-segments--${size}`} aria-hidden>
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-1" />
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-2" />
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-3" />
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-4" />
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-5" />
+          <div className="bpm-spinner-hseg bpm-spinner-hseg-6" />
+        </div>
+        {content}
+      </div>
+    );
+  }
+
+  if (variant === "modularGrid") {
+    return (
+      <div className={`bpm-spinner-container inline-flex flex-col items-center gap-2 ${className}`}>
+        <div className={`bpm-spinner-modular-grid bpm-spinner-modular-grid--${size}`} aria-hidden>
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d1" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d2" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--empty" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d4" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d5" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d6" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--empty" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d8" />
+          <div className="bpm-spinner-grid-cell bpm-spinner-grid-cell--d9" />
         </div>
         {content}
       </div>

@@ -185,3 +185,256 @@
   0%, 100% { opacity: 0.35; }
   50% { opacity: 1; }
 }
+
+/* ─── Variant Iso Blocks : 3 cubes isométriques qui rebondissent ─── */
+.bpm-spinner-iso-blocks {
+  width: 70px;
+  height: 70px;
+  position: relative;
+}
+.bpm-spinner-iso-blocks--small {
+  width: 44px;
+  height: 44px;
+}
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block {
+  width: 14px;
+  height: 14px;
+}
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block .bpm-spinner-iso-top,
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block .bpm-spinner-iso-left,
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block .bpm-spinner-iso-right {
+  width: 14px;
+  height: 14px;
+}
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block:nth-child(1) { top: 6px; left: 15px; }
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block:nth-child(2) { top: 18px; left: 5px; }
+.bpm-spinner-iso-blocks--small .bpm-spinner-iso-block:nth-child(3) { top: 18px; left: 25px; }
+.bpm-spinner-iso-blocks--large {
+  width: 88px;
+  height: 88px;
+}
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block {
+  width: 28px;
+  height: 28px;
+}
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block .bpm-spinner-iso-top,
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block .bpm-spinner-iso-left,
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block .bpm-spinner-iso-right {
+  width: 28px;
+  height: 28px;
+}
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block:nth-child(1) { top: 12px; left: 30px; }
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block:nth-child(2) { top: 38px; left: 10px; }
+.bpm-spinner-iso-blocks--large .bpm-spinner-iso-block:nth-child(3) { top: 38px; left: 50px; }
+.bpm-spinner-iso-block {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  animation: bpm-spinner-iso-float 1.8s ease-in-out infinite;
+}
+.bpm-spinner-iso-block .bpm-spinner-iso-top,
+.bpm-spinner-iso-block .bpm-spinner-iso-left,
+.bpm-spinner-iso-block .bpm-spinner-iso-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.bpm-spinner-iso-block .bpm-spinner-iso-top {
+  background: linear-gradient(135deg, var(--bpm-accent-mint, #00E0C5), var(--bpm-accent-cyan, #00C6FB));
+  clip-path: polygon(50% 0%, 100% 25%, 50% 50%, 0% 25%);
+}
+.bpm-spinner-iso-block .bpm-spinner-iso-left {
+  background: linear-gradient(180deg, #18A0FB, #1264C8);
+  clip-path: polygon(0% 25%, 50% 50%, 50% 100%, 0% 75%);
+}
+.bpm-spinner-iso-block .bpm-spinner-iso-right {
+  background: linear-gradient(180deg, var(--bpm-accent-cyan, #00C6FB), #0090D8);
+  clip-path: polygon(50% 50%, 100% 25%, 100% 75%, 50% 100%);
+}
+.bpm-spinner-iso-block:nth-child(1) { top: 10px; left: 24px; animation-delay: 0s; }
+.bpm-spinner-iso-block:nth-child(2) { top: 30px; left: 8px; animation-delay: 0.2s; }
+.bpm-spinner-iso-block:nth-child(3) { top: 30px; left: 40px; animation-delay: 0.4s; }
+@keyframes bpm-spinner-iso-float {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  30% { transform: translateY(-10px); opacity: 0.6; }
+  60% { transform: translateY(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bpm-spinner-iso-block { animation: none; }
+}
+
+/* ─── Variant Modular Rings : anneaux tournant + point central ─── */
+.bpm-spinner-modular-rings {
+  width: 72px;
+  height: 72px;
+  position: relative;
+  display: inline-block;
+}
+.bpm-spinner-modular-rings--small {
+  width: 44px;
+  height: 44px;
+}
+.bpm-spinner-modular-rings--small .bpm-spinner-mring-1 { width: 44px; height: 44px; top: 0; left: 0; border-width: 3px; }
+.bpm-spinner-modular-rings--small .bpm-spinner-mring-2 { width: 32px; height: 32px; top: 6px; left: 6px; border-width: 3px; }
+.bpm-spinner-modular-rings--small .bpm-spinner-mring-3 { width: 20px; height: 20px; top: 12px; left: 12px; border-width: 2px; }
+.bpm-spinner-modular-rings--small .bpm-spinner-mring-dot { width: 5px; height: 5px; top: 19px; left: 19px; }
+.bpm-spinner-modular-rings--large {
+  width: 88px;
+  height: 88px;
+}
+.bpm-spinner-modular-rings--large .bpm-spinner-mring-1 { width: 88px; height: 88px; top: 0; left: 0; border-width: 6px; }
+.bpm-spinner-modular-rings--large .bpm-spinner-mring-2 { width: 64px; height: 64px; top: 12px; left: 12px; border-width: 5px; }
+.bpm-spinner-modular-rings--large .bpm-spinner-mring-3 { width: 40px; height: 40px; top: 24px; left: 24px; border-width: 4px; }
+.bpm-spinner-modular-rings--large .bpm-spinner-mring-dot { width: 10px; height: 10px; top: 39px; left: 39px; }
+.bpm-spinner-mring {
+  position: absolute;
+  border-radius: 50%;
+  border: 5px solid transparent;
+  box-sizing: border-box;
+}
+.bpm-spinner-mring-1 {
+  width: 72px;
+  height: 72px;
+  top: 0;
+  left: 0;
+  border-top-color: var(--bpm-accent-mint, #00E0C5);
+  border-right-color: var(--bpm-accent-mint, #00E0C5);
+  animation: bpm-spinner-mspin 2s linear infinite;
+}
+.bpm-spinner-mring-2 {
+  width: 52px;
+  height: 52px;
+  top: 10px;
+  left: 10px;
+  border-bottom-color: #18A0FB;
+  border-left-color: #18A0FB;
+  animation: bpm-spinner-mspin 2s linear infinite reverse;
+}
+.bpm-spinner-mring-3 {
+  width: 32px;
+  height: 32px;
+  top: 20px;
+  left: 20px;
+  border-top-color: #1264C8;
+  border-right-color: var(--bpm-accent-cyan, #00C6FB);
+  animation: bpm-spinner-mspin 1.4s linear infinite;
+}
+.bpm-spinner-mring-dot {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, var(--bpm-accent-mint, #00E0C5), #18A0FB);
+  border-radius: 50%;
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  animation: bpm-spinner-mpulse 2s ease-in-out infinite;
+}
+@keyframes bpm-spinner-mspin {
+  to { transform: rotate(360deg); }
+}
+@keyframes bpm-spinner-mpulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bpm-spinner-mring-1, .bpm-spinner-mring-2, .bpm-spinner-mring-3 { animation: none; }
+  .bpm-spinner-mring-dot { animation: none; }
+}
+
+/* ─── Variant Hex Segments : 6 segments qui s'allument en séquence ─── */
+.bpm-spinner-hex-segments {
+  width: 72px;
+  height: 72px;
+  position: relative;
+  display: inline-block;
+}
+.bpm-spinner-hex-segments--small {
+  width: 44px;
+  height: 44px;
+}
+.bpm-spinner-hex-segments--small .bpm-spinner-hseg {
+  width: 44px;
+  height: 44px;
+  border-width: 3px;
+}
+.bpm-spinner-hex-segments--large {
+  width: 88px;
+  height: 88px;
+}
+.bpm-spinner-hex-segments--large .bpm-spinner-hseg {
+  width: 88px;
+  height: 88px;
+  border-width: 6px;
+}
+.bpm-spinner-hseg {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 5px solid rgba(24, 160, 251, 0.1);
+  border-top-color: transparent;
+  box-sizing: border-box;
+}
+.bpm-spinner-hseg-1 { transform: rotate(0deg);   border-top-color: var(--bpm-accent-mint, #00E0C5); animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 0s; }
+.bpm-spinner-hseg-2 { transform: rotate(60deg);  border-top-color: #00D4B8; animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 0.3s; }
+.bpm-spinner-hseg-3 { transform: rotate(120deg); border-top-color: var(--bpm-accent-cyan, #00C6FB); animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 0.6s; }
+.bpm-spinner-hseg-4 { transform: rotate(180deg); border-top-color: #18A0FB; animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 0.9s; }
+.bpm-spinner-hseg-5 { transform: rotate(240deg); border-top-color: #1480DC; animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 1.2s; }
+.bpm-spinner-hseg-6 { transform: rotate(300deg); border-top-color: #1264C8; animation: bpm-spinner-hpulse 1.8s ease-in-out infinite 1.5s; }
+@keyframes bpm-spinner-hpulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bpm-spinner-hseg { animation: none; opacity: 0.5; }
+}
+
+/* ─── Variant Modular Grid : grille 3×3 de barres qui pulsent ─── */
+.bpm-spinner-modular-grid {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 5px;
+}
+.bpm-spinner-modular-grid--small {
+  width: 40px;
+  height: 40px;
+  gap: 3px;
+}
+.bpm-spinner-modular-grid--small .bpm-spinner-grid-cell {
+  border-radius: 2px;
+}
+.bpm-spinner-modular-grid--large {
+  width: 80px;
+  height: 80px;
+  gap: 6px;
+}
+.bpm-spinner-modular-grid--large .bpm-spinner-grid-cell {
+  border-radius: 4px;
+}
+.bpm-spinner-grid-cell {
+  border-radius: 3px;
+  background: linear-gradient(135deg, #18A0FB, var(--bpm-accent-mint, #00E0C5));
+  animation: bpm-spinner-bar-fade 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+.bpm-spinner-grid-cell--empty {
+  background: none;
+  animation: none;
+}
+.bpm-spinner-grid-cell--d1 { animation-delay: 0s; }
+.bpm-spinner-grid-cell--d2 { animation-delay: 0.1s; background: linear-gradient(135deg, var(--bpm-accent-cyan, #00C6FB), var(--bpm-accent-mint, #00E0C5)); }
+.bpm-spinner-grid-cell--d4 { animation-delay: 0.3s; }
+.bpm-spinner-grid-cell--d5 { animation-delay: 0.4s; background: linear-gradient(135deg, #1264C8, #18A0FB); }
+.bpm-spinner-grid-cell--d6 { animation-delay: 0.5s; background: linear-gradient(135deg, var(--bpm-accent-mint, #00E0C5), var(--bpm-accent-cyan, #00C6FB)); }
+.bpm-spinner-grid-cell--d8 { animation-delay: 0.7s; background: linear-gradient(135deg, #18A0FB, #1264C8); }
+.bpm-spinner-grid-cell--d9 { animation-delay: 0.8s; background: linear-gradient(135deg, var(--bpm-accent-cyan, #00C6FB), #18A0FB); }
+@keyframes bpm-spinner-bar-fade {
+  0%, 100% { transform: scale(0.7); opacity: 0.3; }
+  50% { transform: scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bpm-spinner-grid-cell { animation: none; opacity: 0.7; }
+}

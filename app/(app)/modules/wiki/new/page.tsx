@@ -214,7 +214,7 @@ export default function WikiNewPage() {
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
             required
-            className="w-full px-3 py-2 rounded border"
+            className="bpm-input w-full px-3 py-2 rounded border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           />
         </label>
@@ -225,7 +225,7 @@ export default function WikiNewPage() {
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="generé-du-titre"
-            className="w-full px-3 py-2 rounded border"
+            className="bpm-input w-full px-3 py-2 rounded border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           />
         </label>
@@ -267,7 +267,7 @@ export default function WikiNewPage() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={18}
-              className="w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
+              className="bpm-textarea w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
               style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
               placeholder="Contenu Markdown..."
             />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -8,6 +8,7 @@ import rehypeHighlight from "rehype-highlight";
 import { getDollarSuggestions } from "./ai-suggestions";
 import { moduleRegistry } from "@/lib/ai/module-registry";
 import { VoiceRecorder } from "@/components/ai/VoiceRecorder";
+import { Panel, Button, Badge, Checkbox } from "@/components/bpm";
 import "./AIChat.css";
 
 const PROVIDER_ALIAS: Record<string, string> = {
@@ -68,22 +69,41 @@ function highlightAtAndDollar(text: string): React.ReactNode {
   });
 }
 
-type ChatMsg = { role: "user" | "assistant"; content: string; provider?: string };
+type ChatMsg = { role: "user" | "assistant"; content: string; provider?: string; error?: boolean; createdAt?: number };
 
 function MessageBubble({
   message,
   assistantName,
+  onRetry,
+  previousUserContent,
 }: {
   message: ChatMsg;
   assistantName: string;
+  onRetry?: (userMessage: string) => void;
+  previousUserContent?: string;
 }) {
+  const timeStr =
+    message.createdAt != null
+      ? new Date(message.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+      : null;
   if (message.role === "assistant") {
+    const isError = message.error === true;
     return (
-      <div className="bpm-ai-message bpm-ai-message--assistant">
+      <div className={`bpm-ai-message bpm-ai-message--assistant${isError ? " bpm-ai-message--error" : ""}`}>
         <div className="bpm-ai-message-header">
           <span className="bpm-ai-message-provider" style={{ color: "var(--bpm-accent)" }}>
             {assistantName}:
           </span>
+          {isError && (
+            <span className="bpm-ai-message-actions">
+              <Badge variant="error" className="bpm-ai-message-error-badge">Erreur</Badge>
+              {onRetry && previousUserContent && (
+                <Button variant="secondary" size="small" onClick={() => onRetry(previousUserContent)}>
+                  ↺ Réessayer
+                </Button>
+              )}
+            </span>
+          )}
         </div>
         <div className="bpm-ai-message-body">
           <ReactMarkdown
@@ -96,12 +116,14 @@ function MessageBubble({
             {message.content || ""}
           </ReactMarkdown>
         </div>
+        {timeStr && <div className="bpm-ai-message-footer">{timeStr}</div>}
       </div>
     );
   }
   return (
     <div className="bpm-ai-message bpm-ai-message--user">
       <div className="bpm-ai-message-body">{highlightAtAndDollar(message.content || "")}</div>
+      {timeStr && <div className="bpm-ai-message-footer">{timeStr}</div>}
     </div>
   );
 }
@@ -114,6 +136,7 @@ export interface AIChatProps {
 }
 
 const STORAGE_TITLES_KEY = "ia_discussion_titles";
+const STORAGE_ACTIVE_DISCUSSION_ID_KEY = "bpm_ai_active_discussion_id";
 
 export function AIChat({
   historyOpen = false,
@@ -139,12 +162,37 @@ export function AIChat({
   const [historyClosing, setHistoryClosing] = useState(false);
   const [historyOpenAnimationActive, setHistoryOpenAnimationActive] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [selectedContextModuleIds, setSelectedContextModuleIds] = useState<string[]>([]);
+  const [contextPanelOpen, setContextPanelOpen] = useState(false);
+  const [streamProgress, setStreamProgress] = useState<{ startTime: number; tokenCount: number } | null>(null);
+  const contextPanelRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
   const inputRowRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  const hasInitializedContext = useRef(false);
+  useEffect(() => {
+    if (hasInitializedContext.current) return;
+    const ids = moduleRegistry.getAllModules().map((m) => m.moduleId);
+    if (ids.length > 0) {
+      setSelectedContextModuleIds(ids);
+      hasInitializedContext.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!contextPanelOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (contextPanelRef.current && !contextPanelRef.current.contains(e.target as Node)) {
+        setContextPanelOpen(false);
+      }
+    };
+    document.addEventListener("click", onDocClick, true);
+    return () => document.removeEventListener("click", onDocClick, true);
+  }, [contextPanelOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -161,8 +209,27 @@ export function AIChat({
     if (newDiscussionTrigger > 0) {
       setMessages([]);
       setCurrentDiscussionId(null);
+      try {
+        localStorage.removeItem(STORAGE_ACTIVE_DISCUSSION_ID_KEY);
+      } catch {}
     }
   }, [newDiscussionTrigger]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_ACTIVE_DISCUSSION_ID_KEY);
+      if (stored && stored.length > 0) {
+        setCurrentDiscussionId(stored);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (currentDiscussionId == null) return;
+    try {
+      localStorage.setItem(STORAGE_ACTIVE_DISCUSSION_ID_KEY, currentDiscussionId);
+    } catch {}
+  }, [currentDiscussionId]);
 
   useEffect(() => {
     if (!historyOpen) return;
@@ -233,144 +300,177 @@ export function AIChat({
   const handleSend = async () => {
     const text = inputText.trim();
     if (!text || isStreaming) return;
-
-    // Utiliser le provider sélectionné (vllm/qwen/mistral = Ollama, claude = Anthropic)
-    const provider = configuredProviders.some((p) => p.provider_name === activeProvider)
-      ? activeProvider
-      : "vllm";
-
+    const provider = configuredProviders.some((p) => p.provider_name === activeProvider) ? activeProvider : "vllm";
     setInputText("");
     setAttachedFiles([]);
-    setIsStreaming(true);
-    abortRef.current = new AbortController();
-
+    const now = Date.now();
+    const userMsg: ChatMsg = { role: "user", content: text, createdAt: now };
+    setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", provider, createdAt: now }]);
     const baseHistory = messages.slice(-10).map((m) => ({ role: m.role, content: m.content }));
-    const userMsg: ChatMsg = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", provider }]);
+    performSend(text, baseHistory);
+  };
 
+  const performSend = useCallback(async (text: string, baseHistory: { role: string; content: string }[]) => {
+    const provider = configuredProviders.some((p) => p.provider_name === activeProvider) ? activeProvider : "vllm";
+    setIsStreaming(true);
+    setStreamProgress(null);
+    abortRef.current = new AbortController();
     const removeLastAssistant = () =>
       setMessages((prev) => (prev.length >= 2 && prev[prev.length - 1].role === "assistant" ? prev.slice(0, -1) : prev));
-
     let contextFromModules: string | undefined;
+    const moduleIds = selectedContextModuleIds.length > 0 ? selectedContextModuleIds : moduleRegistry.getAllModules().map((m) => m.moduleId);
     try {
-      let moduleIds = moduleRegistry.getAllModules().map((m) => m.moduleId);
-      if (moduleIds.length === 0) {
-        await new Promise((r) => setTimeout(r, 150));
-        moduleIds = moduleRegistry.getAllModules().map((m) => m.moduleId);
-      }
       if (moduleIds.length > 0) {
         const { text: ctx } = await moduleRegistry.buildContext(moduleIds);
         contextFromModules = ctx?.trim() || undefined;
       }
     } catch {
-      // ignorer si le contexte n'est pas disponible
+      /* ignore */
     }
-
-    try {
-      const res = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: text,
-          provider_name: provider,
-          conversation_history: [...baseHistory, { role: "user", content: text }],
-          discussion_id: currentDiscussionId ?? undefined,
-          context_from_modules: contextFromModules,
-        }),
-        signal: abortRef.current.signal,
-        credentials: "include",
-      });
-      if (res.status === 401) {
-        removeLastAssistant();
-        setIsStreaming(false);
-        return;
-      }
-      if (!res.ok) {
-        const errBody = await res.text();
-        let errMsg = `Le service a répondu ${res.status}`;
-        try {
-          const j = JSON.parse(errBody);
-          if (typeof j?.error === "string") errMsg = j.error;
-        } catch {
-          if (errBody.slice(0, 100)) errMsg += ` — ${errBody.slice(0, 100)}`;
+    const maxAttempts = 3;
+    const backoffMs = 2000;
+    let lastRes: Response | null = null;
+    let lastErr: unknown = null;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        lastErr = null;
+        const res = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            provider_name: provider,
+            conversation_history: [...baseHistory, { role: "user", content: text }],
+            discussion_id: currentDiscussionId ?? undefined,
+            context_from_modules: contextFromModules,
+          }),
+          signal: abortRef.current.signal,
+          credentials: "include",
+        });
+        lastRes = res;
+        if (res.status === 401) {
+          removeLastAssistant();
+          setIsStreaming(false);
+          setStreamProgress(null);
+          return;
+        }
+        if (!res.ok && res.status >= 500 && attempt < maxAttempts - 1) {
+          await new Promise((r) => setTimeout(r, backoffMs));
+          continue;
+        }
+        if (!res.ok) {
+          const errBody = await res.text();
+          let errMsg = `Le service a répondu ${res.status}`;
+          try {
+            const j = JSON.parse(errBody);
+            if (typeof j?.error === "string") errMsg = j.error;
+          } catch {
+            if (errBody.slice(0, 100)) errMsg += ` — ${errBody.slice(0, 100)}`;
+          }
+          setMessages((prev) => {
+            const next = [...prev];
+            const last = next[next.length - 1];
+            if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}`, error: true };
+            return next;
+          });
+          break;
+        }
+        const reader = res.body?.getReader();
+        const decoder = new TextDecoder();
+        let full = "";
+        let tokenCount = 0;
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split("\n");
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              try {
+                const data = JSON.parse(line.slice(6)) as { type: string; t?: string; discussion_id?: string; message?: string };
+                if (data.type === "chunk" && data.t) {
+                  full += data.t;
+                  tokenCount += 1;
+                  setStreamProgress((prev) =>
+                    prev ? { ...prev, tokenCount } : { startTime: Date.now(), tokenCount: 1 }
+                  );
+                  setMessages((prev) => {
+                    const next = [...prev];
+                    const last = next[next.length - 1];
+                    if (last?.role === "assistant") next[next.length - 1] = { ...last, content: full };
+                    return next;
+                  });
+                }
+                if (data.type === "done" && data.discussion_id) setCurrentDiscussionId(data.discussion_id);
+                if (data.type === "error") {
+                  let errMsg = typeof data.message === "string" ? data.message : "Erreur lors de l'appel au modèle.";
+                  if (/network error|failed to fetch|fetch failed|econnrefused|econnreset/i.test(errMsg)) {
+                    errMsg = "Impossible de joindre le service IA. Vérifiez votre connexion et qu'Ollama est démarré (ex. http://localhost:11434), ou définissez AI_MOCK=true pour le mode démo.";
+                  }
+                  setMessages((prev) => {
+                    const next = [...prev];
+                    const last = next[next.length - 1];
+                    if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}`, error: true };
+                    return next;
+                  });
+                }
+              } catch {
+                /* ignore */
+              }
+            }
+          }
         }
         setMessages((prev) => {
           const next = [...prev];
           const last = next[next.length - 1];
-          if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}` };
+          if (last?.role === "assistant") next[next.length - 1] = { ...last, content: full || last.content };
           return next;
         });
-        setIsStreaming(false);
-        return;
-      }
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder();
-      let full = "";
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n");
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            try {
-              const data = JSON.parse(line.slice(6)) as { type: string; t?: string; discussion_id?: string; message?: string };
-              if (data.type === "chunk" && data.t) {
-                full += data.t;
-                setMessages((prev) => {
-                  const next = [...prev];
-                  const last = next[next.length - 1];
-                  if (last?.role === "assistant") next[next.length - 1] = { ...last, content: full };
-                  return next;
-                });
-              }
-              if (data.type === "done" && data.discussion_id) setCurrentDiscussionId(data.discussion_id);
-              if (data.type === "error") {
-                let errMsg = typeof data.message === "string" ? data.message : "Erreur lors de l'appel au modèle.";
-                if (/network error|failed to fetch|fetch failed|econnrefused|econnreset/i.test(errMsg)) {
-                  errMsg = "Impossible de joindre le service IA. Vérifiez votre connexion et qu'Ollama est démarré (ex. http://localhost:11434), ou définissez AI_MOCK=true pour le mode démo.";
-                }
-                setMessages((prev) => {
-                  const next = [...prev];
-                  const last = next[next.length - 1];
-                  if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}` };
-                  return next;
-                });
-              }
-            } catch {
-              // ignore
-            }
-          }
+        break;
+      } catch (err) {
+        lastRes = null;
+        lastErr = err;
+        if ((err as Error).name === "AbortError") {
+          removeLastAssistant();
+          break;
         }
-      }
-      setMessages((prev) => {
-        const next = [...prev];
-        const last = next[next.length - 1];
-        if (last?.role === "assistant") next[next.length - 1] = { ...last, content: full || last.content };
-        return next;
-      });
-    } catch (err) {
-      if ((err as Error).name === "AbortError") {
-        removeLastAssistant();
-      } else {
+        const isNetwork = /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed|load failed/i.test(
+          err instanceof Error ? err.message : String(err)
+        );
+        if (isNetwork && attempt < maxAttempts - 1) {
+          await new Promise((r) => setTimeout(r, backoffMs));
+          continue;
+        }
         const raw = err instanceof Error ? err.message : String(err);
-        const isNetwork = /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed|load failed/i.test(raw);
         const errMsg = isNetwork
           ? "Impossible de joindre le service IA. Vérifiez votre connexion et qu'Ollama est démarré (ex. http://localhost:11434), ou définissez AI_MOCK=true pour le mode démo."
           : raw;
         setMessages((prev) => {
           const next = [...prev];
           const last = next[next.length - 1];
-          if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}` };
+          if (last?.role === "assistant") next[next.length - 1] = { ...last, content: `*Erreur :* ${errMsg}`, error: true };
           return next;
         });
+        break;
       }
-    } finally {
-      setIsStreaming(false);
-      abortRef.current = null;
     }
-  };
+    setStreamProgress(null);
+    setIsStreaming(false);
+    abortRef.current = null;
+  }, [activeProvider, configuredProviders, currentDiscussionId, selectedContextModuleIds]);
+
+  const handleRetry = useCallback((userContent: string) => {
+    if (isStreaming) return;
+    const i = messages.findIndex((m) => m.role === "assistant" && (m as ChatMsg & { error?: boolean }).error);
+    if (i < 0) return;
+    const next = [...messages];
+    const provider = configuredProviders.some((p) => p.provider_name === activeProvider) ? activeProvider : "vllm";
+    next[i] = { role: "assistant", content: "", provider };
+    setMessages(next);
+    const baseHistory = next.slice(0, -2).map((m) => ({ role: m.role, content: m.content })).slice(-10);
+    setTimeout(() => performSend(userContent, baseHistory), 0);
+  }, [messages, isStreaming, activeProvider, configuredProviders, performSend]);
 
   const selectedConversation = selectedHistoryId ? historyConversations.find((c) => c.id === selectedHistoryId) : null;
   const providerLabel = (name: string) =>
@@ -602,9 +702,73 @@ export function AIChat({
               </div>
             );
           }
-          return <MessageBubble key={i} message={msg} assistantName={assistantName} />;
+          const prevUser =
+            msg.role === "assistant" && (msg as ChatMsg & { error?: boolean }).error && i > 0 && messages[i - 1]?.role === "user"
+              ? messages[i - 1].content
+              : undefined;
+          return (
+            <MessageBubble
+              key={i}
+              message={msg}
+              assistantName={assistantName}
+              onRetry={msg.role === "assistant" && (msg as ChatMsg & { error?: boolean }).error ? handleRetry : undefined}
+              previousUserContent={msg.role === "assistant" ? prevUser : undefined}
+            />
+          );
         })}
         <div ref={messagesEndRef} />
+      </div>
+
+      <div className="bpm-ai-chat-provider-row">
+        <span className="bpm-ai-chat-provider-label">Modèle :</span>
+        {configuredProviders.map((p) => (
+          <button
+            key={p.provider_name}
+            type="button"
+            className={`bpm-ai-chat-provider-badge${activeProvider === p.provider_name ? " bpm-ai-chat-provider-badge--active" : ""}`}
+            style={{ borderColor: activeProvider === p.provider_name ? (p.color ?? "var(--bpm-accent)") : "var(--bpm-border)", color: p.color ?? "var(--bpm-text-primary)" }}
+            onClick={() => setActiveProvider(p.provider_name)}
+            aria-pressed={activeProvider === p.provider_name}
+            aria-label={`Utiliser ${p.label}`}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="bpm-ai-chat-context-wrap" ref={contextPanelRef}>
+        <button
+          type="button"
+          className={`bpm-ai-chat-context-button${contextPanelOpen ? " bpm-ai-chat-context-button--open" : ""}`}
+          onClick={() => setContextPanelOpen((v) => !v)}
+          aria-expanded={contextPanelOpen}
+          aria-haspopup="true"
+          aria-label="Choisir les modules de contexte"
+          title="Contexte (Wiki, Documents)"
+        >
+          Contexte {selectedContextModuleIds.length > 0 ? `(${selectedContextModuleIds.length})` : ""}
+        </button>
+        {contextPanelOpen && (
+          <Panel variant="info" title="Modules inclus dans le contexte" className="bpm-ai-chat-context-panel">
+            <p className="bpm-ai-chat-context-hint">Cochez les modules dont les données seront envoyées au modèle à chaque message.</p>
+            {moduleRegistry.getAllModules().map((m) => (
+              <div key={m.moduleId} className="bpm-ai-chat-context-check">
+                <Checkbox
+                  label={m.label}
+                  checked={selectedContextModuleIds.includes(m.moduleId)}
+                  onChange={(checked) => {
+                    setSelectedContextModuleIds((prev) =>
+                      checked ? [...prev, m.moduleId] : prev.filter((id) => id !== m.moduleId)
+                    );
+                  }}
+                />
+              </div>
+            ))}
+            {moduleRegistry.getAllModules().length === 0 && (
+              <p className="bpm-ai-chat-context-empty">Aucun module enregistré (Wiki, Documents).</p>
+            )}
+          </Panel>
+        )}
       </div>
 
       <div className="bpm-ai-chat-input-wrap">
@@ -636,6 +800,7 @@ export function AIChat({
               <textarea
                 ref={inputRef}
                 className={`bpm-ai-chat-input${inputText ? " bpm-ai-chat-input--highlight" : ""}`}
+                aria-label="Zone de saisie de l'assistant"
                 placeholder={
                   messages.length === 0
                     ? `Discuter avec ${assistantName}…`

@@ -1,0 +1,274 @@
+/* bpm.loadingbar — Barres de chargement BPM (6 variants) */
+
+.bpm-loadingbar {
+  width: 100%;
+}
+
+/* Sizes */
+.bpm-loadingbar--thin .bpm-loadingbar-sweep-track,
+.bpm-loadingbar--thin .bpm-loadingbar-blocks-track { height: 6px; }
+.bpm-loadingbar--default .bpm-loadingbar-sweep-track,
+.bpm-loadingbar--default .bpm-loadingbar-blocks-track { height: 8px; }
+.bpm-loadingbar--thick .bpm-loadingbar-sweep-track,
+.bpm-loadingbar--thick .bpm-loadingbar-blocks-track { height: 10px; }
+
+/* Static: no animation */
+.bpm-loadingbar--static .bpm-loadingbar-sweep-fill,
+.bpm-loadingbar--static .bpm-loadingbar-sweep-glow { animation: none; left: 20%; }
+.bpm-loadingbar--static .bpm-loadingbar-block-seg { animation: none; opacity: 0.5; }
+.bpm-loadingbar--static .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-fill,
+.bpm-loadingbar--static .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-top,
+.bpm-loadingbar--static .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-side { animation: none; width: 50%; }
+.bpm-loadingbar--static .bpm-loadingbar-stacked-fill { animation: none; left: 10%; }
+.bpm-loadingbar--static .bpm-loadingbar-arc-rect { animation: none; transform: translateX(20%); }
+.bpm-loadingbar--static .bpm-loadingbar-dot { animation: none; opacity: 0.6; }
+
+/* ─── 1. Gradient Sweep ─── */
+.bpm-loadingbar-sweep-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(24, 160, 251, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.bpm-loadingbar-sweep-fill {
+  position: absolute;
+  height: 100%;
+  width: 60%;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    #1264C8 0%,
+    #18A0FB 30%,
+    var(--bpm-accent-cyan, #00C6FB) 60%,
+    var(--bpm-accent-mint, #00E0C5) 80%,
+    rgba(0, 224, 197, 0) 100%
+  );
+  animation: bpm-loadingbar-sweep-move 2s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+.bpm-loadingbar-sweep-glow {
+  position: absolute;
+  height: 100%;
+  width: 20%;
+  background: linear-gradient(90deg, transparent, rgba(0, 224, 197, 0.6), transparent);
+  animation: bpm-loadingbar-sweep-move 2s ease-in-out infinite;
+  animation-delay: 0.1s;
+  filter: blur(2px);
+  top: -2px;
+}
+@keyframes bpm-loadingbar-sweep-move {
+  0% { left: -60%; }
+  100% { left: 110%; }
+}
+
+/* ─── 2. Modular Blocks ─── */
+.bpm-loadingbar-blocks-track {
+  width: 100%;
+  height: 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.bpm-loadingbar-block-seg {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+  background: rgba(24, 160, 251, 0.12);
+  animation: bpm-loadingbar-block-pulse 1.6s ease-in-out infinite;
+}
+.bpm-loadingbar-block-seg:nth-child(1) { animation-delay: 0s; background: rgba(18, 100, 200, 0.15); }
+.bpm-loadingbar-block-seg:nth-child(2) { animation-delay: 0.1s; background: rgba(18, 100, 200, 0.12); }
+.bpm-loadingbar-block-seg:nth-child(3) { animation-delay: 0.2s; }
+.bpm-loadingbar-block-seg:nth-child(4) { animation-delay: 0.3s; }
+.bpm-loadingbar-block-seg:nth-child(5) { animation-delay: 0.4s; }
+.bpm-loadingbar-block-seg:nth-child(6) { animation-delay: 0.5s; }
+.bpm-loadingbar-block-seg:nth-child(7) { animation-delay: 0.6s; }
+.bpm-loadingbar-block-seg:nth-child(8) { animation-delay: 0.7s; }
+.bpm-loadingbar-block-seg:nth-child(9) { animation-delay: 0.8s; }
+.bpm-loadingbar-block-seg:nth-child(10) { animation-delay: 0.9s; }
+.bpm-loadingbar-block-seg:nth-child(11) { animation-delay: 1s; }
+.bpm-loadingbar-block-seg:nth-child(12) { animation-delay: 1.1s; }
+@keyframes bpm-loadingbar-block-pulse {
+  0%, 100% { opacity: 0.2; transform: scaleY(0.6); }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+    background: linear-gradient(90deg, #18A0FB, var(--bpm-accent-mint, #00E0C5));
+  }
+}
+
+/* ─── 3. Isometric Progress ─── */
+.bpm-loadingbar-iso-wrap {
+  width: 100%;
+  position: relative;
+  height: 20px;
+}
+.bpm-loadingbar-iso-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(24, 160, 251, 0.08);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  top: 4px;
+}
+.bpm-loadingbar-iso-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1264C8, #18A0FB 40%, var(--bpm-accent-cyan, #00C6FB) 70%, var(--bpm-accent-mint, #00E0C5));
+  position: relative;
+  transition: width 0.25s ease-out;
+}
+.bpm-loadingbar-iso-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--bpm-accent-cyan, #00C6FB), var(--bpm-accent-mint, #00E0C5) 60%, #80f0e0);
+  clip-path: polygon(0 100%, 100% 100%, calc(100% - 4px) 0%, -4px 0%);
+  border-radius: 1px;
+  transition: width 0.25s ease-out;
+}
+.bpm-loadingbar-iso-side {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #0d4a9a, #1264C8 40%, #18A0FB);
+  clip-path: polygon(0 0%, 100% 0%, calc(100% + 4px) 100%, 4px 100%);
+  transition: width 0.25s ease-out;
+}
+
+/* Indeterminate isometric: animated fill */
+.bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-fill,
+.bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-top,
+.bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-side {
+  width: 0;
+  animation: bpm-loadingbar-iso-fill 3s ease-in-out infinite;
+}
+@keyframes bpm-loadingbar-iso-fill {
+  0% { width: 0; }
+  70% { width: 100%; }
+  85% { width: 100%; }
+  100% { width: 0; }
+}
+
+/* ─── 4. Stacked Layers ─── */
+.bpm-loadingbar-stacked-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.bpm-loadingbar-stacked-track {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(24, 160, 251, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+.bpm-loadingbar-stacked-fill {
+  position: absolute;
+  height: 100%;
+  border-radius: 3px;
+  animation: bpm-loadingbar-stacked-bounce 2.4s ease-in-out infinite;
+}
+.bpm-loadingbar-stacked-track:nth-child(1) .bpm-loadingbar-stacked-fill {
+  background: linear-gradient(90deg, var(--bpm-accent-mint, #00E0C5), var(--bpm-accent-cyan, #00C6FB));
+  animation-delay: 0s;
+  width: 70%;
+}
+.bpm-loadingbar-stacked-track:nth-child(2) .bpm-loadingbar-stacked-fill {
+  background: linear-gradient(90deg, #18A0FB, var(--bpm-accent-cyan, #00C6FB));
+  animation-delay: 0.2s;
+  width: 55%;
+}
+.bpm-loadingbar-stacked-track:nth-child(3) .bpm-loadingbar-stacked-fill {
+  background: linear-gradient(90deg, #1264C8, #18A0FB);
+  animation-delay: 0.4s;
+  width: 40%;
+}
+@keyframes bpm-loadingbar-stacked-bounce {
+  0% { left: -100%; }
+  100% { left: 110%; }
+}
+
+/* ─── 5. Arc Segments (SVG inline in component) ─── */
+.bpm-loadingbar-arc-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bpm-loadingbar-arc-svg {
+  width: 100%;
+  height: 28px;
+  overflow: visible;
+}
+.bpm-loadingbar-arc-rect {
+  animation: bpm-loadingbar-arc-move 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.bpm-loadingbar-arc-rect--1 { animation-delay: 0s; }
+.bpm-loadingbar-arc-rect--2 { animation-delay: 0.3s; }
+.bpm-loadingbar-arc-rect--3 { animation-delay: 0.55s; }
+@keyframes bpm-loadingbar-arc-move {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(529%); }
+}
+
+/* ─── 6. Dot Trail ─── */
+.bpm-loadingbar-dots-track {
+  width: 100%;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.bpm-loadingbar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #18A0FB;
+  flex-shrink: 0;
+  animation: bpm-loadingbar-dot-wave 1.4s ease-in-out infinite;
+}
+.bpm-loadingbar-dot:nth-child(odd) {
+  background: linear-gradient(135deg, #18A0FB, var(--bpm-accent-cyan, #00C6FB));
+}
+.bpm-loadingbar-dot:nth-child(even) {
+  background: linear-gradient(135deg, var(--bpm-accent-cyan, #00C6FB), var(--bpm-accent-mint, #00E0C5));
+  border-radius: 50%;
+}
+.bpm-loadingbar-dot:nth-child(1) { animation-delay: 0s; }
+.bpm-loadingbar-dot:nth-child(2) { animation-delay: 0.1s; }
+.bpm-loadingbar-dot:nth-child(3) { animation-delay: 0.2s; }
+.bpm-loadingbar-dot:nth-child(4) { animation-delay: 0.3s; }
+.bpm-loadingbar-dot:nth-child(5) { animation-delay: 0.4s; }
+.bpm-loadingbar-dot:nth-child(6) { animation-delay: 0.5s; }
+.bpm-loadingbar-dot:nth-child(7) { animation-delay: 0.6s; }
+.bpm-loadingbar-dot:nth-child(8) { animation-delay: 0.7s; }
+.bpm-loadingbar-dot:nth-child(9) { animation-delay: 0.8s; }
+.bpm-loadingbar-dot:nth-child(10) { animation-delay: 0.9s; }
+.bpm-loadingbar-dot:nth-child(11) { animation-delay: 1s; }
+.bpm-loadingbar-dot:nth-child(12) { animation-delay: 1.1s; }
+.bpm-loadingbar-dot:nth-child(13) { animation-delay: 1.2s; }
+.bpm-loadingbar-dot:nth-child(14) { animation-delay: 1.3s; }
+@keyframes bpm-loadingbar-dot-wave {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.25; }
+  50% { transform: scaleY(1.5); opacity: 1; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bpm-loadingbar-sweep-fill,
+  .bpm-loadingbar-sweep-glow { animation: none; left: 20%; }
+  .bpm-loadingbar-block-seg { animation: none; opacity: 0.5; }
+  .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-fill,
+  .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-top,
+  .bpm-loadingbar-iso-wrap[data-indeterminate="true"] .bpm-loadingbar-iso-side { animation: none; width: 50%; }
+  .bpm-loadingbar-stacked-fill { animation: none; left: 10%; }
+  .bpm-loadingbar-arc-rect { animation: none; transform: translateX(20%); }
+  .bpm-loadingbar-dot { animation: none; opacity: 0.6; }
+}

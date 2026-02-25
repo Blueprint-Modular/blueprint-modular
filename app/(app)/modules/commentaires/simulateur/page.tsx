@@ -48,6 +48,28 @@ const COMMENT_TYPES: Record<Comment["type"] & string, { label: string; color: st
   blocage: { label: "Blocage", color: "#e74c3c" },
 };
 
+/** Chip de type dont la couleur sélectionnée = couleur d’affichage dans le fil */
+function TypeChip({
+  label,
+  selected,
+  color,
+  onClick,
+}: { label: string; selected: boolean; color: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium cursor-pointer border-0"
+      style={{
+        background: selected ? color : "var(--bpm-bg-secondary)",
+        color: selected ? "#fff" : "var(--bpm-text-primary)",
+      }}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+}
+
 /** Couleur dérivée de l'id auteur (P5) */
 const AVATAR_COLORS = ["var(--bpm-accent-cyan)", "#e67e22", "#27ae60", "#9b59b6", "#e74c3c", "#1abc9c"];
 function authorColor(authorId: string): string {
@@ -233,12 +255,12 @@ export default function CommentairesSimulateurPage() {
           )}
         </h2>
 
-        {/* Filtre par type */}
+        {/* Filtre par type — couleurs alignées avec le fil */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <span className="text-xs font-medium" style={{ color: "var(--bpm-text-secondary)" }}>Filtrer :</span>
-          <Chip label="Tous" variant={filterType === null ? "primary" : "default"} onClick={() => setFilterType(null)} />
+          <TypeChip label="Tous" selected={filterType === null} color="var(--bpm-accent)" onClick={() => setFilterType(null)} />
           {(Object.keys(COMMENT_TYPES) as (keyof typeof COMMENT_TYPES)[]).map((t) => (
-            <Chip key={t} label={COMMENT_TYPES[t].label} variant={filterType === t ? "primary" : "default"} onClick={() => setFilterType(t)} />
+            <TypeChip key={t} label={COMMENT_TYPES[t].label} selected={filterType === t} color={COMMENT_TYPES[t].color} onClick={() => setFilterType(t)} />
           ))}
         </div>
 
@@ -341,13 +363,14 @@ export default function CommentairesSimulateurPage() {
         {/* Séparateur (P10) */}
         <div className="border-t pt-3 mt-2" style={{ borderColor: "var(--bpm-border)" }}>
           <p className="text-xs font-medium mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Nouveau commentaire</p>
-          <p className="text-xs mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Type :</p>
-          <div className="flex flex-wrap gap-2 mb-3">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span className="text-xs font-medium shrink-0" style={{ color: "var(--bpm-text-secondary)" }}>Type :</span>
             {(Object.keys(COMMENT_TYPES) as (keyof typeof COMMENT_TYPES)[]).map((t) => (
-              <Chip
+              <TypeChip
                 key={t}
                 label={COMMENT_TYPES[t].label}
-                variant={newCommentType === t ? "primary" : "default"}
+                selected={newCommentType === t}
+                color={COMMENT_TYPES[t].color}
                 onClick={() => setNewCommentType(t)}
               />
             ))}

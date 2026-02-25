@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Metric,
@@ -149,7 +149,31 @@ function groupByCategory(components: ComponentEntry[]): { name: string; items: C
 }
 
 export default function DocsComponentsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
   const categories = groupByCategory(registry.components);
+
+  const keywords = useMemo(
+    () =>
+      searchQuery
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean),
+    [searchQuery]
+  );
+
+  const filteredCategories = useMemo(() => {
+    if (keywords.length === 0) return categories;
+    return categories
+      .map((cat) => ({
+        name: cat.name,
+        items: cat.items.filter((item) => {
+          const text = `${item.name} ${item.description} ${cat.name}`.toLowerCase();
+          return keywords.every((kw) => text.includes(kw));
+        }),
+      }))
+      .filter((cat) => cat.items.length > 0);
+  }, [categories, keywords]);
 
   return (
     <div className="doc-page">
@@ -159,9 +183,18 @@ export default function DocsComponentsPage() {
           Référence des composants avec sandbox live. La liste est alimentée par le package Python{" "}
           <code className="text-sm">blueprint-modular</code> (pip install). Cliquez sur une carte pour la documentation.
         </p>
+        <div className="mt-4 max-w-md">
+          <Input
+            type="search"
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Rechercher un composant (mots-clés…)"
+            aria-label="Rechercher un composant par mots-clés"
+          />
+        </div>
       </div>
       <div className="space-y-10">
-        {categories.map((cat) => (
+        {filteredCategories.map((cat) => (
           <section key={cat.name}>
             <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--bpm-text-primary)" }}>
               {cat.name}

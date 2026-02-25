@@ -239,6 +239,14 @@ textarea.bpm-textarea:focus {
   box-shadow: 0 0 0 2px rgba(0, 163, 226, 0.2);
 }
 
+/* Selectbox (ex. Modèle) : même bleu qu’Input/Textarea au focus et à l’ouverture */
+.bpm-selectbox:focus,
+.bpm-selectbox[aria-expanded="true"] {
+  outline: none !important;
+  border-color: var(--bpm-accent) !important;
+  box-shadow: 0 0 0 2px rgba(0, 163, 226, 0.2);
+}
+
 .doc-breadcrumb { font-size: 12px; color: var(--bpm-text-secondary); margin-bottom: 8px; }
 .doc-breadcrumb-header { margin-bottom: 0; }
 .doc-breadcrumb a { color: var(--bpm-color-link); text-decoration: none; }

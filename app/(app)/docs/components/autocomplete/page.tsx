@@ -40,15 +40,6 @@ export default function DocAutocompletePage() {
         </div>
       </div>
 
-      <div className="mt-6 p-4 rounded-xl border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
-        <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-          Tester ce composant en direct dans le sandbox :
-        </p>
-        <Link href="/sandbox?component=autocomplete" className="doc-cta inline-block">
-          Ouvrir dans le sandbox
-        </Link>
-      </div>
-
       <div className="sandbox-container mt-6">
         <div className="sandbox-preview" style={{ maxWidth: 280 }}>
           <Autocomplete

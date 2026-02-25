@@ -153,6 +153,7 @@ export default function DocumentDetailPage() {
       <nav className="doc-pagination mt-8">
         <Link href="/modules/documents" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour à l&apos;Analyse de documents</Link>
         <Link href="/modules/documents#documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Analyser un document</Link>
+        <Link href="/modules/documents/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
       </nav>
     </div>
   );

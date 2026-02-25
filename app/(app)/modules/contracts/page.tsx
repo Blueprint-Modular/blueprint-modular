@@ -316,6 +316,7 @@ export default function ContractsPage() {
       )}
 
       <nav className="doc-pagination mt-8">
+        <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour aux modules</Link>
         <Link href="/modules/contracts#documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Importer un contrat</Link>
         <Link href="/modules/contracts/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
       </nav>

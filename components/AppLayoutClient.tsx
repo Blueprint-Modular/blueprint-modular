@@ -94,7 +94,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
             role="contentinfo"
           >
             <div className="flex flex-wrap items-center justify-between gap-4 max-w-[1400px] mx-auto">
-              <span>Blueprint Modular v0.1.19</span>
+              <span>Blueprint Modular v0.1.20</span>
               <span className="flex flex-wrap gap-4">
                 <a href="https://docs.blueprint-modular.com/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>Documentation</a>
                 <a href="https://pypi.org/project/blueprint-modular/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>PyPI</a>

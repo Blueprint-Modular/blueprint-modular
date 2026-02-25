@@ -25,10 +25,6 @@ export default function DocTimelinePage() {
           <span className="doc-reading-time">⏱ 2 min</span>
         </div>
       </div>
-      <div className="mt-6 p-4 rounded-xl border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
-        <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>Tester ce composant en direct dans le sandbox :</p>
-        <Link href="/sandbox?component=timeline" className="doc-cta inline-block">Ouvrir dans le sandbox</Link>
-      </div>
       <div className="sandbox-container mt-6">
         <div className="sandbox-preview">
           <Timeline items={items} />

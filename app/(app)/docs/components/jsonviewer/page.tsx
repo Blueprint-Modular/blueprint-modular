@@ -191,15 +191,6 @@ export default function DocJsonViewerPage() {
       <CodeBlock code={'bpm.jsonviewer(data={"user": {"name": "Alice"}, "count": 42})'} language="python" />
       <CodeBlock code="bpm.jsonviewer(data=my_dict, default_expanded_level=0, max_height=300)" language="python" />
 
-      <div className="mt-6 p-4 rounded-xl border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
-        <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-          Tester en conditions réelles dans le sandbox :
-        </p>
-        <Link href="/sandbox?component=jsonviewer" className="doc-cta inline-block">
-          Ouvrir dans le sandbox
-        </Link>
-      </div>
-
       <nav className="doc-pagination mt-12">
         {prev ? <Link href={"/docs/components/" + prev}>← bpm.{prev}</Link> : <span />}
         {next ? <Link href={"/docs/components/" + next}>bpm.{next} →</Link> : <span />}

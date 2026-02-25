@@ -33,6 +33,10 @@ export function Progress({
         </div>
       )}
       <div
+        role="progressbar"
+        aria-valuenow={max > 0 ? value : undefined}
+        aria-valuemin={0}
+        aria-valuemax={max}
         className="bpm-progress-track h-2 rounded-full overflow-hidden"
         style={{ background: "var(--bpm-bg-secondary)" }}
       >

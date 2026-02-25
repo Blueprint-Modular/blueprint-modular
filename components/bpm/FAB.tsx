@@ -10,22 +10,20 @@ export interface FABProps {
   className?: string;
 }
 
-export function FAB({ icon, label, onClick, position = "bottom-right", className = "" }: FABProps) {
-  const style: React.CSSProperties = {
-    background: "var(--bpm-accent-cyan)",
-    color: "#fff",
-  };
-  if (position === "bottom-right") { style.bottom = 24; style.right = 24; }
-  else if (position === "bottom-left") { style.bottom = 24; style.left = 24; }
-  else if (position === "top-right") { style.top = 24; style.right = 24; }
-  else { style.top = 24; style.left = 24; }
+const positionClasses: Record<NonNullable<FABProps["position"]>, string> = {
+  "bottom-right": "right-6 bottom-6 max-md:bottom-[calc(5rem+1rem)]",
+  "bottom-left": "left-6 bottom-6 max-md:bottom-[calc(5rem+1rem)]",
+  "top-right": "right-6 top-6",
+  "top-left": "left-6 top-6",
+};
 
+export function FAB({ icon, label, onClick, position = "bottom-right", className = "" }: FABProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={"bpm-fab fixed z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-0 cursor-pointer " + className}
-      style={style}
+      className={"bpm-fab fixed z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-0 cursor-pointer " + positionClasses[position] + " " + className}
+      style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}
       title={label}
       aria-label={label ?? "Action"}
     >

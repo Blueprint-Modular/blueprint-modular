@@ -32,13 +32,15 @@ export function BarChart(p: BarChartProps) {
     }));
   }, [data, width, height]);
   if (!data.length) {
-    return <div className={"bpm-bar-chart " + className} style={{ width, height, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
+    return <div className={"bpm-bar-chart w-full max-w-full " + className} style={{ aspectRatio: `${width}/${height}`, maxWidth: width, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
   }
   return (
-    <svg width={width} height={height} className={"bpm-bar-chart " + className}>
-      {bars.map((b, i) => (
-        <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill={color} rx={2} />
-      ))}
-    </svg>
+    <div className="w-full max-w-full overflow-hidden" style={{ aspectRatio: `${width}/${height}` }}>
+      <svg viewBox={`0 0 ${width} ${height}`} className={"bpm-bar-chart " + className} style={{ width: "100%", height: "auto" }} preserveAspectRatio="xMidYMid meet">
+        {bars.map((b, i) => (
+          <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill={color} rx={2} />
+        ))}
+      </svg>
+    </div>
   );
 }

@@ -97,13 +97,24 @@ export function Tooltip({
     </div>
   );
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (typeof window !== "undefined" && "ontouchstart" in window) {
+      e.preventDefault();
+      setVisible((v) => !v);
+    }
+  };
+
   return (
     <>
       <span
         ref={triggerRef}
         className="bpm-tooltip-container inline"
+        tabIndex={0}
         onMouseEnter={show}
         onMouseLeave={hide}
+        onFocus={show}
+        onBlur={hide}
+        onClick={handleClick}
       >
         {children}
       </span>

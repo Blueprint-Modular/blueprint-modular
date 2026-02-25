@@ -28,10 +28,12 @@ import React, { useMemo } from "react";export interface LineChartDatum {
     const yScale = (v: number) => height - pad - ((v - minY) / rangeY) * h;
     return "M" + data.map((_, i) => xScale(xs[i]) + "," + yScale(ys[i])).join("L");
   }, [data, width, height]);
-  if (!data.length) return <div className={"bpm-line-chart " + className} style={{ width, height, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
+  if (!data.length) return <div className={"bpm-line-chart w-full max-w-full " + className} style={{ aspectRatio: `${width}/${height}`, maxWidth: width, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
   return (
-    <svg width={width} height={height} className={"bpm-line-chart " + className} style={{ overflow: "visible" }}>
-      <path d={path} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className="w-full max-w-full overflow-hidden" style={{ aspectRatio: `${width}/${height}` }}>
+      <svg viewBox={`0 0 ${width} ${height}`} className={"bpm-line-chart " + className} style={{ width: "100%", height: "auto", overflow: "visible" }} preserveAspectRatio="xMidYMid meet">
+        <path d={path} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
   );
 }

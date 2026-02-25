@@ -11,5 +11,5 @@ export interface AudioProps {
 
 export function Audio(p: AudioProps) {
   const { src, controls = true, loop = false, className = "" } = p;
-  return <audio src={src} controls={controls} loop={loop} className={"bpm-audio max-w-full " + className} />;
+  return <audio src={src} controls={controls} loop={loop} className={"bpm-audio w-full max-w-full " + className} />;
 }

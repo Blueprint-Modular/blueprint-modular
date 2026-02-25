@@ -18,6 +18,12 @@ export default function TemplatesDocumentationPage() {
         Modèles prédéfinis (rapports, fiches, emails). L&apos;utilisateur choisit un modèle puis remplit les champs ; le document est généré (PDF, HTML ou enregistré en base).
       </p>
       <CodeBlock code={'bpm.title("Modèles")\nbpm.selectbox(options=modeles, label="Choisir un modèle")'} language="python" />
+
+      <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>Structure d&apos;un modèle (à documenter)</h2>
+      <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        Un modèle peut exposer : <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>id</code>, <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>label</code>, <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>category</code>, <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>description</code>, <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>output</code> (pdf | html | base), <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>fields</code> (liste de champs avec key, label, type, required), <code className="px-1 rounded" style={{ background: "var(--bpm-bg-secondary)" }}>body</code> (contenu avec placeholders <code>{'{{variable}}'}</code>). Voir l&apos;audit du module pour la structure complète proposée.
+      </p>
+
       <p className="mt-6 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <Link href="/modules/templates/simulateur" className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>Simulateur</Link>
       </p>

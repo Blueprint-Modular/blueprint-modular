@@ -1,7 +1,32 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
-import { Tabs, CodeBlock, Panel, Selectbox, Input, Button } from "@/components/bpm";
+import { Tabs, CodeBlock, Selectbox, Input, Button, useToast } from "@/components/bpm";
+
+const TEMPLATE_OPTIONS = [
+  { value: "rapport", label: "Rapport mensuel" },
+  { value: "fiche", label: "Fiche projet" },
+  { value: "email", label: "Email type" },
+];
+
+const TEMPLATE_FIELDS: Record<string, { key: string; label: string; placeholder: string }[]> = {
+  rapport: [
+    { key: "periode", label: "Période", placeholder: "Ex. Mars 2025" },
+    { key: "responsable", label: "Responsable", placeholder: "Nom" },
+    { key: "ca_realise", label: "CA réalisé (€)", placeholder: "0" },
+  ],
+  fiche: [
+    { key: "projet", label: "Nom du projet", placeholder: "Ex. Refonte site" },
+    { key: "chef", label: "Chef de projet", placeholder: "Nom" },
+    { key: "date_limite", label: "Date limite", placeholder: "JJ/MM/AAAA" },
+  ],
+  email: [
+    { key: "destinataire", label: "Destinataire", placeholder: "email@exemple.com" },
+    { key: "objet", label: "Objet", placeholder: "Objet" },
+    { key: "corps", label: "Message", placeholder: "Contenu..." },
+  ],
+};
 
 const docContent = (
   <>
@@ -14,20 +39,47 @@ const docContent = (
 );
 
 function SimuContent() {
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [documentName, setDocumentName] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
+  const { showToast } = useToast();
+  const canCreate = Boolean(selectedModel && documentName.trim());
+  const fields = selectedModel ? TEMPLATE_FIELDS[selectedModel] ?? [] : [];
+
+  const handleCreate = () => {
+    if (!selectedModel || !documentName.trim()) {
+      setFormError("Veuillez sélectionner un modèle et saisir un nom de document.");
+      return;
+    }
+    setFormError(null);
+    const modelLabel = TEMPLATE_OPTIONS.find((o) => o.value === selectedModel)?.label ?? selectedModel;
+    showToast(`Document « ${documentName.trim()} » créé à partir du modèle « ${modelLabel} ».`, "success", 5000, "Création réussie", "Templates", null);
+  };
+
   return (
     <>
       <h2 className="text-lg font-semibold mt-0 mb-2" style={{ color: "var(--bpm-text-primary)" }}>Choisir un modèle (démo)</h2>
-      <Panel variant="info" title="Modèles disponibles">
+      <div className="rounded-lg border p-6 mt-4" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}>
         <Selectbox
-          options={[{ value: "rapport", label: "Rapport mensuel" }, { value: "fiche", label: "Fiche projet" }, { value: "email", label: "Email type" }]}
-          value={null}
-          onChange={() => {}}
+          options={TEMPLATE_OPTIONS}
+          value={selectedModel}
+          onChange={(v) => { setSelectedModel(v); setFieldValues({}); setFormError(null); }}
           placeholder="Choisir un modèle..."
           label="Modèle"
         />
-        <Input label="Nom du document" placeholder="Ex. Rapport mars 2025" value="" onChange={() => {}} className="mt-4" />
-        <Button className="mt-4">Créer à partir du modèle</Button>
-      </Panel>
+        {selectedModel && (
+          <>
+            <Input label="Nom du document" placeholder="Ex. Rapport mars 2025" value={documentName} onChange={setDocumentName} className="mt-4" />
+            {(TEMPLATE_FIELDS[selectedModel] ?? []).map((f) => (
+              <Input key={f.key} label={f.label} placeholder={f.placeholder} value={fieldValues[f.key] ?? ""} onChange={(v) => setFieldValues((prev) => ({ ...prev, [f.key]: v }))} className="mt-4" />
+            ))}
+            {formError && <p className="text-sm mt-3" style={{ color: "#e74c3c" }}>{formError}</p>}
+            <Button className="mt-4" onClick={handleCreate} disabled={!canCreate}>Créer à partir du modèle</Button>
+          </>
+        )}
+        {!selectedModel && <p className="text-sm mt-4" style={{ color: "var(--bpm-text-secondary)" }}>Sélectionnez un modèle pour afficher les champs.</p>}
+      </div>
     </>
   );
 }

@@ -39,10 +39,12 @@ export function AreaChart(p: AreaChartProps) {
     const bottom = height - pad;
     return line + "L" + lastX + "," + bottom + "L" + firstX + "," + bottom + "Z";
   }, [data, width, height]);
-  if (!data.length) return <div className={"bpm-area-chart " + className} style={{ width, height, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
+  if (!data.length) return <div className={"bpm-area-chart w-full max-w-full " + className} style={{ aspectRatio: `${width}/${height}`, maxWidth: width, background: "var(--bpm-bg-secondary)", borderRadius: 8 }} />;
   return (
-    <svg width={width} height={height} className={"bpm-area-chart " + className}>
-      <path d={path} fill={color} fillOpacity={0.3} stroke={color} strokeWidth={1.5} />
-    </svg>
+    <div className="w-full max-w-full overflow-hidden" style={{ aspectRatio: `${width}/${height}` }}>
+      <svg viewBox={`0 0 ${width} ${height}`} className={"bpm-area-chart " + className} style={{ width: "100%", height: "auto" }} preserveAspectRatio="xMidYMid meet">
+        <path d={path} fill={color} fillOpacity={0.3} stroke={color} strokeWidth={1.5} />
+      </svg>
+    </div>
   );
 }

@@ -55,7 +55,7 @@ function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | 
 
 /** Transforme [[slug]] et [[slug|label]] en liens Markdown vers /modules/wiki/slug. */
 function contentWithWikiLinks(content: string): string {
-  if (!content) return content;
+  if (content == null || typeof content !== "string") return "";
   return content.replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, slugPart, label) => {
     const slug = slugPart.trim().toLowerCase().replace(/\s+/g, "-");
     const text = (label ?? slugPart).trim() || slug;
@@ -66,6 +66,7 @@ function contentWithWikiLinks(content: string): string {
 /** Extrait les titres H2 et H3 pour la table des matières. */
 function buildToc(content: string): { level: 2 | 3; text: string; id: string }[] {
   const toc: { level: 2 | 3; text: string; id: string }[] = [];
+  if (!content || typeof content !== "string") return toc;
   const regex = /^(##|###)\s+(.+)$/gm;
   let m: RegExpExecArray | null;
   while ((m = regex.exec(content)) !== null) {
@@ -244,8 +245,9 @@ export default function WikiArticlePage() {
     );
   }
 
-  const toc = buildToc(article.content);
-  const contentForRender = contentWithWikiLinks(article.content);
+  const rawContent = article.content ?? "";
+  const toc = buildToc(rawContent);
+  const contentForRender = contentWithWikiLinks(rawContent);
 
   if (isPrint) {
     return (
@@ -256,8 +258,8 @@ export default function WikiArticlePage() {
           {article.readingTimeMinutes != null && ` · ${article.readingTimeMinutes} min`}
         </p>
         <div className="prose prose-sm max-w-none wiki-article-content" style={{ lineHeight: 1.7 }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags)]}>
-            {contentForRender || "*Aucun contenu.*"}
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags ?? [])]}>
+            {(contentForRender ?? "") || "*Aucun contenu.*"}
           </ReactMarkdown>
         </div>
       </div>
@@ -362,7 +364,7 @@ export default function WikiArticlePage() {
         >
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags)]}
+            rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags ?? [])]}
             components={{
               h2: ({ node, children, ...props }) => {
                 const first = Array.isArray(children) ? children[0] : children;
@@ -382,7 +384,7 @@ export default function WikiArticlePage() {
           </ReactMarkdown>
         </div>
 
-        {article.children && article.children.length > 0 && (
+        {Array.isArray(article.children) && article.children.length > 0 && (
           <div className="mt-8">
             <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Dans cette section</h2>
             <div className="grid gap-2 sm:grid-cols-2">

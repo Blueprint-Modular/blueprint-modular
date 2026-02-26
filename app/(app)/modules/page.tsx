@@ -35,7 +35,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/skeleton", label: "Skeleton", description: "Assemblages de bpm.skeleton pour un chargement de page complet (header, métriques, tableau).", icon: LayoutDashboard, simulatorAndDoc: true },
     { href: "/modules/tableau-blanc", label: "Tableau blanc", description: "Post-it et zones de texte pour rétros ou ateliers.", icon: StickyNote, simulatorAndDoc: true },
     { href: "/modules/templates", label: "Templates", description: "Bibliothèque de modèles (rapports, fiches, emails) avec champs à remplir.", icon: FileText, simulatorAndDoc: true },
-    { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true },
+    { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true, simulateurHref: "/modules/wiki" },
   ],
   "Données & reporting": [
     { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true },

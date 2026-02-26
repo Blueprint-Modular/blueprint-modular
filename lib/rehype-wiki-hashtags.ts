@@ -12,10 +12,11 @@ function isElement(node: unknown): node is Element {
   return typeof node === "object" && node !== null && (node as Element).type === "element";
 }
 
-export function rehypeWikiHashtags(knownTags: string[]) {
-  const tagSet = new Set(knownTags.map((t) => t.toLowerCase()));
+export function rehypeWikiHashtags(knownTags: string[] = []) {
+  const tagSet = new Set((knownTags ?? []).map((t) => String(t).toLowerCase()));
 
   return (tree: Root) => {
+    if (!tree || !Array.isArray(tree.children)) return;
     const toReplace: { parent: Element; index: number; textNode: Text; newNodes: (Text | Element)[] }[] = [];
 
     visitParents(tree, "text", (node: Text, ancestors: unknown[]) => {

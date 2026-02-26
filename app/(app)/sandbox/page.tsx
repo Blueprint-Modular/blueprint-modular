@@ -1488,7 +1488,7 @@ function SandboxContent() {
                 const raw = data.message ?? "Erreur inconnue";
                 const friendly =
                   /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
-                    ? "Vérifiez qu&apos;Ollama est démarré (ex. http://localhost:11434). Sinon, définissez AI_MOCK=true dans .env pour le mode démo."
+                    ? "Vérifiez qu'Ollama est démarré (ex. http://localhost:11434). Sinon, définissez AI_MOCK=true dans .env pour le mode démo."
                     : raw;
                 setAiError(friendly);
               }
@@ -1502,7 +1502,7 @@ function SandboxContent() {
       const raw = err instanceof Error ? err.message : "Erreur réseau";
       const friendly =
         /network error|failed to fetch|fetch failed|econnrefused|econnreset|network request failed/i.test(raw)
-          ? "Vérifiez qu&apos;Ollama est démarré (ex. http://localhost:11434). Sinon, définissez AI_MOCK=true dans .env pour le mode démo."
+          ? "Vérifiez qu'Ollama est démarré (ex. http://localhost:11434). Sinon, définissez AI_MOCK=true dans .env pour le mode démo."
           : raw;
       setAiError(friendly);
       setCode("");
@@ -1783,7 +1783,7 @@ function SandboxContent() {
             </label>
             {aiHealth && !aiHealth.available && (
               <p className="text-xs mb-2" style={{ color: "var(--bpm-text-secondary)" }}>
-                Vérifiez qu&apos;Ollama est démarré (ex. http://localhost:11434) ou définissez AI_MOCK=true dans .env pour le mode démo.
+                Vérifiez qu'Ollama est démarré (ex. http://localhost:11434) ou définissez AI_MOCK=true dans .env pour le mode démo.
               </p>
             )}
             <textarea

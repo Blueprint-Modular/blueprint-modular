@@ -74,5 +74,14 @@
     "asset": "MCH-[TYPE]-[YEAR]-[SEQ:4]",
     "ticket": "OT-[YEAR]-[SEQ:4]",
     "assignment": "AFF-[YEAR]-[SEQ:4]"
-  }
+  },
+  "lifecycle_stages": [
+    { "id": "achat", "label": "Achat" },
+    { "id": "reception", "label": "Réception" },
+    { "id": "deploiement", "label": "Déploiement" },
+    { "id": "en_service", "label": "En service" },
+    { "id": "maintenance", "label": "Maintenance" },
+    { "id": "renouvellement", "label": "Renouvellement" },
+    { "id": "reforme", "label": "Réforme", "terminal": true }
+  ]
 }

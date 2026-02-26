@@ -7,7 +7,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
-  type?: "text" | "email" | "password" | "number" | "search";
+  type?: "text" | "email" | "password" | "number" | "search" | "date";
   disabled?: boolean;
   className?: string;
 }

@@ -25,6 +25,9 @@ export default function AssetManagerDomainPage() {
 
   const [ticketCount, setTicketCount] = useState(0);
   const [assignmentCount, setAssignmentCount] = useState(0);
+  const [contractCount, setContractCount] = useState(0);
+  const [knowledgeCount, setKnowledgeCount] = useState(0);
+  const [changeCount, setChangeCount] = useState(0);
 
   useEffect(() => {
     if (!domainId) return;
@@ -33,12 +36,18 @@ export default function AssetManagerDomainPage() {
       fetch(`/api/asset-manager/assets?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
       fetch(`/api/asset-manager/tickets?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
       fetch(`/api/asset-manager/assignments?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
+      fetch(`/api/asset-manager/contracts?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
+      fetch(`/api/asset-manager/knowledge?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
+      fetch(`/api/asset-manager/changes?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
     ])
-      .then(([cfg, list, tickets, assignments]) => {
+      .then(([cfg, list, tickets, assignments, contracts, knowledge, changes]) => {
         setConfig(cfg);
         setAssets(Array.isArray(list) ? list : []);
         setTicketCount(Array.isArray(tickets) ? tickets.length : 0);
         setAssignmentCount(Array.isArray(assignments) ? assignments.length : 0);
+        setContractCount(Array.isArray(contracts) ? contracts.length : 0);
+        setKnowledgeCount(Array.isArray(knowledge) ? knowledge.length : 0);
+        setChangeCount(Array.isArray(changes) ? changes.length : 0);
       })
       .finally(() => setLoading(false));
   }, [domainId]);
@@ -129,7 +138,7 @@ export default function AssetManagerDomainPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-4 mb-6">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mb-6">
         <Link href={`/modules/asset-manager/${domainId}/assets`} className="block">
           <Metric label={config.asset_label_plural} value={assets.length} />
         </Link>
@@ -138,6 +147,15 @@ export default function AssetManagerDomainPage() {
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/assignments`} className="block">
           <Metric label={`${config.assignment_label}s`} value={assignmentCount} />
+        </Link>
+        <Link href={`/modules/asset-manager/${domainId}/contracts`} className="block">
+          <Metric label="Contrats" value={contractCount} />
+        </Link>
+        <Link href={`/modules/asset-manager/${domainId}/knowledge`} className="block">
+          <Metric label="Base de connaissances" value={knowledgeCount} />
+        </Link>
+        <Link href={`/modules/asset-manager/${domainId}/changes`} className="block">
+          <Metric label="Changements" value={changeCount} />
         </Link>
       </div>
 

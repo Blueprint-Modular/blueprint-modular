@@ -690,7 +690,7 @@ function EventFormModal({
     e.preventDefault();
     if (!titre.trim()) return;
     const h = heure.includes("h") ? heure : `${heure.slice(0, 2)}h${heure.slice(2) || "00"}`;
-    const base: Omit<CalEvent, "id" | "_user"> = {
+    const base: Omit<CalEvent, "id" | "_user" | "date"> = {
       titre: titre.trim(),
       heure: h,
       duree: duree ? parseInt(duree, 10) : undefined,

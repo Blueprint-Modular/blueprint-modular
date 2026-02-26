@@ -93,6 +93,14 @@ export async function PUT(
   const readingTime = readingTimeMinutes(content);
   const slugsInContent = extractWikiSlugs(content);
 
+  /** Excerpt : valeur envoyée, ou génération auto si contenu mis à jour et excerpt vide. */
+  const excerptToSave =
+    body.excerpt !== undefined
+      ? body.excerpt || null
+      : (body.content != null && content && !article.excerpt
+          ? content.replace(/\s+/g, " ").trim().slice(0, 160) + (content.replace(/\s+/g, " ").trim().length > 160 ? "…" : "")
+          : undefined);
+
   const targetArticles = await prisma.wikiArticle.findMany({
     where: { slug: { in: slugsInContent.map((s) => normalizeSlug(s)) } },
     select: { id: true },
@@ -142,7 +150,7 @@ export async function PUT(
         ...(body.title != null && { title: body.title }),
         ...(body.content != null && { content: body.content }),
         ...(body.isPublished != null && { isPublished: body.isPublished }),
-        ...(body.excerpt !== undefined && { excerpt: body.excerpt || null }),
+        ...(excerptToSave !== undefined && { excerpt: excerptToSave || null }),
         ...(body.tags !== undefined && { tags: body.tags ?? [] }),
         ...(body.coverImage !== undefined && { coverImage: body.coverImage || null }),
         ...(body.pinned !== undefined && { pinned: body.pinned }),

@@ -96,6 +96,16 @@ export function NotificationBell() {
     setOverlayRoot(el);
   }, [isMobile]);
 
+  /* En mobile/PWA : bloquer le scroll du body quand le panneau est ouvert */
+  useEffect(() => {
+    if (!isMobile || (!isOpen && !isClosing)) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobile, isOpen, isClosing]);
+
   useLayoutEffect(() => {
     if (!isOpen || isClosing) {
       setAnimActive(false);
@@ -146,7 +156,7 @@ export function NotificationBell() {
   toggleRef.current = toggle;
 
   /** Sur mobile/PWA, le click peut ne pas se déclencher ou être perdu. touchend natif (passive: false)
-   * attaché après le rendu (ref disponible au prochain tick). Même référence pour add/remove au cleanup. */
+   * attaché après le rendu. Ref copiée en variable pour le cleanup (évite listener sur mauvais nœud). */
   useEffect(() => {
     if (!isMobile) return;
     const handler = (e: TouchEvent) => {
@@ -154,13 +164,13 @@ export function NotificationBell() {
       touchHandledRef.current = true;
       toggleRef.current();
     };
-    queueMicrotask(() => {
-      const btn = mobileButtonRef.current;
-      if (!btn) return;
-      btn.addEventListener("touchend", handler, { passive: false });
+    let btn: HTMLButtonElement | null = null;
+    const id = requestAnimationFrame(() => {
+      btn = mobileButtonRef.current;
+      if (btn) btn.addEventListener("touchend", handler, { passive: false });
     });
     return () => {
-      const btn = mobileButtonRef.current;
+      cancelAnimationFrame(id);
       if (btn) btn.removeEventListener("touchend", handler);
     };
   }, [isMobile]);

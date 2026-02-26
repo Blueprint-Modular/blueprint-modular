@@ -35,10 +35,11 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/skeleton", label: "Skeleton", description: "Assemblages de bpm.skeleton pour un chargement de page complet (header, métriques, tableau).", icon: LayoutDashboard, simulatorAndDoc: true },
     { href: "/modules/tableau-blanc", label: "Tableau blanc", description: "Post-it et zones de texte pour rétros ou ateliers.", icon: StickyNote, simulatorAndDoc: true },
     { href: "/modules/templates", label: "Templates", description: "Bibliothèque de modèles (rapports, fiches, emails) avec champs à remplir.", icon: FileText, simulatorAndDoc: true },
+    { href: "/modules/newsletter", label: "Newsletter", description: "Photo de header, création d'articles et archivage des numéros.", icon: Mail, simulatorAndDoc: true, simulateurHref: "/modules/newsletter" },
     { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true, simulateurHref: "/modules/wiki" },
   ],
   "Données & reporting": [
-    { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true },
+    { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true, simulateurHref: "/modules/contracts" },
     { href: "/modules/documents", label: "Analyse de documents", description: "Uploadez, analysez et interrogez vos documents PDF, Word et plus avec l'IA.", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/export-planifie", label: "Export planifié", description: "Envoi périodique par email de rapports ou exports (PDF/CSV).", icon: Mail, simulatorAndDoc: true },
     { href: "/modules/rapports", label: "Rapports", description: "Création de rapports à partir de données (champs, filtres, graphiques prédéfinis).", icon: Table2, simulatorAndDoc: true },

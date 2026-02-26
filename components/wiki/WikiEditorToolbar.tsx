@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import { Button } from "@/components/bpm";
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Modal, Input } from "@/components/bpm";
 
 export interface WikiEditorToolbarProps {
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
@@ -22,6 +22,8 @@ const COLORS = [
   { name: "Gris", value: "#546e7a" },
 ];
 
+type InsertModal = null | "link" | "image" | "table" | "wikilink";
+
 export function WikiEditorToolbar({
   textareaRef,
   value,
@@ -32,6 +34,15 @@ export function WikiEditorToolbar({
   showPreview = false,
 }: WikiEditorToolbarProps) {
   const colorPopoverRef = useRef<HTMLDivElement>(null);
+  const [insertModal, setInsertModal] = useState<InsertModal>(null);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageAlt, setImageAlt] = useState("");
+  const [tableRows, setTableRows] = useState(3);
+  const [tableCols, setTableCols] = useState(3);
+  const [wikiSlug, setWikiSlug] = useState("");
+  const [wikiLabel, setWikiLabel] = useState("");
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -128,21 +139,68 @@ export function WikiEditorToolbar({
       ta.setSelectionRange(start + before.length, start + before.length + selected.length);
     });
   };
-  const handleLink = () => {
+  /** Insère une chaîne à la position du curseur (remplace la sélection). */
+  const insertAtCursor = (str: string) => {
     const ta = textareaRef.current;
     if (!ta) return;
     const start = ta.selectionStart;
     const end = ta.selectionEnd;
-    const selected = value.slice(start, end).trim() || "texte du lien";
-    const before = `[${selected}](`;
-    const after = ")";
-    const newValue = value.slice(0, start) + before + value.slice(end) + after;
+    const newValue = value.slice(0, start) + str + value.slice(end);
     onChange(newValue);
     requestAnimationFrame(() => {
       ta.focus();
-      const urlStart = start + before.length;
-      ta.setSelectionRange(urlStart, urlStart);
+      ta.setSelectionRange(start + str.length, start + str.length);
     });
+  };
+
+  const handleLink = () => {
+    setLinkText(value.slice(textareaRef.current?.selectionStart ?? 0, textareaRef.current?.selectionEnd ?? 0).trim() || "lien");
+    setLinkUrl("");
+    setInsertModal("link");
+  };
+  const handleLinkSubmit = () => {
+    if (!linkUrl.trim()) return;
+    insertAtCursor(`[${linkText.trim() || linkUrl}](${linkUrl.trim()})`);
+    setInsertModal(null);
+  };
+
+  const handleImageClick = () => {
+    setImageUrl("");
+    setImageAlt("");
+    setInsertModal("image");
+  };
+  const handleImageSubmit = () => {
+    if (!imageUrl.trim()) return;
+    insertAtCursor(`![${imageAlt.trim() || "image"}](${imageUrl.trim()})`);
+    setInsertModal(null);
+  };
+
+  const handleTableClick = () => {
+    setTableRows(3);
+    setTableCols(3);
+    setInsertModal("table");
+  };
+  const handleTableSubmit = () => {
+    const r = Math.max(1, Math.min(20, tableRows));
+    const c = Math.max(1, Math.min(10, tableCols));
+    const header = "| " + Array(c).fill("Colonne").map((x, i) => `${x} ${i + 1}`).join(" | ") + " |\n";
+    const sep = "| " + Array(c).fill("---").join(" | ") + " |\n";
+    const body = Array(r - 1).fill("| " + Array(c).fill("").join(" | ") + " |\n").join("");
+    insertAtCursor(header + sep + body);
+    setInsertModal(null);
+  };
+
+  const handleWikiLinkClick = () => {
+    const sel = value.slice(textareaRef.current?.selectionStart ?? 0, textareaRef.current?.selectionEnd ?? 0).trim();
+    setWikiSlug(sel || "");
+    setWikiLabel("");
+    setInsertModal("wikilink");
+  };
+  const handleWikiLinkSubmit = () => {
+    const slug = wikiSlug.trim().toLowerCase().replace(/\s+/g, "-");
+    if (!slug) return;
+    insertAtCursor(wikiLabel.trim() ? `[[${slug}|${wikiLabel.trim()}]]` : `[[${slug}]]`);
+    setInsertModal(null);
   };
   const handleBulletList = () => applyLinePrefix("- ");
   const handleNumberedList = () => applyLinePrefix("1. ");
@@ -232,11 +290,20 @@ export function WikiEditorToolbar({
       </span>
       <span className="w-px self-stretch" style={{ background: "var(--bpm-border)" }} aria-hidden />
       {/* Insertions */}
-      <span title={`Lien (${modKey}+K)`}>
+      <span title="Lien (modale)">
         <Button type="button" variant="outline" size="small" disabled={disabled} onClick={handleLink}>🔗</Button>
+      </span>
+      <span title="Image (modale)">
+        <Button type="button" variant="outline" size="small" disabled={disabled} onClick={handleImageClick}>🖼</Button>
+      </span>
+      <span title="Tableau (modale)">
+        <Button type="button" variant="outline" size="small" disabled={disabled} onClick={handleTableClick}>▦</Button>
       </span>
       <span title={`Bloc de code (${modKey}+/)`}>
         <Button type="button" variant="outline" size="small" disabled={disabled} onClick={handleCodeBlock}>{"</>"}</Button>
+      </span>
+      <span title="Lien wiki [[slug]] (modale)">
+        <Button type="button" variant="outline" size="small" disabled={disabled} onClick={handleWikiLinkClick}>[[ ]]</Button>
       </span>
       {onTogglePreview && (
         <>
@@ -300,6 +367,63 @@ export function WikiEditorToolbar({
           </div>
         </div>
       </div>
+
+      {insertModal === "link" && (
+        <Modal isOpen title="Insérer un lien" onClose={() => setInsertModal(null)} size="small">
+          <div className="space-y-3">
+            <Input label="URL" value={linkUrl} onChange={setLinkUrl} placeholder="https://..." />
+            <Input label="Texte du lien" value={linkText} onChange={setLinkText} placeholder="texte affiché" />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="small" onClick={() => setInsertModal(null)}>Annuler</Button>
+              <Button size="small" onClick={handleLinkSubmit} disabled={!linkUrl.trim()}>Insérer</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {insertModal === "image" && (
+        <Modal isOpen title="Insérer une image" onClose={() => setInsertModal(null)} size="small">
+          <div className="space-y-3">
+            <Input label="URL de l'image" value={imageUrl} onChange={setImageUrl} placeholder="https://..." />
+            <Input label="Texte alternatif" value={imageAlt} onChange={setImageAlt} placeholder="description" />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="small" onClick={() => setInsertModal(null)}>Annuler</Button>
+              <Button size="small" onClick={handleImageSubmit} disabled={!imageUrl.trim()}>Insérer</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {insertModal === "table" && (
+        <Modal isOpen title="Insérer un tableau" onClose={() => setInsertModal(null)} size="small">
+          <div className="space-y-3">
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2">
+                <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Lignes</span>
+                <input type="number" min={1} max={20} value={tableRows} onChange={(e) => setTableRows(parseInt(e.target.value, 10) || 3)} className="w-16 px-2 py-1 rounded border text-sm" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }} />
+              </label>
+              <label className="flex items-center gap-2">
+                <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Colonnes</span>
+                <input type="number" min={1} max={10} value={tableCols} onChange={(e) => setTableCols(parseInt(e.target.value, 10) || 3)} className="w-16 px-2 py-1 rounded border text-sm" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }} />
+              </label>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="small" onClick={() => setInsertModal(null)}>Annuler</Button>
+              <Button size="small" onClick={handleTableSubmit}>Insérer</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {insertModal === "wikilink" && (
+        <Modal isOpen title="Lien wiki [[slug]]" onClose={() => setInsertModal(null)} size="small">
+          <div className="space-y-3">
+            <Input label="Slug de l'article" value={wikiSlug} onChange={setWikiSlug} placeholder="mon-article" />
+            <Input label="Libellé (optionnel)" value={wikiLabel} onChange={setWikiLabel} placeholder="texte affiché" />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="small" onClick={() => setInsertModal(null)}>Annuler</Button>
+              <Button size="small" onClick={handleWikiLinkSubmit} disabled={!wikiSlug.trim()}>Insérer</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

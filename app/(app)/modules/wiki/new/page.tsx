@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button, Panel, Toggle, Selectbox } from "@/components/bpm";
@@ -19,6 +19,7 @@ function slugFromTitle(title: string): string {
 
 export default function WikiNewPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -39,6 +40,12 @@ export default function WikiNewPage() {
   const [generating, setGenerating] = useState(false);
 
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+  /** Parent depuis l'URL (?parentId=...) pour créer un sous-article depuis la liste. */
+  useEffect(() => {
+    const pid = searchParams.get("parentId");
+    if (pid) setParentId(pid);
+  }, [searchParams]);
 
   /** Pré-remplir depuis le bac à sable (Simulateur) si l'utilisateur a cliqué sur "Créer un article depuis ce contenu". */
   useEffect(() => {

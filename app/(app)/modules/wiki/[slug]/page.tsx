@@ -33,6 +33,7 @@ type Article = {
   lastRevisedBy?: string | null;
   prevSlug?: string;
   nextSlug?: string;
+  coverImage?: string | null;
 };
 
 function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | null {
@@ -269,6 +270,11 @@ export default function WikiArticlePage() {
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       <main className="flex-1 min-w-0">
+        {article.coverImage && (
+          <div className="mb-4 rounded-lg overflow-hidden border" style={{ borderColor: "var(--bpm-border)", maxHeight: 280 }}>
+            <img src={article.coverImage} alt="" className="w-full h-auto object-cover" style={{ maxHeight: 280 }} />
+          </div>
+        )}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
             {article.title}

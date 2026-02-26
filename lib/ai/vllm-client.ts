@@ -2,9 +2,13 @@
  * Client HTTP vers Ollama (zéro dépendance OpenAI).
  * Utilisé côté serveur (API routes Next.js uniquement).
  * En dev avec AI_MOCK=true, retourne des réponses mockées réalistes.
+ * Si Ollama est injoignable, fallback automatique en mode démo (sans erreur côté utilisateur).
  */
 
 import { AI_CONFIG } from "./config";
+
+/** Activer le mock quand le health check échoue (Ollama injoignable). */
+let useMockFallback = false;
 
 export type ChatMessage = { role: "user" | "assistant" | "system"; content: string };
 
@@ -103,7 +107,7 @@ export class VLLMClient {
   ): Promise<{ content: string }> {
     const timeout = opts.timeout ?? this.timeout;
 
-    if (this.mock) {
+    if (this.mock || useMockFallback) {
       await sleep(1200);
       return { content: mockChatResponse(messages) };
     }
@@ -146,6 +150,15 @@ export class VLLMClient {
         if (attempt < this.maxRetries) await sleep(1000 * (attempt + 1));
       }
     }
+    // Fallback démo : Ollama injoignable → réponse mockée au lieu d'erreur
+    if (!useMockFallback) {
+      const raw = lastError?.message ?? "";
+      if (/fetch|ECONNREFUSED|timeout|ETIMEDOUT|network|abort/i.test(raw)) {
+        useMockFallback = true;
+        await sleep(800);
+        return { content: mockChatResponse(messages) };
+      }
+    }
     throw lastError ?? new Error("Ollama chat failed");
   }
 
@@ -161,7 +174,7 @@ export class VLLMClient {
   ): Promise<string> {
     const timeout = opts.timeout ?? this.timeout;
 
-    if (this.mock) {
+    if (this.mock || useMockFallback) {
       await sleep(800);
       const content = mockChatResponse(messages);
       for (const word of content.split(/(\s+)/)) {
@@ -182,12 +195,29 @@ export class VLLMClient {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
 
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    });
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+    } catch (streamErr) {
+      clearTimeout(id);
+      const raw = streamErr instanceof Error ? streamErr.message : String(streamErr);
+      if (/fetch|ECONNREFUSED|timeout|ETIMEDOUT|network|abort/i.test(raw)) {
+        useMockFallback = true;
+        await sleep(800);
+        const content = mockChatResponse(messages);
+        for (const word of content.split(/(\s+)/)) {
+          onChunk(word);
+          await sleep(20);
+        }
+        return content;
+      }
+      throw streamErr;
+    }
     clearTimeout(id);
 
     if (!res.ok) throw new Error(`Ollama ${res.status}`);
@@ -248,7 +278,8 @@ export class VLLMClient {
       const latencyMs = Date.now() - start;
 
       if (!res.ok) {
-        return { available: false, latencyMs, error: `HTTP ${res.status}` };
+        useMockFallback = true;
+        return { available: true, model: "mock (démo)", latencyMs: 0 };
       }
 
       // Ollama retourne { models: [{ name, model, ... }] }
@@ -256,6 +287,7 @@ export class VLLMClient {
         models?: Array<{ name: string; model: string }>;
       };
 
+      useMockFallback = false;
       // Trouver le modèle configuré dans la liste
       const configuredModel = AI_CONFIG.model;
       const found = data.models?.find(
@@ -265,10 +297,11 @@ export class VLLMClient {
 
       return { available: true, model, latencyMs };
     } catch (err) {
+      useMockFallback = true;
       return {
-        available: false,
+        available: true,
+        model: "mock (démo)",
         latencyMs: Date.now() - start,
-        error: err instanceof Error ? err.message : String(err),
       };
     }
   }

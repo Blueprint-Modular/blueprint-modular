@@ -16,11 +16,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  apiKeys         ApiKey[]
-  wikiArticles    WikiArticle[]     @relation("Author")
-  documents       Document[]
-  contracts       Contract[]
-  aiConversations AiConversation[]
+  apiKeys              ApiKey[]
+  wikiArticles         WikiArticle[]     @relation("Author")
+  documents            Document[]
+  contracts            Contract[]
+  aiConversations      AiConversation[]
+  newsletterArticles   NewsletterArticle[]
 }
 
 enum Role {
@@ -163,4 +164,23 @@ model AiMessage {
   providerName   String
   createdAt      DateTime @default(now())
   conversation   AiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model NewsletterSettings {
+  id             String   @id @default("default")
+  headerImageUrl String?  @map("header_image_url") @db.Text
+  updatedAt      DateTime @updatedAt @map("updated_at")
+}
+
+model NewsletterArticle {
+  id          String    @id @default(cuid())
+  title       String
+  content     String    @db.Text
+  excerpt     String?   @db.Text
+  publishedAt DateTime? @map("published_at")
+  archived    Boolean   @default(false)
+  authorId    String    @map("author_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

@@ -353,6 +353,15 @@ textarea.bpm-textarea:focus {
 
 /* Wiki */
 .wiki-page { width: 100%; min-width: 0; }
+.wiki-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bpm-bg-primary);
+  padding-bottom: 12px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--bpm-border);
+}
 .wiki-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .wiki-search { margin-bottom: 16px; }
 .wiki-search input { padding: 8px 12px; border: 1px solid var(--bpm-border); border-radius: 8px; width: 100%; max-width: 400px; font-size: 14px; background: var(--bpm-surface); color: var(--bpm-text-primary); }

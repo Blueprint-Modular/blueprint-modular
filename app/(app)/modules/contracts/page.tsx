@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Table, Spinner, Selectbox, Panel, Button } from "@/components/bpm";
+import { Table, Spinner, Selectbox, Panel, Button, Tabs } from "@/components/bpm";
 import { DocumentAnalysisImport } from "@/components/DocumentAnalysisImport";
 
 type Extracted = { supplier_name?: string; contract_date?: string; end_date?: string; overall_risk_level?: string };
@@ -252,26 +252,22 @@ export default function ContractsPage() {
     status: c.status === "analyzing" ? `En cours (${c.analysisProgress}%)` : c.status === "done" ? "Analysé" : c.status === "pending" ? "En attente" : c.status === "error" ? "error" : c.status,
   }));
 
-  return (
-    <div className="doc-page contracts-page">
-      <div id="documentation">
-      <DocumentAnalysisImport
-        title="Base contractuelle"
-        description="Importez des documents PDF (contrats fournisseurs, CGV, analyses) pour générer automatiquement une synthèse actionnable grâce à Claude. Les analyses sont stockées en base de données et peuvent être réexploitées dans d'autres onglets."
-        accept=".pdf,.docx,.txt"
-        maxFiles={10}
-        dropLabel="Glissez-déposez ou cliquez pour sélectionner des fichiers PDF, DOCX ou TXT (jusqu'à 10 fichiers)"
-        buttonLabel="Analyser les documents"
-        disabled={uploading}
-        onAnalyze={handleAnalyze}
-      />
-      </div>
-      {uploading && (
-        <div className="flex items-center justify-center gap-2 py-4" style={{ color: "var(--bpm-text-secondary)" }}>
-          <Spinner size="small" text="Analyse en cours..." />
-        </div>
-      )}
-      <div className="flex flex-wrap items-center gap-2 mt-6 mb-4">
+  const listTabContent = (
+    <>
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <input
+          type="search"
+          placeholder="Rechercher par nom de fichier…"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="px-3 py-2 rounded border text-sm max-w-xs flex-1 min-w-[200px]"
+          style={{
+            borderColor: "var(--bpm-border)",
+            background: "var(--bpm-surface)",
+            color: "var(--bpm-text-primary)",
+          }}
+          aria-label="Rechercher par nom de fichier"
+        />
         <Selectbox
           options={WORKSPACES}
           value={workspace}
@@ -292,29 +288,13 @@ export default function ContractsPage() {
         />
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 mt-4 mb-2">
-        <input
-          type="search"
-          placeholder="Rechercher par nom de fichier…"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="px-3 py-2 rounded border text-sm max-w-xs"
-          style={{
-            borderColor: "var(--bpm-border)",
-            background: "var(--bpm-surface)",
-            color: "var(--bpm-text-primary)",
-          }}
-          aria-label="Rechercher par nom de fichier"
-        />
-      </div>
-
       {loading ? (
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
       ) : contracts.length === 0 ? (
         <Panel variant="info" title="Aucun contrat">
-          Uploadez un fichier PDF, DOCX ou TXT pour lancer l&apos;analyse IA.
+          Passez par l&apos;onglet <strong>Importer</strong> pour ajouter des fichiers PDF, DOCX ou TXT et lancer l&apos;analyse IA.
         </Panel>
       ) : filteredContracts.length === 0 ? (
         <Panel variant="info" title="Aucun résultat">
@@ -332,10 +312,49 @@ export default function ContractsPage() {
           />
         </div>
       )}
+    </>
+  );
+
+  const importTabContent = (
+    <>
+      {uploading && (
+        <div className="flex items-center justify-center gap-2 py-4" style={{ color: "var(--bpm-text-secondary)" }}>
+          <Spinner size="small" text="Analyse en cours..." />
+        </div>
+      )}
+      <DocumentAnalysisImport
+        title="Importer des contrats"
+        description="Glissez-déposez ou sélectionnez des fichiers PDF, DOCX ou TXT. Les documents seront analysés par l'IA et ajoutés à la base contractuelle."
+        accept=".pdf,.docx,.txt"
+        maxFiles={10}
+        dropLabel="Glissez-déposez ou cliquez pour sélectionner des fichiers (jusqu'à 10)"
+        buttonLabel="Analyser les documents"
+        disabled={uploading}
+        onAnalyze={handleAnalyze}
+      />
+    </>
+  );
+
+  return (
+    <div className="doc-page contracts-page">
+      <div className="doc-page-header mb-6">
+        <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Base contractuelle</div>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Base contractuelle</h1>
+        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+          Importez des contrats fournisseurs, CGV ou analyses pour générer une synthèse actionnable. Consultez la liste et cliquez sur une ligne pour ouvrir le détail.
+        </p>
+      </div>
+
+      <Tabs
+        tabs={[
+          { label: "Liste des contrats", content: listTabContent },
+          { label: "Importer", content: importTabContent },
+        ]}
+        defaultTab={0}
+      />
 
       <nav className="doc-pagination mt-8">
         <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour aux modules</Link>
-        <Link href="/modules/contracts#documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Importer un contrat</Link>
         <Link href="/modules/contracts/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
       </nav>
     </div>

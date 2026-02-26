@@ -11,6 +11,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import { getGuestArticleBySlug, updateGuestArticle } from "@/lib/wiki-guest";
+import { WIKI_TEMPLATE_IDS, WIKI_TEMPLATE_LABELS, getWikiTemplateContent, type WikiTemplateId } from "@/lib/wiki-templates";
 
 /** Transforme [[slug]] et [[slug|label]] en liens Markdown. */
 function contentWithWikiLinks(content: string): string {
@@ -34,6 +35,8 @@ export default function WikiEditPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [pinned, setPinned] = useState(false);
+  const [template, setTemplate] = useState<WikiTemplateId>("");
+  const [coverImage, setCoverImage] = useState("");
   const [changeNote, setChangeNote] = useState("");
   const [preview, setPreview] = useState(false);
   const [viewMode, setViewMode] = useState<"editor" | "split" | "preview">("split");
@@ -98,6 +101,8 @@ export default function WikiEditPage() {
           excerpt: excerpt.trim() || null,
           tags,
           pinned,
+          template: template || null,
+          coverImage: coverImage.trim() || null,
           changeNote: changeNote.trim() || null,
         }),
         credentials: "include",
@@ -113,7 +118,7 @@ export default function WikiEditPage() {
     } finally {
       setSaving(false);
     }
-  }, [slug, title, content, isPublished, excerpt, tags, pinned, changeNote, isGuestArticle, session]);
+  }, [slug, title, content, isPublished, excerpt, tags, pinned, template, coverImage, changeNote, isGuestArticle, session]);
 
   useEffect(() => {
     if (!dirty || isGuestArticle) return;
@@ -188,10 +193,12 @@ export default function WikiEditPage() {
       setTitle(guest.title);
       setContent(guest.content ?? "");
       setIsPublished(guest.isPublished ?? false);
-      const g = guest as { excerpt?: string; tags?: string[]; pinned?: boolean };
+      const g = guest as { excerpt?: string; tags?: string[]; pinned?: boolean; template?: string; coverImage?: string };
       setExcerpt(g.excerpt ?? "");
       setTags(Array.isArray(g.tags) ? g.tags : []);
       setPinned(g.pinned ?? false);
+      setTemplate((g.template as WikiTemplateId) ?? "");
+      setCoverImage(g.coverImage ?? "");
       if (guest.canEdit) {
         setIsGuestArticle(true);
         return true;
@@ -229,7 +236,7 @@ export default function WikiEditPage() {
         }
         throw new Error("Not found");
       })
-      .then((a: { title: string; content?: string; isPublished?: boolean; excerpt?: string | null; tags?: string[]; pinned?: boolean } | void) => {
+      .then((a: { title: string; content?: string; isPublished?: boolean; excerpt?: string | null; tags?: string[]; pinned?: boolean; template?: string | null; coverImage?: string | null } | void) => {
         if (!a) return;
         setTitle(a.title);
         setContent(a.content ?? "");
@@ -237,6 +244,8 @@ export default function WikiEditPage() {
         setExcerpt(a.excerpt ?? "");
         setTags(Array.isArray(a.tags) ? a.tags : []);
         setPinned(a.pinned ?? false);
+        setTemplate((a.template as WikiTemplateId) ?? "");
+        setCoverImage(a.coverImage ?? "");
       })
       .catch(() => setError("Article introuvable"))
       .finally(() => setLoading(false));
@@ -258,6 +267,8 @@ export default function WikiEditPage() {
           excerpt: excerpt.trim() || undefined,
           tags: tags.length ? tags : undefined,
           pinned,
+          template: template || undefined,
+          coverImage: coverImage.trim() || undefined,
         }),
         credentials: "include",
       });
@@ -298,6 +309,8 @@ export default function WikiEditPage() {
           excerpt: excerpt.trim() || null,
           tags,
           pinned,
+          template: template || null,
+          coverImage: coverImage.trim() || null,
           changeNote: changeNote.trim() || null,
         }),
         credentials: "include",
@@ -426,6 +439,45 @@ export default function WikiEditPage() {
         <div>
           <Toggle label="Épingler cet article" value={pinned} onChange={(v) => { setPinned(v); setDirty(true); }} />
         </div>
+        <div className="flex flex-wrap items-end gap-2">
+          <label className="block min-w-[180px]">
+            <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Template</span>
+            <select
+              value={template}
+              onChange={(e) => { setTemplate(e.target.value as WikiTemplateId); setDirty(true); }}
+              className="w-full px-3 py-2 rounded border text-sm"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            >
+              {WIKI_TEMPLATE_IDS.map((id) => (
+                <option key={id || "none"} value={id}>{WIKI_TEMPLATE_LABELS[id]}</option>
+              ))}
+            </select>
+          </label>
+          {template && (
+            <Button
+              type="button"
+              variant="outline"
+              size="small"
+              onClick={() => {
+                const t = getWikiTemplateContent(template as Exclude<WikiTemplateId, "">);
+                if (t) { setContent(t); setDirty(true); }
+              }}
+            >
+              Appliquer le template
+            </Button>
+          )}
+        </div>
+        <label className="block">
+          <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Image de couverture (URL)</span>
+          <input
+            type="url"
+            value={coverImage}
+            onChange={(e) => { setCoverImage(e.target.value); setDirty(true); }}
+            placeholder="https://..."
+            className="bpm-input w-full px-3 py-2 rounded border"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+          />
+        </label>
         <label className="block">
           <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Résumé (excerpt)</span>
           <input

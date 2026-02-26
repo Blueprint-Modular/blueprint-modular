@@ -15,35 +15,45 @@ function buildTree(items: WikiArticle[], parentId: string | null = null): WikiAr
     .map((a) => ({ ...a, children: buildTree(items, a.id) }));
 }
 
+function getAllNodeIds(nodes: WikiArticle[]): string[] {
+  return nodes.flatMap((n) => [n.id, ...getAllNodeIds(n.children ?? [])]);
+}
+
 function TreeNode({
   node,
   depth = 0,
   selectedParent,
+  expandedIds,
+  onToggle,
   onSelect,
   onOpenArticle,
+  onAddChild,
 }: {
   node: WikiArticle;
   depth?: number;
   selectedParent: string | null;
+  expandedIds: Set<string>;
+  onToggle: (id: string) => void;
   onSelect: (id: string | null) => void;
   onOpenArticle: (slug: string) => void;
+  onAddChild: (parentId: string) => void;
 }) {
-  const [open, setOpen] = useState(depth === 0);
   const hasChildren = node.children && node.children.length > 0;
+  const open = depth === 0 || expandedIds.has(node.id);
 
   const handleClick = () => {
     if (hasChildren) {
       onSelect(node.id);
-      setOpen(!open);
+      onToggle(node.id);
     } else {
       onOpenArticle(node.slug);
     }
   };
 
   return (
-    <div style={{ paddingLeft: depth * 16 }}>
+    <div style={{ paddingLeft: depth * 16 }} className="flex items-center gap-1 group">
       <div
-        className={`wiki-tree-node ${selectedParent === node.id ? "active" : ""}`}
+        className={`wiki-tree-node flex-1 min-w-0 ${selectedParent === node.id ? "active" : ""}`}
         onClick={handleClick}
         role={hasChildren ? "button" : "link"}
         aria-label={hasChildren ? `Section ${node.title}, ${node.children!.length} article(s)` : `Ouvrir l'article ${node.title}`}
@@ -66,14 +76,27 @@ function TreeNode({
         <span>{node.title}</span>
         {hasChildren && <span className="wiki-tree-count">({node.children!.length})</span>}
       </div>
+      <Link
+        href={`/modules/wiki/new?parentId=${encodeURIComponent(node.id)}`}
+        onClick={(e) => e.stopPropagation()}
+        className="opacity-0 group-hover:opacity-100 text-sm px-1.5 py-0.5 rounded hover:bg-[var(--bpm-border)]"
+        style={{ color: "var(--bpm-accent-cyan)" }}
+        title="Créer un sous-article"
+        aria-label="Créer un sous-article"
+      >
+        +
+      </Link>
       {open && hasChildren && node.children!.map((child) => (
         <TreeNode
           key={child.id}
           node={child}
           depth={depth + 1}
           selectedParent={selectedParent}
+          expandedIds={expandedIds}
+          onToggle={onToggle}
           onSelect={onSelect}
           onOpenArticle={onOpenArticle}
+          onAddChild={onAddChild}
         />
       ))}
     </div>
@@ -220,17 +243,18 @@ export default function WikiPage() {
 
   return (
     <div className="wiki-page doc-page">
-      <div id="documentation" className="doc-page-header">
-        <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Wiki</div>
-        <h1>Wiki</h1>
-        <p className="doc-description">
-          Wiki interne : articles en Markdown, arborescence, brouillons et publication. Idéal pour la doc d&apos;équipe.
-        </p>
-        <div className="doc-meta">
-          <span className="doc-badge doc-badge-category">Module</span>
+      <div className="wiki-sticky-header">
+        <div id="documentation" className="doc-page-header">
+          <div className="doc-breadcrumb"><Link href="/modules">Modules</Link> → Wiki</div>
+          <h1>Wiki</h1>
+          <p className="doc-description">
+            Wiki interne : articles en Markdown, arborescence, brouillons et publication. Idéal pour la doc d&apos;équipe.
+          </p>
+          <div className="doc-meta">
+            <span className="doc-badge doc-badge-category">Module</span>
+          </div>
         </div>
-      </div>
-      <div className="wiki-header">
+        <div className="wiki-header">
         <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Articles</h2>
         <Link href="/modules/wiki/new" className="btn-primary">
           + Nouvel article
@@ -307,6 +331,7 @@ export default function WikiPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
       {loading ? (
         <div className="wiki-loading flex flex-col gap-4">

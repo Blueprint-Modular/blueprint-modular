@@ -64,6 +64,8 @@
   border: 1px solid white;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
   pointer-events: none;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 /* 1 chiffre : rester parfaitement rond */
@@ -75,6 +77,19 @@
 
 .notification-bell-mobile-btn {
   position: relative !important;
+  min-width: 44px;
+  min-height: 44px;
+  overflow: visible;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/* Badge bien visible sur mobile/PWA : au-dessus du contenu et non coupé */
+.notification-bell-mobile-btn .notification-bell-badge {
+  z-index: 2;
+  top: 0;
+  right: 0;
 }
 
 @keyframes notification-dock-open {

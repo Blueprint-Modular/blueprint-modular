@@ -78,8 +78,8 @@
   transition: opacity 200ms ease-out;
 }
 [data-theme="dark"] .bpm-skeleton-container {
-  /* Contraste : conteneur plus clair que le fond page pour délimiter la zone skeleton (audit P1). */
-  background: var(--bpm-surface);
+  /* Contraste lisible : skeleton rgb(50,52,58) sur fond rgb(18,18,24). */
+  background: rgb(18, 18, 24);
 }
 
 html {
@@ -108,7 +108,9 @@ body {
     top: env(titlebar-area-y, 0);
     width: env(titlebar-area-width, 100%);
     height: env(titlebar-area-height, 56px);
+    min-height: 44px;
     padding-left: var(--bpm-sidebar-width, 0);
+    overflow: visible;
     -webkit-app-region: drag;
     app-region: drag;
     background: #fff !important;
@@ -117,10 +119,24 @@ body {
   .pwa-title-bar a {
     -webkit-app-region: no-drag;
     app-region: no-drag;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+    cursor: pointer;
   }
   .app-content-column {
     padding-top: env(titlebar-area-height, 56px);
   }
+}
+
+/* Barre de navigation mobile / PWA : liens cliquables sans délai */
+.bpm-mobile-nav-bar a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* Table variants (striped / hover) — lignes impaires en gris plus clair que l'en-tête */
@@ -347,6 +363,7 @@ textarea.bpm-textarea:focus {
 .wiki-tree-node { padding: 6px 8px; border-radius: 6px; cursor: pointer; display: flex; gap: 8px; align-items: center; font-size: 14px; }
 .wiki-tree-node:hover { background: var(--bpm-border); }
 .wiki-tree-node.active { background: rgba(0,163,226,0.1); color: var(--bpm-accent); font-weight: 600; }
+.wiki-tree-arrow { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; }
 .wiki-tree-count { font-size: 12px; color: var(--bpm-text-secondary); }
 .wiki-tree-doc { font-size: 1em; line-height: 1; opacity: 0.85; }
 .wiki-article-list { display: flex; flex-direction: column; gap: 12px; }
@@ -410,3 +427,29 @@ textarea.bpm-textarea:focus {
 .wiki-article-content pre code.hljs { padding: 0; }
 .bpm-markdown .hljs { background: var(--bpm-code-bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--bpm-code-border); overflow-x: auto; }
 .bpm-markdown pre code.hljs { padding: 0; background: transparent; }
+
+/* Wiki — impression / export PDF (CDC Part 11) */
+@media print {
+  .app-layout-root .pwa-title-bar,
+  .app-layout-root aside,
+  .app-layout-root footer,
+  .app-layout-root [role="main"] .doc-pagination,
+  .app-layout-root .bpm-mobile-nav-bar {
+    display: none !important;
+  }
+  .app-layout-root .app-content-column { margin-left: 0 !important; }
+  .wiki-print-only {
+    max-width: 100% !important;
+    padding: 2cm !important;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #1a1a1a;
+  }
+  .wiki-print-only .wiki-article-content {
+    font-size: 11pt;
+  }
+  .wiki-print-only a { color: #1a4b8f; }
+  .wiki-print-only pre,
+  .wiki-print-only code { font-family: ui-monospace, "Cascadia Code", monospace; }
+}

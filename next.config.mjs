@@ -3,9 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   async redirects() {
-    return [
-      { source: "/modules/skeleton/documentation", destination: "/modules/skeleton", permanent: false },
-    ];
+    return [];
   },
   experimental: {
     serverActions: {

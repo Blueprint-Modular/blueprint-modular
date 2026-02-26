@@ -16,7 +16,6 @@ export async function GET(
   context: { params: Params }
 ) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { slug: rawSlug } = await resolveParams(context.params);
   const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({
@@ -24,8 +23,17 @@ export async function GET(
     select: { id: true, authorId: true, isPublished: true },
   });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const canSee = result.user.id === article.authorId || result.user.role === "ADMIN" || result.user.role === "OWNER" || article.isPublished;
-  if (!canSee) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (article.isPublished) {
+    // Lecture publique des révisions pour articles publiés (CDC Phase 3).
+  } else if (!result) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } else {
+    const canSee =
+      result.user.id === article.authorId ||
+      result.user.role === "ADMIN" ||
+      result.user.role === "OWNER";
+    if (!canSee) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const revisions = await prisma.wikiRevision.findMany({
     where: { articleId: article.id },
@@ -33,6 +41,7 @@ export async function GET(
     select: {
       id: true,
       content: true,
+      title: true,
       authorId: true,
       authorName: true,
       changeNote: true,

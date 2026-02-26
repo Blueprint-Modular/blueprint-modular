@@ -16,7 +16,7 @@ export async function GET(
   context: { params: Params }
 ) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = result?.user ?? null;
   const { slug: rawSlug } = await resolveParams(context.params);
   const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({
@@ -24,15 +24,21 @@ export async function GET(
     select: { id: true, authorId: true, isPublished: true },
   });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const canSee = result.user.id === article.authorId || result.user.role === "ADMIN" || result.user.role === "OWNER" || article.isPublished;
-  if (!canSee) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!article.isPublished && (!user || (user.id !== article.authorId && user.role !== "ADMIN" && user.role !== "OWNER"))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const backlinks = await prisma.wikiBacklink.findMany({
     where: { targetArticleId: article.id },
     include: {
-      source: { select: { id: true, title: true, slug: true } },
+      source: { select: { id: true, title: true, slug: true, excerpt: true } },
     },
   });
-  const list = backlinks.map((b) => ({ id: b.source.id, title: b.source.title, slug: b.source.slug }));
+  const list = backlinks.map((b) => ({
+    id: b.source.id,
+    title: b.source.title,
+    slug: b.source.slug,
+    excerpt: b.source.excerpt ?? undefined,
+  }));
   return NextResponse.json(list);
 }

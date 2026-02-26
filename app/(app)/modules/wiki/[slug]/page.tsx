@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
+import { rehypeWikiHashtags } from "@/lib/rehype-wiki-hashtags";
 import { Panel, Button } from "@/components/bpm";
 import { useAssistant } from "@/lib/ai/assistant-context";
 import { getGuestArticleBySlug, getGuestWikiArticles, deleteGuestArticle } from "@/lib/wiki-guest";
@@ -21,7 +22,7 @@ type Article = {
   createdAt: string;
   updatedAt: string;
   author: { name: string | null; email?: string };
-  children: { id: string; title: string; slug: string; excerpt?: string; tags?: string[]; pinned?: boolean }[];
+  children: { id: string; title: string; slug: string; excerpt?: string; tags?: string[]; pinned?: boolean; isPublished?: boolean }[];
   canEdit?: boolean;
   excerpt?: string | null;
   tags?: string[];
@@ -30,6 +31,8 @@ type Article = {
   readingTimeMinutes?: number | null;
   wordCount?: number | null;
   lastRevisedBy?: string | null;
+  prevSlug?: string;
+  nextSlug?: string;
 };
 
 function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | null {
@@ -48,30 +51,6 @@ function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | 
     children,
     canEdit: g.canEdit,
   };
-}
-
-/**
- * Transforme #mot en badge cliquable uniquement si le tag existe en base.
- * Ne casse pas les titres Markdown (H1–H6 : # suivi d'un espace).
- * Si le tag n'existe pas : affiche le mot sans le # (texte normal).
- */
-function contentWithHashtagTags(content: string, knownTags: string[]): string {
-  if (!content) return content;
-  const tagSet = new Set(knownTags.map((t) => t.toLowerCase()));
-  const badgeHtml = (w: string) =>
-    `<a href="/modules/wiki?tag=${encodeURIComponent(w)}" class="bpm-badge bpm-badge-default inline-block text-xs font-medium px-2 py-0.5 rounded-md no-underline" style="background:var(--bpm-bg-secondary);color:var(--bpm-text-primary);border:1px solid var(--bpm-border)">${escapeHtml(w)}</a>`;
-  let out = content.replace(/^#([a-zA-Z0-9_\u00C0-\u024F-]+)/gm, (_: string, word: string) => {
-    const w = word.trim();
-    return tagSet.has(w.toLowerCase()) ? badgeHtml(w) : escapeHtml(w);
-  });
-  out = out.replace(/(\s)#([a-zA-Z0-9_\u00C0-\u024F-]+)/g, (_: string, space: string, word: string) => {
-    const w = word.trim();
-    return tagSet.has(w.toLowerCase()) ? space + badgeHtml(w) : space + escapeHtml(w);
-  });
-  return out;
-}
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 /** Transforme [[slug]] et [[slug|label]] en liens Markdown vers /modules/wiki/slug. */
@@ -109,7 +88,7 @@ export default function WikiArticlePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [backlinks, setBacklinks] = useState<{ id: string; title: string; slug: string }[]>([]);
+  const [backlinks, setBacklinks] = useState<{ id: string; title: string; slug: string; excerpt?: string }[]>([]);
   const [comments, setComments] = useState<{ id: string; content: string; authorName?: string; createdAt: string }[]>([]);
   const [commentText, setCommentText] = useState("");
   const [commentSending, setCommentSending] = useState(false);
@@ -161,14 +140,24 @@ export default function WikiArticlePage() {
 
     if (!session) {
       const guest = getGuestArticleBySlug(slug);
-      setArticle(guestToArticle(guest));
-      setError(guest ? null : "Article introuvable");
-      setLoading(false);
+      if (guest) {
+        setArticle(guestToArticle(guest));
+        setError(null);
+        setLoading(false);
+        return;
+      }
+      fetch(`/api/wiki/${encodeURIComponent(slug)}?incView=1`, { credentials: "include" })
+        .then((r) => {
+          if (!r.ok) throw new Error("Not found");
+          return r.json();
+        })
+        .then(setArticle)
+        .catch(() => setError("Article introuvable"))
+        .finally(() => setLoading(false));
       return;
     }
 
-    const incView = "1";
-    fetch(`/api/wiki/${encodeURIComponent(slug)}?incView=${incView}`, { credentials: "include" })
+    fetch(`/api/wiki/${encodeURIComponent(slug)}?incView=1`, { credentials: "include" })
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
         return r.json();
@@ -179,7 +168,7 @@ export default function WikiArticlePage() {
   }, [slug, session, status]);
 
   useEffect(() => {
-    if (!session || !slug || !article?.id) return;
+    if (!slug || !article) return;
     fetch(`/api/wiki/${encodeURIComponent(slug)}/backlinks`, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setBacklinks(Array.isArray(data) ? data : []))
@@ -188,7 +177,7 @@ export default function WikiArticlePage() {
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setComments(Array.isArray(data) ? data : []))
       .catch(() => setComments([]));
-  }, [session, slug, article?.id]);
+  }, [slug, article]);
 
   useEffect(() => {
     if (session) {
@@ -256,7 +245,7 @@ export default function WikiArticlePage() {
   }
 
   const toc = buildToc(article.content);
-  const contentForRender = contentWithHashtagTags(contentWithWikiLinks(article.content), knownTags);
+  const contentForRender = contentWithWikiLinks(article.content);
 
   if (isPrint) {
     return (
@@ -267,7 +256,7 @@ export default function WikiArticlePage() {
           {article.readingTimeMinutes != null && ` · ${article.readingTimeMinutes} min`}
         </p>
         <div className="prose prose-sm max-w-none wiki-article-content" style={{ lineHeight: 1.7 }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight]}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags)]}>
             {contentForRender || "*Aucun contenu.*"}
           </ReactMarkdown>
         </div>
@@ -373,7 +362,7 @@ export default function WikiArticlePage() {
         >
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeHighlight]}
+            rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeWikiHashtags(knownTags)]}
             components={{
               h2: ({ node, children, ...props }) => {
                 const first = Array.isArray(children) ? children[0] : children;
@@ -395,33 +384,63 @@ export default function WikiArticlePage() {
 
         {article.children && article.children.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Dans cet espace</h2>
-            <ul className="flex flex-wrap gap-2">
+            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Dans cette section</h2>
+            <div className="grid gap-2 sm:grid-cols-2">
               {article.children.map((c) => (
-                <li key={c.id}>
-                  <Link href={`/modules/wiki/${c.slug}`} className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>
-                    → {c.title}
+                <Link
+                  key={c.id}
+                  href={`/modules/wiki/${c.slug}`}
+                  className="block p-3 rounded border no-underline"
+                  style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "inherit" }}
+                >
+                  <span className="font-medium" style={{ color: "var(--bpm-accent-cyan)" }}>{c.title}</span>
+                  {c.excerpt && (
+                    <p className="text-sm mt-1 line-clamp-1" style={{ color: "var(--bpm-text-secondary)" }}>{c.excerpt}</p>
+                  )}
+                  <span className="inline-block mt-1">
+                    <Badge variant={c.isPublished !== false ? "success" : "warning"} className="text-xs">
+                      {c.isPublished !== false ? "Publié" : "Brouillon"}
+                    </Badge>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {backlinks.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Articles liés</h2>
+            <p className="text-sm mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Articles qui citent celui-ci.</p>
+            <ul className="space-y-2">
+              {backlinks.map((b) => (
+                <li key={b.id} className="p-2 rounded border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+                  <Link href={`/modules/wiki/${b.slug}`} className="font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+                    {b.title}
                   </Link>
+                  {b.excerpt && (
+                    <p className="text-sm mt-1 line-clamp-1" style={{ color: "var(--bpm-text-secondary)" }}>{b.excerpt}</p>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        {session && backlinks.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Articles qui citent celui-ci</h2>
-            <ul className="flex flex-wrap gap-2">
-              {backlinks.map((b) => (
-                <li key={b.id}>
-                  <Link href={`/modules/wiki/${b.slug}`} className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>
-                    {b.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {((article.prevSlug ?? article.nextSlug) && (
+          <nav className="mt-8 flex justify-between gap-4 border-t pt-6" style={{ borderColor: "var(--bpm-border)" }} aria-label="Navigation précédent / suivant">
+            {article.prevSlug ? (
+              <Link href={`/modules/wiki/${article.prevSlug}`} className="text-sm font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+                ← Article précédent
+              </Link>
+            ) : <span />}
+            {article.nextSlug ? (
+              <Link href={`/modules/wiki/${article.nextSlug}`} className="text-sm font-medium underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+                Article suivant →
+              </Link>
+            ) : <span />}
+          </nav>
+        ))}
 
         {session && (
           <div className="mt-8">

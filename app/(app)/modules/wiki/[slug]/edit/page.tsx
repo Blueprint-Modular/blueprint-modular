@@ -44,6 +44,8 @@ export default function WikiEditPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isGuestArticle, setIsGuestArticle] = useState(false);
+  const [saveToDbLoading, setSaveToDbLoading] = useState(false);
+  const [localSaveMessage, setLocalSaveMessage] = useState<string | null>(null);
   const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiNotes, setAiNotes] = useState("");
@@ -79,6 +81,7 @@ export default function WikiEditPage() {
       if (updated) {
         setLastSavedAt(new Date());
         setDirty(false);
+        if (!session) setLocalSaveMessage("Article sauvegardé localement.");
       }
       return;
     }
@@ -110,7 +113,7 @@ export default function WikiEditPage() {
     } finally {
       setSaving(false);
     }
-  }, [slug, title, content, isPublished, excerpt, tags, pinned, changeNote, isGuestArticle]);
+  }, [slug, title, content, isPublished, excerpt, tags, pinned, changeNote, isGuestArticle, session]);
 
   useEffect(() => {
     if (!dirty || isGuestArticle) return;
@@ -176,13 +179,12 @@ export default function WikiEditPage() {
     streamWikiGenerate({ notes: aiNotes.trim(), articleType: aiArticleType, workspace: aiWorkspace });
   };
 
+  /** Charge l'article : API d'abord si connecté, puis fallback localStorage si 404 (CDC Bug 2). */
   useEffect(() => {
     if (!slug) return;
 
-    // Toujours vérifier le localStorage en premier : un article créé en invité
-    // peut être édité même si l'utilisateur est connecté (article pas encore en base).
-    const guest = getGuestArticleBySlug(slug);
-    if (guest?.canEdit) {
+    const loadFromGuest = (guest: ReturnType<typeof getGuestArticleBySlug>) => {
+      if (!guest) return false;
       setTitle(guest.title);
       setContent(guest.content ?? "");
       setIsPublished(guest.isPublished ?? false);
@@ -190,18 +192,22 @@ export default function WikiEditPage() {
       setExcerpt(g.excerpt ?? "");
       setTags(Array.isArray(g.tags) ? g.tags : []);
       setPinned(g.pinned ?? false);
-      setIsGuestArticle(true);
-      setLoading(false);
-      return;
-    }
-    if (guest && !guest.canEdit) {
+      if (guest.canEdit) {
+        setIsGuestArticle(true);
+        return true;
+      }
       setError("Article en lecture seule en mode invité (article de base).");
-      setLoading(false);
-      return;
-    }
+      return true;
+    };
 
     if (status === "loading") return;
+
     if (!session) {
+      const guest = getGuestArticleBySlug(slug);
+      if (loadFromGuest(guest)) {
+        setLoading(false);
+        return;
+      }
       setError("Article introuvable.");
       setLoading(false);
       return;
@@ -209,10 +215,22 @@ export default function WikiEditPage() {
 
     fetch(`/api/wiki/${encodeURIComponent(slug)}`, { credentials: "include" })
       .then((r) => {
-        if (!r.ok) throw new Error("Not found");
-        return r.json();
+        if (r.ok) return r.json();
+        if (r.status === 404) {
+          const guest = getGuestArticleBySlug(slug);
+          if (guest?.canEdit) {
+            loadFromGuest(guest);
+            return;
+          }
+          if (guest && !guest.canEdit) {
+            setError("Article en lecture seule en mode invité (article de base).");
+            return;
+          }
+        }
+        throw new Error("Not found");
       })
-      .then((a: { title: string; content?: string; isPublished?: boolean; excerpt?: string | null; tags?: string[]; pinned?: boolean }) => {
+      .then((a: { title: string; content?: string; isPublished?: boolean; excerpt?: string | null; tags?: string[]; pinned?: boolean } | void) => {
+        if (!a) return;
         setTitle(a.title);
         setContent(a.content ?? "");
         setIsPublished(a.isPublished ?? false);
@@ -224,15 +242,50 @@ export default function WikiEditPage() {
       .finally(() => setLoading(false));
   }, [slug, session, status]);
 
+  const handleSaveToDb = async () => {
+    if (!session || !isGuestArticle) return;
+    setError(null);
+    setSaveToDbLoading(true);
+    try {
+      const res = await fetch("/api/wiki", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          content,
+          slug,
+          isPublished,
+          excerpt: excerpt.trim() || undefined,
+          tags: tags.length ? tags : undefined,
+          pinned,
+        }),
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? "Erreur");
+      }
+      const created = await res.json() as { slug: string };
+      router.push(`/modules/wiki/${created.slug}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Impossible de sauvegarder en base");
+    } finally {
+      setSaveToDbLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLocalSaveMessage(null);
     setSaving(true);
     try {
       if (isGuestArticle) {
         const updated = updateGuestArticle(slug, { title, content, isPublished });
-        if (updated) router.push(`/modules/wiki/${slug}`);
-        else setError("Impossible de sauvegarder (article invité)");
+        if (updated) {
+          if (!session) setLocalSaveMessage("Article sauvegardé localement.");
+          router.push(`/modules/wiki/${slug}`);
+        } else setError("Impossible de sauvegarder (article invité)");
         return;
       }
       const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, {
@@ -332,6 +385,30 @@ export default function WikiEditPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col min-h-0">
+        {isGuestArticle && (
+          <div
+            className="py-3 px-4 rounded-lg border flex flex-wrap items-center justify-between gap-2"
+            style={{ background: "var(--bpm-bg-secondary)", borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)" }}
+            role="status"
+          >
+            <span className="text-sm">Vous modifiez un article local (non synchronisé).</span>
+            {session && (
+              <Button
+                type="button"
+                variant="primary"
+                size="small"
+                onClick={handleSaveToDb}
+                disabled={saveToDbLoading}
+                aria-label="Sauvegarder cet article en base de données"
+              >
+                {saveToDbLoading ? "Enregistrement…" : "Sauvegarder en base"}
+              </Button>
+            )}
+          </div>
+        )}
+        {localSaveMessage && (
+          <p className="text-sm" style={{ color: "var(--bpm-accent-cyan)" }}>{localSaveMessage}</p>
+        )}
         <label className="block">
           <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Titre</span>
           <input

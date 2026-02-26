@@ -31,20 +31,19 @@ export default function WikiHistoryPage() {
 
   useEffect(() => {
     if (!slug || status === "loading") return;
-    if (!session) {
-      setError("Connectez-vous pour voir l'historique.");
-      setLoading(false);
-      return;
-    }
     fetch(`/api/wiki/${encodeURIComponent(slug)}/revisions`, { credentials: "include" })
       .then((r) => {
+        if (r.status === 401) {
+          setError("Connectez-vous pour voir l'historique.");
+          return [];
+        }
         if (!r.ok) throw new Error("Not found");
         return r.json();
       })
       .then((data) => setRevisions(Array.isArray(data) ? data : []))
       .catch(() => setError("Impossible de charger l'historique."))
       .finally(() => setLoading(false));
-  }, [slug, session, status]);
+  }, [slug, status]);
 
   const selected = revisions.find((r) => r.id === selectedId);
   const compare = compareId ? revisions.find((r) => r.id === compareId) : null;

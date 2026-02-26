@@ -8,8 +8,7 @@ const PAGE_SIZE = 20;
 
 export async function GET(request: Request) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { user } = result;
+  const user = result?.user ?? null;
   const { searchParams } = new URL(request.url);
   const publishedOnly = searchParams.get("published") === "true";
   const status = searchParams.get("status")?.trim() ?? ""; // published | draft
@@ -20,6 +19,8 @@ export async function GET(request: Request) {
   const sortBy = searchParams.get("sortBy")?.trim() || "updatedAt"; // updatedAt | createdAt | title | viewCount
   const sortOrder = searchParams.get("sortOrder")?.toLowerCase() === "asc" ? "asc" : "desc";
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
+  const includeParam = searchParams.get("include")?.trim() ?? "";
+  const includeChildrenCount = includeParam.split(",").map((s) => s.trim()).includes("children_count");
   const withContent = searchParams.get("withContent") === "true";
   const limitContent = Math.min(parseInt(searchParams.get("limit") ?? "15", 10) || 15, 30);
 
@@ -35,7 +36,8 @@ export async function GET(request: Request) {
         ? { isPublished: false }
         : null;
   const pinnedCondition = pinnedOnly ? { pinned: true } : null;
-  const parentCondition = parent !== "" ? { parentId: parent || null } : null;
+  const parentCondition =
+    parent === "root" ? { parentId: null } : parent !== "" ? { parentId: parent } : null;
 
   const searchCondition = search
     ? {
@@ -98,13 +100,21 @@ export async function GET(request: Request) {
       lastRevisedBy: true,
       authorName: true,
       author: { select: { name: true } },
+      ...(includeChildrenCount ? { _count: { select: { children: true } } } : {}),
       ...(withContent ? { content: true } : {}),
     },
   });
 
   const canEdit = (authorId: string) =>
     !!user && (user.id === authorId || user.role === "ADMIN" || user.role === "OWNER");
-  const articles = rawArticles.map((a) => ({ ...a, canEdit: canEdit(a.authorId) }));
+  const articles = rawArticles.map((a) => {
+    const { _count, ...rest } = a as typeof a & { _count?: { children: number } };
+    return {
+      ...rest,
+      ...(includeChildrenCount && _count ? { childrenCount: _count.children } : {}),
+      canEdit: canEdit(a.authorId),
+    };
+  });
   return NextResponse.json(articles);
 }
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { Button, Modal, Input, Textarea, Chip } from "@/components/bpm";
+import { Button, Modal, Input, Textarea, Chip, Selectbox } from "@/components/bpm";
 
 type View = "jour" | "semaine" | "mois";
 
@@ -18,6 +18,8 @@ export type CalEvent = {
   categorie?: string;
   statut?: "confirmé" | "annulé" | "tentative";
   participants?: string[];
+  /** Récurrence (affichage détail) */
+  recurrence?: "daily" | "weekly" | "monthly";
   /** true si créé par l'utilisateur dans le simulateur (supprimable) */
   _user?: boolean;
 };
@@ -281,8 +283,10 @@ export default function CalendrierSimulateurPage() {
     setSelectedEvent(null);
   };
 
-  const handleAddEvent = (ev: Omit<CalEvent, "id" | "_user">) => {
-    setUserEvents((prev) => [...prev, { ...ev, id: `user-${Date.now()}`, _user: true }]);
+  const handleAddEvent = (ev: Omit<CalEvent, "id" | "_user"> | Omit<CalEvent, "id" | "_user">[]) => {
+    const list = Array.isArray(ev) ? ev : [ev];
+    const baseId = `user-${Date.now()}`;
+    setUserEvents((prev) => [...prev, ...list.map((e, i) => ({ ...e, id: `${baseId}-${i}`, _user: true }))]);
     setFormOpen(false);
   };
 
@@ -327,7 +331,7 @@ export default function CalendrierSimulateurPage() {
             </Button>
           </div>
           <p className="text-sm font-medium m-0 flex-1 min-w-0 truncate text-center px-2" style={{ color: "var(--bpm-text-primary)" }} title={formatTitle(view, focusDate)}>
-            {view === "semaine" ? `S${getISOWeekNumber(focusDate)}` : view === "jour" || view === "mois" ? null : formatTitle(view, focusDate)}
+            {view === "semaine" || view === "jour" || view === "mois" ? null : formatTitle(view, focusDate)}
           </p>
           <div className="w-4 flex-shrink-0 sm:w-10" />
         </div>
@@ -442,23 +446,13 @@ export default function CalendrierSimulateurPage() {
                   minWidth: 0,
                 }}
               >
-                {/* Coin haut gauche : numéro de semaine + période (ex. Semaine 9 - du 23 févr.…) */}
+                {/* Coin haut gauche : S9 centré */}
                 <div
-                  className="py-1 pr-1 text-xs font-medium border-b border-r truncate flex items-center"
+                  className="py-1 pr-1 text-xs font-medium border-b border-r flex items-center justify-center"
                   style={{ gridColumn: 1, gridRow: 1, borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)", background: "var(--bpm-bg-secondary)" }}
                   title={formatTitle("semaine", focusDate)}
                 >
-                  {(() => {
-                    const { start } = getWeekRange(focusDate);
-                    const weekNum = getISOWeekNumber(focusDate);
-                    const fmt = (x: Date) => `${x.getDate()} ${MONTHS[x.getMonth()].slice(0, 3)}.`;
-                    return (
-                      <>
-                        <span className="sm:hidden">S. {weekNum}</span>
-                        <span className="hidden sm:inline">S. {weekNum} - du {fmt(start)}…</span>
-                      </>
-                    );
-                  })()}
+                  S{getISOWeekNumber(focusDate)}
                 </div>
                 {[0, 1, 2, 3, 4, 5, 6].map((dayOffset) => {
                   const { start } = getWeekRange(focusDate);
@@ -594,6 +588,9 @@ export default function CalendrierSimulateurPage() {
           <div className="space-y-3 text-sm">
             <p className="m-0"><strong>Date :</strong> {selectedEvent.date}</p>
             <p className="m-0"><strong>Heure :</strong> {formatHeureDisplay(selectedEvent.heure)}{selectedEvent.duree ? ` (${selectedEvent.duree} min)` : ""}</p>
+            {selectedEvent.recurrence && (
+              <p className="m-0"><strong>Récurrence :</strong> {selectedEvent.recurrence === "daily" ? "Tous les jours" : selectedEvent.recurrence === "weekly" ? "Toutes les semaines" : "Tous les mois"}</p>
+            )}
             {selectedEvent.lieu && <p className="m-0"><strong>Lieu :</strong> {selectedEvent.lieu}</p>}
             {selectedEvent.categorie && <p className="m-0"><strong>Catégorie :</strong> {selectedEvent.categorie}</p>}
             {selectedEvent.statut && <p className="m-0"><strong>Statut :</strong> {selectedEvent.statut}</p>}
@@ -623,6 +620,51 @@ export default function CalendrierSimulateurPage() {
   );
 }
 
+const RECURRENCE_OPTIONS = [
+  { value: "", label: "Aucune" },
+  { value: "daily", label: "Tous les jours" },
+  { value: "weekly", label: "Toutes les semaines" },
+  { value: "monthly", label: "Tous les mois" },
+];
+
+/** Génère les dates pour une récurrence à partir de la date de début. */
+function generateRecurrenceDates(
+  startDateStr: string,
+  recurrence: "daily" | "weekly" | "monthly",
+  count: number
+): string[] {
+  const [y, m, d] = startDateStr.split("-").map(Number);
+  const dates: string[] = [];
+  let current = new Date(y, m - 1, d);
+  for (let i = 0; i < count; i++) {
+    dates.push(
+      `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`
+    );
+    if (recurrence === "daily") current.setDate(current.getDate() + 1);
+    else if (recurrence === "weekly") current.setDate(current.getDate() + 7);
+    else current.setMonth(current.getMonth() + 1);
+  }
+  return dates;
+}
+
+/** Retourne toutes les dates entre du et au (inclus), au format YYYY-MM-DD. */
+function getDatesBetween(du: string, au: string): string[] {
+  if (au < du) return [du];
+  const [y1, m1, d1] = du.split("-").map(Number);
+  const [y2, m2, d2] = au.split("-").map(Number);
+  const start = new Date(y1, m1 - 1, d1);
+  const end = new Date(y2, m2 - 1, d2);
+  const dates: string[] = [];
+  const current = new Date(start);
+  while (current <= end) {
+    dates.push(
+      `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`
+    );
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+}
+
 function EventFormModal({
   open,
   onClose,
@@ -631,54 +673,80 @@ function EventFormModal({
 }: {
   open: boolean;
   onClose: () => void;
-  onSubmit: (ev: Omit<CalEvent, "id" | "_user">) => void;
+  onSubmit: (ev: Omit<CalEvent, "id" | "_user"> | Omit<CalEvent, "id" | "_user">[]) => void;
   defaultDate: string;
 }) {
   const [date, setDate] = useState(defaultDate);
+  const [dateFin, setDateFin] = useState("");
   const [heure, setHeure] = useState("09h00");
   const [titre, setTitre] = useState("");
   const [duree, setDuree] = useState("");
   const [lieu, setLieu] = useState("");
   const [description, setDescription] = useState("");
   const [couleur, setCouleur] = useState(COULEURS[0].value);
+  const [recurrence, setRecurrence] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!titre.trim()) return;
     const h = heure.includes("h") ? heure : `${heure.slice(0, 2)}h${heure.slice(2) || "00"}`;
-    onSubmit({
-      date,
+    const base: Omit<CalEvent, "id" | "_user"> = {
       titre: titre.trim(),
       heure: h,
       duree: duree ? parseInt(duree, 10) : undefined,
       lieu: lieu.trim() || undefined,
       description: description.trim() || undefined,
       couleur,
-    });
+      recurrence: recurrence ? (recurrence as "daily" | "weekly" | "monthly") : undefined,
+    };
+    if (recurrence === "daily" || recurrence === "weekly" || recurrence === "monthly") {
+      const count = recurrence === "daily" ? 60 : recurrence === "weekly" ? 12 : 12;
+      const dates = generateRecurrenceDates(date, recurrence as "daily" | "weekly" | "monthly", count);
+      onSubmit(dates.map((d) => ({ ...base, date: d })));
+    } else if (dateFin && dateFin >= date) {
+      const dates = getDatesBetween(date, dateFin);
+      onSubmit(dates.map((d) => ({ ...base, date: d })));
+    } else {
+      onSubmit({ ...base, date });
+    }
     setTitre("");
     setHeure("09h00");
     setDuree("");
     setLieu("");
     setDescription("");
     setDate(defaultDate);
+    setDateFin("");
     setCouleur(COULEURS[0].value);
+    setRecurrence("");
   };
 
   return (
     <Modal isOpen={open} onClose={onClose} title="Nouvel événement" size="small">
       <form onSubmit={handleSubmit} className="space-y-3">
         <Input label="Titre" value={titre} onChange={setTitre} placeholder="Titre de l'événement" required />
+        <div>
+          <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>Du</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border text-sm"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>Au (optionnel)</label>
+          <input
+            type="date"
+            value={dateFin}
+            onChange={(e) => setDateFin(e.target.value)}
+            min={date}
+            className="w-full px-3 py-2 rounded-lg border text-sm"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
+            title="Laisser vide pour un événement sur un seul jour"
+          />
+        </div>
         <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border text-sm"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
-            />
-          </div>
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>Heure</label>
             <input
@@ -696,8 +764,19 @@ function EventFormModal({
               style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
             />
           </div>
+          <div>
+            <Input label="Durée (min)" value={duree} onChange={setDuree} type="number" placeholder="60" />
+          </div>
         </div>
-        <Input label="Durée (min)" value={duree} onChange={setDuree} type="number" placeholder="60" />
+        <div>
+          <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>Récurrence</label>
+          <Selectbox
+            options={RECURRENCE_OPTIONS}
+            value={recurrence}
+            onChange={(v) => setRecurrence(v ?? "")}
+            placeholder="Aucune"
+          />
+        </div>
         <Input label="Lieu" value={lieu} onChange={setLieu} placeholder="Salle, Visio..." />
         <Textarea label="Description" value={description} onChange={setDescription} placeholder="Optionnel" rows={2} />
         <div>

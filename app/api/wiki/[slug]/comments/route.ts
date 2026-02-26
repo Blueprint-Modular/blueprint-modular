@@ -16,7 +16,7 @@ export async function GET(
   context: { params: Params }
 ) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = result?.user ?? null;
   const { slug: rawSlug } = await resolveParams(context.params);
   const slug = normalizeSlug(rawSlug);
   const article = await prisma.wikiArticle.findFirst({
@@ -24,8 +24,14 @@ export async function GET(
     select: { id: true, authorId: true, isPublished: true },
   });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const canSee = result.user.id === article.authorId || result.user.role === "ADMIN" || result.user.role === "OWNER" || article.isPublished;
-  if (!canSee) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (article.isPublished) {
+    // Lecture publique des commentaires pour articles publiés.
+  } else if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } else {
+    const canSee = user.id === article.authorId || user.role === "ADMIN" || user.role === "OWNER";
+    if (!canSee) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const comments = await prisma.wikiComment.findMany({
     where: { articleId: article.id },

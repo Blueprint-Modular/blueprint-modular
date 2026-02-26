@@ -251,6 +251,37 @@ def stepper(
     _node("stepper", steps=steps or [], current_step=current_step)
 
 
+# --- Assemblage skeleton (chargement par type de page) ---
+def skeleton_dashboard(metrics: int = 3, rows: int = 5) -> None:
+    """Assemblage skeleton type dashboard : header, métriques, zone contenu, tableau."""
+    _node("skeleton_dashboard", metrics=metrics, rows=rows)
+
+
+def skeleton_list(rows: int = 8, columns: int = 4) -> None:
+    """Assemblage skeleton type liste : header, barre recherche, tableau N colonnes × M lignes."""
+    _node("skeleton_list", rows=rows, columns=columns)
+
+
+def skeleton_article() -> None:
+    """Assemblage skeleton type article : titre large + paragraphes en largeur variable (Wiki, Analyse de documents)."""
+    _node("skeleton_article")
+
+
+def skeleton_form(fields: int = 5) -> None:
+    """Assemblage skeleton type formulaire : N blocs label + input empilés + bouton en bas."""
+    _node("skeleton_form", fields=fields)
+
+
+def skeleton_detail() -> None:
+    """Assemblage skeleton type détail : header + sidebar métadonnées + grande zone contenu."""
+    _node("skeleton_detail")
+
+
+def skeleton_chart(type: str = "bar") -> None:
+    """Assemblage skeleton type graphique : rectangle proportionné avec axe Y simulé."""
+    _node("skeleton_chart", type=type)
+
+
 def set_page_config(
     page_title: str = "BPM App",
     layout: str = "centered",
@@ -374,4 +405,10 @@ __all__ = [
     "chip",
     "breadcrumb",
     "stepper",
+    "skeleton_dashboard",
+    "skeleton_list",
+    "skeleton_article",
+    "skeleton_form",
+    "skeleton_detail",
+    "skeleton_chart",
 ]

@@ -44,7 +44,13 @@ export default function SkeletonDocumentationPage() {
         <strong>Quand préférer le skeleton au spinner ?</strong> Utilisez un skeleton lorsque la page a une structure identifiable (tableau, formulaire, article) : le placeholder reproduit cette structure et réduit la perception du temps d&apos;attente. Utilisez un spinner pour des actions ponctuelles (soumission, chargement d&apos;un détail en overlay).
       </p>
       <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <strong>Construire un skeleton fidèle à sa page :</strong> choisissez l&apos;assemblage nommé correspondant (dashboard, list, article, form, detail, chart) et adaptez le nombre de lignes, colonnes ou métriques. Le simulateur permet de prévisualiser chaque assemblage avec des sliders pour les paramètres.
+      </p>
+      <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <strong>Transition vers le contenu :</strong> affichez le skeleton tant que <code>loading === true</code>, puis le contenu réel. Pour une transition fluide, appliquez <code>transition: opacity 200ms ease-out</code> sur le conteneur skeleton (classe <code>bpm-skeleton-container</code>) et passez à <code>opacity: 0</code> avant de retirer le skeleton du DOM ou de le cacher.
+      </p>
+      <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <strong>Implémenter la transition :</strong> gardez le conteneur avec la classe <code>bpm-skeleton-container</code> (qui a déjà <code>transition: opacity 200ms ease-out</code> en global). Avant de démonter le skeleton, mettez <code>opacity: 0</code> sur ce conteneur, attendez 200 ms, puis remplacez par le contenu réel ou supprimez le nœud.
       </p>
       <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         <strong>Réduire les animations :</strong> le composant respecte <code>prefers-reduced-motion</code> (animation désactivée automatiquement). Vous pouvez aussi passer <code>animated=false</code> pour un skeleton statique (screenshots, tests).

@@ -15,7 +15,17 @@ const CATEGORY_ORDER = [
   "Métier",
 ] as const;
 
-const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], { href: string; label: string; description: string; icon: React.ComponentType<{ className?: string }>; simulatorAndDoc: boolean }[]> = {
+type ModuleEntry = {
+  href: string;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  simulatorAndDoc: boolean;
+  /** Si défini, le lien « Simulateur » pointe vers cette URL au lieu de href/simulateur (ex. Wiki → page du module). */
+  simulateurHref?: string;
+};
+
+const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]> = {
   Authentification: [
     { href: "/modules/auth", label: "Auth", description: "Authentification Google & e-mail, gestion de sessions et whitelist utilisateurs.", icon: Shield, simulatorAndDoc: true },
   ],
@@ -141,7 +151,7 @@ export default function ModulesPage() {
                           Documentation
                         </Link>
                         {mod.simulatorAndDoc && (
-                          <Link href={`${mod.href}/simulateur`} className="text-sm font-medium hover:underline" style={linkStyle}>
+                          <Link href={mod.simulateurHref ?? `${mod.href}/simulateur`} className="text-sm font-medium hover:underline" style={linkStyle}>
                             Simulateur
                           </Link>
                         )}

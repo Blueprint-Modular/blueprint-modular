@@ -48,7 +48,21 @@ function TreeNode({
         role={hasChildren ? "button" : "link"}
         aria-label={hasChildren ? `Section ${node.title}, ${node.children!.length} article(s)` : `Ouvrir l'article ${node.title}`}
       >
-        {hasChildren ? <span aria-hidden>{open ? "▼" : "▶"}</span> : <span className="wiki-tree-doc" aria-hidden>📄</span>}
+        {hasChildren ? (
+          <span className="wiki-tree-arrow" aria-hidden>
+            {open ? (
+              <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                <path d="M480-373.85 303.85-550h352.3L480-373.85Z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                <path d="M410-303.85v-352.3L586.15-480 410-303.85Z" />
+              </svg>
+            )}
+          </span>
+        ) : (
+          <span className="wiki-tree-doc" aria-hidden>📄</span>
+        )}
         <span>{node.title}</span>
         {hasChildren && <span className="wiki-tree-count">({node.children!.length})</span>}
       </div>
@@ -95,9 +109,24 @@ export default function WikiPage() {
   const fetchArticles = useCallback(() => {
     setLoading(true);
     if (!session) {
-      const guest = getGuestWikiArticles();
-      setArticles(guest);
-      setLoading(false);
+      const params = new URLSearchParams();
+      params.set("status", "published");
+      if (search) params.set("search", search);
+      if (tagFilter) params.set("tag", tagFilter);
+      params.set("sortBy", sortBy);
+      params.set("sortOrder", sortOrder);
+      params.set("page", String(page));
+      fetch(`/api/wiki?${params.toString()}`, { credentials: "include" })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((data) => {
+          const fromApi = Array.isArray(data) ? data : [];
+          const guest = getGuestWikiArticles();
+          const guestSlugs = new Set(guest.map((a) => a.slug));
+          const fromApiFiltered = fromApi.filter((a: { slug: string }) => !guestSlugs.has(a.slug));
+          setArticles([...guest, ...fromApiFiltered]);
+        })
+        .catch(() => setArticles(getGuestWikiArticles()))
+        .finally(() => setLoading(false));
       return;
     }
     const params = new URLSearchParams();
@@ -116,13 +145,11 @@ export default function WikiPage() {
   }, [search, tagFilter, statusFilter, sortBy, sortOrder, page, session]);
 
   useEffect(() => {
-    if (session) {
-      fetch("/api/wiki/tags", { credentials: "include" })
-        .then((r) => (r.ok ? r.json() : []))
-        .then((data) => setAllTags(Array.isArray(data) ? data : []))
-        .catch(() => setAllTags([]));
-    }
-  }, [session]);
+    fetch("/api/wiki/tags", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => setAllTags(Array.isArray(data) ? data : []))
+      .catch(() => setAllTags([]));
+  }, []);
 
   useEffect(() => {
     fetchArticles();
@@ -222,7 +249,7 @@ export default function WikiPage() {
             </select>
           </>
         )}
-        {session && allTags.length > 0 && (
+        {allTags.length > 0 && (
           <div className="flex flex-wrap gap-1 items-center">
             <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Tag :</span>
             <button
@@ -362,6 +389,7 @@ export default function WikiPage() {
       )}
       <nav className="doc-pagination mt-8">
         <Link href="/modules/wiki/new" style={{ color: "var(--bpm-accent-cyan)" }}>Créer un article</Link>
+        <Link href="/modules/wiki/search" style={{ color: "var(--bpm-accent-cyan)" }}>Recherche</Link>
         <Link href="/modules/wiki/tags" style={{ color: "var(--bpm-accent-cyan)" }}>Tags</Link>
         <Link href="/modules/wiki/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
       </nav>

@@ -40,6 +40,27 @@ export default function WikiNewPage() {
 
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
+  /** Pré-remplir depuis le bac à sable (Simulateur) si l'utilisateur a cliqué sur "Créer un article depuis ce contenu". */
+  useEffect(() => {
+    try {
+      const fromSandbox = typeof window !== "undefined" && sessionStorage.getItem("wiki-sandbox-content");
+      if (fromSandbox) {
+        sessionStorage.removeItem("wiki-sandbox-content");
+        setContent(fromSandbox);
+        const firstH1 = fromSandbox.split("\n").find((l) => l.startsWith("# "));
+        if (firstH1 && !title) {
+          const t = firstH1.replace(/^#+\s*/, "").trim();
+          if (t) {
+            setTitle(t);
+            setSlug(slugFromTitle(t));
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     if (session) {
       fetch("/api/wiki", { credentials: "include" })

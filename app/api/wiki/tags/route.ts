@@ -4,8 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { user } = result;
+  const user = result?.user ?? null;
 
   const articles = await prisma.wikiArticle.findMany({
     where: user

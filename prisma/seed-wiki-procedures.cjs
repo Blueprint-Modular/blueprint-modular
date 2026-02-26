@@ -1,12 +1,167 @@
 /**
- * Seed : crée 3 procédures de bonne tenue dans le Wiki.
- * À exécuter après avoir au moins un utilisateur en base (ex. après inscription).
+ * Seed : crée 8 à 10 articles professionnels dans le Wiki (procédures, guides, FAQ, référence).
+ * CDC Phase 1 : articles avec tags, hiérarchie (parentId) et backlinks [[slug]].
+ * À exécuter après avoir au moins un utilisateur en base.
  * Usage : node prisma/seed-wiki-procedures.cjs
- * Ou : npx prisma db seed (si "prisma.seed" pointe vers ce fichier)
+ * Ou : npx prisma db seed
  */
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+
+/** Article de référence statique pour liens entrants et simulateur (CDC Bug 1). */
+const GUIDE_MARKDOWN = {
+  title: "Guide Markdown",
+  slug: "guide-markdown",
+  excerpt: "Référence des capacités Markdown du module Wiki : titres, listes, code, tableaux, callouts.",
+  tags: ["guide", "markdown", "référence"],
+  parentSlug: null,
+  content: `# Guide Markdown
+
+Ce document sert de référence statique pour le bac à sable et les liens entrants.
+
+## Titres et texte
+
+**Gras**, *italique*, ~~barré~~, \`code inline\`.
+
+> Blockquote pour citations.
+
+Liste à puces :
+- Premier point
+- Deuxième point
+
+Liste numérotée :
+1. Étape un
+2. Étape deux
+
+## Code et tableaux
+
+\`\`\`javascript
+function hello() { return "Bonjour"; }
+\`\`\`
+
+| Colonne A | Colonne B |
+|-----------|-----------|
+| Donnée 1  | Donnée 2  |
+
+## Liens inter-articles
+
+Voir [[procedure-redaction-documents]] pour la procédure de rédaction.
+
+## Ressources
+
+- [[procedure-tenue-reunions]]
+- [[procedure-communication-ecrite-orale]]`,
+};
+
+/** Articles supplémentaires avec hiérarchie et backlinks (CDC seed 8–10 articles). */
+const EXTRA_ARTICLES = [
+  {
+    title: "Onboarding RH",
+    slug: "onboarding-rh",
+    excerpt: "Bienvenue et premiers pas pour les nouveaux collaborateurs.",
+    tags: ["onboarding", "RH", "équipe"],
+    parentSlug: null,
+    content: `# Onboarding RH
+
+## Objectif
+
+Accueillir les nouveaux collaborateurs et leur donner les clés pour démarrer.
+
+## Premiers pas
+
+1. Réception du kit d'accueil.
+2. Configuration du poste (voir [[procedure-reinitialisation-mdp]] si besoin).
+3. Prise de rendez-vous avec le responsable.
+
+## Ressources
+
+- [[procedure-redaction-documents]] pour les documents internes.
+- [[faq-equipe]] pour les questions fréquentes.`,
+  },
+  {
+    title: "Procédure réinitialisation mot de passe",
+    slug: "procedure-reinitialisation-mdp",
+    excerpt: "Réinitialisation du mot de passe (IT) : étapes et bonnes pratiques.",
+    tags: ["IT", "sécurité", "procédure"],
+    parentSlug: null,
+    content: `# Procédure réinitialisation mot de passe
+
+## Contexte
+
+En cas d'oubli ou d'expiration du mot de passe, suivre cette procédure.
+
+## Étapes
+
+1. Contacter le support IT ou utiliser le portail d'auto-réinitialisation.
+2. Vérifier son identité (email, badge).
+3. Choisir un mot de passe conforme à la politique (voir [[documentation-produit]]).
+
+## Références
+
+- [[procedure-communication-ecrite-orale]] pour les échanges avec le support.`,
+  },
+  {
+    title: "FAQ Équipe",
+    slug: "faq-equipe",
+    excerpt: "Questions fréquentes : horaires, congés, outils, contacts.",
+    tags: ["FAQ", "équipe", "onboarding"],
+    parentSlug: null,
+    content: `# FAQ Équipe
+
+## Horaires et congés
+
+**Quels sont les horaires ?** Flexibles avec plage obligatoire 10h–16h.
+
+**Comment poser un congé ?** Via l’outil RH ; voir [[onboarding-rh]] pour les nouveaux.
+
+## Outils
+
+**Accès au Wiki ?** Tous les collaborateurs. Création d’articles selon droits.
+
+**Référence Markdown :** [[guide-markdown]].`,
+  },
+  {
+    title: "Documentation Produit",
+    slug: "documentation-produit",
+    excerpt: "Vue d'ensemble du produit et de la documentation technique.",
+    tags: ["produit", "documentation", "guide"],
+    parentSlug: null,
+    content: `# Documentation Produit
+
+## Vue d'ensemble
+
+Ce document regroupe les liens vers les procédures et guides métier.
+
+## Procédures clés
+
+- [[procedure-redaction-documents]]
+- [[procedure-tenue-reunions]]
+- [[procedure-reinitialisation-mdp]]
+
+## Référence
+
+- [[guide-markdown]] pour la syntaxe Markdown du Wiki.`,
+  },
+  {
+    title: "Premiers pas (Onboarding)",
+    slug: "onboarding-premiers-pas",
+    excerpt: "Checklist des premiers pas pour un nouveau collaborateur.",
+    tags: ["onboarding", "checklist"],
+    parentSlug: "onboarding-rh",
+    content: `# Premiers pas
+
+Article enfant de [[onboarding-rh]].
+
+## Checklist
+
+- [ ] Kit d'accueil reçu
+- [ ] Poste configuré (voir [[procedure-reinitialisation-mdp]] si blocage)
+- [ ] Rencontre avec le responsable
+
+Voir aussi [[faq-equipe]].`,
+  },
+];
 
 const PROCEDURES = [
   {
@@ -177,38 +332,44 @@ async function main() {
     console.log("Utilisateur créé : " + user.email);
   }
 
-  for (const proc of PROCEDURES) {
-    const wordCount = countWords(proc.content);
-    const readingTime = readingTimeMinutes(proc.content);
+  const upsert = async (art, parentId = null) => {
+    const wordCount = countWords(art.content);
+    const readingTime = readingTimeMinutes(art.content);
     const data = {
-      title: proc.title,
-      content: proc.content,
+      title: art.title,
+      content: art.content,
       isPublished: true,
-      excerpt: proc.excerpt || null,
-      tags: proc.tags || [],
+      excerpt: art.excerpt || null,
+      tags: art.tags || [],
       wordCount,
       readingTimeMinutes: readingTime,
       lastRevisedBy: user.name,
+      parentId,
     };
-    const existing = await prisma.wikiArticle.findUnique({ where: { slug: proc.slug } });
+    const existing = await prisma.wikiArticle.findUnique({ where: { slug: art.slug } });
     if (existing) {
-      console.log("Article déjà existant : " + proc.slug + ", mis à jour.");
-      await prisma.wikiArticle.update({
-        where: { id: existing.id },
-        data,
-      });
+      await prisma.wikiArticle.update({ where: { id: existing.id }, data });
+      console.log("Mis à jour : " + art.slug);
     } else {
       await prisma.wikiArticle.create({
-        data: {
-          ...data,
-          slug: proc.slug,
-          authorId: user.id,
-        },
+        data: { ...data, slug: art.slug, authorId: user.id },
       });
-      console.log("Créé : " + proc.slug);
+      console.log("Créé : " + art.slug);
     }
+  };
+
+  for (const proc of PROCEDURES) await upsert(proc);
+  await upsert(GUIDE_MARKDOWN);
+
+  const roots = EXTRA_ARTICLES.filter((a) => !a.parentSlug);
+  const children = EXTRA_ARTICLES.filter((a) => a.parentSlug);
+  for (const art of roots) await upsert(art);
+  for (const art of children) {
+    const parent = await prisma.wikiArticle.findUnique({ where: { slug: art.parentSlug } });
+    await upsert(art, parent ? parent.id : null);
   }
-  console.log("Seed Wiki terminé : 3 articles disponibles pour les tests (liste, détail, module IA).");
+
+  console.log("Seed Wiki terminé : " + (PROCEDURES.length + 1 + EXTRA_ARTICLES.length) + " articles (procédures, guide-markdown, onboarding, FAQ, backlinks).");
 }
 
 main()

@@ -96,7 +96,7 @@ export default function WikiSearchPage() {
             className="flex-1 min-w-[200px] px-3 py-2 rounded border text-sm"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           />
-          <Button type="submit" size="small" disabled={loading || !session}>
+          <Button type="submit" size="small" disabled={loading}>
             {loading ? "Recherche…" : "Rechercher"}
           </Button>
         </form>
@@ -110,16 +110,7 @@ export default function WikiSearchPage() {
         </div>
       )}
 
-      {!session && status !== "loading" && (
-        <Panel variant="info" title="Connexion requise" className="mb-6">
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-            Connectez-vous pour rechercher dans le wiki.
-          </p>
-          <Link href="/modules/wiki" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour au Wiki</Link>
-        </Panel>
-      )}
-
-      {!loading && searched && session && (
+      {!loading && searched && (
         <>
           <section className="mb-8">
             <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>

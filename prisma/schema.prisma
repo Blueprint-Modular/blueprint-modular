@@ -74,7 +74,8 @@ model WikiRevision {
   id         String     @id @default(cuid())
   articleId  String     @map("article_id")
   content    String     @db.Text
-  authorId   String?     @map("author_id")
+  title      String     @default("") // snapshot du titre au moment de la révision (CDC Part 1.2)
+  authorId   String?    @map("author_id")
   authorName String?    @map("author_name")
   changeNote String?    @map("change_note") @db.Text
   createdAt  DateTime   @default(now()) @map("created_at")

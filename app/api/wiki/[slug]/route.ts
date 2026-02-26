@@ -19,8 +19,7 @@ export async function GET(
   context: { params: Params }
 ) {
   const result = await getSessionOrTestUser();
-  if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { user } = result;
+  const user = result?.user ?? null;
   const { slug: rawSlug } = await resolveParams(context.params);
   const slug = normalizeSlug(rawSlug);
   const { searchParams } = new URL(request.url);
@@ -32,7 +31,7 @@ export async function GET(
       : { slug, isPublished: true },
     include: {
       author: { select: { name: true, email: true } },
-      children: { select: { id: true, title: true, slug: true, excerpt: true, tags: true, pinned: true } },
+      children: { select: { id: true, title: true, slug: true, excerpt: true, tags: true, pinned: true, isPublished: true } },
     },
   });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -44,7 +43,24 @@ export async function GET(
     });
   }
 
-  const payload = { ...article, ...(incView ? { viewCount: article.viewCount + 1 } : {}) };
+  const siblings = await prisma.wikiArticle.findMany({
+    where: {
+      parentId: article.parentId,
+      OR: user ? [{ isPublished: true }, { authorId: user.id }] : [{ isPublished: true }],
+    },
+    orderBy: { title: "asc" },
+    select: { slug: true },
+  });
+  const idx = siblings.findIndex((s) => s.slug === article.slug);
+  const prevSlug = idx > 0 ? siblings[idx - 1]?.slug ?? null : null;
+  const nextSlug = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1]?.slug ?? null : null;
+
+  const payload = {
+    ...article,
+    ...(incView ? { viewCount: article.viewCount + 1 } : {}),
+    prevSlug: prevSlug ?? undefined,
+    nextSlug: nextSlug ?? undefined,
+  };
   return NextResponse.json(payload);
 }
 
@@ -88,6 +104,7 @@ export async function PUT(
       data: {
         articleId: article.id,
         content: article.content,
+        title: article.title,
         authorId: article.authorId,
         authorName: user.name ?? undefined,
         changeNote: body.changeNote ?? undefined,
@@ -142,7 +159,7 @@ export async function PUT(
     where: { id: article.id },
     include: {
       author: { select: { name: true, email: true } },
-      children: { select: { id: true, title: true, slug: true, excerpt: true, tags: true, pinned: true } },
+      children: { select: { id: true, title: true, slug: true, excerpt: true, tags: true, pinned: true, isPublished: true } },
     },
   });
   return NextResponse.json(updated);

@@ -119,7 +119,7 @@ export function Sidebar() {
   const mobileNavBar = (
     <aside
       aria-label="Navigation mobile"
-      className="fixed left-0 right-0 bottom-0 z-40 md:hidden flex flex-row items-stretch border-t pb-[env(safe-area-inset-bottom,0)] pt-2"
+      className="fixed left-0 right-0 bottom-0 z-40 md:hidden flex flex-row items-stretch border-t pb-[env(safe-area-inset-bottom,0)] pt-2 bpm-mobile-nav-bar"
       style={{
         background: "var(--bpm-sidebar-bg)",
         color: "var(--bpm-sidebar-text)",

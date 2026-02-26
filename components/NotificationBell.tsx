@@ -145,26 +145,31 @@ export function NotificationBell() {
   const toggleRef = useRef(toggle);
   toggleRef.current = toggle;
 
-  /** Sur mobile, même problème que le burger doc : le click peut ne pas se déclencher ou être perdu.
-   * Écouteur natif touchend avec passive: false pour que preventDefault soit pris en compte (React attache souvent en passive). */
+  /** Sur mobile/PWA, le click peut ne pas se déclencher ou être perdu. touchend natif (passive: false)
+   * attaché après le rendu (ref disponible au prochain tick). Même référence pour add/remove au cleanup. */
   useEffect(() => {
     if (!isMobile) return;
-    const btn = mobileButtonRef.current;
-    if (!btn) return;
-    const onTouchEnd = (e: TouchEvent) => {
+    const handler = (e: TouchEvent) => {
       e.preventDefault();
       touchHandledRef.current = true;
       toggleRef.current();
     };
-    btn.addEventListener("touchend", onTouchEnd, { passive: false });
-    return () => btn.removeEventListener("touchend", onTouchEnd);
+    queueMicrotask(() => {
+      const btn = mobileButtonRef.current;
+      if (!btn) return;
+      btn.addEventListener("touchend", handler, { passive: false });
+    });
+    return () => {
+      const btn = mobileButtonRef.current;
+      if (btn) btn.removeEventListener("touchend", handler);
+    };
   }, [isMobile]);
 
   const handleMobileBellClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     if (touchHandledRef.current) {
       touchHandledRef.current = false;
-      e.preventDefault();
       return;
     }
     toggle();

@@ -169,7 +169,7 @@ export default function AssetManagerTicketsPage() {
           <Spinner size="medium" />
         </div>
       ) : (
-        <Panel variant="default" title={`${filtered.length} ticket(s)`}>
+        <Panel variant="info" title={`${filtered.length} ticket(s)`}>
           <Table
             columns={columns}
             data={filtered}

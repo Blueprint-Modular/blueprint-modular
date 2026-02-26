@@ -132,7 +132,7 @@ export default function AssetManagerTicketDetailPage() {
         </div>
       </Panel>
 
-      <Panel variant="default" title="Modifier le ticket" className="mt-6">
+      <Panel variant="info" title="Modifier le ticket" className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Selectbox
             label="Statut"

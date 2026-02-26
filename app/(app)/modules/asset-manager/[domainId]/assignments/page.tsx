@@ -127,7 +127,7 @@ export default function AssetManagerAssignmentsPage() {
           <Spinner size="medium" />
         </div>
       ) : (
-        <Panel variant="default" title={`${filtered.length} mise(s) à disposition`}>
+        <Panel variant="info" title={`${filtered.length} mise(s) à disposition`}>
           <Table
             columns={columns}
             data={filtered}

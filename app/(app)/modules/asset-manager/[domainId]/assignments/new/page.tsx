@@ -83,7 +83,7 @@ export default function AssetManagerAssignmentNewPage() {
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Nouvelle mise à disposition</h1>
       </div>
 
-      <Panel variant="default" title="Créer une MAD">
+      <Panel variant="info" title="Créer une MAD">
         <form onSubmit={handleSubmit} className="space-y-4">
           <Selectbox
             label="Actif *"

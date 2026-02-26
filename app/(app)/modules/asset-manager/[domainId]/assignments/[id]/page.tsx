@@ -131,7 +131,7 @@ export default function AssetManagerAssignmentDetailPage() {
         </dl>
       </Panel>
 
-      <Panel variant="default" title="Modifier" className="mt-6">
+      <Panel variant="info" title="Modifier" className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Selectbox label="Statut" value={editStatus} onChange={(v) => setEditStatus(String(v))} options={STATUS_OPTIONS} />
           <div>

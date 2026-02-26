@@ -88,7 +88,7 @@ export default function AssetManagerTicketNewPage() {
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Nouveau ticket</h1>
       </div>
 
-      <Panel variant="default" title="Créer un ticket">
+      <Panel variant="info" title="Créer un ticket">
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input label="Titre" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Résumé du problème ou de la demande" />
           <div>

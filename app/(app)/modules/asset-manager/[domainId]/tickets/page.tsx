@@ -21,7 +21,7 @@ type Ticket = {
 type DomainConfig = {
   domain_label: string;
   ticket_categories: { id: string; label: string; subcategories: string[] }[];
-  priorities: { id: string; label: string; color: string }[];
+  priorities: { id: string; label: string; color: string; sla_hours?: number }[];
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -41,6 +41,7 @@ export default function AssetManagerTicketsPage() {
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("");
   const [filterPriority, setFilterPriority] = useState("");
+  const [filterSlaRisk, setFilterSlaRisk] = useState(false);
 
   const fetchTickets = useCallback(() => {
     if (!domainId) return;
@@ -69,9 +70,21 @@ export default function AssetManagerTicketsPage() {
   const getPriorityLabel = (id: string) => config?.priorities?.find((p) => p.id === id)?.label ?? id;
   const getCategoryLabel = (id: string) => config?.ticket_categories?.find((c) => c.id === id)?.label ?? id;
 
+  const openStatuses = ["new", "open", "pending", "in_progress", "on_hold", "assigned"];
+  const isTicketSlaRisk = (t: Ticket) => {
+    if (!openStatuses.includes(t.status)) return false;
+    const prio = config?.priorities?.find((p) => p.id === t.priorityId);
+    const slaHours = prio?.sla_hours ?? 48;
+    const elapsed = (Date.now() - new Date(t.openedAt).getTime()) / (1000 * 60 * 60);
+    const pct = (elapsed / slaHours) * 100;
+    return pct >= 80;
+  };
+  const slaRiskCount = tickets.filter(isTicketSlaRisk).length;
+
   const filtered = tickets.filter((t) => {
     if (filterStatus && t.status !== filterStatus) return false;
     if (filterPriority && t.priorityId !== filterPriority) return false;
+    if (filterSlaRisk && !isTicketSlaRisk(t)) return false;
     return true;
   });
 
@@ -147,7 +160,7 @@ export default function AssetManagerTicketsPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 mb-4">
+      <div className="flex flex-wrap items-center gap-4 mb-4">
         <Selectbox
           label="Statut"
           value={filterStatus}
@@ -162,6 +175,20 @@ export default function AssetManagerTicketsPage() {
           options={priorityOptions}
           placeholder="Toutes"
         />
+        {slaRiskCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setFilterSlaRisk((v) => !v)}
+            className={`rounded px-3 py-1.5 text-sm font-medium ${filterSlaRisk ? "ring-2 ring-offset-2" : ""}`}
+            style={
+              filterSlaRisk
+                ? { background: "var(--bpm-accent)", color: "#fff" }
+                : { background: "var(--bpm-accent-amber, #f59e0b)", color: "#fff" }
+            }
+          >
+            {slaRiskCount} en danger SLA
+          </button>
+        )}
       </div>
 
       {loading ? (

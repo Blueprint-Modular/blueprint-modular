@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Panel, Button, Spinner, Input, Selectbox } from "@/components/bpm";
 
 const CATEGORY_OPTIONS = [
@@ -16,7 +16,9 @@ const CATEGORY_OPTIONS = [
 export default function AssetManagerKnowledgeNewPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const domainId = typeof params?.domainId === "string" ? params.domainId : "";
+  const fromTicketId = searchParams.get("fromTicket");
   const [config, setConfig] = useState<{ asset_types?: { id: string; label: string }[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -34,6 +36,18 @@ export default function AssetManagerKnowledgeNewPage() {
       .then(setConfig)
       .finally(() => setLoading(false));
   }, [domainId]);
+
+  useEffect(() => {
+    if (!fromTicketId || !domainId) return;
+    fetch(`/api/asset-manager/tickets/${fromTicketId}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((t: { title?: string; solution?: string | null; description?: string } | null) => {
+        if (t) {
+          setTitle(t.title ?? "");
+          setContent([t.solution, t.description].filter(Boolean).join("\n\n---\n\n") || "");
+        }
+      });
+  }, [fromTicketId, domainId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +93,9 @@ export default function AssetManagerKnowledgeNewPage() {
           <Link href={`/modules/asset-manager/${domainId}/knowledge`} style={{ color: "var(--bpm-accent-cyan)" }}>Base de connaissances</Link> → Nouveau
         </nav>
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Nouvel article</h1>
+        {fromTicketId && (
+          <p className="text-sm mt-1" style={{ color: "var(--bpm-text-secondary)" }}>Prérempli depuis le ticket</p>
+        )}
       </div>
 
       <Panel variant="info" title="Créer un article">

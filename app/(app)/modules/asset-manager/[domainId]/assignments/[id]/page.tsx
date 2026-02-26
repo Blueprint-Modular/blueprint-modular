@@ -38,9 +38,27 @@ export default function AssetManagerAssignmentDetailPage() {
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [returning, setReturning] = useState(false);
   const [editStatus, setEditStatus] = useState("");
   const [editConditionReturn, setEditConditionReturn] = useState("");
   const [editContractSigned, setEditContractSigned] = useState(false);
+
+  const handleReturn = () => {
+    if (!assignment || assignment.status !== "active" || returning) return;
+    if (!confirm("Clôturer cette mise à disposition et remettre l’actif en stock ?")) return;
+    setReturning(true);
+    fetch(`/api/asset-manager/assignments/${id}/return`, { method: "POST", credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((updated) => {
+        if (updated) {
+          setAssignment(updated);
+          setEditStatus(updated.status);
+          setEditConditionReturn(updated.conditionAtReturn ?? "");
+          setEditContractSigned(updated.contractSigned);
+        }
+      })
+      .finally(() => setReturning(false));
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -107,6 +125,17 @@ export default function AssetManagerAssignmentDetailPage() {
           {assignment.asset?.label ?? "—"} — Bénéficiaire : {assignment.assignee?.name ?? assignment.assignee?.email ?? "—"}
         </p>
       </div>
+
+      {assignment.status === "active" && (
+        <Panel variant="info" title="Restituer l’actif" className="mb-6">
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Clôture la MAD, enregistre la date de retour et remet l’actif en stock.
+          </p>
+          <Button variant="primary" size="small" onClick={handleReturn} disabled={returning}>
+            {returning ? "En cours…" : "Restituer l’actif"}
+          </Button>
+        </Panel>
+      )}
 
       <Panel variant="info" title="Informations">
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">

@@ -25,7 +25,7 @@ type Ticket = {
 };
 
 type DomainConfig = {
-  priorities: { id: string; label: string }[];
+  priorities: { id: string; label: string; sla_hours?: number }[];
   ticket_categories: { id: string; label: string; subcategories: string[] }[];
 };
 
@@ -103,6 +103,14 @@ export default function AssetManagerTicketDetailPage() {
   const getPriorityLabel = (pid: string) => config?.priorities?.find((p) => p.id === pid)?.label ?? pid;
   const getCategoryLabel = (cid: string) => config?.ticket_categories?.find((c) => c.id === cid)?.label ?? cid;
 
+  const openStatuses = ["new", "open", "pending", "in_progress", "on_hold", "assigned"];
+  const isOpen = openStatuses.includes(ticket.status);
+  const slaHours = config?.priorities?.find((p) => p.id === ticket.priorityId)?.sla_hours ?? 48;
+  const elapsedHours = (Date.now() - new Date(ticket.openedAt).getTime()) / (1000 * 60 * 60);
+  const slaPercent = isOpen && slaHours > 0 ? Math.min(150, Math.round((elapsedHours / slaHours) * 100)) : 0;
+  const slaColor =
+    !isOpen ? "var(--bpm-text-secondary)" : slaPercent >= 100 ? "var(--bpm-accent)" : slaPercent >= 80 ? "var(--bpm-accent-amber, #f59e0b)" : "var(--bpm-accent-mint)";
+
   return (
     <div className="doc-page">
       <div className="doc-page-header mb-6">
@@ -116,6 +124,24 @@ export default function AssetManagerTicketDetailPage() {
           {ticket.reference} — Ouvert le {new Date(ticket.openedAt).toLocaleDateString("fr-FR")} — {getPriorityLabel(ticket.priorityId)} — {getCategoryLabel(ticket.categoryId)}
         </p>
       </div>
+
+      {isOpen && (
+        <Panel variant="info" title="SLA" className="mt-4">
+          <div className="flex justify-between items-center mb-1 text-sm">
+            <span style={{ color: "var(--bpm-text-secondary)" }}>Temps consommé (objectif : {slaHours} h)</span>
+            <span className="tabular-nums font-medium" style={{ color: slaColor }}>{slaPercent} %</span>
+          </div>
+          <div className="h-3 rounded-full overflow-hidden" style={{ background: "var(--bpm-bg-secondary)" }}>
+            <div
+              className="h-full rounded-full transition-[width]"
+              style={{ width: `${Math.min(100, slaPercent)}%`, background: slaColor }}
+            />
+          </div>
+          {slaPercent >= 100 && (
+            <p className="text-xs mt-1" style={{ color: "var(--bpm-accent)" }}>SLA dépassé</p>
+          )}
+        </Panel>
+      )}
 
       <Panel variant="info" title="Informations">
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
@@ -131,6 +157,17 @@ export default function AssetManagerTicketDetailPage() {
           <div className="whitespace-pre-wrap rounded p-3" style={{ background: "var(--bpm-bg-secondary)" }}>{ticket.description}</div>
         </div>
       </Panel>
+
+      {(ticket.status === "resolved" || ticket.status === "closed") && (
+        <Panel variant="info" title="Base de connaissances" className="mt-6">
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Créez un article à partir de ce ticket pour enrichir la base de connaissances.
+          </p>
+          <Link href={`/modules/asset-manager/${domainId}/knowledge/new?fromTicket=${ticket.id}`}>
+            <Button variant="outline" size="small">Publier en base de connaissance</Button>
+          </Link>
+        </Panel>
+      )}
 
       <Panel variant="info" title="Modifier le ticket" className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

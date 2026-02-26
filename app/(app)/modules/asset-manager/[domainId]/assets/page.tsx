@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
 
 interface Asset {
@@ -11,6 +11,7 @@ interface Asset {
   label: string;
   assetTypeId: string;
   statusId: string;
+  lifecycleStage?: string | null;
   attributes: { key: string; valueText: string | null; valueNumber: number | null; valueDate: string | null; valueBool: boolean | null }[];
 }
 
@@ -19,23 +20,33 @@ interface DomainConfig {
   asset_label_plural: string;
   asset_types: { id: string; label: string }[];
   statuses: { id: string; label: string; color: string }[];
+  lifecycle_stages?: { id: string; label: string }[];
 }
 
 export default function AssetManagerAssetsPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const domainId = typeof params?.domainId === "string" ? params.domainId : "";
   const [config, setConfig] = useState<DomainConfig | null>(null);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const [filterLifecycle, setFilterLifecycle] = useState("");
+
+  useEffect(() => {
+    setFilterType(searchParams.get("assetTypeId") ?? "");
+    setFilterStatus(searchParams.get("statusId") ?? "");
+    setFilterLifecycle(searchParams.get("lifecycleStage") ?? "");
+  }, [searchParams]);
 
   const fetchAssets = useCallback(() => {
     if (!domainId) return;
     const params = new URLSearchParams({ domainId });
     if (filterType) params.set("assetTypeId", filterType);
     if (filterStatus) params.set("statusId", filterStatus);
+    if (filterLifecycle !== "") params.set("lifecycleStage", filterLifecycle);
     fetch(`/api/asset-manager/assets?${params}`, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => {
@@ -43,7 +54,7 @@ export default function AssetManagerAssetsPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [domainId, filterType, filterStatus]);
+  }, [domainId, filterType, filterStatus, filterLifecycle]);
 
   useEffect(() => {
     if (!domainId) {
@@ -60,6 +71,8 @@ export default function AssetManagerAssetsPage() {
 
   const getStatusLabel = (id: string) => config?.statuses.find((s) => s.id === id)?.label ?? id;
   const getTypeLabel = (id: string) => config?.asset_types.find((t) => t.id === id)?.label ?? id;
+  const getLifecycleLabel = (id: string | null | undefined) =>
+    id ? (config?.lifecycle_stages?.find((s) => s.id === id)?.label ?? id) : "—";
 
   const columns = [
     { key: "reference", label: "Référence" },
@@ -84,6 +97,15 @@ export default function AssetManagerAssetsPage() {
         </span>
       ),
     },
+    {
+      key: "lifecycleStage",
+      label: "Cycle de vie",
+      render: (val: unknown) => (
+        <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+          {getLifecycleLabel(val as string | null)}
+        </span>
+      ),
+    },
   ];
 
   const typeOptions = [
@@ -93,6 +115,10 @@ export default function AssetManagerAssetsPage() {
   const statusOptions = [
     { value: "", label: "Tous les statuts" },
     ...(config?.statuses.map((s) => ({ value: s.id, label: s.label })) ?? []),
+  ];
+  const lifecycleOptions = [
+    { value: "", label: "Toutes les étapes" },
+    ...(config?.lifecycle_stages?.map((s) => ({ value: s.id, label: s.label })) ?? []),
   ];
 
   if (!config && !loading) {
@@ -140,6 +166,12 @@ export default function AssetManagerAssetsPage() {
           onChange={(v) => setFilterStatus(v ?? "")}
           placeholder="Statut"
         />
+        <Selectbox
+          options={lifecycleOptions}
+          value={filterLifecycle}
+          onChange={(v) => setFilterLifecycle(v ?? "")}
+          placeholder="Cycle de vie"
+        />
         <Link href={`/modules/asset-manager/${domainId}/assets/nouveau`}>
           <Button variant="primary">Nouvel actif</Button>
         </Link>
@@ -157,7 +189,7 @@ export default function AssetManagerAssetsPage() {
         <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
             columns={columns}
-            data={assets.map((a) => ({ id: a.id, reference: a.reference, label: a.label, assetTypeId: a.assetTypeId, statusId: a.statusId }))}
+            data={assets.map((a) => ({ id: a.id, reference: a.reference, label: a.label, assetTypeId: a.assetTypeId, statusId: a.statusId, lifecycleStage: a.lifecycleStage ?? null }))}
             onRowClick={(row) => {
               const id = (row as { id?: string }).id;
               if (id) router.push(`/modules/asset-manager/${domainId}/assets/${id}`);

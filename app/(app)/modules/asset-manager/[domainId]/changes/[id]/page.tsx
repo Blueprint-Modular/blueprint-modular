@@ -35,6 +35,7 @@ export default function AssetManagerChangeDetailPage() {
   const [change, setChange] = useState<ChangeRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [rejectComment, setRejectComment] = useState("");
 
   useEffect(() => {
     if (!domainId || !id) return;
@@ -55,6 +56,36 @@ export default function AssetManagerChangeDetailPage() {
         body: JSON.stringify({ status: value }),
       });
       if (res.ok) setChange(await res.json());
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    if (!change || saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/asset-manager/changes/${change.id}/approve`, { method: "POST", credentials: "include" });
+      if (res.ok) setChange(await res.json());
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!change || saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/asset-manager/changes/${change.id}/reject`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ comment: rejectComment.trim() || undefined }),
+      });
+      if (res.ok) {
+        setChange(await res.json());
+        setRejectComment("");
+      }
     } finally {
       setSaving(false);
     }
@@ -90,6 +121,33 @@ export default function AssetManagerChangeDetailPage() {
           {change.reference} — {TYPE_LABELS[change.type] ?? change.type} — {RISK_LABELS[change.riskLevel] ?? change.riskLevel}
         </p>
       </div>
+
+      {change.status === "cab_review" && (
+        <Panel variant="warning" title="Revue CAB" className="mb-4">
+          <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+            Approuvez ou rejetez cette demande de changement.
+          </p>
+          <div className="flex flex-wrap items-end gap-4">
+            <Button variant="primary" size="small" onClick={handleApprove} disabled={saving}>
+              {saving ? "En cours…" : "Approuver"}
+            </Button>
+            <div className="flex-1 min-w-[200px]">
+              <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Commentaire de rejet (optionnel)</label>
+              <input
+                type="text"
+                value={rejectComment}
+                onChange={(e) => setRejectComment(e.target.value)}
+                placeholder="Motif du rejet..."
+                className="w-full rounded border p-2 text-sm"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+              />
+            </div>
+            <Button variant="outline" size="small" onClick={handleReject} disabled={saving}>
+              Rejeter
+            </Button>
+          </div>
+        </Panel>
+      )}
 
       <Panel variant="info" title="Statut" className="mb-4">
         <div className="flex flex-wrap items-center gap-2">

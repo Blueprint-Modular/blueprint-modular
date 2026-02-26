@@ -24,19 +24,36 @@ export default function AssetManagerTicketNewPage() {
   const [priorityId, setPriorityId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [subcategory, setSubcategory] = useState("");
+  const [assetId, setAssetId] = useState("");
+  const [assets, setAssets] = useState<{ id: string; reference: string; label: string }[]>([]);
+  const [suggestedArticles, setSuggestedArticles] = useState<{ id: string; title: string; slug: string }[]>([]);
 
   useEffect(() => {
     if (!domainId) return;
-    fetch(`/api/asset-manager/config/${domainId}`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((cfg) => {
+    Promise.all([
+      fetch(`/api/asset-manager/config/${domainId}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : null)),
+      fetch(`/api/asset-manager/assets?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
+    ])
+      .then(([cfg, list]) => {
         setConfig(cfg);
+        setAssets(Array.isArray(list) ? list : []);
         if (cfg?.priorities?.length) setPriorityId(cfg.priorities[0].id);
         if (cfg?.ticket_categories?.length) setCategoryId(cfg.ticket_categories[0].id);
         if (cfg?.ticket_types?.length) setTypeId(cfg.ticket_types[0]);
       })
       .finally(() => setLoading(false));
   }, [domainId]);
+
+  useEffect(() => {
+    if (!domainId || !categoryId) {
+      setSuggestedArticles([]);
+      return;
+    }
+    const params = new URLSearchParams({ domainId, categoryId });
+    fetch(`/api/asset-manager/knowledge?${params}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list: { id: string; title: string; slug: string }[]) => setSuggestedArticles(Array.isArray(list) ? list.slice(0, 5) : []));
+  }, [domainId, categoryId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +71,7 @@ export default function AssetManagerTicketNewPage() {
         priorityId: priorityId || undefined,
         categoryId: categoryId || undefined,
         subcategory: subcategory.trim() || null,
+        assetId: assetId.trim() || null,
       }),
     })
       .then((r) => (r.ok ? r.json() : null))
@@ -114,6 +132,34 @@ export default function AssetManagerTicketNewPage() {
           )}
           {subcategoryOptions.length > 0 && (
             <Selectbox label="Sous-catégorie" value={subcategory} onChange={(v) => setSubcategory(String(v))} options={[{ value: "", label: "—" }, ...subcategoryOptions]} />
+          )}
+          {assets.length > 0 && (
+            <Selectbox
+              label="Actif concerné"
+              value={assetId}
+              onChange={(v) => setAssetId(String(v))}
+              options={[{ value: "", label: "— Aucun" }, ...assets.map((a) => ({ value: a.id, label: `${a.reference} — ${a.label}` }))]}
+            />
+          )}
+          {suggestedArticles.length > 0 && (
+            <div className="rounded-lg border p-3" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+              <div className="text-sm font-medium mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Articles susceptibles de vous aider</div>
+              <ul className="space-y-1 text-sm">
+                {suggestedArticles.map((a) => (
+                  <li key={a.id}>
+                    <Link
+                      href={`/modules/asset-manager/${domainId}/knowledge/${a.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                      style={{ color: "var(--bpm-accent-cyan)" }}
+                    >
+                      {a.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           <div className="flex gap-2 pt-2">
             <Button type="submit" size="small" disabled={saving || !title.trim() || !description.trim()}>

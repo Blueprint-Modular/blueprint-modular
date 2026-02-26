@@ -14,6 +14,7 @@ export async function GET(request: Request) {
   const domainId = searchParams.get("domainId");
   const assetTypeId = searchParams.get("assetTypeId");
   const statusId = searchParams.get("statusId");
+  const lifecycleStageParam = searchParams.get("lifecycleStage");
   const search = searchParams.get("search")?.trim();
 
   if (!domainId || !getDomainConfig(domainId)) {
@@ -23,6 +24,8 @@ export async function GET(request: Request) {
   const where: Prisma.AssetWhereInput = { domainId };
   if (assetTypeId) where.assetTypeId = assetTypeId;
   if (statusId) where.statusId = statusId;
+  if (lifecycleStageParam !== null && lifecycleStageParam !== undefined)
+    where.lifecycleStage = lifecycleStageParam.trim() || null;
   if (search) {
     where.OR = [
       { reference: { contains: search, mode: "insensitive" } },

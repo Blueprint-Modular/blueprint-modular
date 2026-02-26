@@ -60,6 +60,9 @@ type CIRelation = {
   targetAsset: { id: string; reference: string; label: string };
 };
 
+type TicketSummary = { id: string; reference: string; title: string; status: string; openedAt: string };
+type ContractSummary = { id: string; reference: string; label: string; type: string; endDate: string | null; assetIds: string | null };
+
 const DEFAULT_LIFECYCLE_STAGES = [
   { id: "achat", label: "Achat" },
   { id: "reception", label: "Réception" },
@@ -93,6 +96,10 @@ export default function AssetDetailPage() {
   const [newRelationType, setNewRelationType] = useState("depends_on");
   const [savingRelation, setSavingRelation] = useState(false);
   const [domainAssets, setDomainAssets] = useState<{ id: string; reference: string; label: string }[]>([]);
+  const [tickets, setTickets] = useState<TicketSummary[]>([]);
+  const [contracts, setContracts] = useState<ContractSummary[]>([]);
+  const [loadingTickets, setLoadingTickets] = useState(false);
+  const [loadingContracts, setLoadingContracts] = useState(false);
 
   useEffect(() => {
     if (!domainId || !id) return;
@@ -134,6 +141,36 @@ export default function AssetDetailPage() {
     if (!asset?.id) return;
     fetchRelations();
   }, [asset?.id, fetchRelations]);
+
+  useEffect(() => {
+    if (!domainId || !id) return;
+    setLoadingTickets(true);
+    fetch(`/api/asset-manager/tickets?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list: { assetId?: string | null }[]) => setTickets(Array.isArray(list) ? list.filter((t) => t.assetId === id) as TicketSummary[] : []))
+      .finally(() => setLoadingTickets(false));
+  }, [domainId, id]);
+
+  useEffect(() => {
+    if (!domainId || !id) return;
+    setLoadingContracts(true);
+    fetch(`/api/asset-manager/contracts?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list: ContractSummary[]) => {
+        const filtered = Array.isArray(list)
+          ? list.filter((c) => {
+              try {
+                const ids: string[] = c.assetIds ? JSON.parse(c.assetIds) : [];
+                return ids.includes(id);
+              } catch (_) {
+                return false;
+              }
+            })
+          : [];
+        setContracts(filtered);
+      })
+      .finally(() => setLoadingContracts(false));
+  }, [domainId, id]);
 
   const handleAddRelation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -411,6 +448,77 @@ export default function AssetDetailPage() {
                 {m.notes && <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>— {m.notes}</span>}
               </li>
             ))}
+          </ul>
+        )}
+      </Panel>
+
+      <Panel variant="info" title="Tickets" className="mt-4">
+        {loadingTickets ? (
+          <div className="flex justify-center py-4">
+            <Spinner size="small" />
+          </div>
+        ) : tickets.length === 0 ? (
+          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun ticket lié à cet actif.</p>
+        ) : (
+          <ul className="space-y-2">
+            {tickets.map((t) => (
+              <li key={t.id} className="flex flex-wrap items-baseline gap-2 py-2 border-b border-[var(--bpm-border)] last:border-0 text-sm">
+                <Link
+                  href={`/modules/asset-manager/${domainId}/tickets/${t.id}`}
+                  className="font-medium hover:underline"
+                  style={{ color: "var(--bpm-accent-cyan)" }}
+                >
+                  {t.reference}
+                </Link>
+                <span style={{ color: "var(--bpm-text-primary)" }}>{t.title}</span>
+                <span className="rounded px-2 py-0.5 text-xs" style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}>
+                  {t.status}
+                </span>
+                <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
+                  {new Date(t.openedAt).toLocaleDateString("fr-FR")}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+
+      <Panel variant="info" title="Contrats" className="mt-4">
+        {loadingContracts ? (
+          <div className="flex justify-center py-4">
+            <Spinner size="small" />
+          </div>
+        ) : contracts.length === 0 ? (
+          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun contrat couvrant cet actif.</p>
+        ) : (
+          <ul className="space-y-2">
+            {contracts.map((c) => {
+              const endDate = c.endDate ? new Date(c.endDate) : null;
+              const isExpired = endDate ? endDate < new Date() : false;
+              return (
+                <li key={c.id} className="flex flex-wrap items-baseline gap-2 py-2 border-b border-[var(--bpm-border)] last:border-0 text-sm">
+                  <Link
+                    href={`/modules/asset-manager/${domainId}/contracts/${c.id}`}
+                    className="font-medium hover:underline"
+                    style={{ color: "var(--bpm-accent-cyan)" }}
+                  >
+                    {c.reference}
+                  </Link>
+                  <span style={{ color: "var(--bpm-text-primary)" }}>{c.label}</span>
+                  <span className="rounded px-2 py-0.5 text-xs" style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}>
+                    {c.type}
+                  </span>
+                  {endDate && (
+                    <span
+                      className={`rounded px-2 py-0.5 text-xs font-medium ${isExpired ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300" : ""}`}
+                      style={!isExpired ? { background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" } : undefined}
+                    >
+                      Fin : {endDate.toLocaleDateString("fr-FR")}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </Panel>

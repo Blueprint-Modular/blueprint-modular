@@ -28,6 +28,11 @@ export default function AssetManagerDomainPage() {
   const [contractCount, setContractCount] = useState(0);
   const [knowledgeCount, setKnowledgeCount] = useState(0);
   const [changeCount, setChangeCount] = useState(0);
+  const [alerts, setAlerts] = useState<{ contractsExpiring30: number; ticketsSlaRisk: number; assetsOutOfService: number }>({
+    contractsExpiring30: 0,
+    ticketsSlaRisk: 0,
+    assetsOutOfService: 0,
+  });
 
   useEffect(() => {
     if (!domainId) return;
@@ -42,12 +47,32 @@ export default function AssetManagerDomainPage() {
     ])
       .then(([cfg, list, tickets, assignments, contracts, knowledge, changes]) => {
         setConfig(cfg);
-        setAssets(Array.isArray(list) ? list : []);
+        const assetList = Array.isArray(list) ? list : [];
+        setAssets(assetList);
         setTicketCount(Array.isArray(tickets) ? tickets.length : 0);
         setAssignmentCount(Array.isArray(assignments) ? assignments.length : 0);
         setContractCount(Array.isArray(contracts) ? contracts.length : 0);
         setKnowledgeCount(Array.isArray(knowledge) ? knowledge.length : 0);
         setChangeCount(Array.isArray(changes) ? changes.length : 0);
+        const priorities = (cfg as DomainConfig)?.priorities ?? [];
+        const openStatuses = ["new", "open", "pending", "in_progress", "assigned"];
+        const now = Date.now();
+        const in30Days = now + 30 * 24 * 60 * 60 * 1000;
+        const contractsExpiring30 = (Array.isArray(contracts) ? contracts : []).filter((c: { endDate?: string | null }) => {
+          const end = c.endDate ? new Date(c.endDate).getTime() : null;
+          return end != null && end >= now && end <= in30Days;
+        }).length;
+        const ticketsSlaRisk = (Array.isArray(tickets) ? tickets : []).filter((t: { status: string; openedAt: string; priorityId: string }) => {
+          if (!openStatuses.includes(t.status)) return false;
+          const prio = priorities.find((p: { id: string; sla_hours: number }) => p.id === t.priorityId);
+          const slaHours = prio?.sla_hours ?? 48;
+          const opened = new Date(t.openedAt).getTime();
+          const elapsed = (now - opened) / (1000 * 60 * 60);
+          const pct = (elapsed / slaHours) * 100;
+          return pct >= 80;
+        }).length;
+        const assetsOutOfService = assetList.filter((a: { statusId: string }) => a.statusId === "out_of_service").length;
+        setAlerts({ contractsExpiring30, ticketsSlaRisk, assetsOutOfService });
       })
       .finally(() => setLoading(false));
   }, [domainId]);
@@ -158,6 +183,45 @@ export default function AssetManagerDomainPage() {
           <Metric label="Changements" value={changeCount} />
         </Link>
       </div>
+
+      {(alerts.contractsExpiring30 > 0 || alerts.ticketsSlaRisk > 0 || alerts.assetsOutOfService > 0) && (
+        <Panel variant="warning" title="Alertes" className="mb-6">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-3 text-sm">
+            {alerts.contractsExpiring30 > 0 && (
+              <Link
+                href={`/modules/asset-manager/${domainId}/contracts`}
+                className="flex items-center gap-2 p-3 rounded-lg border"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+              >
+                <span className="font-semibold" style={{ color: "var(--bpm-accent-amber, #f59e0b)" }}>
+                  {alerts.contractsExpiring30}
+                </span>
+                <span style={{ color: "var(--bpm-text-primary)" }}>contrat(s) arrivant à échéance sous 30 jours</span>
+              </Link>
+            )}
+            {alerts.ticketsSlaRisk > 0 && (
+              <Link
+                href={`/modules/asset-manager/${domainId}/tickets`}
+                className="flex items-center gap-2 p-3 rounded-lg border"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+              >
+                <span className="font-semibold" style={{ color: "var(--bpm-accent)" }}>{alerts.ticketsSlaRisk}</span>
+                <span style={{ color: "var(--bpm-text-primary)" }}>ticket(s) en danger ou dépassement SLA</span>
+              </Link>
+            )}
+            {alerts.assetsOutOfService > 0 && (
+              <Link
+                href={`/modules/asset-manager/${domainId}/assets?statusId=out_of_service`}
+                className="flex items-center gap-2 p-3 rounded-lg border"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+              >
+                <span className="font-semibold" style={{ color: "var(--bpm-accent)" }}>{alerts.assetsOutOfService}</span>
+                <span style={{ color: "var(--bpm-text-primary)" }}>actif(s) hors service</span>
+              </Link>
+            )}
+          </div>
+        </Panel>
+      )}
 
       <Panel variant="info" title={config.asset_label_plural}>
         <div className="flex justify-between items-center mb-4">

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
 
 type ChangeRequest = {
@@ -46,11 +46,16 @@ const RISK_LABELS: Record<string, string> = {
 export default function AssetManagerChangesPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const domainId = typeof params?.domainId === "string" ? params.domainId : "";
   const [changes, setChanges] = useState<ChangeRequest[]>([]);
   const [config, setConfig] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStatus, setFilterStatus] = useState(() => searchParams.get("status") ?? "");
+
+  useEffect(() => {
+    setFilterStatus(searchParams.get("status") ?? "");
+  }, [searchParams]);
 
   useEffect(() => {
     if (!domainId) {
@@ -109,14 +114,28 @@ export default function AssetManagerChangesPage() {
               Demandes de changement (CAB), planification et suivi.
             </p>
           </div>
-          <Link href={`/modules/asset-manager/${domainId}/changes/new`}>
-            <Button size="small">+ Nouvelle demande</Button>
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link href={`/modules/asset-manager/${domainId}/changes/calendar`}>
+              <Button size="small" variant="outline">Calendrier</Button>
+            </Link>
+            <Link href={`/modules/asset-manager/${domainId}/changes/new`}>
+              <Button size="small">+ Nouvelle demande</Button>
+            </Link>
+          </div>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-4">
         <Selectbox label="Statut" value={filterStatus} onChange={(v) => setFilterStatus(String(v))} options={statusOptions} placeholder="Tous" />
+        {!loading && changes.filter((c) => c.status === "cab_review").length > 0 && !filterStatus && (
+          <Link
+            href={`/modules/asset-manager/${domainId}/changes?status=cab_review`}
+            className="rounded px-3 py-1.5 text-sm font-medium"
+            style={{ background: "var(--bpm-accent-amber, #f59e0b)", color: "#fff" }}
+          >
+            {changes.filter((c) => c.status === "cab_review").length} en attente CAB
+          </Link>
+        )}
       </div>
 
       {loading ? (

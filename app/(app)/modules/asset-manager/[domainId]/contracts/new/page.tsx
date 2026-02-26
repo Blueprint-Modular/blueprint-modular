@@ -30,14 +30,25 @@ export default function AssetManagerContractNewPage() {
   const [noticeDays, setNoticeDays] = useState("30");
   const [autoRenewal, setAutoRenewal] = useState(false);
   const [notes, setNotes] = useState("");
+  const [assetIds, setAssetIds] = useState<string[]>([]);
+  const [assets, setAssets] = useState<{ id: string; reference: string; label: string }[]>([]);
 
   useEffect(() => {
     if (!domainId) return;
-    fetch(`/api/asset-manager/config/${domainId}`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then(setConfig)
+    Promise.all([
+      fetch(`/api/asset-manager/config/${domainId}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : null)),
+      fetch(`/api/asset-manager/assets?domainId=${encodeURIComponent(domainId)}`, { credentials: "include" }).then((r) => (r.ok ? r.json() : [])),
+    ])
+      .then(([cfg, list]) => {
+        setConfig(cfg);
+        setAssets(Array.isArray(list) ? list : []);
+      })
       .finally(() => setLoading(false));
   }, [domainId]);
+
+  const toggleAsset = (aid: string) => {
+    setAssetIds((prev) => (prev.includes(aid) ? prev.filter((id) => id !== aid) : [...prev, aid]));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +70,7 @@ export default function AssetManagerContractNewPage() {
         noticeDays: parseInt(noticeDays, 10) || 30,
         autoRenewal,
         notes: notes.trim() || null,
+        assetIds: assetIds.length > 0 ? assetIds : null,
       }),
     })
       .then((r) => (r.ok ? r.json() : null))
@@ -125,6 +137,28 @@ export default function AssetManagerContractNewPage() {
             onChange={(v) => setAutoRenewal(v === "yes")}
             options={[{ value: "no", label: "Non" }, { value: "yes", label: "Oui" }]}
           />
+          {assets.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--bpm-text-secondary)" }}>Actifs couverts (optionnel)</label>
+              <div className="max-h-40 overflow-y-auto rounded border p-2 space-y-1" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+                {assets.map((a) => (
+                  <label key={a.id} className="flex items-center gap-2 cursor-pointer text-sm">
+                    <input
+                      type="checkbox"
+                      checked={assetIds.includes(a.id)}
+                      onChange={() => toggleAsset(a.id)}
+                      className="rounded"
+                      style={{ accentColor: "var(--bpm-accent-cyan)" }}
+                    />
+                    <span style={{ color: "var(--bpm-text-primary)" }}>{a.reference} — {a.label}</span>
+                  </label>
+                ))}
+              </div>
+              {assetIds.length > 0 && (
+                <p className="text-xs mt-1" style={{ color: "var(--bpm-text-secondary)" }}>{assetIds.length} actif(s) sélectionné(s)</p>
+              )}
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Notes</label>
             <textarea

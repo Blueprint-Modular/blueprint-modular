@@ -138,10 +138,16 @@ export default function NewsletterEditPage() {
             <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>
               Date de publication (optionnel)
             </label>
-            <Input
+            <input
               type="datetime-local"
               value={publishedAt}
-              onChange={setPublishedAt}
+              onChange={(e) => setPublishedAt(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border text-sm min-h-[44px]"
+              style={{
+                borderColor: "var(--bpm-border)",
+                background: "var(--bpm-bg-primary)",
+                color: "var(--bpm-text-primary)",
+              }}
               aria-label="Date de publication"
             />
           </div>

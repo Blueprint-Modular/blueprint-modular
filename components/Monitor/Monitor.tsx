@@ -225,6 +225,10 @@ export default function Monitor() {
   const [showApiKeyPanel, setShowApiKeyPanel] = useState(false);
   // Clé API Claude : uniquement saisie utilisateur ou localStorage, jamais en dur dans le code.
   const [apiKey, setApiKey] = useState(() => (typeof window !== "undefined" ? (localStorage.getItem("bpm-monitor-anthropic-key") ?? "") : ""));
+  // Position du panneau (déplaçable)
+  const PANEL_W = 430;
+  const [panelPos, setPanelPos] = useState<{ left: number; top: number } | null>(null);
+  const dragRef = useRef<{ startX: number; startY: number; startLeft: number; startTop: number } | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -243,6 +247,41 @@ export default function Monitor() {
   useEffect(() => {
     checkHealth().then(() => setPrompteurStatus("ok")).catch(() => setPrompteurStatus("error"));
   }, [checkHealth]);
+
+  // Position initiale du panneau (coin supérieur droit)
+  useEffect(() => {
+    if (typeof window === "undefined" || panelPos !== null) return;
+    setPanelPos({
+      left: Math.max(0, window.innerWidth - PANEL_W - 14),
+      top: 14,
+    });
+  }, [panelPos]);
+
+  // Glisser le panneau (mousemove / mouseup) — listeners globaux pour suivre en dehors du panneau
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!dragRef.current) return;
+      const { startX, startY, startLeft, startTop } = dragRef.current;
+      let left = startLeft + (e.clientX - startX);
+      let top = startTop + (e.clientY - startY);
+      left = Math.max(0, Math.min(left, window.innerWidth - PANEL_W));
+      top = Math.max(0, Math.min(top, window.innerHeight - 200));
+      setPanelPos({ left, top });
+    };
+    const onUp = () => { dragRef.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+
+  const onHeaderDragStart = useCallback((e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest("input")) return;
+    const pos = panelPos ?? { left: window.innerWidth - PANEL_W - 14, top: 14 };
+    dragRef.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top };
+  }, [panelPos]);
 
   const next = useCallback(() => setCur(s => Math.min(s + 1, slides.length - 1)), [slides.length]);
   const prev = useCallback(() => setCur(s => Math.max(s - 1, 0)), []);
@@ -364,12 +403,38 @@ export default function Monitor() {
         ← Fenêtre Teams visible ici →
       </div>
 
-      {/* ── OVERLAY PANEL ── */}
-      <div style={{ position:"fixed", top:"14px", right:"14px", width:"430px", maxHeight:"calc(100vh - 28px)", background:T.bg, border:`1px solid ${T.border}`, borderRadius:T.radiusLg, boxShadow:T.shadowLg, display:"flex", flexDirection:"column", overflow:"hidden", zIndex:9997, animation:"bpm-in .25s ease", fontFamily:T.font }}>
-
-        {/* ── HEADER (style doc-nav Blueprint) ── */}
+      {/* ── OVERLAY PANEL (déplaçable par la barre de titre) ── */}
+      <div
+        style={{
+          position: "fixed",
+          ...(panelPos
+            ? { left: panelPos.left, top: panelPos.top }
+            : { left: "calc(100vw - 430px - 14px)", top: 14 }),
+          width: `${PANEL_W}px`,
+          maxHeight: "calc(100vh - 28px)",
+          background: T.bg,
+          border: `1px solid ${T.border}`,
+          borderRadius: T.radiusLg,
+          boxShadow: T.shadowLg,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          zIndex: 9997,
+          animation: "bpm-in .25s ease",
+          fontFamily: T.font,
+        }}
+      >
+        {/* ── HEADER (zone titre = poignée de déplacement) ── */}
         <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:T.bg }}>
-          <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+          <div
+            role="button"
+            tabIndex={0}
+            onMouseDown={onHeaderDragStart}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.preventDefault(); }}
+            style={{ display:"flex", alignItems:"center", gap:"8px", cursor:"move", userSelect:"none" }}
+            title="Glisser pour déplacer le panneau"
+            aria-label="Déplacer le panneau"
+          >
             <BpmLogo size={20}/>
             <span style={{ fontWeight:700, fontSize:"14px", letterSpacing:"-0.01em" }}>
               <span style={{ color:T.bleu }}>Blueprint</span>

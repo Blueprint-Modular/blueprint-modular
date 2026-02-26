@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -39,7 +39,7 @@ function TreeNode({
   onAddChild: (parentId: string) => void;
 }) {
   const hasChildren = node.children && node.children.length > 0;
-  const open = depth === 0 || expandedIds.has(node.id);
+  const open = expandedIds.has(node.id);
 
   const handleClick = () => {
     if (hasChildren) {
@@ -113,6 +113,16 @@ export default function WikiPage() {
   const [loading, setLoading] = useState(true);
   const [selectedParent, setSelectedParent] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const expandedInitialized = useRef(false);
+
+  // Au premier chargement, ouvrir tous les nœuds racine (sinon le clic ne peut pas les fermer)
+  useEffect(() => {
+    if (articles.length === 0) return;
+    if (expandedInitialized.current) return;
+    expandedInitialized.current = true;
+    const root = buildTree(articles);
+    setExpandedIds(new Set(root.map((n) => n.id)));
+  }, [articles.length]);
 
   const openArticle = (slug: string) => router.push(`/modules/wiki/${slug}`);
   const onToggle = (id: string) => {

@@ -12,9 +12,16 @@ export default function AssetManagerDocumentationPage() {
         </nav>
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Documentation — Gestion d&apos;actifs</h1>
         <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          Module de gestion d&apos;actifs, tickets et mises à disposition. L&apos;interface ouvre directement le tableau de bord.
+          Module de gestion d&apos;actifs, tickets et mises à disposition. Tableau de bord, équipements, tickets, mises à disposition, contrats, base de connaissances et changements.
         </p>
       </div>
+
+      <h2 className="text-lg font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
+        Interface et UX
+      </h2>
+      <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
+        L&apos;interface s&apos;appuie sur le design system BPM avec une hiérarchie visuelle inspirée de Linear : fond de page <code>#F5F5F7</code>, cartes à bordure légère (12px, pas d&apos;ombre marquée). En haut de chaque page : <strong>breadcrumb</strong> (Modules › Gestion d&apos;actifs › …), <strong>onglets horizontaux</strong> (bpm.tabs) pour naviguer entre Tableau de bord, Équipements, Tickets, Mises à disposition, Contrats, Base de connaissances, Changements. Le bouton d&apos;action principal (« Nouvel actif », « Nouveau ticket », etc.) est aligné à droite du titre (hauteur 40px). Les <strong>filtres</strong> sont des chips sélectionnables (32px, border-radius 6px, état actif bleu clair) avec défilement horizontal sur mobile ; l&apos;export CSV est en bouton icône à droite. Les tableaux ont des en-têtes en semi-bold (font-weight 500, pas de majuscules), un hover sur les lignes (#F8F9FA) et des badges colorés pour Statut et Priorité. L&apos;<strong>état vide</strong> est centré avec icône, titre, description et CTA (sans bpm.panel info). Le <strong>tableau de bord</strong> affiche des cartes métriques compactes (bpm.metric) avec icône et couleur d&apos;accent par domaine (bleu équipements, orange tickets, violet MAD, vert contrats, cyan base de connaissances, rose changements) et une micro-info sous chaque métrique.
+      </p>
 
       <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
         Le module ne code pas en dur les types d&apos;actifs. Il s&apos;appuie sur un <strong>fichier de configuration JSON</strong> (<code>lib/asset-manager/config/</code>) qui décrit les types d&apos;actifs, leurs champs, les statuts, les catégories de tickets, les priorités et les règles de numérotation.

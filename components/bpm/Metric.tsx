@@ -24,6 +24,14 @@ export interface MetricProps {
   valueGrouping?: boolean;
   /** Afficher la bordure autour de la métrique (true par défaut). */
   border?: boolean;
+  /** Icône distinctive (ex. lucide-react) affichée à gauche du label. */
+  icon?: React.ReactNode | null;
+  /** Micro-info contextuelle sous la métrique (gris clair). */
+  subtext?: string | null;
+  /** Couleur d'accent (bordure gauche ou fond icône). */
+  accentColor?: string | null;
+  /** Mode compact : hauteur réduite (~80px), padding et typo plus serrés. */
+  compact?: boolean;
 }
 
 export function Metric({
@@ -39,6 +47,10 @@ export function Metric({
   valueDecimals = 0,
   valueGrouping = true,
   border = true,
+  icon = null,
+  subtext = null,
+  accentColor = null,
+  compact = false,
 }: MetricProps) {
   const symbols: Record<string, string> = {
     EUR: "€",
@@ -74,25 +86,42 @@ export function Metric({
 
   return (
     <div
-      className={`inline-block p-4 rounded-lg min-w-[140px] ${border ? "border" : ""}`}
+      className={`inline-block rounded-lg min-w-[140px] ${compact ? "p-3" : "p-4"} ${border ? "border" : ""}`}
       style={{
         background: "var(--bpm-surface)",
         ...(border ? { borderColor: "var(--bpm-border)" } : {}),
+        ...(accentColor ? { borderLeftWidth: 4, borderLeftColor: accentColor } : {}),
         color: "var(--bpm-text-primary)",
+        minHeight: compact ? "80px" : undefined,
       }}
       data-metric-name={name && name !== "" ? name : undefined}
     >
-      <div className="text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>
-        {label}
-        {help && (
-          <span className="ml-1" title={help}>
-            ⓘ
+      <div className={`flex items-center gap-2 ${compact ? "mb-0.5" : "mb-1"}`}>
+        {icon != null && (
+          <span
+            className="flex-shrink-0 flex items-center justify-center rounded"
+            style={{ color: accentColor || "var(--bpm-text-secondary)" }}
+          >
+            {icon}
           </span>
         )}
+        <div className={`${compact ? "text-xs" : "text-sm"} truncate`} style={{ color: "var(--bpm-text-secondary)" }}>
+          {label}
+          {help && (
+            <span className="ml-1" title={help}>
+              ⓘ
+            </span>
+          )}
+        </div>
       </div>
-      <div className="text-xl font-bold">{displayValue}</div>
+      <div className={compact ? "text-lg font-bold" : "text-xl font-bold"}>{displayValue}</div>
+      {(subtext != null && subtext !== "") && (
+        <div className={`${compact ? "text-xs mt-0.5" : "text-sm mt-1"}`} style={{ color: "var(--bpm-text-secondary)" }}>
+          {subtext}
+        </div>
+      )}
       <div
-        className={`text-sm mt-1 ${hasDelta ? (positive ? "text-green-600" : negative ? "text-red-600" : "") : "opacity-0"}`}
+        className={`${compact ? "text-xs mt-0.5" : "text-sm mt-1"} ${hasDelta ? (positive ? "text-green-600" : negative ? "text-red-600" : "") : "opacity-0"}`}
       >
         {hasDelta ? (
           <>

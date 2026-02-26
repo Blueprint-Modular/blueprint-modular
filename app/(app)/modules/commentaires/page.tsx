@@ -23,7 +23,7 @@ function SimuContent() {
       >
         <h3 className="text-sm font-semibold m-0 mb-3" style={{ color: "var(--bpm-text-primary)" }}>Commentaires (2)</h3>
         <div className="space-y-3 text-sm">
-          <div className="flex gap-3 p-2 rounded-lg" style={{ background: "var(--bpm-bg-secondary)" }}>
+          <div className="flex gap-3 p-2 rounded-lg" style={{ background: "var(--bpm-sidebar-bg)" }}>
             <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0" style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}>AM</span>
             <div>
               <strong style={{ color: "var(--bpm-text-primary)" }}>Alice Martin</strong>
@@ -31,7 +31,7 @@ function SimuContent() {
               <p className="m-0 mt-1" style={{ color: "var(--bpm-text-primary)" }}>Bonne avancée sur le livrable.</p>
             </div>
           </div>
-          <div className="flex gap-3 p-2 rounded-lg" style={{ background: "var(--bpm-bg-secondary)" }}>
+          <div className="flex gap-3 p-2 rounded-lg" style={{ background: "var(--bpm-sidebar-bg)" }}>
             <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0" style={{ background: "#e67e22", color: "#fff" }}>BL</span>
             <div>
               <strong style={{ color: "var(--bpm-text-primary)" }}>Bob Leroy</strong>

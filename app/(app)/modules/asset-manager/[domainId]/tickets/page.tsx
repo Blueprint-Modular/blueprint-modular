@@ -3,7 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+import { Download, Ticket as TicketIcon } from "lucide-react";
+import { Table, Spinner, Panel, Button, Chip, EmptyState } from "@/components/bpm";
+import { AssetManagerNav } from "../../AssetManagerNav";
 
 type Ticket = {
   id: string;
@@ -68,6 +70,19 @@ export default function AssetManagerTicketsPage() {
   }, [domainId, fetchTickets]);
 
   const getPriorityLabel = (id: string) => config?.priorities?.find((p) => p.id === id)?.label ?? id;
+  const getPriorityColor = (id: string) => {
+    const c = config?.priorities?.find((p) => p.id === id)?.color ?? "gray";
+    const map: Record<string, string> = {
+      red: "#ef4444",
+      green: "var(--bpm-accent-mint)",
+      amber: "#f59e0b",
+      yellow: "#f59e0b",
+      orange: "#f59e0b",
+      gray: "#6b7280",
+      blue: "var(--bpm-accent-cyan)",
+    };
+    return map[c] ?? map.gray;
+  };
   const getCategoryLabel = (id: string) => config?.ticket_categories?.find((c) => c.id === id)?.label ?? id;
 
   const openStatuses = ["new", "open", "pending", "in_progress", "on_hold", "assigned"];
@@ -103,7 +118,18 @@ export default function AssetManagerTicketsPage() {
     {
       key: "priorityId",
       label: "Priorité",
-      render: (val: unknown) => getPriorityLabel(String(val)),
+      render: (val: unknown) => {
+        const id = String(val);
+        const bg = getPriorityColor(id);
+        return (
+          <span
+            className="rounded px-2 py-0.5 text-xs font-medium"
+            style={{ backgroundColor: bg, color: "#fff" }}
+          >
+            {getPriorityLabel(id)}
+          </span>
+        );
+      },
     },
     {
       key: "categoryId",
@@ -140,102 +166,143 @@ export default function AssetManagerTicketsPage() {
     );
   }
 
+  const breadcrumbItems = [
+    { label: "Modules", href: "/modules" },
+    { label: "Gestion d'actifs", href: "/modules/asset-manager" },
+    { label: "Tableau de bord", href: `/modules/asset-manager/${domainId}` },
+    { label: "Tickets" },
+  ];
+
+  const getStatusBadgeColor = (status: string) => {
+    if (status === "in_progress" || status === "assigned") return "#f59e0b";
+    if (status === "resolved" || status === "closed") return "var(--bpm-accent-mint)";
+    if (status === "on_hold") return "#6b7280";
+    return "var(--bpm-bg-secondary)";
+  };
+
+  const exportCsv = () => {
+    const headers = ["Référence", "Titre", "Statut", "Priorité", "Catégorie", "Ouvert le"];
+    const rows = filtered.map((t) => [
+      t.reference,
+      t.title,
+      STATUS_LABELS[t.status] ?? t.status,
+      getPriorityLabel(t.priorityId),
+      getCategoryLabel(t.categoryId),
+      t.openedAt ? new Date(t.openedAt).toLocaleDateString("fr-FR") : "",
+    ]);
+    const csv = [headers.join(";"), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))].join("\r\n");
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tickets-${domainId}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> → Tickets
-        </nav>
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="doc-page-header">
+        <AssetManagerNav breadcrumbItems={breadcrumbItems} />
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Tickets</h1>
-            <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+            <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>Tickets</h1>
+            <p className="doc-description mt-0.5" style={{ color: "var(--bpm-text-secondary)" }}>
               Suivi des tickets et demandes d&apos;intervention.
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => {
-              const headers = ["Référence", "Titre", "Statut", "Priorité", "Catégorie", "Ouvert le"];
-              const rows = filtered.map((t) => [
-                t.reference,
-                t.title,
-                STATUS_LABELS[t.status] ?? t.status,
-                getPriorityLabel(t.priorityId),
-                getCategoryLabel(t.categoryId),
-                t.openedAt ? new Date(t.openedAt).toLocaleDateString("fr-FR") : "",
-              ]);
-              const csv = [headers.join(";"), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))].join("\r\n");
-              const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = `tickets-${domainId}-${new Date().toISOString().slice(0, 10)}.csv`;
-              a.click();
-              URL.revokeObjectURL(url);
-            }}
-            disabled={filtered.length === 0}
-          >
-            Exporter CSV
-          </Button>
-          <Link href={`/modules/asset-manager/${domainId}/tickets/new`}>
-            <Button size="small">+ Nouveau ticket</Button>
+          <Link href={`/modules/asset-manager/${domainId}/tickets/new`} className="asset-manager-cta-button">
+            <Button variant="primary" size="small">+ Nouveau ticket</Button>
           </Link>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mb-4">
-        <Selectbox
-          label="Statut"
-          value={filterStatus}
-          onChange={(v) => setFilterStatus(String(v))}
-          options={statusOptions}
-          placeholder="Tous"
-        />
-        <Selectbox
-          label="Priorité"
-          value={filterPriority}
-          onChange={(v) => setFilterPriority(String(v))}
-          options={priorityOptions}
-          placeholder="Toutes"
-        />
+      <div className="asset-manager-filters flex flex-wrap items-center gap-2 overflow-x-auto">
+        {statusOptions.map((opt) => (
+          <Chip
+            key={opt.value}
+            label={opt.label}
+            variant={filterStatus === opt.value ? "primary" : "default"}
+            onClick={() => setFilterStatus(opt.value)}
+            className={filterStatus === opt.value ? "asset-manager-chip-active" : ""}
+          />
+        ))}
+        {priorityOptions.map((opt) => (
+          <Chip
+            key={opt.value}
+            label={opt.label}
+            variant={filterPriority === opt.value ? "primary" : "default"}
+            onClick={() => setFilterPriority(opt.value)}
+            className={filterPriority === opt.value ? "asset-manager-chip-active" : ""}
+          />
+        ))}
         {slaRiskCount > 0 && (
+          <Chip
+            label={`${slaRiskCount} en danger SLA`}
+            variant={filterSlaRisk ? "primary" : "default"}
+            onClick={() => setFilterSlaRisk((v) => !v)}
+            className={filterSlaRisk ? "asset-manager-chip-active" : ""}
+          />
+        )}
+        <div className="ml-auto flex-shrink-0">
           <button
             type="button"
-            onClick={() => setFilterSlaRisk((v) => !v)}
-            className={`rounded px-3 py-1.5 text-sm font-medium ${filterSlaRisk ? "ring-2 ring-offset-2" : ""}`}
-            style={
-              filterSlaRisk
-                ? { background: "var(--bpm-accent)", color: "#fff" }
-                : { background: "var(--bpm-accent-amber, #f59e0b)", color: "#fff" }
-            }
+            onClick={exportCsv}
+            disabled={filtered.length === 0}
+            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
+            title="Exporter CSV"
           >
-            {slaRiskCount} en danger SLA
+            <Download size={18} />
           </button>
-        )}
+        </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucun ticket"
+            description="Créez un ticket pour suivre une demande d'intervention."
+            icon={<TicketIcon size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/tickets/new`}>
+                <Button variant="primary" size="small">+ Nouveau ticket</Button>
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${filtered.length} ticket(s)`}>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
-            columns={columns}
+            columns={columns.map((col) =>
+              col.key === "status"
+                ? {
+                    ...col,
+                    render: (val: unknown) => {
+                      const s = String(val);
+                      return (
+                        <span
+                          className="rounded px-2 py-0.5 text-xs font-medium"
+                          style={{ backgroundColor: getStatusBadgeColor(s), color: "#fff" }}
+                        >
+                          {STATUS_LABELS[s] ?? s}
+                        </span>
+                      );
+                    },
+                  }
+                : col
+            )}
             data={filtered}
             keyColumn="id"
             onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/tickets/${row.id}`)}
           />
-        </Panel>
+        </div>
       )}
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>← Tableau de bord</Link>
-        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
-      </nav>
     </div>
   );
 }

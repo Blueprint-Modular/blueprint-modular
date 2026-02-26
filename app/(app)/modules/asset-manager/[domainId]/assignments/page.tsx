@@ -3,7 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+import { Download, UserCheck } from "lucide-react";
+import { Table, Spinner, Button, Chip, EmptyState } from "@/components/bpm";
+import { AssetManagerNav } from "../../AssetManagerNav";
 
 type Assignment = {
   id: string;
@@ -95,55 +97,129 @@ export default function AssetManagerAssignmentsPage() {
     ...Object.entries(STATUS_LABELS).map(([id, label]) => ({ value: id, label })),
   ];
 
+  const breadcrumbItems = [
+    { label: "Modules", href: "/modules" },
+    { label: "Gestion d'actifs", href: "/modules/asset-manager" },
+    { label: "Tableau de bord", href: `/modules/asset-manager/${domainId}` },
+    { label: "Mises à disposition" },
+  ];
+
+  const getStatusBadgeColor = (status: string) => {
+    if (status === "active") return "var(--bpm-accent-mint)";
+    if (status === "returned") return "#6b7280";
+    if (status === "overdue") return "#ef4444";
+    if (status === "cancelled") return "#6b7280";
+    return "var(--bpm-bg-secondary)";
+  };
+
+  const exportCsv = () => {
+    const headers = ["Référence", "Actif", "Bénéficiaire", "Statut", "Début", "Fin prévue"];
+    const rows = filtered.map((a) => [
+      a.reference,
+      a.asset ? `${a.asset.reference} — ${a.asset.label}` : "—",
+      a.assignee?.name ?? "—",
+      STATUS_LABELS[a.status] ?? a.status,
+      a.startDate ? new Date(a.startDate).toLocaleDateString("fr-FR") : "",
+      a.expectedEndDate ? new Date(a.expectedEndDate).toLocaleDateString("fr-FR") : "—",
+    ]);
+    const csv = [headers.join(";"), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))].join("\r\n");
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `mad-${domainId}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const columnsWithBadges = columns.map((col) =>
+    col.key === "status"
+      ? {
+          ...col,
+          render: (val: unknown) => {
+            const s = String(val);
+            return (
+              <span
+                className="rounded px-2 py-0.5 text-xs font-medium"
+                style={{ backgroundColor: getStatusBadgeColor(s), color: "#fff" }}
+              >
+                {STATUS_LABELS[s] ?? s}
+              </span>
+            );
+          },
+        }
+      : col
+  );
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> → Mises à disposition
-        </nav>
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="doc-page-header">
+        <AssetManagerNav breadcrumbItems={breadcrumbItems} />
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Mises à disposition</h1>
-            <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+            <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>Mises à disposition</h1>
+            <p className="doc-description mt-0.5" style={{ color: "var(--bpm-text-secondary)" }}>
               Suivi des mises à disposition d&apos;actifs.
             </p>
           </div>
-          <Link href={`/modules/asset-manager/${domainId}/assignments/new`}>
-            <Button size="small">+ Nouvelle MAD</Button>
+          <Link href={`/modules/asset-manager/${domainId}/assignments/new`} className="asset-manager-cta-button">
+            <Button variant="primary" size="small">+ Nouvelle MAD</Button>
           </Link>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 mb-4">
-        <Selectbox
-          label="Statut"
-          value={filterStatus}
-          onChange={(v) => setFilterStatus(String(v))}
-          options={statusOptions}
-          placeholder="Tous"
-        />
+      <div className="asset-manager-filters flex flex-wrap items-center gap-2 overflow-x-auto">
+        {statusOptions.map((opt) => (
+          <Chip
+            key={opt.value}
+            label={opt.label}
+            variant={filterStatus === opt.value ? "primary" : "default"}
+            onClick={() => setFilterStatus(opt.value)}
+            className={filterStatus === opt.value ? "asset-manager-chip-active" : ""}
+          />
+        ))}
+        <div className="ml-auto flex-shrink-0">
+          <button
+            type="button"
+            onClick={exportCsv}
+            disabled={filtered.length === 0}
+            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
+            title="Exporter CSV"
+          >
+            <Download size={18} />
+          </button>
+        </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucune mise à disposition"
+            description="Créez une MAD pour attribuer un actif à un bénéficiaire."
+            icon={<UserCheck size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/assignments/new`}>
+                <Button variant="primary" size="small">+ Nouvelle MAD</Button>
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${filtered.length} mise(s) à disposition`}>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
-            columns={columns}
+            columns={columnsWithBadges}
             data={filtered}
             keyColumn="id"
             onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/assignments/${row.id}`)}
           />
-        </Panel>
+        </div>
       )}
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>← Tableau de bord</Link>
-        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
-      </nav>
     </div>
   );
 }

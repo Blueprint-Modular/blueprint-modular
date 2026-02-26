@@ -320,7 +320,7 @@ export default function CalendrierSimulateurPage() {
         {/* Navigation temporelle + Nouvel événement */}
         <div
           className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b"
-          style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+          style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}
         >
           <div className="flex items-center gap-1 flex-shrink-0">
             <Button size="small" variant="secondary" onClick={goPrev} aria-label="Période précédente">←</Button>
@@ -337,7 +337,7 @@ export default function CalendrierSimulateurPage() {
         </div>
 
         {/* Filtres par couleur (P13) */}
-        <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+        <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}>
           <span className="text-xs font-medium" style={{ color: "var(--bpm-text-secondary)" }}>Filtrer :</span>
           <Chip
             label="Tous"
@@ -363,7 +363,7 @@ export default function CalendrierSimulateurPage() {
         </div>
 
         {/* Onglets vues */}
-        <div className="flex gap-1 p-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+        <div className="flex gap-1 p-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}>
           <Button size="small" variant={view === "jour" ? "primary" : "secondary"} onClick={() => setView("jour")}>Jour</Button>
           <Button size="small" variant={view === "semaine" ? "primary" : "secondary"} onClick={() => setView("semaine")}>Semaine</Button>
           <Button size="small" variant={view === "mois" ? "primary" : "secondary"} onClick={() => setView("mois")}>Mois</Button>
@@ -449,7 +449,7 @@ export default function CalendrierSimulateurPage() {
                 {/* Coin haut gauche : S9 centré */}
                 <div
                   className="py-1 pr-1 text-xs font-medium border-b border-r flex items-center justify-center"
-                  style={{ gridColumn: 1, gridRow: 1, borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)", background: "var(--bpm-bg-secondary)" }}
+                  style={{ gridColumn: 1, gridRow: 1, borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)", background: "var(--bpm-sidebar-bg)" }}
                   title={formatTitle("semaine", focusDate)}
                 >
                   S{getISOWeekNumber(focusDate)}

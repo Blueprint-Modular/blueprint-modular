@@ -30,7 +30,7 @@ function SimuContent() {
           background: "var(--bpm-bg-primary)",
         }}
       >
-        <div className="flex gap-1 p-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+        <div className="flex gap-1 p-2 border-b" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}>
           <Button size="small" variant="secondary">Jour</Button>
           <Button size="small" variant="primary">Semaine</Button>
           <Button size="small" variant="secondary">Mois</Button>

@@ -3,8 +3,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Metric, Table } from "@/components/bpm";
+import { Monitor, Ticket, UserCheck, FileText, BookOpen, RefreshCw } from "lucide-react";
+import { Button, Spinner, Metric, Table, Panel } from "@/components/bpm";
+import { AssetManagerNav } from "../AssetManagerNav";
 import type { DomainConfig } from "@/lib/asset-manager/get-domain-config";
+
+const ACCENT = {
+  assets: "#2563eb",
+  tickets: "#f59e0b",
+  assignments: "#8b5cf6",
+  contracts: "#10b981",
+  knowledge: "#06b6d4",
+  changes: "#ec4899",
+} as const;
 
 type Asset = {
   id: string;
@@ -149,38 +160,99 @@ export default function AssetManagerDomainPage() {
     statusId: a.statusId,
   }));
 
+  const breadcrumbItems = [
+    { label: "Modules", href: "/modules" },
+    { label: "Gestion d'actifs", href: "/modules/asset-manager" },
+    { label: "Tableau de bord" },
+  ];
+
+  const iconSize = 18;
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link>
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
-          Gestion d&apos;actifs
-        </h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {config.asset_label_plural}, tickets et {config.assignment_label}s. Tableau de bord et accès rapides.
-        </p>
+      <div className="doc-page-header">
+        <AssetManagerNav breadcrumbItems={breadcrumbItems} />
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+          <div>
+            <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>
+              Gestion d&apos;actifs
+            </h1>
+            <p className="doc-description mt-0.5" style={{ color: "var(--bpm-text-secondary)" }}>
+              {config.asset_label_plural}, tickets et {config.assignment_label}s. Tableau de bord et accès rapides.
+            </p>
+          </div>
+          <Link href={`/modules/asset-manager/${domainId}/assets/nouveau`} className="asset-manager-cta-button">
+            <Button variant="primary" size="small">+ Nouvel actif</Button>
+          </Link>
+        </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mb-6">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mb-6 asset-manager-metrics-grid">
         <Link href={`/modules/asset-manager/${domainId}/assets`} className="block">
-          <Metric label={config.asset_label_plural} value={assets.length} />
+          <Metric
+            label={config.asset_label_plural}
+            value={assets.length}
+            compact
+            border={false}
+            icon={<Monitor size={iconSize} />}
+            accentColor={ACCENT.assets}
+            subtext={assets.length === 0 ? "Aucun actif enregistré" : "Dernière mise à jour : —"}
+          />
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/tickets`} className="block">
-          <Metric label={`${config.ticket_label_singular}s`} value={ticketCount} />
+          <Metric
+            label={`${config.ticket_label_singular}s`}
+            value={ticketCount}
+            compact
+            border={false}
+            icon={<Ticket size={iconSize} />}
+            accentColor={ACCENT.tickets}
+            subtext={ticketCount === 0 ? "Aucun ticket" : "Dernière mise à jour : —"}
+          />
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/assignments`} className="block">
-          <Metric label={`${config.assignment_label}s`} value={assignmentCount} />
+          <Metric
+            label={`${config.assignment_label}s`}
+            value={assignmentCount}
+            compact
+            border={false}
+            icon={<UserCheck size={iconSize} />}
+            accentColor={ACCENT.assignments}
+            subtext={assignmentCount === 0 ? "Aucune MAD" : "Dernière mise à jour : —"}
+          />
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/contracts`} className="block">
-          <Metric label="Contrats" value={contractCount} />
+          <Metric
+            label="Contrats"
+            value={contractCount}
+            compact
+            border={false}
+            icon={<FileText size={iconSize} />}
+            accentColor={ACCENT.contracts}
+            subtext={contractCount === 0 ? "Aucun contrat" : "Dernière mise à jour : —"}
+          />
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/knowledge`} className="block">
-          <Metric label="Base de connaissances" value={knowledgeCount} />
+          <Metric
+            label="Base de connaissances"
+            value={knowledgeCount}
+            compact
+            border={false}
+            icon={<BookOpen size={iconSize} />}
+            accentColor={ACCENT.knowledge}
+            subtext={knowledgeCount === 0 ? "Aucun article" : "Dernière mise à jour : —"}
+          />
         </Link>
         <Link href={`/modules/asset-manager/${domainId}/changes`} className="block">
-          <Metric label="Changements" value={changeCount} />
+          <Metric
+            label="Changements"
+            value={changeCount}
+            compact
+            border={false}
+            icon={<RefreshCw size={iconSize} />}
+            accentColor={ACCENT.changes}
+            subtext={changeCount === 0 ? "Aucun changement" : "Dernière mise à jour : —"}
+          />
         </Link>
       </div>
 
@@ -223,17 +295,27 @@ export default function AssetManagerDomainPage() {
         </Panel>
       )}
 
-      <Panel variant="info" title={config.asset_label_plural}>
-        <div className="flex justify-between items-center mb-4">
+      <div
+        className="rounded-xl border overflow-hidden"
+        style={{
+          background: "var(--bpm-surface)",
+          border: "1px solid #E5E7EB",
+          borderRadius: 12,
+          padding: 16,
+        }}
+        role="region"
+        aria-label={config.asset_label_plural}
+      >
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-sm font-semibold m-0" style={{ color: "var(--bpm-text-secondary)", letterSpacing: "0.04em" }}>
+            {config.asset_label_plural}
+          </h2>
           <Link href={`/modules/asset-manager/${domainId}/cmdb-graph`}>
             <Button variant="outline" size="small">Cartographie CMDB</Button>
           </Link>
-          <Link href={`/modules/asset-manager/${domainId}/assets/new`}>
-            <Button variant="primary">Nouvel actif</Button>
-          </Link>
         </div>
         {assets.length === 0 ? (
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+          <p className="text-sm m-0" style={{ color: "var(--bpm-text-secondary)" }}>
             Aucun actif. Cliquez sur « Nouvel actif » pour en créer un.
           </p>
         ) : (
@@ -248,19 +330,8 @@ export default function AssetManagerDomainPage() {
             />
           </div>
         )}
-      </Panel>
+      </div>
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/audit`} style={{ color: "var(--bpm-accent-cyan)" }}>
-          Journal d&apos;audit
-        </Link>
-        <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Retour aux modules
-        </Link>
-        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>
-          Documentation
-        </Link>
-      </nav>
     </div>
   );
 }

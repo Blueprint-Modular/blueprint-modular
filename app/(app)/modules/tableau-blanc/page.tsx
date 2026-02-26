@@ -28,7 +28,7 @@ function SimuContent() {
     <>
       <p className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>Aperçu des 3 colonnes. Pour éditer, supprimer, déplacer et ajouter des post-it, ouvrez le simulateur.</p>
       <div className="rounded-xl border overflow-hidden" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}>
-        <div className="px-4 py-2 border-b text-sm font-semibold" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-primary)" }}>
+        <div className="px-4 py-2 border-b text-sm font-semibold" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)", color: "var(--bpm-text-primary)" }}>
           Zone idées (3 post-it)
         </div>
         <div className="p-4 grid gap-4" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>

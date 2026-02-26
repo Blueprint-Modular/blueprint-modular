@@ -69,12 +69,13 @@
 
       <h2>v0.1.21 (actuelle)</h2>
       <ul>
-        <li><strong>Composants BPM</strong> : LoadingBar (6 variantes : sweep, blocks, iso, stacked, arc, dots), Transition (4 variantes : fade, shimmer, border, grid), Spinner (variants isoBlocks, modularRings, hexSegments, modularGrid).</li>
-        <li><strong>Audits</strong> : Wiki, Base contractuelle, Documents — nav complète (Retour, Documentation), lien Documentation sur pages détail ; Module IA — panneau contexte, Réessayer, sélecteur provider, aria-label ; contract-analyzer retour partiel en cas d'erreur.</li>
-        <li>Doc composants : suppression du bloc « Tester en direct dans le sandbox : Ouvrir dans le sandbox ».</li>
-        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.21, Trusted Publishing via tag <code>v*</code>).</li>
-        <li>Déploiement prod : vitrine, doc et app Next.js (app.blueprint-modular.com) via <code>deploy-vps-remote.ps1</code>.</li>
-        <li><strong>Wiki</strong> : modèle enrichi (excerpt, tags, révisions, commentaires, backlinks), migration Prisma, seed 3 articles pour tests IA ; déploiement avec <code>prisma migrate deploy</code> et <code>seed:wiki</code> sur le serveur.</li>
+        <li><strong>Module Gestion d&apos;actifs</strong> : refonte UX (inspiration Linear) — cartes métriques compactes avec icônes et couleurs d&apos;accent par domaine, onglets bpm.tabs en haut, breadcrumb discret, filtres en chips (32px, scroll horizontal mobile), export CSV en icône, empty state centré avec CTA, tableaux avec en-têtes semi-bold et hover, badges Statut/Priorité, bouton CTA 40px, fond #F5F5F7 et cartes 12px.</li>
+        <li><strong>Cohérence visuelle</strong> : harmonisation du gris (sidebar) — en-têtes et bulles du Calendrier, Keep screen on, Commentaires et Tableau blanc utilisent <code>var(--bpm-sidebar-bg)</code>.</li>
+        <li><strong>Version</strong> : source unique <code>package.json</code>, script <code>npm run version:sync</code> pour aligner pyproject.toml, bpm/__init__.py et doc statique ; app lit la version dans le footer.</li>
+        <li><strong>Composants BPM</strong> : LoadingBar (6 variantes), Transition (4 variantes), Spinner (isoBlocks, modularRings, hexSegments, modularGrid).</li>
+        <li><strong>Audits</strong> : Wiki, Base contractuelle, Documents — nav complète ; Module IA — panneau contexte, Réessayer, sélecteur provider ; contract-analyzer retour partiel en cas d&apos;erreur.</li>
+        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.21, Trusted Publishing via tag <code>v*</code>). Déploiement prod : vitrine, doc et app via <code>deploy-vps-remote.ps1</code>.</li>
+        <li><strong>Wiki</strong> : modèle enrichi (excerpt, tags, révisions, commentaires, backlinks), migration Prisma, seed 3 articles pour tests IA.</li>
       </ul>
 
       <h2>v0.1.19</h2>
@@ -98,14 +99,14 @@
       <ul>
         <li><strong>Wiki IA</strong> : bouton « Aide IA » sur la page d'édition — mettre en forme le contenu actuel ou générer un article depuis des notes (stream SSE, <code>POST /api/wiki/generate</code>).</li>
         <li><strong>Module IA</strong> : contenu des articles wiki récents inclus dans le contexte (<code>/api/wiki?withContent=true</code>) pour que l'assistant puisse s'appuyer sur le texte des articles.</li>
-        <li>Package Python sur PyPI (version 0.1.17). Déploiement prod.</li>
+        <li>Package Python sur PyPI (version 0.1.21). Déploiement prod.</li>
       </ul>
 
       <h2>v0.1.10</h2>
       <ul>
         <li>Auth modules : <code>getSessionOrTestUser</code> partout (dont Sandbox Par IA) ; option <code>SKIP_AUTH_FOR_TEST=true</code> documentée dans <code>deploy/app-env.example</code> pour utiliser les modules sans connexion (démo/tests).</li>
         <li>UI : suppression du breadcrumb en double sur le détail des modules (Documents, Contrats).</li>
-        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.10, Trusted Publishing via tag <code>v*</code>).</li>
+        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.21, Trusted Publishing via tag <code>v*</code>).</li>
       </ul>
 
       <h2>v0.1.9</h2>

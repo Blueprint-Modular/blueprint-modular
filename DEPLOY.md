@@ -4,19 +4,16 @@
 
 | Étape | Où / Comment |
 |-------|----------------|
+| **Version** | Source unique : `package.json`. Après modification : `npm run version:sync`. |
 | **Migration Prisma** | Sur le **VPS** (où `DATABASE_URL` est défini) : exécutée automatiquement par `deploy-from-git.sh` lors du déploiement. Sinon à la main : `npx prisma migrate deploy`. |
-| **Publication PyPI** | `git push origin v0.1.21` (déclenche le workflow GitHub → PyPI). |
-| **Déploiement de l’app** | 1) Pousser les commits sur `master`. 2) Sur le VPS : `git pull && ./deploy/deploy-from-git.sh` — ou depuis Windows : `.\scripts\deploy-vps-remote.ps1`. Le script fait `npm run build`, `npx prisma migrate deploy`, puis redémarre PM2. |
+| **Publication PyPI** | `git tag vX.Y.Z` puis `git push origin vX.Y.Z`. Incrémenter si version déjà sur PyPI. |
+| **Déploiement de l’app** | 1) Push sur `master`. 2) Depuis Windows : `.\scripts\deploy-vps-remote.ps1` — ou sur le VPS : `git pull && ./deploy/deploy-from-git.sh`. Vitrine + doc + build Next.js + Prisma migrate + PM2. |
 
 ---
 
-## Version alignée (0.1.21)
+## Version alignée
 
-La version **0.1.21** est alignée dans :
-- `package.json` (app Next.js)
-- `pyproject.toml` (package Python)
-- `bpm/__init__.py` (`__version__`)
-- Footer de l’app (`components/AppLayoutClient.tsx`)
+Source unique : **`package.json`**. Après `npm run version:sync` : `pyproject.toml`, `bpm/__init__.py`, doc statique, et app (footer via `lib/version.ts`).
 
 ---
 
@@ -54,24 +51,24 @@ npm run start
 
 ## 3. Publication sur PyPI
 
-Le projet utilise **Trusted Publishing** (workflow GitHub). Pour publier la version **0.1.21** :
+Le projet utilise **Trusted Publishing** (workflow GitHub). Pour publier une version (ex. **0.1.22**) :
 
-1. Vérifier que les changements sont commités et poussés sur `master` (ou la branche par défaut).
-2. Créer et pousser le tag :
+1. Incrémenter la version dans `package.json`, puis lancer `npm run version:sync`.
+2. Commit, push sur `master`, puis créer et pousser le tag :
 
 ```bash
-git tag v0.1.21
-git push origin v0.1.21
+git tag v0.1.22
+git push origin v0.1.22
 ```
 
-Le workflow `.github/workflows/workflow.yml` se déclenche au push du tag, build le package Python et le publie sur PyPI.
+Le workflow `.github/workflows/workflow.yml` se déclenche au push du tag, build le package Python et le publie sur PyPI. **PyPI n'accepte pas d'écraser une version existante** : toujours incrémenter avant de republier.
 
 Vérification après publication :
 
 ```bash
 pip install blueprint-modular
 bpm --version
-# → blueprint-modular 0.1.21
+# → blueprint-modular 0.1.22
 ```
 
 ---

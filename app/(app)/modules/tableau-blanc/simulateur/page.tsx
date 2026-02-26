@@ -153,7 +153,7 @@ export default function TableauBlancSimulateurPage() {
         style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}
       >
         {/* En-tête avec compteur — pas d'icône ℹ */}
-        <div className="px-4 py-3 border-b flex flex-wrap items-center justify-between gap-2" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+        <div className="px-4 py-3 border-b flex flex-wrap items-center justify-between gap-2" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}>
           <h2 className="text-base font-semibold m-0" style={{ color: "var(--bpm-text-primary)" }}>
             Zone idées ({postIts.length} post-it)
           </h2>

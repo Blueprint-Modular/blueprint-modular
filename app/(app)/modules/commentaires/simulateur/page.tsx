@@ -60,7 +60,7 @@ function TypeChip({
       type="button"
       className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium cursor-pointer border-0"
       style={{
-        background: selected ? color : "var(--bpm-bg-secondary)",
+        background: selected ? color : "var(--bpm-sidebar-bg)",
         color: selected ? "#fff" : "var(--bpm-text-primary)",
       }}
       onClick={onClick}
@@ -235,7 +235,7 @@ export default function CommentairesSimulateurPage() {
       {/* Contexte entité (P3) */}
       <div
         className="rounded-t-xl border border-b-0 px-3 py-2 text-sm"
-        style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}
+        style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)", color: "var(--bpm-text-secondary)" }}
       >
         Document : <Link href="#" className="underline" style={{ color: "var(--bpm-accent-cyan)" }}>Rapport Q4 — Synthèse</Link>
       </div>
@@ -285,7 +285,7 @@ export default function CommentairesSimulateurPage() {
                 className="group relative flex gap-3 p-3 rounded-lg border transition-colors"
                 style={{
                   borderColor: "var(--bpm-border)",
-                  background: isOwn ? "rgba(0,163,226,0.06)" : "var(--bpm-bg-secondary)",
+                  background: isOwn ? "rgba(0,163,226,0.06)" : "var(--bpm-sidebar-bg)",
                 }}
               >
                 <span

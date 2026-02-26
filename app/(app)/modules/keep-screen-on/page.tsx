@@ -153,7 +153,7 @@ export default function KeepScreenOnPage() {
       >
         <div
           className="px-4 py-3 border-b flex flex-wrap items-center justify-between gap-2"
-          style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+          style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-sidebar-bg)" }}
         >
           <span className="text-sm font-medium" style={{ color: "var(--bpm-text-primary)" }}>
             Durée d&apos;écran allumé

@@ -98,10 +98,16 @@ export default function AssetManagerAssetsPage() {
   if (!config && !loading) {
     return (
       <div className="doc-page">
-        <Panel variant="info" title="Domaine introuvable" />
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Retour
-        </Link>
+        <div className="doc-page-header mb-6">
+          <nav className="doc-breadcrumb">
+            <Link href="/modules">Modules</Link> → Gestion d&apos;actifs
+          </nav>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Gestion d&apos;actifs</h1>
+        </div>
+        <Panel variant="warning" title="Configuration introuvable" />
+        <nav className="doc-pagination mt-6">
+          <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour aux modules</Link>
+        </nav>
       </div>
     );
   }
@@ -109,14 +115,16 @@ export default function AssetManagerAssetsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header mb-6">
-        <div className="doc-breadcrumb">
+        <nav className="doc-breadcrumb">
           <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>{config?.domain_label ?? domainId}</Link> →{" "}
-          {config?.asset_label_plural ?? "Actifs"}
-        </div>
+          <Link href={`/modules/asset-manager/${domainId}`}>{config?.asset_label_plural ?? "Actifs"}</Link>
+        </nav>
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
           {config?.asset_label_plural ?? "Actifs"}
         </h1>
+        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+          Liste des actifs avec filtres par type et statut.
+        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-4 mb-6">
@@ -158,9 +166,12 @@ export default function AssetManagerAssetsPage() {
         </div>
       )}
 
-      <nav className="doc-pagination mt-8">
+      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
         <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>
           ← Tableau de bord
+        </Link>
+        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>
+          Documentation
         </Link>
       </nav>
     </div>

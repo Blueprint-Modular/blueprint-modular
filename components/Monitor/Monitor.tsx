@@ -237,7 +237,12 @@ export default function Monitor() {
   const qRef = useRef<HTMLTextAreaElement | null>(null);
   const tRef = useRef<HTMLTextAreaElement | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const { suggestAnswer, translate: translateAPI, summarize: summarizeAPI, importPptx } = usePrompterAPI(apiKey || null);
+  const { suggestAnswer, translate: translateAPI, summarize: summarizeAPI, importPptx, checkHealth } = usePrompterAPI(apiKey || null);
+  const [prompteurStatus, setPrompteurStatus] = useState<"unknown" | "ok" | "error">("unknown");
+
+  useEffect(() => {
+    checkHealth().then(() => setPrompteurStatus("ok")).catch(() => setPrompteurStatus("error"));
+  }, [checkHealth]);
 
   const next = useCallback(() => setCur(s => Math.min(s + 1, slides.length - 1)), [slides.length]);
   const prev = useCallback(() => setCur(s => Math.max(s - 1, 0)), []);
@@ -399,6 +404,13 @@ export default function Monitor() {
               style={{ width:"100%", padding:"8px 10px", border:`1px solid ${T.border}`, borderRadius:T.radius, fontSize:"12px", fontFamily:T.mono, color:T.fg, background:T.bg }}
               title="Saisie stockée localement (localStorage). Utilisée pour Q&R IA, traduction et résumé." />
             <div style={{ fontSize:"10px", color:T.muted, marginTop:"4px" }}>Stockée localement · utilisée pour l’IA</div>
+          </div>
+        )}
+
+        {/* Alerte service prompteur indisponible */}
+        {prompteurStatus === "error" && (
+          <div style={{ background: "rgba(220,38,38,0.08)", borderBottom: "1px solid rgba(220,38,38,0.25)", padding: "8px 14px", fontSize: "12px", color: "var(--bpm-text-primary)" }}>
+            <strong style={{ color: "var(--bpm-danger, #dc2626)" }}>Service prompteur indisponible.</strong> L&apos;import PPTX et les réponses IA peuvent ne pas fonctionner. Vérifiez que le service tourne sur le serveur (PM2 : prompteur-api).
           </div>
         )}
 

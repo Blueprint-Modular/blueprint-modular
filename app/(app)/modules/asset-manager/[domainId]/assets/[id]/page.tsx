@@ -55,12 +55,18 @@ export default function AssetDetailPage() {
   if (!asset) {
     return (
       <div className="doc-page">
+        <div className="doc-page-header mb-6">
+          <nav className="doc-breadcrumb">
+            <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link>
+          </nav>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Gestion d&apos;actifs</h1>
+        </div>
         <Panel variant="warning" title="Actif introuvable">
-          L’actif demandé n’existe pas ou vous n’y avez pas accès.
+          L&apos;actif demandé n&apos;existe pas ou vous n&apos;y avez pas accès.
         </Panel>
-        <Link href={`/modules/asset-manager/${domainId}`} className="mt-4 inline-block" style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Retour à la liste
-        </Link>
+        <nav className="doc-pagination mt-6">
+          <Link href={`/modules/asset-manager/${domainId}/assets`} style={{ color: "var(--bpm-accent-cyan)" }}>← Retour à la liste</Link>
+        </nav>
       </div>
     );
   }
@@ -70,10 +76,10 @@ export default function AssetDetailPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header mb-6">
-        <div className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d’actifs</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>{config?.domain_label ?? domainId}</Link> → {asset.reference}
-        </div>
+        <nav className="doc-breadcrumb">
+          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
+          <Link href={`/modules/asset-manager/${domainId}/assets`}>{config?.asset_label_plural ?? "Actifs"}</Link> → {asset.reference}
+        </nav>
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
           {asset.label}
         </h1>
@@ -141,11 +147,17 @@ export default function AssetDetailPage() {
         </Panel>
       )}
 
-      <div className="flex gap-2 mt-6">
-        <Link href={`/modules/asset-manager/${domainId}`}>
-          <Button variant="secondary">Liste des actifs</Button>
+      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
+        <Link href={`/modules/asset-manager/${domainId}/assets`} style={{ color: "var(--bpm-accent-cyan)" }}>
+          ← Liste des actifs
         </Link>
-      </div>
+        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>
+          Tableau de bord
+        </Link>
+        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>
+          Documentation
+        </Link>
+      </nav>
     </div>
   );
 }

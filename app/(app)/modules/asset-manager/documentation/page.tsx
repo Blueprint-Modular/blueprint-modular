@@ -10,14 +10,14 @@ export default function AssetManagerDocumentationPage() {
         <nav className="doc-breadcrumb">
           <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> → Documentation
         </nav>
-        <h1>Documentation — Gestion d&apos;actifs</h1>
-        <p className="doc-description">
-          Module générique de gestion d&apos;actifs, tickets et mises à disposition, piloté par une configuration de domaine (IT, maintenance industrielle, etc.).
+        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Documentation — Gestion d&apos;actifs</h1>
+        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
+          Module de gestion d&apos;actifs, tickets et mises à disposition. L&apos;interface ouvre directement le tableau de bord.
         </p>
       </div>
 
       <p className="mb-6" style={{ color: "var(--bpm-text-secondary)" }}>
-        Le module <strong>asset-manager</strong> ne code pas en dur les types d&apos;actifs (ordinateur, imprimante, machine…). Il charge un <strong>fichier de configuration JSON</strong> par domaine qui décrit les types d&apos;actifs, leurs champs, les statuts, les catégories de tickets, les priorités et les règles de numérotation. Deux domaines sont livrés : <strong>IT</strong> (parc informatique type GLPI) et <strong>Maintenance</strong> (maintenance industrielle).
+        Le module ne code pas en dur les types d&apos;actifs. Il s&apos;appuie sur un <strong>fichier de configuration JSON</strong> (<code>lib/asset-manager/config/</code>) qui décrit les types d&apos;actifs, leurs champs, les statuts, les catégories de tickets, les priorités et les règles de numérotation.
       </p>
 
       <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>

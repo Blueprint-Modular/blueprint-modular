@@ -114,16 +114,22 @@ export function usePrompterAPI(apiKey: string | null = null) {
     });
     if (!response.ok) {
       const raw = await response.text();
+      const status = response.status;
       let msg = "Erreur import PPTX";
       try {
-        const err = JSON.parse(raw) as { detail?: string | { msg?: string }[]; error?: string };
+        const err = JSON.parse(raw) as { detail?: string | { msg?: string }[]; error?: string; message?: string };
         if (typeof err.detail === "string") msg = err.detail;
         else if (Array.isArray(err.detail) && err.detail.length) msg = err.detail.map((d) => (d && typeof d === "object" && "msg" in d ? ((d as { msg?: string }).msg ?? "") : String(d ?? "")).trim()).filter(Boolean).join("; ") || msg;
         else if (typeof err.error === "string") msg = err.error;
+        else if (typeof err.message === "string") msg = err.message;
       } catch {
         if (raw.length && raw.length < 200) msg = raw;
-        else if (response.status === 502) msg = "Service prompteur indisponible (502). Vérifiez que l’API prompteur tourne.";
+        else if (status === 502) msg = "Service prompteur indisponible (502). Vérifiez que l’API prompteur tourne sur le serveur.";
+        else if (status === 500) msg = "Erreur serveur (500). Consultez les logs du service prompteur.";
+        else if (status === 413) msg = "Fichier trop volumineux (413).";
+        else msg = `Erreur import PPTX (HTTP ${status}).`;
       }
+      if (msg === "Erreur import PPTX" && status !== 200) msg = `Erreur import PPTX (HTTP ${status}).`;
       throw new Error(msg);
     }
     return response.json() as Promise<{ title: string; slide_count: number; slides: { id: number; title: string; script: string; notes?: string | null; kpis: string[] }[] }>;

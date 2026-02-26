@@ -51,41 +51,43 @@ function TreeNode({
   };
 
   return (
-    <div style={{ paddingLeft: depth * 16 }} className="flex items-center gap-1 group">
-      <div
-        className={`wiki-tree-node flex-1 min-w-0 ${selectedParent === node.id ? "active" : ""}`}
-        onClick={handleClick}
-        role={hasChildren ? "button" : "link"}
-        aria-label={hasChildren ? `Section ${node.title}, ${node.children!.length} article(s)` : `Ouvrir l'article ${node.title}`}
-      >
-        {hasChildren ? (
-          <span className="wiki-tree-arrow" aria-hidden>
-            {open ? (
-              <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
-                <path d="M480-373.85 303.85-550h352.3L480-373.85Z" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
-                <path d="M410-303.85v-352.3L586.15-480 410-303.85Z" />
-              </svg>
-            )}
-          </span>
-        ) : (
-          <span className="wiki-tree-doc" aria-hidden>📄</span>
-        )}
-        <span>{node.title}</span>
-        {hasChildren && <span className="wiki-tree-count">({node.children!.length})</span>}
+    <div style={{ paddingLeft: depth * 16 }} className="flex flex-col min-w-0">
+      <div className="flex items-center gap-1 group">
+        <div
+          className={`wiki-tree-node flex-1 min-w-0 ${selectedParent === node.id ? "active" : ""}`}
+          onClick={handleClick}
+          role={hasChildren ? "button" : "link"}
+          aria-label={hasChildren ? `Section ${node.title}, ${node.children!.length} article(s)` : `Ouvrir l'article ${node.title}`}
+        >
+          {hasChildren ? (
+            <span className="wiki-tree-arrow" aria-hidden>
+              {open ? (
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                  <path d="M480-373.85 303.85-550h352.3L480-373.85Z" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+                  <path d="M410-303.85v-352.3L586.15-480 410-303.85Z" />
+                </svg>
+              )}
+            </span>
+          ) : (
+            <span className="wiki-tree-doc" aria-hidden>📄</span>
+          )}
+          <span className="truncate">{node.title}</span>
+          {hasChildren && <span className="wiki-tree-count flex-shrink-0">({node.children!.length})</span>}
+        </div>
+        <Link
+          href={`/modules/wiki/new?parentId=${encodeURIComponent(node.id)}`}
+          onClick={(e) => e.stopPropagation()}
+          className="opacity-0 group-hover:opacity-100 text-sm px-1.5 py-0.5 rounded hover:bg-[var(--bpm-border)] flex-shrink-0"
+          style={{ color: "var(--bpm-accent-cyan)" }}
+          title="Créer un sous-article"
+          aria-label="Créer un sous-article"
+        >
+          +
+        </Link>
       </div>
-      <Link
-        href={`/modules/wiki/new?parentId=${encodeURIComponent(node.id)}`}
-        onClick={(e) => e.stopPropagation()}
-        className="opacity-0 group-hover:opacity-100 text-sm px-1.5 py-0.5 rounded hover:bg-[var(--bpm-border)]"
-        style={{ color: "var(--bpm-accent-cyan)" }}
-        title="Créer un sous-article"
-        aria-label="Créer un sous-article"
-      >
-        +
-      </Link>
       {open && hasChildren && node.children!.map((child) => (
         <TreeNode
           key={child.id}

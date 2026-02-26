@@ -68,12 +68,20 @@ export default function AssetManagerDomainPage() {
   if (!config) {
     return (
       <div className="doc-page">
-        <Panel variant="warning" title="Domaine introuvable">
-          Le domaine &quot;{domainId}&quot; n’existe pas ou n’est pas configuré.
+        <div className="doc-page-header mb-6">
+          <nav className="doc-breadcrumb">
+            <Link href="/modules">Modules</Link> → Gestion d&apos;actifs
+          </nav>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
+            Gestion d&apos;actifs
+          </h1>
+        </div>
+        <Panel variant="warning" title="Configuration introuvable">
+          Le domaine &quot;{domainId}&quot; n&apos;existe pas ou n&apos;est pas configuré.
         </Panel>
-        <Link href="/modules/asset-manager" className="mt-4 inline-block" style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Retour
-        </Link>
+        <nav className="doc-pagination mt-6">
+          <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour aux modules</Link>
+        </nav>
       </div>
     );
   }
@@ -110,14 +118,14 @@ export default function AssetManagerDomainPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header mb-6">
-        <div className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d’actifs</Link> → {config.domain_label}
-        </div>
+        <nav className="doc-breadcrumb">
+          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link>
+        </nav>
         <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
-          {config.domain_label}
+          Gestion d&apos;actifs
         </h1>
         <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {config.asset_label_plural}, tickets et {config.assignment_label}s.
+          {config.asset_label_plural}, tickets et {config.assignment_label}s. Tableau de bord et accès rapides.
         </p>
       </div>
 
@@ -159,8 +167,11 @@ export default function AssetManagerDomainPage() {
       </Panel>
 
       <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Changer de domaine
+        <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>
+          ← Retour aux modules
+        </Link>
+        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>
+          Documentation
         </Link>
       </nav>
     </div>

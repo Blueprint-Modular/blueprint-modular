@@ -235,7 +235,7 @@ export default function Monitor() {
   });
   const [showOpacityPanel, setShowOpacityPanel] = useState(false);
   // Position du panneau (déplaçable)
-  const PANEL_W = 430;
+  const PANEL_W = 520;
   const [panelPos, setPanelPos] = useState<{ left: number; top: number } | null>(null);
   const dragRef = useRef<{ startX: number; startY: number; startLeft: number; startTop: number } | null>(null);
 
@@ -453,7 +453,7 @@ export default function Monitor() {
           position: "fixed",
           ...(panelPos
             ? { left: panelPos.left, top: panelPos.top }
-            : { left: "calc(100vw - 430px - 14px)", top: 14 }),
+            : { left: "calc(100vw - 520px - 14px)", top: 14 }),
           width: `${PANEL_W}px`,
           maxHeight: "calc(100vh - 28px)",
           background: `rgba(255,255,255,${panelOpacity})`,
@@ -472,24 +472,24 @@ export default function Monitor() {
         }}
       >
         {/* ── HEADER (zone titre = poignée de déplacement) ── */}
-        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:`rgba(255,255,255,${Math.min(panelOpacity + 0.05, 1)})`, backdropFilter:"blur(12px)", WebkitBackdropFilter:"blur(12px)" }}>
+        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, flexWrap:"nowrap", gap:"12px", background:`rgba(255,255,255,${Math.min(panelOpacity + 0.05, 1)})`, backdropFilter:"blur(12px)", WebkitBackdropFilter:"blur(12px)" }}>
           <div
             role="button"
             tabIndex={0}
             onMouseDown={onHeaderDragStart}
             onTouchStart={onHeaderTouchStart}
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.preventDefault(); }}
-            style={{ display:"flex", alignItems:"center", gap:"8px", cursor:"move", userSelect:"none", touchAction:"none" }}
+            style={{ display:"flex", alignItems:"center", gap:"8px", cursor:"move", userSelect:"none", touchAction:"none", flexShrink:0, whiteSpace:"nowrap" }}
             title="Glisser pour déplacer le panneau"
             aria-label="Déplacer le panneau"
           >
             <BpmLogo size={20}/>
-            <span style={{ fontWeight:700, fontSize:"14px", letterSpacing:"-0.01em" }}>
+            <span style={{ fontWeight:700, fontSize:"14px", letterSpacing:"-0.01em", whiteSpace:"nowrap" }}>
               <span style={{ color:T.bleu }}>Blueprint</span>
               <span style={{ color:T.cyan }}> Monitor</span>
             </span>
           </div>
-          <div style={{ display:"flex", gap:"6px", alignItems:"center" }}>
+          <div style={{ display:"flex", gap:"6px", alignItems:"center", flexShrink:0, flexWrap:"nowrap" }}>
             {/* Import PPTX */}
             <input ref={fileRef} type="file" accept=".pptx" style={{ display:"none" }} onChange={async e => { const f=e.target.files?.[0]; if(f){await handleImport(f); e.target.value="";} }}/>
             <Btn onClick={() => fileRef.current?.click()} disabled={importing} variant="outline" size="sm">

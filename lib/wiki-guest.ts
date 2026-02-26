@@ -17,6 +17,7 @@ export type GuestWikiArticle = {
   authorId?: string;
   canEdit?: boolean;
   children?: GuestWikiArticle[];
+  tags?: string[];
 };
 
 /** 3 articles de base (non stockés en cache, toujours visibles en mode invité). */

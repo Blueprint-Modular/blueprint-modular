@@ -4,14 +4,22 @@ import { prisma } from "@/lib/prisma";
 import { normalizeSlug } from "@/lib/slug";
 import { countWords, readingTimeMinutes } from "@/lib/wiki-utils";
 
+const PAGE_SIZE = 20;
+
 export async function GET(request: Request) {
   const result = await getSessionOrTestUser();
   if (!result) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { user } = result;
   const { searchParams } = new URL(request.url);
   const publishedOnly = searchParams.get("published") === "true";
+  const status = searchParams.get("status")?.trim() ?? ""; // published | draft
   const search = searchParams.get("search")?.trim() ?? "";
   const tag = searchParams.get("tag")?.trim() ?? "";
+  const pinnedOnly = searchParams.get("pinned") === "true";
+  const parent = searchParams.get("parent")?.trim() ?? "";
+  const sortBy = searchParams.get("sortBy")?.trim() || "updatedAt"; // updatedAt | createdAt | title | viewCount
+  const sortOrder = searchParams.get("sortOrder")?.toLowerCase() === "asc" ? "asc" : "desc";
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
   const withContent = searchParams.get("withContent") === "true";
   const limitContent = Math.min(parseInt(searchParams.get("limit") ?? "15", 10) || 15, 30);
 
@@ -20,32 +28,65 @@ export async function GET(request: Request) {
       ? { OR: [{ isPublished: true }, { authorId: user.id }] }
       : { isPublished: true };
 
+  const statusCondition =
+    status === "published"
+      ? { isPublished: true }
+      : status === "draft"
+        ? { isPublished: false }
+        : null;
+  const pinnedCondition = pinnedOnly ? { pinned: true } : null;
+  const parentCondition = parent !== "" ? { parentId: parent || null } : null;
+
   const searchCondition = search
     ? {
         OR: [
           { title: { contains: search, mode: "insensitive" as const } },
           { slug: { contains: search, mode: "insensitive" as const } },
           { content: { contains: search, mode: "insensitive" as const } },
+          { tags: { hasSome: search.toLowerCase().split(/\s+/) } },
         ],
       }
     : null;
 
   const tagCondition = tag ? { tags: { has: tag } } : null;
-  const conditions = [visibility, searchCondition, tagCondition].filter(
-    (c): c is NonNullable<typeof c> => c != null
-  );
+  const conditions = [
+    visibility,
+    statusCondition,
+    pinnedCondition,
+    parentCondition,
+    searchCondition,
+    tagCondition,
+  ].filter((c): c is NonNullable<typeof c> => c != null);
   const where = conditions.length > 1 ? { AND: conditions } : conditions[0] ?? visibility;
+
+  const orderByKey =
+    sortBy === "createdAt"
+      ? "createdAt"
+      : sortBy === "title"
+        ? "title"
+        : sortBy === "viewCount"
+          ? "viewCount"
+          : "updatedAt";
+  const orderBy = [
+    { pinned: "desc" as const },
+    { [orderByKey]: sortOrder as "asc" | "desc" },
+  ];
+
+  const skip = withContent ? undefined : (page - 1) * PAGE_SIZE;
+  const take = withContent ? limitContent : PAGE_SIZE;
 
   const rawArticles = await prisma.wikiArticle.findMany({
     where,
-    orderBy: [{ pinned: "desc" }, { updatedAt: "desc" }],
-    take: withContent ? limitContent : undefined,
+    orderBy,
+    skip,
+    take,
     select: {
       id: true,
       title: true,
       slug: true,
       parentId: true,
       authorId: true,
+      createdAt: true,
       updatedAt: true,
       isPublished: true,
       excerpt: true,
@@ -55,6 +96,7 @@ export async function GET(request: Request) {
       readingTimeMinutes: true,
       viewCount: true,
       lastRevisedBy: true,
+      authorName: true,
       author: { select: { name: true } },
       ...(withContent ? { content: true } : {}),
     },
@@ -81,6 +123,7 @@ export async function POST(request: Request) {
     tags,
     coverImage,
     pinned,
+    template,
   } = body as {
     title?: string;
     content?: string;
@@ -91,6 +134,7 @@ export async function POST(request: Request) {
     tags?: string[];
     coverImage?: string | null;
     pinned?: boolean;
+    template?: string | null;
   };
   if (!title || !slug) {
     return NextResponse.json({ error: "title and slug required" }, { status: 400 });
@@ -110,11 +154,13 @@ export async function POST(request: Request) {
       slug: normalizedSlug,
       parentId: parentId || null,
       authorId: user.id,
+      authorName: user.name ?? null,
       isPublished: isPublished ?? false,
       excerpt: excerpt || null,
       tags: Array.isArray(tags) ? tags : [],
       coverImage: coverImage || null,
       pinned: pinned ?? false,
+      template: template || null,
       wordCount,
       readingTimeMinutes: readingTime,
       lastRevisedBy: user.name ?? null,

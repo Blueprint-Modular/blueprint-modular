@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -9,7 +9,18 @@ import { WikiEditorToolbar } from "@/components/wiki/WikiEditorToolbar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import rehypeHighlight from "rehype-highlight";
 import { getGuestArticleBySlug, updateGuestArticle } from "@/lib/wiki-guest";
+
+/** Transforme [[slug]] et [[slug|label]] en liens Markdown. */
+function contentWithWikiLinks(content: string): string {
+  if (!content) return content;
+  return content.replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, slugPart, label) => {
+    const slug = slugPart.trim().toLowerCase().replace(/\s+/g, "-");
+    const text = (label ?? slugPart).trim() || slug;
+    return `[${text}](/modules/wiki/${encodeURIComponent(slug)})`;
+  });
+}
 
 export default function WikiEditPage() {
   const params = useParams();
@@ -25,6 +36,10 @@ export default function WikiEditPage() {
   const [pinned, setPinned] = useState(false);
   const [changeNote, setChangeNote] = useState("");
   const [preview, setPreview] = useState(false);
+  const [viewMode, setViewMode] = useState<"editor" | "split" | "preview">("split");
+  const [splitRatio, setSplitRatio] = useState(0.5);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +51,72 @@ export default function WikiEditPage() {
   const [aiWorkspace, setAiWorkspace] = useState<"service1" | "service2" | "shared">("shared");
 
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const splitDragRef = useRef(false);
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!splitDragRef.current) return;
+      const container = document.querySelector(".wiki-edit-split-container");
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const x = Math.max(0.2, Math.min(0.8, (e.clientX - rect.left) / rect.width));
+      setSplitRatio(x);
+    };
+    const onMouseUp = () => { splitDragRef.current = false; };
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+
+  const markDirty = useCallback(() => setDirty(true), []);
+
+  const performSave = useCallback(async () => {
+    if (isGuestArticle) {
+      const updated = updateGuestArticle(slug, { title, content, isPublished });
+      if (updated) {
+        setLastSavedAt(new Date());
+        setDirty(false);
+      }
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/wiki/${encodeURIComponent(slug)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          content,
+          isPublished,
+          excerpt: excerpt.trim() || null,
+          tags,
+          pinned,
+          changeNote: changeNote.trim() || null,
+        }),
+        credentials: "include",
+      });
+      if (res.ok) {
+        setLastSavedAt(new Date());
+        setDirty(false);
+      } else {
+        setError("Erreur lors de la sauvegarde");
+      }
+    } catch {
+      setError("Impossible de sauvegarder");
+    } finally {
+      setSaving(false);
+    }
+  }, [slug, title, content, isPublished, excerpt, tags, pinned, changeNote, isGuestArticle]);
+
+  useEffect(() => {
+    if (!dirty || isGuestArticle) return;
+    const t = setInterval(performSave, 30_000);
+    return () => clearInterval(t);
+  }, [dirty, isGuestArticle, performSave]);
 
   const streamWikiGenerate = async (body: Record<string, unknown>) => {
     setAiLoading(true);
@@ -169,6 +250,8 @@ export default function WikiEditPage() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Erreur");
+      setLastSavedAt(new Date());
+      setDirty(false);
       router.push(`/modules/wiki/${slug}`);
     } catch {
       setError("Impossible de sauvegarder");
@@ -187,36 +270,91 @@ export default function WikiEditPage() {
     );
   }
 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6" style={{ color: "var(--bpm-accent)" }}>
-        Modifier l&apos;article
-      </h1>
+  const handleContentChange = (v: string) => {
+    setContent(v);
+    setDirty(true);
+  };
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl">
+  const toggleViewMode = () => {
+    if (viewMode === "split") setViewMode("preview");
+    else if (viewMode === "preview") setViewMode("split");
+    else setViewMode("split");
+    setPreview(viewMode !== "preview");
+  };
+
+  const isPreviewOnly = viewMode === "preview";
+
+  return (
+    <div className="flex flex-col min-h-0">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-accent)" }}>
+          Modifier l&apos;article
+        </h1>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span
+            className="text-xs px-2 py-1 rounded"
+            style={{
+              color: "var(--bpm-text-secondary)",
+              background: dirty ? "rgba(245,158,11,0.15)" : "var(--bpm-bg-secondary)",
+              border: "1px solid var(--bpm-border)",
+            }}
+            title={dirty ? "Modification non sauvegardée" : lastSavedAt ? `Brouillon sauvegardé à ${lastSavedAt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}` : ""}
+          >
+            {dirty ? "Modification non sauvegardée" : lastSavedAt ? `Sauvegardé à ${lastSavedAt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}` : "—"}
+          </span>
+          <div className="flex gap-1" role="group" aria-label="Mode d’affichage">
+            <Button
+              type="button"
+              variant={viewMode === "editor" ? "primary" : "outline"}
+              size="small"
+              onClick={() => { setViewMode("editor"); setPreview(false); }}
+            >
+              Éditeur
+            </Button>
+            <Button
+              type="button"
+              variant={viewMode === "split" ? "primary" : "outline"}
+              size="small"
+              onClick={() => { setViewMode("split"); setPreview(true); }}
+            >
+              Split
+            </Button>
+            <Button
+              type="button"
+              variant={viewMode === "preview" ? "primary" : "outline"}
+              size="small"
+              onClick={() => { setViewMode("preview"); setPreview(true); }}
+            >
+              Aperçu
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col min-h-0">
         <label className="block">
           <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Titre</span>
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
             required
             className="bpm-input w-full px-3 py-2 rounded border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
           />
         </label>
         <div>
-          <Toggle label="Publié" value={isPublished} onChange={setIsPublished} />
+          <Toggle label="Publié" value={isPublished} onChange={(v) => { setIsPublished(v); setDirty(true); }} />
         </div>
         <div>
-          <Toggle label="Épingler cet article" value={pinned} onChange={setPinned} />
+          <Toggle label="Épingler cet article" value={pinned} onChange={(v) => { setPinned(v); setDirty(true); }} />
         </div>
         <label className="block">
           <span className="block text-sm mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Résumé (excerpt)</span>
           <input
             type="text"
             value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
+            onChange={(e) => { setExcerpt(e.target.value); setDirty(true); }}
             placeholder="2-3 lignes optionnel"
             className="bpm-input w-full px-3 py-2 rounded border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
@@ -228,7 +366,7 @@ export default function WikiEditPage() {
             {tags.map((t) => (
               <span key={t} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm" style={{ background: "var(--bpm-border)", color: "var(--bpm-text-primary)" }}>
                 {t}
-                <button type="button" onClick={() => setTags((prev) => prev.filter((x) => x !== t))} className="opacity-70 hover:opacity-100" aria-label="Retirer">×</button>
+                <button type="button" onClick={() => { setTags((prev) => prev.filter((x) => x !== t)); setDirty(true); }} className="opacity-70 hover:opacity-100" aria-label="Retirer">×</button>
               </span>
             ))}
             <input
@@ -239,7 +377,7 @@ export default function WikiEditPage() {
                 if (e.key === "Enter" || e.key === ",") {
                   e.preventDefault();
                   const v = (e.key === "," ? tagInput.replace(/,/g, "") : tagInput).trim();
-                  if (v && !tags.includes(v)) setTags((prev) => [...prev, v]);
+                  if (v && !tags.includes(v)) { setTags((prev) => [...prev, v]); setDirty(true); }
                   setTagInput("");
                 }
               }}
@@ -262,11 +400,6 @@ export default function WikiEditPage() {
         </label>
 
         <div className="flex flex-wrap items-center gap-2 border-b pb-2" style={{ borderColor: "var(--bpm-border)" }}>
-          <Toggle
-            label={preview ? "Prévisualisation : oui" : "Prévisualisation : non"}
-            value={preview}
-            onChange={setPreview}
-          />
           {!isGuestArticle && (
             <button
               type="button"
@@ -346,29 +479,62 @@ export default function WikiEditPage() {
           </div>
         )}
 
-        {preview ? (
+        {(viewMode === "split" || viewMode === "editor" || viewMode === "preview") && (
           <div
-            className="min-h-[400px] p-4 rounded border prose prose-sm max-w-none"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            className="wiki-edit-split-container flex-1 flex min-h-[400px] border rounded overflow-hidden"
+            style={{ borderColor: "var(--bpm-border)" }}
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{content || "*Aucun contenu.*"}</ReactMarkdown>
+            {(viewMode === "editor" || viewMode === "split") && (
+              <div
+                className="flex flex-col min-w-0 flex-1"
+                style={{ width: viewMode === "split" ? `${splitRatio * 100}%` : "100%" }}
+              >
+                <WikiEditorToolbar
+                  textareaRef={contentTextareaRef}
+                  value={content}
+                  onChange={handleContentChange}
+                  onSave={performSave}
+                  onTogglePreview={toggleViewMode}
+                  showPreview={isPreviewOnly}
+                />
+                <textarea
+                  ref={contentTextareaRef}
+                  value={content}
+                  onChange={(e) => handleContentChange(e.target.value)}
+                  rows={18}
+                  className="bpm-textarea flex-1 w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[200px]"
+                  style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+                />
+              </div>
+            )}
+            {viewMode === "split" && (
+              <div
+                role="separator"
+                aria-valuenow={splitRatio}
+                className="w-2 flex-shrink-0 cursor-col-resize hover:bg-[var(--bpm-accent)] transition-colors"
+                style={{ background: "var(--bpm-border)" }}
+                onMouseDown={() => { splitDragRef.current = true; }}
+              />
+            )}
+            {(viewMode === "split" || viewMode === "preview") && (
+              <div
+                className="flex-1 min-w-0 overflow-auto p-4 prose prose-sm max-w-none"
+                style={{
+                  width: viewMode === "split" ? `${(1 - splitRatio) * 100}%` : "100%",
+                  borderColor: "var(--bpm-border)",
+                  background: "var(--bpm-bg-secondary)",
+                  color: "var(--bpm-text-primary)",
+                }}
+              >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw, rehypeHighlight]}
+                >
+                  {contentWithWikiLinks(content) || "*Aucun contenu.*"}
+                </ReactMarkdown>
+              </div>
+            )}
           </div>
-        ) : (
-          <>
-            <WikiEditorToolbar
-              textareaRef={contentTextareaRef}
-              value={content}
-              onChange={setContent}
-            />
-            <textarea
-              ref={contentTextareaRef}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={18}
-              className="bpm-textarea w-full px-3 py-2 rounded-b border font-mono text-sm min-h-[400px]"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-            />
-          </>
         )}
 
         <div className="flex gap-3">

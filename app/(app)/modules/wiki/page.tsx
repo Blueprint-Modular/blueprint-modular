@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { Badge, Button } from "@/components/bpm";
 import { getGuestWikiArticles, deleteGuestArticle, type GuestWikiArticle } from "@/lib/wiki-guest";
 
 type WikiArticle = GuestWikiArticle;
@@ -76,7 +77,20 @@ export default function WikiPage() {
   const openArticle = (slug: string) => router.push(`/modules/wiki/${slug}`);
 
   const [tagFilter, setTagFilter] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"" | "published" | "draft">("");
+  const [sortBy, setSortBy] = useState<"updatedAt" | "createdAt" | "title" | "viewCount">("updatedAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(1);
   const [allTags, setAllTags] = useState<{ tag: string; count: number }[]>([]);
+
+  const hasActiveFilters = tagFilter !== null || statusFilter !== "" || search.trim() !== "";
+
+  const clearFilters = () => {
+    setTagFilter(null);
+    setStatusFilter("");
+    setSearch("");
+    setPage(1);
+  };
 
   const fetchArticles = useCallback(() => {
     setLoading(true);
@@ -89,13 +103,17 @@ export default function WikiPage() {
     const params = new URLSearchParams();
     if (search) params.set("search", search);
     if (tagFilter) params.set("tag", tagFilter);
-    const url = `/api/wiki${params.toString() ? `?${params.toString()}` : ""}`;
+    if (statusFilter) params.set("status", statusFilter);
+    params.set("sortBy", sortBy);
+    params.set("sortOrder", sortOrder);
+    params.set("page", String(page));
+    const url = `/api/wiki?${params.toString()}`;
     fetch(url, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setArticles(Array.isArray(data) ? data : []))
       .catch(() => setArticles([]))
       .finally(() => setLoading(false));
-  }, [search, tagFilter, session]);
+  }, [search, tagFilter, statusFilter, sortBy, sortOrder, page, session]);
 
   useEffect(() => {
     if (session) {
@@ -122,14 +140,14 @@ export default function WikiPage() {
     if (res.ok) setArticles((prev) => prev.filter((a) => a.slug !== slug));
   };
 
-  const filteredArticles =
-    !session && search.trim()
-      ? articles.filter(
-          (a) =>
-            a.title.toLowerCase().includes(search.toLowerCase()) ||
-            a.slug.toLowerCase().includes(search.toLowerCase()) ||
-            (a.content && a.content.toLowerCase().includes(search.toLowerCase()))
-        )
+  const filteredArticles = session
+    ? articles
+    : search.trim() || tagFilter
+      ? articles.filter((a) => {
+          const matchSearch = !search.trim() || a.title.toLowerCase().includes(search.toLowerCase()) || a.slug.toLowerCase().includes(search.toLowerCase()) || (a.content && a.content.toLowerCase().includes(search.toLowerCase()));
+          const matchTag = !tagFilter || (Array.isArray(a.tags) && a.tags.includes(tagFilter));
+          return matchSearch && matchTag;
+        })
       : articles;
   const tree = buildTree(filteredArticles);
   const displayed = filteredArticles
@@ -140,6 +158,7 @@ export default function WikiPage() {
       if (pinnedB !== pinnedA) return pinnedB - pinnedA;
       return new Date((b as { updatedAt?: string }).updatedAt ?? b.updatedAt).getTime() - new Date((a as { updatedAt?: string }).updatedAt ?? a.updatedAt).getTime();
     });
+  const noResultsForFilters = hasActiveFilters && (session ? articles.length === 0 : filteredArticles.length === 0);
 
   return (
     <div className="wiki-page doc-page">
@@ -159,14 +178,50 @@ export default function WikiPage() {
           + Nouvel article
         </Link>
       </div>
-      <div className="wiki-search flex flex-wrap items-center gap-2">
+      <div className="wiki-search flex flex-wrap items-center gap-2 mb-2">
         <input
           type="search"
-          placeholder="Rechercher dans le wiki..."
+          placeholder="Rechercher (titre, contenu, tags)..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
           className="flex-1 min-w-[200px]"
         />
+        {session && (
+          <>
+            <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Statut :</span>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value as "" | "published" | "draft"); setPage(1); }}
+              className="text-sm px-2 py-1 rounded border"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            >
+              <option value="">Tous</option>
+              <option value="published">Publié</option>
+              <option value="draft">Brouillon</option>
+            </select>
+            <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Tri :</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="text-sm px-2 py-1 rounded border"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            >
+              <option value="updatedAt">Date MàJ</option>
+              <option value="createdAt">Date création</option>
+              <option value="title">Titre A-Z</option>
+              <option value="viewCount">Vues</option>
+            </select>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+              className="text-sm px-2 py-1 rounded border"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+            >
+              <option value="desc">Desc</option>
+              <option value="asc">Asc</option>
+            </select>
+          </>
+        )}
         {session && allTags.length > 0 && (
           <div className="flex flex-wrap gap-1 items-center">
             <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Tag :</span>
@@ -182,7 +237,7 @@ export default function WikiPage() {
               <button
                 key={tag}
                 type="button"
-                onClick={() => setTagFilter(tagFilter === tag ? null : tag)}
+                onClick={() => { setTagFilter(tagFilter === tag ? null : tag); setPage(1); }}
                 className={`text-xs px-2 py-1 rounded ${tagFilter === tag ? "opacity-100 font-medium" : "opacity-70"}`}
                 style={{
                   background: tagFilter === tag ? "var(--bpm-accent-cyan)" : "var(--bpm-bg-secondary)",
@@ -196,13 +251,28 @@ export default function WikiPage() {
         )}
       </div>
       {loading ? (
-        <div className="wiki-loading">Chargement...</div>
-      ) : articles.length === 0 ? (
-        <div className="wiki-empty">
-          <p>Le wiki est vide pour l&apos;instant.</p>
-          <Link href="/modules/wiki/new" className="text-sm mt-2 inline-block" style={{ color: "var(--bpm-accent-cyan)" }}>
-            Créer le premier article →
+        <div className="wiki-loading flex flex-col gap-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="wiki-card flex flex-col gap-2 p-4 rounded border animate-pulse" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
+              <div className="h-5 w-3/4 rounded bg-[var(--bpm-border)]" />
+              <div className="h-4 w-full rounded bg-[var(--bpm-border)]" />
+              <div className="h-4 w-1/2 rounded bg-[var(--bpm-border)]" />
+            </div>
+          ))}
+        </div>
+      ) : articles.length === 0 && !hasActiveFilters ? (
+        <div className="wiki-empty text-center py-12">
+          <p className="text-lg" style={{ color: "var(--bpm-text-primary)" }}>Votre wiki est vide.</p>
+          <Link href="/modules/wiki/new" className="inline-block mt-4">
+            <Button size="small">Créer le premier article</Button>
           </Link>
+        </div>
+      ) : noResultsForFilters ? (
+        <div className="wiki-empty text-center py-12">
+          <p className="text-lg" style={{ color: "var(--bpm-text-primary)" }}>Aucun article pour ces filtres.</p>
+          <Button type="button" variant="outline" size="small" onClick={clearFilters} className="mt-4">
+            Effacer les filtres
+          </Button>
         </div>
       ) : (
         <div className="wiki-layout">
@@ -239,7 +309,11 @@ export default function WikiPage() {
                           {a.pinned && (
                             <span className="text-xs px-2 py-0.5 rounded" style={{ background: "var(--bpm-accent)", color: "#fff" }}>Épinglé</span>
                           )}
-                          {!article.isPublished && <span className="wiki-draft text-xs">Brouillon</span>}
+                          {!article.isPublished ? (
+                            <Badge variant="warning" className="text-xs">Brouillon</Badge>
+                          ) : (
+                            <Badge variant="success" className="text-xs">Publié</Badge>
+                          )}
                         </h3>
                         {a.excerpt && (
                           <p className="text-sm mt-1 line-clamp-2" style={{ color: "var(--bpm-text-secondary)" }}>{a.excerpt}</p>

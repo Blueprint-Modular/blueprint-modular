@@ -50,6 +50,7 @@ export function NotificationBell() {
   const [animActive, setAnimActive] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
+  const touchHandledRef = useRef(false);
 
   const [minLevel, setMinLevel] = useState<1 | 2 | 3>(() => {
     if (typeof window === "undefined") return 3;
@@ -132,6 +133,23 @@ export function NotificationBell() {
   const toggle = () => {
     if (!isOpen && !isClosing) setIsOpen(true);
     else if (isOpen && !isClosing) requestClose();
+  };
+
+  /** Sur mobile/PWA en portrait, le click peut ne pas se déclencher (z-index, délai tactile).
+   * On force l'ouverture au touchEnd pour un comportement fiable. */
+  const handleMobileBellTouch = (e: React.TouchEvent) => {
+    e.preventDefault();
+    touchHandledRef.current = true;
+    toggle();
+  };
+
+  const handleMobileBellClick = (e: React.MouseEvent) => {
+    if (touchHandledRef.current) {
+      touchHandledRef.current = false;
+      e.preventDefault();
+      return;
+    }
+    toggle();
   };
 
   const filteredNotifications = notifications.filter((n) => (n.level ?? 3) <= minLevel);
@@ -267,7 +285,8 @@ export function NotificationBell() {
         <button
           type="button"
           className="dashboard-header-icon-btn notification-bell-mobile-btn"
-          onClick={toggle}
+          onClick={handleMobileBellClick}
+          onTouchEnd={handleMobileBellTouch}
           aria-label="Notifications"
         >
           <BellSvg />

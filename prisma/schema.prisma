@@ -54,11 +54,13 @@ model WikiArticle {
   excerpt            String?   @db.Text
   tags               String[]  @default([])
   coverImage         String?   @map("cover_image")
+  authorName         String?   @map("author_name")
   lastRevisedBy      String?   @map("last_revised_by")
   readingTimeMinutes Int?      @map("reading_time_minutes")
   wordCount          Int?      @map("word_count")
   viewCount          Int       @default(0) @map("view_count")
   pinned             Boolean   @default(false) @map("pinned")
+  template           String?   @map("template")
   parent             WikiArticle?   @relation("WikiHierarchy", fields: [parentId], references: [id])
   children           WikiArticle[]  @relation("WikiHierarchy")
   author             User          @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
@@ -72,7 +74,7 @@ model WikiRevision {
   id         String     @id @default(cuid())
   articleId  String     @map("article_id")
   content    String     @db.Text
-  authorId   String     @map("author_id")
+  authorId   String?     @map("author_id")
   authorName String?    @map("author_name")
   changeNote String?    @map("change_note") @db.Text
   createdAt  DateTime   @default(now()) @map("created_at")
@@ -83,7 +85,7 @@ model WikiComment {
   id         String     @id @default(cuid())
   articleId  String     @map("article_id")
   content    String     @db.Text
-  authorId   String     @map("author_id")
+  authorId   String?    @map("author_id")
   authorName String?    @map("author_name")
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime   @updatedAt @map("updated_at")

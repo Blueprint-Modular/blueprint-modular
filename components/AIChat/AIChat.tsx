@@ -76,20 +76,40 @@ function MessageBubble({
   assistantName,
   onRetry,
   previousUserContent,
+  isExpanded,
+  onToggle,
 }: {
   message: ChatMsg;
   assistantName: string;
   onRetry?: (userMessage: string) => void;
   previousUserContent?: string;
+  /** Si défini, l'heure n'est affichée qu'au clic sur la bulle (comportement type SMS Android). */
+  isExpanded?: boolean;
+  onToggle?: () => void;
 }) {
   const timeStr =
     message.createdAt != null
       ? new Date(message.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
       : null;
+  const showTime = timeStr && (onToggle === undefined ? true : isExpanded);
+  const handleBubbleClick = onToggle
+    ? (e: React.MouseEvent) => {
+        if ((e.target as HTMLElement).closest("a") || (e.target as HTMLElement).closest("button")) return;
+        onToggle();
+      }
+    : undefined;
+
   if (message.role === "assistant") {
     const isError = message.error === true;
     return (
-      <div className={`bpm-ai-message bpm-ai-message--assistant${isError ? " bpm-ai-message--error" : ""}`}>
+      <div
+        className={`bpm-ai-message bpm-ai-message--assistant${isError ? " bpm-ai-message--error" : ""}${showTime ? " bpm-ai-message--expanded" : ""}`}
+        onClick={handleBubbleClick}
+        role={onToggle ? "button" : undefined}
+        tabIndex={onToggle ? 0 : undefined}
+        onKeyDown={onToggle ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } } : undefined}
+        aria-label={onToggle && timeStr ? "Cliquer pour afficher l'heure" : undefined}
+      >
         <div className="bpm-ai-message-header">
           <span className="bpm-ai-message-provider" style={{ color: "var(--bpm-accent)" }}>
             {assistantName}:
@@ -98,9 +118,11 @@ function MessageBubble({
             <span className="bpm-ai-message-actions">
               <Badge variant="error" className="bpm-ai-message-error-badge">Erreur</Badge>
               {onRetry && previousUserContent && (
-                <Button variant="secondary" size="small" onClick={() => onRetry(previousUserContent)}>
-                  ↺ Réessayer
-                </Button>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <Button variant="secondary" size="small" onClick={() => onRetry(previousUserContent)}>
+                    ↺ Réessayer
+                  </Button>
+                </span>
               )}
             </span>
           )}
@@ -116,14 +138,29 @@ function MessageBubble({
             {message.content || ""}
           </ReactMarkdown>
         </div>
-        {timeStr && <div className="bpm-ai-message-footer">{timeStr}</div>}
+        {timeStr && (
+          <div className={`bpm-ai-message-footer${showTime ? " bpm-ai-message-footer--visible" : ""}`}>
+            {timeStr}
+          </div>
+        )}
       </div>
     );
   }
   return (
-    <div className="bpm-ai-message bpm-ai-message--user">
+    <div
+      className={`bpm-ai-message bpm-ai-message--user${showTime ? " bpm-ai-message--expanded" : ""}`}
+      onClick={handleBubbleClick}
+      role={onToggle ? "button" : undefined}
+      tabIndex={onToggle ? 0 : undefined}
+      onKeyDown={onToggle ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } } : undefined}
+      aria-label={onToggle && timeStr ? "Cliquer pour afficher l'heure" : undefined}
+    >
       <div className="bpm-ai-message-body">{highlightAtAndDollar(message.content || "")}</div>
-      {timeStr && <div className="bpm-ai-message-footer">{timeStr}</div>}
+      {timeStr && (
+        <div className={`bpm-ai-message-footer${showTime ? " bpm-ai-message-footer--visible" : ""}`}>
+          {timeStr}
+        </div>
+      )}
     </div>
   );
 }
@@ -164,6 +201,7 @@ export function AIChat({
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [selectedContextModuleIds, setSelectedContextModuleIds] = useState<string[]>([]);
   const [streamProgress, setStreamProgress] = useState<{ startTime: number; tokenCount: number } | null>(null);
+  const [expandedBubbleIndex, setExpandedBubbleIndex] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
@@ -700,6 +738,8 @@ export function AIChat({
               assistantName={assistantName}
               onRetry={msg.role === "assistant" && (msg as ChatMsg & { error?: boolean }).error ? handleRetry : undefined}
               previousUserContent={msg.role === "assistant" ? prevUser : undefined}
+              isExpanded={expandedBubbleIndex === i}
+              onToggle={() => setExpandedBubbleIndex((prev) => (prev === i ? null : i))}
             />
           );
         })}

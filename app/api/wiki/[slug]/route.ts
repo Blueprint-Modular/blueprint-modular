@@ -68,6 +68,7 @@ export async function PUT(
     tags?: string[];
     coverImage?: string | null;
     pinned?: boolean;
+    template?: string | null;
     changeNote?: string | null;
   };
 
@@ -128,9 +129,11 @@ export async function PUT(
         ...(body.tags !== undefined && { tags: body.tags ?? [] }),
         ...(body.coverImage !== undefined && { coverImage: body.coverImage || null }),
         ...(body.pinned !== undefined && { pinned: body.pinned }),
+        ...(body.template !== undefined && { template: body.template || null }),
         wordCount,
         readingTimeMinutes: readingTime,
         lastRevisedBy: user.name ?? null,
+        authorName: user.name ?? undefined,
       },
     });
   });

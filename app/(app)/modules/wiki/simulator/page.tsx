@@ -16,7 +16,7 @@ export default function WikiSimulatorRedirectPage() {
   return (
     <div className="doc-page flex flex-col items-center justify-center gap-4 min-h-[200px]" style={{ color: "var(--bpm-text-secondary)" }}>
       <Spinner size="medium" text="Redirection vers le Wiki…" />
-      <p className="text-sm">Vous allez être redirigé vers l&apos;article Accueil (mode démo).</p>
+      <p className="text-sm">Vous allez être redirigé vers l&apos;article Guide (mode démo).</p>
     </div>
   );
 }

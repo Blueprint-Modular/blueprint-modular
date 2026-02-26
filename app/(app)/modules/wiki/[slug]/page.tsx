@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import ReactMarkdown from "react-markdown";
@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import { Panel, Button } from "@/components/bpm";
+import { useAssistant } from "@/lib/ai/assistant-context";
 import { getGuestArticleBySlug, getGuestWikiArticles, deleteGuestArticle } from "@/lib/wiki-guest";
 
 type Article = {
@@ -49,11 +50,28 @@ function guestToArticle(g: ReturnType<typeof getGuestArticleBySlug>): Article | 
   };
 }
 
-/** Transforme #mot (hashtags) en spans tag pour le rendu, sans casser les titres Markdown (H1–H6 : # suivi d'un espace). */
-function contentWithHashtagTags(content: string): string {
+/**
+ * Transforme #mot en badge cliquable uniquement si le tag existe en base.
+ * Ne casse pas les titres Markdown (H1–H6 : # suivi d'un espace).
+ * Si le tag n'existe pas : affiche le mot sans le # (texte normal).
+ */
+function contentWithHashtagTags(content: string, knownTags: string[]): string {
   if (!content) return content;
-  const withLineStart = content.replace(/^#([a-zA-Z0-9_\u00C0-\u024F-]+)/gm, '<span class="bpm-wiki-tag">$1</span>');
-  return withLineStart.replace(/\s#([a-zA-Z0-9_\u00C0-\u024F-]+)/g, ' <span class="bpm-wiki-tag">$1</span>');
+  const tagSet = new Set(knownTags.map((t) => t.toLowerCase()));
+  const badgeHtml = (w: string) =>
+    `<a href="/modules/wiki?tag=${encodeURIComponent(w)}" class="bpm-badge bpm-badge-default inline-block text-xs font-medium px-2 py-0.5 rounded-md no-underline" style="background:var(--bpm-bg-secondary);color:var(--bpm-text-primary);border:1px solid var(--bpm-border)">${escapeHtml(w)}</a>`;
+  let out = content.replace(/^#([a-zA-Z0-9_\u00C0-\u024F-]+)/gm, (_: string, word: string) => {
+    const w = word.trim();
+    return tagSet.has(w.toLowerCase()) ? badgeHtml(w) : escapeHtml(w);
+  });
+  out = out.replace(/(\s)#([a-zA-Z0-9_\u00C0-\u024F-]+)/g, (_: string, space: string, word: string) => {
+    const w = word.trim();
+    return tagSet.has(w.toLowerCase()) ? space + badgeHtml(w) : space + escapeHtml(w);
+  });
+  return out;
+}
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 /** Transforme [[slug]] et [[slug|label]] en liens Markdown vers /modules/wiki/slug. */
@@ -83,7 +101,9 @@ function buildToc(content: string): { level: 2 | 3; text: string; id: string }[]
 export default function WikiArticlePage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const slug = params.slug as string;
+  const isPrint = searchParams.get("print") === "true";
   const { data: session, status } = useSession();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
@@ -93,6 +113,47 @@ export default function WikiArticlePage() {
   const [comments, setComments] = useState<{ id: string; content: string; authorName?: string; createdAt: string }[]>([]);
   const [commentText, setCommentText] = useState("");
   const [commentSending, setCommentSending] = useState(false);
+  const [knownTags, setKnownTags] = useState<string[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const assistant = useAssistant();
+
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, []);
+
+  const openAiAssistant = () => {
+    const context = `Tu es en train de consulter l'article "${article?.title}" du wiki. Voici son contenu complet :\n\n${article?.content ?? ""}\n\nRéponds aux questions de l'utilisateur sur cet article ou sur les sujets qu'il aborde.`;
+    assistant?.openAssistant(context);
+    setMenuOpen(false);
+  };
+
+  const copyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(`${window.location.origin}/modules/wiki/${article?.slug ?? ""}`);
+      setMenuOpen(false);
+    }
+  };
+
+  const exportMarkdown = () => {
+    if (!article) return;
+    const blob = new Blob([article.content], { type: "text/markdown;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${article.slug || "article"}.md`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setMenuOpen(false);
+  };
+
+  const openPrint = () => {
+    window.open(`/modules/wiki/${article?.slug ?? ""}?print=true`, "_blank", "noopener");
+    setMenuOpen(false);
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -128,6 +189,17 @@ export default function WikiArticlePage() {
       .then((data) => setComments(Array.isArray(data) ? data : []))
       .catch(() => setComments([]));
   }, [session, slug, article?.id]);
+
+  useEffect(() => {
+    if (session) {
+      fetch("/api/wiki/tags", { credentials: "include" })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((data: { tag: string }[]) => setKnownTags(Array.isArray(data) ? data.map((x) => x.tag) : []))
+        .catch(() => setKnownTags([]));
+    } else if (article) {
+      setKnownTags(Array.isArray(article.tags) ? article.tags : []);
+    }
+  }, [session, article]);
 
   const refreshComments = () => {
     if (!session || !slug) return;
@@ -184,7 +256,24 @@ export default function WikiArticlePage() {
   }
 
   const toc = buildToc(article.content);
-  const contentForRender = contentWithHashtagTags(contentWithWikiLinks(article.content));
+  const contentForRender = contentWithHashtagTags(contentWithWikiLinks(article.content), knownTags);
+
+  if (isPrint) {
+    return (
+      <div className="wiki-print-only p-8 max-w-[720px] mx-auto" style={{ color: "var(--bpm-text-primary)" }}>
+        <h1 className="text-3xl font-bold mb-2">{article.title}</h1>
+        <p className="text-sm mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
+          {article.author?.name ?? article.lastRevisedBy ?? "—"} · {new Date(article.updatedAt).toLocaleDateString("fr-FR")}
+          {article.readingTimeMinutes != null && ` · ${article.readingTimeMinutes} min`}
+        </p>
+        <div className="prose prose-sm max-w-none wiki-article-content" style={{ lineHeight: 1.7 }}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeHighlight]}>
+            {contentForRender || "*Aucun contenu.*"}
+          </ReactMarkdown>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">
@@ -197,18 +286,51 @@ export default function WikiArticlePage() {
             )}
             {!article.isPublished && <span className="wiki-draft ml-2">Brouillon</span>}
           </h1>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap" ref={menuRef}>
+            {session && (
+              <Button variant="outline" size="small" onClick={openAiAssistant}>
+                Demander à l&apos;IA
+              </Button>
+            )}
             {(session || article.canEdit) && (
               <>
-                <Link href={`/modules/wiki/${article.slug}/edit`}>
+                <Link
+                  href={`/modules/wiki/${article.slug}/edit`}
+                  title={!session && article.canEdit ? "Modifications enregistrées localement (connectez-vous pour sauvegarder en base)" : undefined}
+                >
                   <Button variant="outline" size="small">Modifier</Button>
                 </Link>
                 <Link href={`/modules/wiki/${article.slug}/history`}>
                   <Button variant="outline" size="small">Historique</Button>
                 </Link>
-                <Button variant="outline" size="small" onClick={handleDelete} disabled={deleting}>
-                  Supprimer
-                </Button>
+                <div className="relative inline-block">
+                  <Button variant="outline" size="small" onClick={() => setMenuOpen((o) => !o)} aria-haspopup="true" aria-expanded={menuOpen}>
+                    …
+                  </Button>
+                  {menuOpen && (
+                    <div
+                      className="absolute right-0 top-full mt-1 py-1 rounded border shadow-lg z-20 min-w-[180px]"
+                      style={{ background: "var(--bpm-surface)", borderColor: "var(--bpm-border)" }}
+                      role="menu"
+                    >
+                      <button type="button" className="block w-full text-left px-3 py-2 text-sm hover:bg-[var(--bpm-bg-secondary)]" style={{ color: "var(--bpm-text-primary)" }} role="menuitem" onClick={copyLink}>
+                        Copier le lien
+                      </button>
+                      <Link href={`/modules/wiki/${article.slug}/history`} className="block px-3 py-2 text-sm hover:bg-[var(--bpm-bg-secondary)]" style={{ color: "var(--bpm-text-primary)" }} onClick={() => setMenuOpen(false)}>
+                        Voir l&apos;historique
+                      </Link>
+                      <button type="button" className="block w-full text-left px-3 py-2 text-sm hover:bg-[var(--bpm-bg-secondary)]" style={{ color: "var(--bpm-text-primary)" }} role="menuitem" onClick={exportMarkdown}>
+                        Exporter en Markdown (.md)
+                      </button>
+                      <button type="button" className="block w-full text-left px-3 py-2 text-sm hover:bg-[var(--bpm-bg-secondary)]" style={{ color: "var(--bpm-text-primary)" }} role="menuitem" onClick={openPrint}>
+                        Exporter en PDF (impression)
+                      </button>
+                      <button type="button" className="block w-full text-left px-3 py-2 text-sm hover:bg-[var(--bpm-bg-secondary)]" style={{ color: "var(--bpm-text-primary)" }} role="menuitem" onClick={handleDelete} disabled={deleting}>
+                        Supprimer
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>

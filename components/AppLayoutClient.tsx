@@ -77,7 +77,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
         className={`app-content-column flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"}`}
       >
           <header
-            className="pwa-title-bar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2"
+            className="pwa-title-bar sticky top-0 z-30 max-md:z-50 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2"
             style={{ background: "var(--bpm-bg-primary)" }}
           >
             <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--bpm-text-primary)" }}>
@@ -94,7 +94,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
             role="contentinfo"
           >
             <div className="flex flex-wrap items-center justify-between gap-4 max-w-[1400px] mx-auto">
-              <span>Blueprint Modular v0.1.20</span>
+              <span>Blueprint Modular v0.1.21</span>
               <span className="flex flex-wrap gap-4">
                 <a href="https://docs.blueprint-modular.com/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>Documentation</a>
                 <a href="https://pypi.org/project/blueprint-modular/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "var(--bpm-color-link)" }}>PyPI</a>

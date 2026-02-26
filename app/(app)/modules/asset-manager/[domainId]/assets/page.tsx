@@ -1,0 +1,168 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+
+interface Asset {
+  id: string;
+  reference: string;
+  label: string;
+  assetTypeId: string;
+  statusId: string;
+  attributes: { key: string; valueText: string | null; valueNumber: number | null; valueDate: string | null; valueBool: boolean | null }[];
+}
+
+interface DomainConfig {
+  domain_label: string;
+  asset_label_plural: string;
+  asset_types: { id: string; label: string }[];
+  statuses: { id: string; label: string; color: string }[];
+}
+
+export default function AssetManagerAssetsPage() {
+  const params = useParams();
+  const router = useRouter();
+  const domainId = typeof params?.domainId === "string" ? params.domainId : "";
+  const [config, setConfig] = useState<DomainConfig | null>(null);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+
+  const fetchAssets = useCallback(() => {
+    if (!domainId) return;
+    const params = new URLSearchParams({ domainId });
+    if (filterType) params.set("assetTypeId", filterType);
+    if (filterStatus) params.set("statusId", filterStatus);
+    fetch(`/api/asset-manager/assets?${params}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        setAssets(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [domainId, filterType, filterStatus]);
+
+  useEffect(() => {
+    if (!domainId) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    fetch(`/api/asset-manager/config/${domainId}`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setConfig)
+      .catch(() => {});
+    fetchAssets();
+  }, [domainId, fetchAssets]);
+
+  const getStatusLabel = (id: string) => config?.statuses.find((s) => s.id === id)?.label ?? id;
+  const getTypeLabel = (id: string) => config?.asset_types.find((t) => t.id === id)?.label ?? id;
+
+  const columns = [
+    { key: "reference", label: "Référence" },
+    { key: "label", label: "Libellé" },
+    {
+      key: "assetTypeId",
+      label: "Type",
+      render: (val: unknown) => getTypeLabel(String(val)),
+    },
+    {
+      key: "statusId",
+      label: "Statut",
+      render: (val: unknown) => (
+        <span
+          className="rounded px-2 py-0.5 text-xs font-medium"
+          style={{
+            backgroundColor: "var(--bpm-bg-secondary)",
+            color: "var(--bpm-text-primary)",
+          }}
+        >
+          {getStatusLabel(String(val))}
+        </span>
+      ),
+    },
+  ];
+
+  const typeOptions = [
+    { value: "", label: "Tous les types" },
+    ...(config?.asset_types.map((t) => ({ value: t.id, label: t.label })) ?? []),
+  ];
+  const statusOptions = [
+    { value: "", label: "Tous les statuts" },
+    ...(config?.statuses.map((s) => ({ value: s.id, label: s.label })) ?? []),
+  ];
+
+  if (!config && !loading) {
+    return (
+      <div className="doc-page">
+        <Panel variant="info" title="Domaine introuvable" />
+        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>
+          ← Retour
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="doc-page">
+      <div className="doc-page-header mb-6">
+        <div className="doc-breadcrumb">
+          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
+          <Link href={`/modules/asset-manager/${domainId}`}>{config?.domain_label ?? domainId}</Link> →{" "}
+          {config?.asset_label_plural ?? "Actifs"}
+        </div>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
+          {config?.asset_label_plural ?? "Actifs"}
+        </h1>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        <Selectbox
+          options={typeOptions}
+          value={filterType}
+          onChange={(v) => setFilterType(v ?? "")}
+          placeholder="Type"
+        />
+        <Selectbox
+          options={statusOptions}
+          value={filterStatus}
+          onChange={(v) => setFilterStatus(v ?? "")}
+          placeholder="Statut"
+        />
+        <Link href={`/modules/asset-manager/${domainId}/assets/nouveau`}>
+          <Button variant="primary">Nouvel actif</Button>
+        </Link>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <Spinner size="medium" />
+        </div>
+      ) : assets.length === 0 ? (
+        <Panel variant="info" title="Aucun actif">
+          Aucun actif pour ce domaine. Créez-en un avec le bouton &quot;Nouvel actif&quot;.
+        </Panel>
+      ) : (
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+          <Table
+            columns={columns}
+            data={assets.map((a) => ({ id: a.id, reference: a.reference, label: a.label, assetTypeId: a.assetTypeId, statusId: a.statusId }))}
+            onRowClick={(row) => {
+              const id = (row as { id?: string }).id;
+              if (id) router.push(`/modules/asset-manager/${domainId}/assets/${id}`);
+            }}
+          />
+        </div>
+      )}
+
+      <nav className="doc-pagination mt-8">
+        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>
+          ← Tableau de bord
+        </Link>
+      </nav>
+    </div>
+  );
+}

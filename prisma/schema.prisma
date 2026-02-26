@@ -22,6 +22,11 @@ model User {
   contracts            Contract[]
   aiConversations      AiConversation[]
   newsletterArticles   NewsletterArticle[]
+  assetsCreated        Asset[]           @relation("AssetCreatedBy")
+  ticketsRequested     Ticket[]          @relation("TicketRequester")
+  ticketsAssigned      Ticket[]          @relation("TicketAssignee")
+  assignmentsAssigned  Assignment[]      @relation("AssignmentAssignee")
+  assignmentsAsTech    Assignment[]      @relation("AssignmentTechnician")
 }
 
 enum Role {
@@ -183,4 +188,257 @@ model NewsletterArticle {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+// --- Module Asset Manager (actifs, tickets, mises à disposition) ---
+model Asset {
+  id              String    @id @default(cuid())
+  domainId        String    @map("domain_id")
+  assetTypeId     String    @map("asset_type_id")
+  reference       String    @unique
+  label           String
+  brand           String?
+  model           String?
+  serialNumber    String?   @map("serial_number")
+  statusId        String    @map("status_id")
+  lifecycleStage  String?   @map("lifecycle_stage") // achat | reception | deploiement | en_service | maintenance | renouvellement | reforme
+  locationId      String?   @map("location_id")
+  ownerUserId     String?   @map("owner_user_id")
+  purchaseDate    DateTime? @map("purchase_date") @db.Date
+  warrantyEndDate DateTime? @map("warranty_end_date") @db.Date
+  supplierId      String?   @map("supplier_id")
+  purchasePrice   Float?    @map("purchase_price")
+  notes           String?   @db.Text
+  createdById     String    @map("created_by_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  createdBy       User      @relation("AssetCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  attributes       AssetAttribute[]
+  tickets         Ticket[]  @relation("TicketAsset")
+  assignments     Assignment[]
+  movements       AssetMovement[]
+  ciRelationsSource CIRelation[] @relation("CIRelationSource")
+  ciRelationsTarget CIRelation[] @relation("CIRelationTarget")
+}
+
+model AssetAttribute {
+  id           String   @id @default(cuid())
+  assetId      String   @map("asset_id")
+  key          String
+  valueText    String?  @map("value_text") @db.Text
+  valueNumber  Float?   @map("value_number")
+  valueDate    DateTime? @map("value_date") @db.Date
+  valueBool    Boolean? @map("value_bool")
+  asset        Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  @@unique([assetId, key])
+  @@index([assetId])
+}
+
+model Ticket {
+  id                String    @id @default(cuid())
+  domainId          String    @map("domain_id")
+  reference         String    @unique
+  typeId            String    @map("type_id")
+  title             String
+  description       String    @db.Text
+  status            String    // new | in_progress | on_hold | resolved | closed
+  priorityId        String    @map("priority_id")
+  categoryId        String    @map("category_id")
+  subcategory       String?
+  assetId           String?   @map("asset_id")
+  requesterId       String    @map("requester_id")
+  assigneeId        String?   @map("assignee_id")
+  slaDueAt          DateTime? @map("sla_due_at")
+  openedAt          DateTime  @default(now()) @map("opened_at")
+  takenAt           DateTime? @map("taken_at")
+  resolvedAt        DateTime? @map("resolved_at")
+  closedAt          DateTime? @map("closed_at")
+  solution          String?   @db.Text
+  satisfactionScore Int?      @map("satisfaction_score")
+  satisfactionComment String? @map("satisfaction_comment") @db.Text
+  parentTicketId    String?   @map("parent_ticket_id")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  asset             Asset?    @relation("TicketAsset", fields: [assetId], references: [id], onDelete: SetNull)
+  requester         User      @relation("TicketRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  assignee          User?     @relation("TicketAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  assignments       Assignment[]
+  parentTicket      Ticket?   @relation("TicketHierarchy", fields: [parentTicketId], references: [id], onDelete: SetNull)
+  childTickets      Ticket[]  @relation("TicketHierarchy")
+}
+
+model Assignment {
+  id               String    @id @default(cuid())
+  domainId         String    @map("domain_id")
+  reference        String    @unique
+  assignmentType   String    @map("assignment_type") // permanent | temporary
+  assetId          String    @map("asset_id")
+  assigneeId       String    @map("assignee_id")
+  technicianId     String?   @map("technician_id")
+  startDate        DateTime  @map("start_date") @db.Date
+  expectedEndDate  DateTime? @map("expected_end_date") @db.Date
+  actualEndDate    DateTime? @map("actual_end_date") @db.Date
+  status           String    // active | returned | overdue | cancelled
+  reason           String?   @db.Text
+  conditionAtStart String?   @map("condition_at_start") @db.Text
+  conditionAtReturn String?  @map("condition_at_return") @db.Text
+  accessories      String?   @db.Text // JSON array
+  contractSigned   Boolean   @default(false) @map("contract_signed")
+  contractFileUrl  String?   @map("contract_file_url") @db.Text
+  notes            String?   @db.Text
+  ticketId         String?   @map("ticket_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  asset            Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  assignee         User      @relation("AssignmentAssignee", fields: [assigneeId], references: [id], onDelete: Cascade)
+  technician       User?     @relation("AssignmentTechnician", fields: [technicianId], references: [id], onDelete: SetNull)
+  ticket           Ticket?   @relation(fields: [ticketId], references: [id], onDelete: SetNull)
+  @@index([domainId])
+  @@index([assetId])
+}
+
+// --- Phase 2 : Cycle de vie, contrats, mouvements, KB, changements ---
+
+model AssetContract {
+  id              String    @id @default(cuid())
+  domainId        String    @map("domain_id")
+  reference       String
+  type            String    // garantie | maintenance | leasing | credit_bail | licence
+  label           String
+  supplier        String?   // ou FK suppliers future
+  startDate       DateTime  @map("start_date") @db.Date
+  endDate         DateTime  @map("end_date") @db.Date
+  amount          Float?
+  autoRenewal     Boolean   @default(false) @map("auto_renewal")
+  noticeDays      Int       @map("notice_days")
+  assetIds        String?   @map("asset_ids") @db.Text // JSON array d'ids
+  notes           String?   @db.Text
+  documentUrl     String?   @map("document_url") @db.Text
+  alertDaysBefore Int       @default(30) @map("alert_days_before")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  @@index([domainId])
+  @@index([endDate])
+}
+
+model AssetMovement {
+  id            String    @id @default(cuid())
+  assetId       String    @map("asset_id")
+  movementType  String    @map("movement_type") // reception | deployment | transfer | return | repair_out | repair_in | disposal
+  fromLocationId String?  @map("from_location_id")
+  toLocationId  String?   @map("to_location_id")
+  fromUserId   String?   @map("from_user_id")
+  toUserId     String?   @map("to_user_id")
+  performedById String   @map("performed_by_id")
+  date         DateTime  @db.Date
+  reason        String?   @db.Text
+  ticketId     String?   @map("ticket_id")
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  asset        Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  @@index([assetId])
+  @@index([date])
+}
+
+model KnowledgeArticle {
+  id               String    @id @default(cuid())
+  domainId         String    @map("domain_id")
+  title            String
+  slug             String
+  content          String    @db.Text
+  categoryId       String    @map("category_id")
+  assetTypeId      String?   @map("asset_type_id")
+  tags             String[]  @default([])
+  visibility       String    @default("technicians_only") // public | technicians_only
+  sourceTicketId   String?   @map("source_ticket_id")
+  viewsCount       Int       @default(0) @map("views_count")
+  helpfulCount     Int       @default(0) @map("helpful_count")
+  notHelpfulCount  Int       @default(0) @map("not_helpful_count")
+  createdById      String    @map("created_by_id")
+  validatedById    String?   @map("validated_by_id")
+  publishedAt      DateTime? @map("published_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  @@unique([domainId, slug])
+  @@index([domainId])
+  @@index([categoryId])
+}
+
+model ChangeRequest {
+  id                      String    @id @default(cuid())
+  domainId                String    @map("domain_id")
+  reference               String    @unique
+  type                    String    // standard | normal | emergency
+  title                   String
+  description             String    @db.Text
+  impact                  String    @db.Text
+  riskLevel               String    @map("risk_level") // low | medium | high | critical
+  rollbackPlan            String    @map("rollback_plan") @db.Text
+  assetsImpacted          String?   @map("assets_impacted") @db.Text // JSON array
+  ticketsLinked           String?   @map("tickets_linked") @db.Text // JSON array
+  requesterId             String    @map("requester_id")
+  implementerId           String?   @map("implementer_id")
+  cabReviewerIds         String?   @map("cab_reviewer_ids") @db.Text // JSON array
+  status                  String    // draft | submitted | cab_review | approved | rejected | scheduled | in_progress | completed | failed | cancelled
+  plannedStart            DateTime? @map("planned_start")
+  plannedEnd              DateTime? @map("planned_end")
+  actualStart             DateTime? @map("actual_start")
+  actualEnd               DateTime? @map("actual_end")
+  implementationNotes     String?   @map("implementation_notes") @db.Text
+  success                 Boolean?
+  postImplementationReview String?  @map("post_implementation_review") @db.Text
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+  @@index([domainId])
+  @@index([status])
+  @@index([plannedStart])
+}
+
+// --- Phase 3 : CMDB (relations entre actifs) ---
+
+model CIRelation {
+  id             String   @id @default(cuid())
+  domainId       String   @map("domain_id")
+  sourceAssetId  String   @map("source_asset_id")
+  targetAssetId  String   @map("target_asset_id")
+  relationType   String   @map("relation_type") // depends_on | connected_to | hosted_on | fed_by | controls | ...
+  description    String?  @db.Text
+  createdById    String   @map("created_by_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  sourceAsset    Asset    @relation("CIRelationSource", fields: [sourceAssetId], references: [id], onDelete: Cascade)
+  targetAsset    Asset    @relation("CIRelationTarget", fields: [targetAssetId], references: [id], onDelete: Cascade)
+  @@index([domainId])
+  @@index([sourceAssetId])
+  @@index([targetAssetId])
+}
+
+// --- Audit et RBAC (compléments sécurité) ---
+
+model AuditLog {
+  id            String    @id @default(cuid())
+  domainId      String?   @map("domain_id")
+  userId        String    @map("user_id")
+  action        String    // create | update | delete | login | export
+  resourceType  String    @map("resource_type") // asset | ticket | change | ...
+  resourceId    String?   @map("resource_id")
+  beforeState   String?   @map("before_state") @db.Text // JSON
+  afterState    String?   @map("after_state") @db.Text // JSON
+  changedFields String[]  @map("changed_fields") @default([])
+  ipAddress     String?   @map("ip_address")
+  userAgent     String?   @map("user_agent") @db.Text
+  timestamp     DateTime  @default(now())
+  @@index([domainId])
+  @@index([userId])
+  @@index([resourceType])
+  @@index([timestamp])
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  roleId    String   @map("role_id") // OWNER | ADMIN | USER ou id futur rôle
+  domainId  String   @map("domain_id") // it | maintenance | *
+  resource  String   // assets | tickets | changes | cmdb | ...
+  actions   String[] @default([]) // read | create | update | delete | approve
+  @@unique([roleId, domainId, resource])
+  @@index([roleId])
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Bell, BookMarked, Bot, Calendar, FileText, LayoutDashboard, Link2, Mail, MessageSquare, Package, PenTool, Radio, Settings, Shield, StickyNote, Table2, Webhook } from "lucide-react";
+import { Bell, BookMarked, Bot, Calendar, FileText, LayoutDashboard, Link2, Mail, MessageSquare, Monitor, Package, PenTool, Radio, Settings, Shield, StickyNote, Table2, Webhook } from "lucide-react";
 import { Input } from "@/components/bpm";
 
 /** Catégories dans l’ordre d’affichage. À l’intérieur de chaque catégorie, les modules sont triés par label. */
@@ -37,6 +37,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/templates", label: "Templates", description: "Bibliothèque de modèles (rapports, fiches, emails) avec champs à remplir.", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/newsletter", label: "Newsletter", description: "Photo de header, création d'articles et archivage des numéros.", icon: Mail, simulatorAndDoc: true, simulateurHref: "/modules/newsletter" },
     { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true, simulateurHref: "/modules/wiki" },
+    { href: "/modules/monitor", label: "Monitor", description: "Téléprompte IA pour présentations — import PPTX, suggestions Q&R, traduction et résumé de séance.", icon: Monitor, simulatorAndDoc: true, simulateurHref: "/modules/monitor" },
   ],
   "Données & reporting": [
     { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true, simulateurHref: "/modules/contracts" },
@@ -62,6 +63,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/webhooks", label: "Webhooks", description: "Émission d'événements vers des URLs externes (validation, création, etc.).", icon: Webhook, simulatorAndDoc: true },
   ],
   Métier: [
+    { href: "/modules/asset-manager", label: "Gestion d'actifs", description: "Actifs, tickets et mises à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },
     { href: "/modules/catalogue-produits", label: "Catalogue produits", description: "Fiche produit, variantes, prix, stock (codes-barres / QR).", icon: Package, simulatorAndDoc: true },
     { href: "/modules/devis-facturation", label: "Devis / Facturation", description: "Lignes, totaux, PDF, statuts (brouillon, envoyé, payé).", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/formulaire-dynamique", label: "Formulaire dynamique", description: "Formulaires dont les champs dépendent d'un type ou référentiel.", icon: PenTool, simulatorAndDoc: true },

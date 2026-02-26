@@ -1,0 +1,9 @@
+# Dépendances du service Prompteur API (FastAPI, port 8001)
+# Installer : pip install -r deploy/prompteur-api-requirements.txt
+# Requis pour l’endpoint import-pptx (UploadFile) : python-multipart
+fastapi
+uvicorn
+anthropic
+python-pptx
+python-dotenv
+python-multipart

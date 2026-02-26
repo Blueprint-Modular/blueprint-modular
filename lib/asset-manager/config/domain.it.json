@@ -1,0 +1,132 @@
+{
+  "domain_id": "it",
+  "domain_label": "Parc Informatique",
+  "domain_icon": "Monitor",
+  "asset_label_singular": "Équipement",
+  "asset_label_plural": "Équipements",
+  "ticket_label_singular": "Ticket",
+  "assignment_label": "Mise à disposition",
+  "asset_id_prefix": "NXTF",
+  "asset_types": [
+    {
+      "id": "laptop",
+      "label": "Ordinateur portable",
+      "icon": "Laptop",
+      "fields": [
+        { "key": "processeur", "label": "Processeur", "type": "text", "show_in_list": false },
+        { "key": "ram_go", "label": "RAM (Go)", "type": "number", "show_in_list": true },
+        { "key": "stockage_go", "label": "Stockage (Go)", "type": "number", "show_in_list": false },
+        { "key": "os", "label": "Système d'exploitation", "type": "select", "options": ["Windows 11", "Windows 10", "macOS", "Linux"], "show_in_list": true },
+        { "key": "hostname", "label": "Nom de machine", "type": "text", "searchable": true, "show_in_list": true },
+        { "key": "adresse_mac_wifi", "label": "MAC Wi-Fi", "type": "text" },
+        { "key": "adresse_mac_ethernet", "label": "MAC Ethernet", "type": "text" },
+        { "key": "domaine_ad", "label": "Domaine AD", "type": "text" }
+      ]
+    },
+    {
+      "id": "printer",
+      "label": "Imprimante",
+      "icon": "Printer",
+      "fields": [
+        { "key": "adresse_ip", "label": "Adresse IP", "type": "text", "show_in_list": true },
+        { "key": "compteur_pages", "label": "Compteur pages", "type": "number" },
+        { "key": "date_dernier_releve", "label": "Date dernier relevé", "type": "date" }
+      ]
+    },
+    {
+      "id": "server",
+      "label": "Serveur",
+      "icon": "Server",
+      "fields": [
+        { "key": "processeur", "label": "Processeur", "type": "text" },
+        { "key": "ram_go", "label": "RAM (Go)", "type": "number", "show_in_list": true },
+        { "key": "os", "label": "OS", "type": "text", "show_in_list": true },
+        { "key": "adresse_ip", "label": "Adresse IP", "type": "text", "show_in_list": true },
+        { "key": "hostname", "label": "Hostname", "type": "text", "show_in_list": true },
+        { "key": "ups_protege", "label": "Protégé par UPS", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "mobile",
+      "label": "Téléphone mobile",
+      "icon": "Smartphone",
+      "fields": [
+        { "key": "imei", "label": "IMEI", "type": "text", "show_in_list": true },
+        { "key": "operateur", "label": "Opérateur", "type": "select", "options": ["Orange", "SFR", "Bouygues", "Free", "Autre"] },
+        { "key": "numero_sim", "label": "Numéro SIM", "type": "text" }
+      ]
+    },
+    {
+      "id": "network",
+      "label": "Équipement réseau",
+      "icon": "Network",
+      "fields": [
+        { "key": "adresse_ip", "label": "Adresse IP", "type": "text", "show_in_list": true },
+        { "key": "nb_ports", "label": "Nombre de ports", "type": "number" }
+      ]
+    }
+  ],
+  "statuses": [
+    { "id": "in_service", "label": "En service", "color": "green" },
+    { "id": "in_stock", "label": "En stock", "color": "blue" },
+    { "id": "in_maintenance", "label": "En maintenance", "color": "yellow" },
+    { "id": "assigned", "label": "Mis à disposition", "color": "blue" },
+    { "id": "out_of_service", "label": "Hors service", "color": "red" },
+    { "id": "retired", "label": "Réformé", "color": "gray", "terminal": true }
+  ],
+  "ticket_categories": [
+    { "id": "hardware", "label": "Matériel", "subcategories": ["Panne", "Casse", "Perte", "Remplacement"] },
+    { "id": "software", "label": "Logiciel", "subcategories": ["Installation", "Mise à jour", "Licence", "Bug"] },
+    { "id": "network", "label": "Réseau", "subcategories": ["Connexion", "Wi-Fi", "VPN", "Accès"] },
+    { "id": "access", "label": "Accès / Droits", "subcategories": ["Création compte", "Mot de passe", "Droits AD"] }
+  ],
+  "ticket_types": ["Incident", "Demande", "Question"],
+  "priorities": [
+    { "id": "critical", "label": "Critique", "sla_hours": 4, "color": "red" },
+    { "id": "high", "label": "Haute", "sla_hours": 8, "color": "orange" },
+    { "id": "normal", "label": "Normale", "sla_hours": 48, "color": "blue" },
+    { "id": "low", "label": "Basse", "sla_hours": 120, "color": "gray" }
+  ],
+  "assignment_requires_signature": true,
+  "assignment_condition_tracking": true,
+  "numbering": {
+    "asset": "NXTF-[TYPE]-[YEAR]-[SEQ:4]",
+    "ticket": "TK-[YEAR]-[SEQ:4]",
+    "assignment": "MAD-[YEAR]-[SEQ:4]",
+    "change": "CHG-[YEAR]-[SEQ:4]"
+  },
+  "lifecycle_stages": [
+    { "id": "achat", "label": "Achat" },
+    { "id": "reception", "label": "Réception" },
+    { "id": "deploiement", "label": "Déploiement" },
+    { "id": "en_service", "label": "En service" },
+    { "id": "maintenance", "label": "Maintenance" },
+    { "id": "renouvellement", "label": "Renouvellement" },
+    { "id": "reforme", "label": "Réforme", "terminal": true }
+  ],
+  "sla_escalation": [
+    {
+      "priority_id": "critical",
+      "levels": [
+        { "after_percent": 50, "action": "notify_manager", "message": "Ticket critique à 50% du SLA" },
+        { "after_percent": 80, "action": "reassign_group", "target_group": "senior_tech", "message": "Escalade SLA imminente" },
+        { "after_percent": 100, "action": "notify_director", "message": "SLA dépassé — intervention requise" }
+      ]
+    }
+  ],
+  "change_management": {
+    "enabled": true,
+    "cab_group_id": "cab",
+    "standard_change_types": ["Redémarrage programmé", "Mise à jour antivirus", "Patch OS standard"],
+    "approval_mode": "unanimous",
+    "emergency_approvers": ["admin", "it_manager"]
+  },
+  "ci_relation_types": [
+    { "id": "depends_on", "label": "Dépend de" },
+    { "id": "connected_to", "label": "Connecté à" },
+    { "id": "hosted_on", "label": "Hébergé sur" },
+    { "id": "backed_up_by", "label": "Sauvegardé par" },
+    { "id": "protected_by", "label": "Protégé par" },
+    { "id": "prints_to", "label": "Imprime sur" }
+  ]
+}

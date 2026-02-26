@@ -1,0 +1,78 @@
+{
+  "domain_id": "maintenance",
+  "domain_label": "Maintenance industrielle",
+  "domain_icon": "Wrench",
+  "asset_label_singular": "Machine",
+  "asset_label_plural": "Machines",
+  "ticket_label_singular": "Ordre de travail",
+  "assignment_label": "Affectation technicien",
+  "asset_id_prefix": "MCH",
+  "asset_types": [
+    {
+      "id": "production_line",
+      "label": "Ligne de production",
+      "icon": "Factory",
+      "fields": [
+        { "key": "code_machine", "label": "Code machine", "type": "text", "show_in_list": true, "searchable": true },
+        { "key": "famille", "label": "Famille", "type": "select", "options": ["Découpe", "Assemblage", "Conditionnement", "Réfrigération", "Convoyeur"], "show_in_list": true },
+        { "key": "puissance_kw", "label": "Puissance (kW)", "type": "number" },
+        { "key": "tension_v", "label": "Tension (V)", "type": "number" },
+        { "key": "heures_fonctionnement", "label": "Heures de fonctionnement", "type": "number", "show_in_list": true },
+        { "key": "derniere_maintenance_preventive", "label": "Dernière maintenance préventive", "type": "date", "show_in_list": true },
+        { "key": "prochaine_maintenance_preventive", "label": "Prochaine maintenance préventive", "type": "date", "show_in_list": true },
+        { "key": "ups_protege", "label": "Protégée par UPS/onduleur", "type": "boolean" },
+        { "key": "criticite", "label": "Criticité production", "type": "select", "options": ["Critique", "Haute", "Moyenne", "Faible"], "show_in_list": true },
+        { "key": "documentation_url", "label": "Documentation constructeur", "type": "url" }
+      ]
+    },
+    {
+      "id": "utility",
+      "label": "Utilité (air comprimé, vapeur, froid…)",
+      "icon": "Gauge",
+      "fields": [
+        { "key": "type_utilite", "label": "Type", "type": "select", "options": ["Air comprimé", "Vapeur", "Eau glacée", "Eau chaude", "Électricité HT"] },
+        { "key": "pression_bar", "label": "Pression nominale (bar)", "type": "number" },
+        { "key": "debit_m3h", "label": "Débit nominal (m³/h)", "type": "number" }
+      ]
+    },
+    {
+      "id": "vehicle",
+      "label": "Engin / Véhicule atelier",
+      "icon": "Forklift",
+      "fields": [
+        { "key": "immatriculation", "label": "Immatriculation / N° série", "type": "text", "show_in_list": true },
+        { "key": "type_energie", "label": "Énergie", "type": "select", "options": ["Électrique", "Thermique", "GPL", "Hydrogène"] },
+        { "key": "heure_moteur", "label": "Heures moteur", "type": "number", "show_in_list": true },
+        { "key": "date_controle_periodique", "label": "Prochain contrôle périodique", "type": "date", "show_in_list": true }
+      ]
+    }
+  ],
+  "statuses": [
+    { "id": "running", "label": "En production", "color": "green" },
+    { "id": "stopped_scheduled", "label": "Arrêt planifié", "color": "blue" },
+    { "id": "stopped_breakdown", "label": "Arrêt panne", "color": "red" },
+    { "id": "in_maintenance", "label": "En maintenance", "color": "yellow" },
+    { "id": "standby", "label": "En veille", "color": "gray" },
+    { "id": "decommissioned", "label": "Déclassée", "color": "gray", "terminal": true }
+  ],
+  "ticket_categories": [
+    { "id": "breakdown", "label": "Panne / Arrêt", "subcategories": ["Mécanique", "Électrique", "Pneumatique", "Hydraulique", "Automatisme"] },
+    { "id": "preventive", "label": "Maintenance préventive", "subcategories": ["Graissage", "Remplacement pièces usure", "Étalonnage", "Nettoyage"] },
+    { "id": "improvement", "label": "Amélioration / Fiabilisation", "subcategories": ["Modification", "Mise en conformité", "Optimisation"] },
+    { "id": "safety", "label": "Sécurité", "subcategories": ["EPI", "Verrouillage/Consignation", "Incident", "Near-miss"] }
+  ],
+  "ticket_types": ["Curatif", "Préventif", "Amélioratif", "Réglementaire"],
+  "priorities": [
+    { "id": "critical", "label": "Critique (arrêt production)", "sla_hours": 2, "color": "red" },
+    { "id": "high", "label": "Haute (impact production)", "sla_hours": 8, "color": "orange" },
+    { "id": "normal", "label": "Normale (planifiable)", "sla_hours": 72, "color": "blue" },
+    { "id": "low", "label": "Basse (amélioration)", "sla_hours": 336, "color": "gray" }
+  ],
+  "assignment_requires_signature": false,
+  "assignment_condition_tracking": false,
+  "numbering": {
+    "asset": "MCH-[TYPE]-[YEAR]-[SEQ:4]",
+    "ticket": "OT-[YEAR]-[SEQ:4]",
+    "assignment": "AFF-[YEAR]-[SEQ:4]"
+  }
+}

@@ -56,3 +56,29 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
 - **URL** : https://app.blueprint-modular.com (dashboard, Module Wiki, Module IA, etc.)
 - **Logs** : `pm2 logs blueprint-app`
 - **Statut** : `pm2 status blueprint-app`
+
+## Service Prompteur API (optionnel, module Monitor)
+
+Le module **Monitor** (téléprompte IA) appelle l’API `https://app.blueprint-modular.com/api/prompteur/*`. En prod, Nginx proxy cette voie vers un service Python séparé (port 8001).
+
+1. **Sur le VPS** : créer le projet (ex. `/home/ubuntu/prompteur-api`) avec `main.py`, `router_prompteur.py`, `prompteur_schemas.py`, et `.env` (ANTHROPIC_API_KEY).
+2. **Dépendances Python** (inclure **python-multipart** pour l’upload PPTX) :
+   ```bash
+   pip install -r deploy/prompteur-api-requirements.txt
+   ```
+   Ou à la main : `pip install fastapi uvicorn anthropic python-pptx python-dotenv python-multipart`
+3. **PM2** : `pm2 start "venv/bin/uvicorn main:app --host 0.0.0.0 --port 8001" --name prompteur-api --cwd /home/ubuntu/prompteur-api`
+4. **Nginx** : dans le bloc `server { server_name app.blueprint-modular.com; }`, ajouter :
+   ```nginx
+   location /api/prompteur/ {
+       proxy_pass http://127.0.0.1:8001/api/prompteur/;
+       proxy_http_version 1.1;
+       proxy_set_header Host $host;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_buffering off;
+       proxy_read_timeout 300s;
+   }
+   ```
+   Puis `sudo nginx -t && sudo systemctl reload nginx`.
+5. **Vérif** : `curl https://app.blueprint-modular.com/api/prompteur/health`

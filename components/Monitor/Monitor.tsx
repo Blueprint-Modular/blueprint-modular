@@ -226,12 +226,12 @@ export default function Monitor() {
   const [showApiKeyPanel, setShowApiKeyPanel] = useState(false);
   // Clé API Claude : uniquement saisie utilisateur ou localStorage, jamais en dur dans le code.
   const [apiKey, setApiKey] = useState(() => (typeof window !== "undefined" ? (localStorage.getItem("bpm-monitor-anthropic-key") ?? "") : ""));
-  // Transparence du fond du panneau (60–95 %, réglable en live depuis la fenêtre principale)
+  // Transparence du fond du panneau (50–95 %, réglable en live depuis la fenêtre principale)
   const [panelOpacity, setPanelOpacity] = useState(() => {
-    if (typeof window === "undefined") return 0.92;
+    if (typeof window === "undefined") return 0.78;
     const v = localStorage.getItem("bpm-monitor-panel-opacity");
-    const n = v != null ? parseFloat(v) : 0.92;
-    return Number.isFinite(n) ? Math.max(0.6, Math.min(0.95, n)) : 0.92;
+    const n = v != null ? parseFloat(v) : 0.78;
+    return Number.isFinite(n) ? Math.max(0.5, Math.min(0.95, n)) : 0.78;
   });
   const [showOpacityPanel, setShowOpacityPanel] = useState(false);
   // Position du panneau (déplaçable)
@@ -457,8 +457,9 @@ export default function Monitor() {
           width: `${PANEL_W}px`,
           maxHeight: "calc(100vh - 28px)",
           background: `rgba(255,255,255,${panelOpacity})`,
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          isolation: "isolate",
           border: `1px solid ${T.border}`,
           borderRadius: T.radiusLg,
           boxShadow: T.shadowLg,
@@ -471,7 +472,7 @@ export default function Monitor() {
         }}
       >
         {/* ── HEADER (zone titre = poignée de déplacement) ── */}
-        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:`rgba(255,255,255,${Math.min(panelOpacity + 0.03, 1)})`, backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)" }}>
+        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:`rgba(255,255,255,${Math.min(panelOpacity + 0.05, 1)})`, backdropFilter:"blur(12px)", WebkitBackdropFilter:"blur(12px)" }}>
           <div
             role="button"
             tabIndex={0}
@@ -516,14 +517,14 @@ export default function Monitor() {
           <div style={{ background:T.bgCard, borderBottom:`1px solid ${T.border}`, padding:"10px 14px", animation:"bpm-in .15s ease" }}>
             <div style={{ fontSize:"11px", fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:"6px" }}>Transparence du fond</div>
             <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-              <input type="range" min="60" max="95" step="5" value={Math.round(panelOpacity * 100)}
+              <input type="range" min="50" max="95" step="5" value={Math.round(panelOpacity * 100)}
                 onChange={e => setPanelOpacity(Math.round(Number(e.target.value)) / 100)}
                 style={{ flex:1, accentColor:T.cyan, cursor:"pointer" }}
-                title="Opacité du panneau (60–95 %)"
+                title="Opacité du panneau (50–95 %)"
               />
               <span style={{ fontSize:"12px", fontFamily:T.mono, color:T.fg, minWidth:"36px" }}>{Math.round(panelOpacity * 100)} %</span>
             </div>
-            <div style={{ fontSize:"10px", color:T.muted, marginTop:"4px" }}>Réglage en direct · 60–95 % (CDC)</div>
+            <div style={{ fontSize:"10px", color:T.muted, marginTop:"4px" }}>Réglage en direct · 50–95 % (CDC)</div>
           </div>
         )}
 

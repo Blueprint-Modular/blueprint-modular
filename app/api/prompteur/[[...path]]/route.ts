@@ -51,8 +51,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pat
     const headers: Record<string, string> = {};
     forwardAnthropicHeader(req, headers);
     if (contentType.includes("multipart/form-data")) {
-      body = await req.formData();
-      // Ne pas envoyer Content-Type pour FormData (fetch ajoute le boundary)
+      // Ne pas bufferiser avec req.formData() (limite ~10 Mo Next.js). Transmettre le flux brut pour import PPTX jusqu'à 100 Mo (Nginx client_max_body_size).
+      body = req.body;
+      headers["Content-Type"] = contentType;
     } else if (contentType.includes("application/json")) {
       body = await req.text();
       headers["Content-Type"] = "application/json";

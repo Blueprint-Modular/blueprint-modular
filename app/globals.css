@@ -367,6 +367,7 @@ textarea.bpm-textarea:focus {
   top: 0;
   z-index: 10;
   background: var(--bpm-bg-primary);
+  padding-top: 24px;
   padding-bottom: 12px;
   margin-bottom: 0;
   border-bottom: 1px solid var(--bpm-border);
@@ -386,7 +387,7 @@ textarea.bpm-textarea:focus {
 .wiki-body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
 .wiki-loading, .wiki-empty { padding: 24px; color: var(--bpm-text-secondary); flex-shrink: 0; }
 .wiki-empty a { color: var(--bpm-accent-cyan); text-decoration: none; }
-.wiki-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; margin-top: 24px; flex: 1; min-height: 0; overflow: hidden; }
+.wiki-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; margin-top: 32px; flex: 1; min-height: 0; overflow: hidden; }
 .wiki-sidebar { border-right: 1px solid var(--bpm-border); padding-right: 24px; overflow-y: auto; min-height: 0; }
 .wiki-tree-node { padding: 6px 8px; border-radius: 6px; cursor: pointer; display: flex; gap: 8px; align-items: center; font-size: 14px; }
 .wiki-tree-node:hover { background: var(--bpm-border); }

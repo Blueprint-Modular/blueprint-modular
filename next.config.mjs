@@ -9,8 +9,6 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "100mb",
     },
-    // Limite du body pour les routes qui lisent le body (ex. proxy /api/prompteur/import-pptx). Défaut 10 Mo.
-    proxyClientMaxBodySize: "100mb",
   },
   images: {
     remotePatterns: [

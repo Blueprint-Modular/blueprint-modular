@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Bell, BookMarked, Bot, Calendar, FileText, LayoutDashboard, Link2, Mail, MessageSquare, Monitor, Package, PenTool, Radio, Settings, Shield, StickyNote, Table2, Webhook } from "lucide-react";
+import { Bell, BookMarked, Bot, Calendar, FileText, LayoutDashboard, Link2, Mail, MessageSquare, Monitor, Package, PenTool, Radio, Settings, Shield, StickyNote, Sun, Table2, Webhook } from "lucide-react";
 import { Input } from "@/components/bpm";
 
 /** Catégories dans l’ordre d’affichage. À l’intérieur de chaque catégorie, les modules sont triés par label. */
@@ -38,6 +38,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/newsletter", label: "Newsletter", description: "Photo de header, création d'articles et archivage des numéros.", icon: Mail, simulatorAndDoc: true, simulateurHref: "/modules/newsletter" },
     { href: "/modules/wiki", label: "Wiki", description: "Créez et gérez des articles internes en Markdown avec arborescence et publication.", icon: BookMarked, simulatorAndDoc: true, simulateurHref: "/modules/wiki" },
     { href: "/modules/monitor", label: "Monitor", description: "Téléprompte IA pour présentations — import PPTX, suggestions Q&R, traduction et résumé de séance.", icon: Monitor, simulatorAndDoc: true, simulateurHref: "/modules/monitor" },
+    { href: "/modules/keep-screen-on", label: "Keep screen on", description: "Gardez l'écran allumé pendant une présentation ou une réunion — durée réglable ou indéfinie.", icon: Sun, simulatorAndDoc: true, simulateurHref: "/modules/keep-screen-on" },
   ],
   "Données & reporting": [
     { href: "/modules/asset-manager", label: "Asset Manager", description: "Gestion d'actifs, tickets et mises à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },

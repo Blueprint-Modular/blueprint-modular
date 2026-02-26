@@ -88,7 +88,7 @@ export default function AssetManagerAssignmentDetailPage() {
   if (!assignment) {
     return (
       <div className="doc-page">
-        <Panel variant="warning" title="Mise à disposition introuvable">Cette MAD n'existe pas ou vous n'y avez pas accès.</Panel>
+        <Panel variant="warning" title="Mise à disposition introuvable">Cette MAD n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
         <Link href={`/modules/asset-manager/${domainId}/assignments`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des MAD</Link>
       </div>
     );

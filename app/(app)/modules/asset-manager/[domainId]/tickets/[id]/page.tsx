@@ -94,7 +94,7 @@ export default function AssetManagerTicketDetailPage() {
   if (!ticket) {
     return (
       <div className="doc-page">
-        <Panel variant="warning" title="Ticket introuvable">Ce ticket n'existe pas ou vous n'y avez pas accès.</Panel>
+        <Panel variant="warning" title="Ticket introuvable">Ce ticket n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
         <Link href={`/modules/asset-manager/${domainId}/tickets`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des tickets</Link>
       </div>
     );

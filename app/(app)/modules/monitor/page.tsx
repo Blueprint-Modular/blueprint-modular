@@ -20,6 +20,9 @@ export default function MonitorPage() {
           <div className="doc-meta" style={{ marginTop: 4 }}>
             <span className="doc-badge doc-badge-category">IA</span>
             <span className="doc-reading-time">⏱ 2 min</span>
+            <Link href="/modules/monitor/documentation" className="text-sm font-medium ml-2" style={{ color: "var(--bpm-accent-cyan)" }}>
+              Documentation
+            </Link>
           </div>
         </div>
       </div>

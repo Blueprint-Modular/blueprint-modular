@@ -222,13 +222,22 @@ export default function Monitor() {
   const [editing, setEditing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showKeys, setShowKeys] = useState(false);
+  const [showApiKeyPanel, setShowApiKeyPanel] = useState(false);
+  // Clé API Claude : uniquement saisie utilisateur ou localStorage, jamais en dur dans le code.
+  const [apiKey, setApiKey] = useState(() => (typeof window !== "undefined" ? (localStorage.getItem("bpm-monitor-anthropic-key") ?? "") : ""));
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (apiKey) localStorage.setItem("bpm-monitor-anthropic-key", apiKey);
+    else localStorage.removeItem("bpm-monitor-anthropic-key");
+  }, [apiKey]);
 
   const slides = pres.slides;
   const slide = slides[cur] || slides[0];
   const qRef = useRef<HTMLTextAreaElement | null>(null);
   const tRef = useRef<HTMLTextAreaElement | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const { suggestAnswer, translate: translateAPI, summarize: summarizeAPI, importPptx } = usePrompterAPI();
+  const { suggestAnswer, translate: translateAPI, summarize: summarizeAPI, importPptx } = usePrompterAPI(apiKey || null);
 
   const next = useCallback(() => setCur(s => Math.min(s + 1, slides.length - 1)), [slides.length]);
   const prev = useCallback(() => setCur(s => Math.max(s - 1, 0)), []);
@@ -370,6 +379,9 @@ export default function Monitor() {
             </Btn>
             {/* Slide counter */}
             <Badge label={`${cur+1} / ${slides.length}`} variant="neutral"/>
+            {/* Clé API Claude */}
+            <button onClick={() => setShowApiKeyPanel(s => !s)} className="bpm-hover-gray" title="Clé API Claude"
+              style={{ background: showApiKeyPanel ? "rgba(0,163,224,0.1)" : "none", border:`1px solid ${showApiKeyPanel ? T.cyan : T.border}`, color: showApiKeyPanel ? T.cyan : T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", fontSize:"12px", fontFamily:T.font, display:"flex", alignItems:"center", justifyContent:"center" }}>🔑</button>
             {/* Shortcuts */}
             <button onClick={() => setShowKeys(s => !s)} className="bpm-hover-gray"
               style={{ background:"none", border:`1px solid ${T.border}`, color:T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", fontSize:"12px", fontFamily:T.font, display:"flex", alignItems:"center", justifyContent:"center" }}>?</button>
@@ -378,6 +390,17 @@ export default function Monitor() {
               style={{ background:"none", border:`1px solid ${T.border}`, color:T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"15px" }}>_</button>
           </div>
         </div>
+
+        {/* Clé API Claude (paramétrable) */}
+        {showApiKeyPanel && (
+          <div style={{ background:T.bgCard, borderBottom:`1px solid ${T.border}`, padding:"10px 14px", animation:"bpm-in .15s ease" }}>
+            <div style={{ fontSize:"11px", fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:"6px" }}>Clé API Claude (Anthropic)</div>
+            <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} placeholder="sk-ant-..."
+              style={{ width:"100%", padding:"8px 10px", border:`1px solid ${T.border}`, borderRadius:T.radius, fontSize:"12px", fontFamily:T.mono, color:T.fg, background:T.bg }}
+              title="Saisie stockée localement (localStorage). Utilisée pour Q&R IA, traduction et résumé." />
+            <div style={{ fontSize:"10px", color:T.muted, marginTop:"4px" }}>Stockée localement · utilisée pour l’IA</div>
+          </div>
+        )}
 
         {/* Shortcuts panel */}
         {showKeys && (

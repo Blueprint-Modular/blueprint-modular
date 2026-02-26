@@ -40,6 +40,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/monitor", label: "Monitor", description: "Téléprompte IA pour présentations — import PPTX, suggestions Q&R, traduction et résumé de séance.", icon: Monitor, simulatorAndDoc: true, simulateurHref: "/modules/monitor" },
   ],
   "Données & reporting": [
+    { href: "/modules/asset-manager", label: "Asset Manager", description: "Gestion d'actifs, tickets et mises à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },
     { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true, simulateurHref: "/modules/contracts" },
     { href: "/modules/documents", label: "Analyse de documents", description: "Uploadez, analysez et interrogez vos documents PDF, Word et plus avec l'IA.", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/export-planifie", label: "Export planifié", description: "Envoi périodique par email de rapports ou exports (PDF/CSV).", icon: Mail, simulatorAndDoc: true },
@@ -63,7 +64,6 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/webhooks", label: "Webhooks", description: "Émission d'événements vers des URLs externes (validation, création, etc.).", icon: Webhook, simulatorAndDoc: true },
   ],
   Métier: [
-    { href: "/modules/asset-manager", label: "Gestion d'actifs", description: "Actifs, tickets et mises à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },
     { href: "/modules/catalogue-produits", label: "Catalogue produits", description: "Fiche produit, variantes, prix, stock (codes-barres / QR).", icon: Package, simulatorAndDoc: true },
     { href: "/modules/devis-facturation", label: "Devis / Facturation", description: "Lignes, totaux, PDF, statuts (brouillon, envoyé, payé).", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/formulaire-dynamique", label: "Formulaire dynamique", description: "Formulaires dont les champs dépendent d'un type ou référentiel.", icon: PenTool, simulatorAndDoc: true },

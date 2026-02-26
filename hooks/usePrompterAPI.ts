@@ -3,6 +3,7 @@
 /**
  * Hook pour consommer les endpoints SSE du module Prompteur (backend FastAPI).
  * BASE_URL : même origine en prod (Nginx proxy vers prompteur-api:8001) ou variable d'env.
+ * apiKey : clé API Claude (Anthropic) optionnelle ; envoyée en header X-Anthropic-API-Key.
  */
 import { useCallback } from "react";
 
@@ -10,6 +11,14 @@ const BASE_URL =
   typeof window !== "undefined"
     ? (process.env.NEXT_PUBLIC_PROMPTEUR_API_URL || "/api/prompteur")
     : "";
+
+const ANTHROPIC_HEADER = "X-Anthropic-API-Key";
+
+function headersWithKey(apiKey: string | null, init: Record<string, string> = {}): Record<string, string> {
+  const h = { ...init };
+  if (apiKey?.trim()) h[ANTHROPIC_HEADER] = apiKey.trim();
+  return h;
+}
 
 async function readSSEStream(
   response: Response,
@@ -40,7 +49,7 @@ async function readSSEStream(
   }
 }
 
-export function usePrompterAPI() {
+export function usePrompterAPI(apiKey: string | null = null) {
   const suggestAnswer = useCallback(
     async (
       question: string,
@@ -50,12 +59,12 @@ export function usePrompterAPI() {
     ) => {
       const response = await fetch(`${BASE_URL}/suggest-answer`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headersWithKey(apiKey, { "Content-Type": "application/json" }),
         body: JSON.stringify({ question, slide, lang }),
       });
       await readSSEStream(response, onChunk);
     },
-    []
+    [apiKey]
   );
 
   const translate = useCallback(
@@ -66,12 +75,12 @@ export function usePrompterAPI() {
     ) => {
       const response = await fetch(`${BASE_URL}/translate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headersWithKey(apiKey, { "Content-Type": "application/json" }),
         body: JSON.stringify({ text, direction }),
       });
       await readSSEStream(response, onChunk);
     },
-    []
+    [apiKey]
   );
 
   const summarize = useCallback(
@@ -83,7 +92,7 @@ export function usePrompterAPI() {
     ) => {
       const response = await fetch(`${BASE_URL}/summarize`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headersWithKey(apiKey, { "Content-Type": "application/json" }),
         body: JSON.stringify({
           presentation_title: presentationTitle,
           slides,
@@ -92,7 +101,7 @@ export function usePrompterAPI() {
       });
       await readSSEStream(response, onChunk);
     },
-    []
+    [apiKey]
   );
 
   const importPptx = useCallback(async (file: File) => {
@@ -100,19 +109,32 @@ export function usePrompterAPI() {
     formData.append("file", file);
     const response = await fetch(`${BASE_URL}/import-pptx`, {
       method: "POST",
+      headers: headersWithKey(apiKey),
       body: formData,
     });
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error((err as { detail?: string }).detail || "Erreur import PPTX");
+      const raw = await response.text();
+      let msg = "Erreur import PPTX";
+      try {
+        const err = JSON.parse(raw) as { detail?: string | { msg?: string }[]; error?: string };
+        if (typeof err.detail === "string") msg = err.detail;
+        else if (Array.isArray(err.detail) && err.detail.length) msg = err.detail.map((d) => (d && typeof d === "object" && "msg" in d ? ((d as { msg?: string }).msg ?? "") : String(d ?? "")).trim()).filter(Boolean).join("; ") || msg;
+        else if (typeof err.error === "string") msg = err.error;
+      } catch {
+        if (raw.length && raw.length < 200) msg = raw;
+        else if (response.status === 502) msg = "Service prompteur indisponible (502). Vérifiez que l’API prompteur tourne.";
+      }
+      throw new Error(msg);
     }
     return response.json() as Promise<{ title: string; slide_count: number; slides: { id: number; title: string; script: string; notes?: string | null; kpis: string[] }[] }>;
-  }, []);
+  }, [apiKey]);
 
   const checkHealth = useCallback(async () => {
-    const response = await fetch(`${BASE_URL}/health`);
+    const response = await fetch(`${BASE_URL}/health`, {
+      headers: headersWithKey(apiKey),
+    });
     return response.json() as Promise<{ status: string; anthropic_key_set: boolean }>;
-  }, []);
+  }, [apiKey]);
 
   return { suggestAnswer, translate, summarize, importPptx, checkHealth };
 }

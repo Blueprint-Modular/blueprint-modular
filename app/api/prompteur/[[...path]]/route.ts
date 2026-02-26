@@ -15,13 +15,22 @@ function buildUrl(path: string[]): string {
   return `${PROMPTEUR_BASE}${BASE_PATH}${segment ? `/${segment}` : ""}`;
 }
 
+const ANTHROPIC_HEADER = "x-anthropic-api-key";
+
+function forwardAnthropicHeader(req: NextRequest, headers: Record<string, string>): void {
+  const key = req.headers.get(ANTHROPIC_HEADER);
+  if (key) headers[ANTHROPIC_HEADER] = key;
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params;
   const url = buildUrl(path);
+  const headers: Record<string, string> = { Accept: "application/json" };
+  forwardAnthropicHeader(req, headers);
   try {
     const res = await fetch(url, {
       method: "GET",
-      headers: { Accept: "application/json" },
+      headers,
       cache: "no-store",
     });
     const data = await res.json().catch(() => ({}));
@@ -40,6 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pat
   try {
     let body: RequestInit["body"];
     const headers: Record<string, string> = {};
+    forwardAnthropicHeader(req, headers);
     if (contentType.includes("multipart/form-data")) {
       body = await req.formData();
       // Ne pas envoyer Content-Type pour FormData (fetch ajoute le boundary)

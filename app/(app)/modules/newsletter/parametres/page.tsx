@@ -65,7 +65,7 @@ export default function NewsletterParametresPage() {
         </p>
       </div>
 
-      <Panel variant="default" title="Image d'en-tête">
+      <Panel variant="info" title="Image d'en-tête">
         <form onSubmit={handleSave} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>

@@ -117,7 +117,7 @@ export default function NewsletterArticlePage() {
         </p>
       )}
 
-      <Panel variant="default" title="">
+      <Panel variant="info" title="">
         <div
           className="prose max-w-none whitespace-pre-wrap"
           style={{ color: "var(--bpm-text-primary)" }}

@@ -102,7 +102,7 @@ export default function NewsletterEditPage() {
         </h1>
       </div>
 
-      <Panel variant="default" title="Édition">
+      <Panel variant="info" title="Édition">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-primary)" }}>

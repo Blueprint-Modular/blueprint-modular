@@ -355,6 +355,7 @@ export default function WikiPage() {
         )}
         </div>
       </div>
+      <div className="wiki-body">
       {loading ? (
         <div className="wiki-loading flex flex-col gap-4">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -508,6 +509,7 @@ export default function WikiPage() {
           </main>
         </div>
       )}
+      </div>
       <nav className="doc-pagination mt-8">
         <Link href="/modules/wiki/new" style={{ color: "var(--bpm-accent-cyan)" }}>Créer un article</Link>
         <Link href="/modules/wiki/search" style={{ color: "var(--bpm-accent-cyan)" }}>Recherche</Link>

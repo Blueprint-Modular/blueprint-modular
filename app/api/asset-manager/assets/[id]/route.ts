@@ -44,6 +44,7 @@ export async function PUT(request: Request, context: { params: Params }) {
     model?: string;
     serialNumber?: string;
     statusId?: string;
+    lifecycleStage?: string | null;
     locationId?: string;
     ownerUserId?: string;
     purchaseDate?: string | null;
@@ -60,6 +61,7 @@ export async function PUT(request: Request, context: { params: Params }) {
   if (typeof body.model === "string") data.model = body.model.trim() || null;
   if (typeof body.serialNumber === "string") data.serialNumber = body.serialNumber.trim() || null;
   if (typeof body.statusId === "string") data.statusId = body.statusId;
+  if (body.lifecycleStage !== undefined) data.lifecycleStage = body.lifecycleStage?.trim() || null;
   if (body.locationId !== undefined) data.locationId = body.locationId || null;
   if (body.ownerUserId !== undefined) data.ownerUserId = body.ownerUserId || null;
   if (body.purchaseDate !== undefined) data.purchaseDate = body.purchaseDate ? new Date(body.purchaseDate) : null;

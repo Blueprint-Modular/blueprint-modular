@@ -68,10 +68,10 @@ Le module **Monitor** (téléprompte IA) appelle l’API `https://app.blueprint-
    ```
    Ou à la main : `pip install fastapi uvicorn anthropic python-pptx python-dotenv python-multipart`
 3. **PM2** : `pm2 start "venv/bin/uvicorn main:app --host 0.0.0.0 --port 8001" --name prompteur-api --cwd /home/ubuntu/prompteur-api`
-4. **Nginx** : dans le bloc `server { server_name app.blueprint-modular.com; }`, s’assurer que `client_max_body_size 50m;` est présent (pour upload PPTX Monitor jusqu’à 50 Mo), puis ajouter :
+4. **Nginx** : dans le bloc `server { server_name app.blueprint-modular.com; }`, s’assurer que `client_max_body_size 100m;` est présent (pour upload PPTX Monitor jusqu’à 50 Mo), puis ajouter :
    ```nginx
    location /api/prompteur/ {
-       client_max_body_size 50m;
+       client_max_body_size 100m;
        proxy_pass http://127.0.0.1:8001/api/prompteur/;
        proxy_http_version 1.1;
        proxy_set_header Host $host;

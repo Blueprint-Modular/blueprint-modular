@@ -35,6 +35,7 @@ export type DomainConfig = {
     ticket: string;
     assignment: string;
   };
+  lifecycle_stages?: { id: string; label: string; terminal?: boolean }[];
 };
 
 const CONFIG_DIR = path.join(process.cwd(), "lib", "asset-manager", "config");

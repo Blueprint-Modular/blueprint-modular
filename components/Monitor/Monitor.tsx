@@ -197,8 +197,9 @@ export default function Monitor() {
   const [cur, setCur] = useState(0);
   const [tab, setTab] = useState("script");
 
-  // Q&R
+  // Questions IA (Q&R)
   const [qInput, setQInput] = useState("");
+  const [qLang, setQLang] = useState<"fr" | "en">("fr");
   const [aiResp, setAiResp] = useState("");
   const [aiErr, setAiErr] = useState("");
   const [loadAI, setLoadAI] = useState(false);
@@ -225,6 +226,14 @@ export default function Monitor() {
   const [showApiKeyPanel, setShowApiKeyPanel] = useState(false);
   // Clé API Claude : uniquement saisie utilisateur ou localStorage, jamais en dur dans le code.
   const [apiKey, setApiKey] = useState(() => (typeof window !== "undefined" ? (localStorage.getItem("bpm-monitor-anthropic-key") ?? "") : ""));
+  // Transparence du fond du panneau (60–95 %, réglable en live depuis la fenêtre principale)
+  const [panelOpacity, setPanelOpacity] = useState(() => {
+    if (typeof window === "undefined") return 0.92;
+    const v = localStorage.getItem("bpm-monitor-panel-opacity");
+    const n = v != null ? parseFloat(v) : 0.92;
+    return Number.isFinite(n) ? Math.max(0.6, Math.min(0.95, n)) : 0.92;
+  });
+  const [showOpacityPanel, setShowOpacityPanel] = useState(false);
   // Position du panneau (déplaçable)
   const PANEL_W = 430;
   const [panelPos, setPanelPos] = useState<{ left: number; top: number } | null>(null);
@@ -235,6 +244,11 @@ export default function Monitor() {
     if (apiKey) localStorage.setItem("bpm-monitor-anthropic-key", apiKey);
     else localStorage.removeItem("bpm-monitor-anthropic-key");
   }, [apiKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("bpm-monitor-panel-opacity", String(panelOpacity));
+  }, [panelOpacity]);
 
   const slides = pres.slides;
   const slide = slides[cur] || slides[0];
@@ -257,31 +271,61 @@ export default function Monitor() {
     });
   }, [panelPos]);
 
-  // Glisser le panneau (mousemove / mouseup) — listeners globaux pour suivre en dehors du panneau
+  // Glisser le panneau (mousemove/mouseup + touchmove/touchend) — listeners globaux pour suivre en dehors du panneau
   useEffect(() => {
+    const clamp = (left: number, top: number) => ({
+      left: Math.max(0, Math.min(left, window.innerWidth - PANEL_W)),
+      top: Math.max(0, Math.min(top, window.innerHeight - 200)),
+    });
     const onMove = (e: MouseEvent) => {
       if (!dragRef.current) return;
       const { startX, startY, startLeft, startTop } = dragRef.current;
-      let left = startLeft + (e.clientX - startX);
-      let top = startTop + (e.clientY - startY);
-      left = Math.max(0, Math.min(left, window.innerWidth - PANEL_W));
-      top = Math.max(0, Math.min(top, window.innerHeight - 200));
+      const { left, top } = clamp(startLeft + (e.clientX - startX), startTop + (e.clientY - startY));
+      setPanelPos({ left, top });
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!dragRef.current) return;
+      const t = e.touches[0];
+      if (!t) return;
+      e.preventDefault();
+      const { startX, startY, startLeft, startTop } = dragRef.current;
+      const { left, top } = clamp(startLeft + (t.clientX - startX), startTop + (t.clientY - startY));
       setPanelPos({ left, top });
     };
     const onUp = () => { dragRef.current = null; };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onUp);
+    window.addEventListener("touchcancel", onUp);
     return () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onUp);
+      window.removeEventListener("touchcancel", onUp);
     };
   }, []);
 
   const onHeaderDragStart = useCallback((e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest("input")) return;
+    e.preventDefault();
+    e.stopPropagation();
     const pos = panelPos ?? { left: window.innerWidth - PANEL_W - 14, top: 14 };
     dragRef.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top };
   }, [panelPos]);
+
+  const onHeaderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest("input")) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+      e.preventDefault();
+      const pos = panelPos ?? { left: window.innerWidth - PANEL_W - 14, top: 14 };
+      dragRef.current = { startX: touch.clientX, startY: touch.clientY, startLeft: pos.left, startTop: pos.top };
+    },
+    [panelPos]
+  );
 
   const next = useCallback(() => setCur(s => Math.min(s + 1, slides.length - 1)), [slides.length]);
   const prev = useCallback(() => setCur(s => Math.max(s - 1, 0)), []);
@@ -310,7 +354,7 @@ export default function Monitor() {
       await suggestAnswer(
         qInput,
         { id: slide.id, title: slide.title, script: slide.script, notes: slide.notes, kpis: slide.kpis ?? [] },
-        "fr",
+        qLang,
         (c) => { full += c; setAiResp(full); }
       );
       if (full) setLogged(p => [...p, { question: qInput, answer: full, slide_title: slide.title }]);
@@ -361,7 +405,7 @@ export default function Monitor() {
 
   const TABS = [
     { id:"script",    label:"Script",   icon:"📋" },
-    { id:"ai",        label:"Q&R IA",   icon:"🧠", badge: logged.length },
+    { id:"ai",        label:"Questions IA", icon:"🧠", badge: logged.length },
     { id:"translate", label:"Trad.",    icon:"🌐" },
     { id:"summary",   label:"Résumé",   icon:"📊" },
   ];
@@ -412,7 +456,9 @@ export default function Monitor() {
             : { left: "calc(100vw - 430px - 14px)", top: 14 }),
           width: `${PANEL_W}px`,
           maxHeight: "calc(100vh - 28px)",
-          background: T.bg,
+          background: `rgba(255,255,255,${panelOpacity})`,
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
           border: `1px solid ${T.border}`,
           borderRadius: T.radiusLg,
           boxShadow: T.shadowLg,
@@ -425,13 +471,14 @@ export default function Monitor() {
         }}
       >
         {/* ── HEADER (zone titre = poignée de déplacement) ── */}
-        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:T.bg }}>
+        <div style={{ padding:"10px 14px", borderBottom:`1px solid ${T.border}`, display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0, background:`rgba(255,255,255,${Math.min(panelOpacity + 0.03, 1)})`, backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)" }}>
           <div
             role="button"
             tabIndex={0}
             onMouseDown={onHeaderDragStart}
+            onTouchStart={onHeaderTouchStart}
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.preventDefault(); }}
-            style={{ display:"flex", alignItems:"center", gap:"8px", cursor:"move", userSelect:"none" }}
+            style={{ display:"flex", alignItems:"center", gap:"8px", cursor:"move", userSelect:"none", touchAction:"none" }}
             title="Glisser pour déplacer le panneau"
             aria-label="Déplacer le panneau"
           >
@@ -449,6 +496,9 @@ export default function Monitor() {
             </Btn>
             {/* Slide counter */}
             <Badge label={`${cur+1} / ${slides.length}`} variant="neutral"/>
+            {/* Transparence du fond (réglable en live) */}
+            <button onClick={() => setShowOpacityPanel(s => !s)} className="bpm-hover-gray" title="Transparence du fond"
+              style={{ background: showOpacityPanel ? "rgba(0,163,224,0.1)" : "none", border:`1px solid ${showOpacityPanel ? T.cyan : T.border}`, color: showOpacityPanel ? T.cyan : T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", fontSize:"12px", fontFamily:T.font, display:"flex", alignItems:"center", justifyContent:"center" }}>◐</button>
             {/* Clé API Claude */}
             <button onClick={() => setShowApiKeyPanel(s => !s)} className="bpm-hover-gray" title="Clé API Claude"
               style={{ background: showApiKeyPanel ? "rgba(0,163,224,0.1)" : "none", border:`1px solid ${showApiKeyPanel ? T.cyan : T.border}`, color: showApiKeyPanel ? T.cyan : T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", fontSize:"12px", fontFamily:T.font, display:"flex", alignItems:"center", justifyContent:"center" }}>🔑</button>
@@ -460,6 +510,22 @@ export default function Monitor() {
               style={{ background:"none", border:`1px solid ${T.border}`, color:T.muted, borderRadius:T.radius, width:"26px", height:"26px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"15px" }}>_</button>
           </div>
         </div>
+
+        {/* Transparence du fond (réglable en live depuis la fenêtre principale) */}
+        {showOpacityPanel && (
+          <div style={{ background:T.bgCard, borderBottom:`1px solid ${T.border}`, padding:"10px 14px", animation:"bpm-in .15s ease" }}>
+            <div style={{ fontSize:"11px", fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:"6px" }}>Transparence du fond</div>
+            <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+              <input type="range" min="60" max="95" step="5" value={Math.round(panelOpacity * 100)}
+                onChange={e => setPanelOpacity(Math.round(Number(e.target.value)) / 100)}
+                style={{ flex:1, accentColor:T.cyan, cursor:"pointer" }}
+                title="Opacité du panneau (60–95 %)"
+              />
+              <span style={{ fontSize:"12px", fontFamily:T.mono, color:T.fg, minWidth:"36px" }}>{Math.round(panelOpacity * 100)} %</span>
+            </div>
+            <div style={{ fontSize:"10px", color:T.muted, marginTop:"4px" }}>Réglage en direct · 60–95 % (CDC)</div>
+          </div>
+        )}
 
         {/* Clé API Claude (paramétrable) */}
         {showApiKeyPanel && (
@@ -483,7 +549,7 @@ export default function Monitor() {
         {showKeys && (
           <div style={{ background:T.bgCard, borderBottom:`1px solid ${T.border}`, padding:"10px 14px", animation:"bpm-in .15s ease" }}>
             <div style={{ display:"grid", gridTemplateColumns:"auto 1fr", gap:"4px 16px", fontSize:"12px" }}>
-              {[["→ / Espace","Slide suivante"],["←","Slide précédente"],["Q","Focus Q&R IA"],["T","Focus Traduction"],["S","Générer résumé"],["H / Échap","Masquer l'overlay"]].map(([k,v]) => (
+              {[["→ / Espace","Slide suivante"],["←","Slide précédente"],["Q","Focus Questions IA"],["T","Focus Traduction"],["S","Générer résumé"],["H / Échap","Masquer l'overlay"]].map(([k,v]) => (
                 <>
                   <kbd key={k+"k"} style={{ fontFamily:T.mono, background:T.bleu, color:"#fff", padding:"1px 7px", borderRadius:"4px", fontSize:"11px", fontWeight:500, display:"inline-block", textAlign:"center" }}>{k}</kbd>
                   <span key={k+"v"} style={{ color:T.fg, display:"flex", alignItems:"center" }}>{v}</span>
@@ -560,11 +626,20 @@ export default function Monitor() {
             </div>
           )}
 
-          {/* Q&R IA */}
+          {/* Questions IA (zone IA live — bpm.toggle FR/EN) */}
           {tab === "ai" && (
             <div style={{ animation:"bpm-in .2s ease" }}>
               <div style={{ fontSize:"12px", color:T.muted, marginBottom:"10px" }}>
                 Contexte : <span style={{ color:T.bleu, fontWeight:600 }}>{slide.title}</span>
+              </div>
+
+              <div style={{ display:"flex", gap:"8px", marginBottom:"10px" }}>
+                {(["fr","en"] as const).map((val) => (
+                  <button key={val} onClick={() => setQLang(val)}
+                    style={{ flex:1, padding:"6px 10px", background:qLang===val?"rgba(0,163,224,0.08)":T.bg, border:`1px solid ${qLang===val ? T.cyan : T.border}`, borderRadius:T.radius, color:qLang===val ? T.cyan : T.fg, fontSize:"12px", cursor:"pointer", fontFamily:T.font, fontWeight:qLang===val ? 600 : 400, transition:"all .15s" }}>
+                    {val === "fr" ? "🇫🇷 FR" : "🇬🇧 EN"}
+                  </button>
+                ))}
               </div>
 
               <Textarea ref={qRef} value={qInput} onChange={e => setQInput(e.target.value)}

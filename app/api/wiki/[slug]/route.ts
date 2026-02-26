@@ -55,11 +55,13 @@ export async function GET(
   const prevSlug = idx > 0 ? siblings[idx - 1]?.slug ?? null : null;
   const nextSlug = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1]?.slug ?? null : null;
 
+  const canEdit = !!user && (article.authorId === user.id || user.role === "ADMIN" || user.role === "OWNER");
   const payload = {
     ...article,
     ...(incView ? { viewCount: article.viewCount + 1 } : {}),
     prevSlug: prevSlug ?? undefined,
     nextSlug: nextSlug ?? undefined,
+    canEdit,
   };
   return NextResponse.json(payload);
 }
@@ -73,8 +75,10 @@ export async function PUT(
   const { user } = result;
   const { slug: rawSlug } = await resolveParams(context.params);
   const slug = normalizeSlug(rawSlug);
-  const article = await prisma.wikiArticle.findFirst({ where: { slug, authorId: user.id } });
+  const article = await prisma.wikiArticle.findFirst({ where: { slug } });
   if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const canEdit = article.authorId === user.id || user.role === "ADMIN" || user.role === "OWNER";
+  if (!canEdit) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = (await request.json()) as {
     title?: string;

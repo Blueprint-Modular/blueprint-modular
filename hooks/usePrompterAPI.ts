@@ -104,7 +104,15 @@ export function usePrompterAPI(apiKey: string | null = null) {
     [apiKey]
   );
 
+  const PPTX_MAX_MB = 100;
+  const PPTX_MAX_BYTES = PPTX_MAX_MB * 1024 * 1024;
+
   const importPptx = useCallback(async (file: File) => {
+    if (file.size > PPTX_MAX_BYTES) {
+      throw new Error(
+        `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} Mo). Limite : ${PPTX_MAX_MB} Mo. Réduisez la taille du PPTX ou augmentez la limite côté serveur (Nginx client_max_body_size, backend prompteur).`
+      );
+    }
     const formData = new FormData();
     formData.append("file", file);
     const response = await fetch(`${BASE_URL}/import-pptx`, {
@@ -126,7 +134,8 @@ export function usePrompterAPI(apiKey: string | null = null) {
         if (raw.length && raw.length < 200) msg = raw;
         else if (status === 502) msg = "Service prompteur indisponible (502). Vérifiez que l’API prompteur tourne sur le serveur.";
         else if (status === 500) msg = "Erreur serveur (500). Consultez les logs du service prompteur.";
-        else if (status === 413) msg = "Fichier trop volumineux (413).";
+        else if (status === 413)
+          msg = `Fichier trop volumineux (413). Augmentez la limite côté serveur : Nginx (client_max_body_size 100m), Next.js (proxyClientMaxBodySize / bodySizeLimit), ou le backend prompteur. Taille du fichier : ${(file.size / 1024 / 1024).toFixed(1)} Mo.`;
         else msg = `Erreur import PPTX (HTTP ${status}).`;
       }
       if (msg === "Erreur import PPTX" && status !== 200) msg = `Erreur import PPTX (HTTP ${status}).`;

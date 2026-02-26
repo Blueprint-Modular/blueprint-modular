@@ -231,62 +231,75 @@ export default function SkeletonSimulateurPage() {
     );
 
   return (
-    <div className="doc-page" style={{ maxWidth: 960, margin: "0 auto" }}>
+    <div className="doc-page">
       <div className="doc-page-header">
         <div className="doc-breadcrumb">
           <Link href="/modules">Modules</Link> → <Link href="/modules/skeleton">Skeleton</Link> → Simulateur
         </div>
         <h1>Simulateur — Skeleton</h1>
         <p className="doc-description">
-          Assemblages nommés <code>bpm.skeleton_dashboard</code>, <code>bpm.skeleton_list</code>, <code>bpm.skeleton_article</code>, etc. Modifiez les paramètres pour adapter l’aperçu.
+          Assemblages bpm.skeleton_* pour chargement de page. Choisissez l&apos;assemblage et les paramètres pour l’aperçu.
         </p>
       </div>
 
-      <div className="mb-6 rounded-xl border p-4" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
-        <label className="block text-sm font-medium mb-2" style={{ color: "var(--bpm-text-primary)" }}>Assemblage</label>
-        <Selectbox
-          options={ASSEMBLY_OPTIONS}
-          value={assembly}
-          onChange={(v) => setAssembly(v ?? "dashboard")}
-          placeholder="Choisir"
-        />
-        {(assembly === "dashboard" || assembly === "list") && (
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {assembly === "dashboard" && (
-              <>
-                <div>
-                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Métriques</label>
-                  <Slider value={metrics} min={1} max={6} onChange={setMetrics} />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Lignes tableau</label>
-                  <Slider value={rows} min={1} max={15} onChange={setRows} />
-                </div>
-              </>
-            )}
-            {assembly === "list" && (
-              <>
-                <div>
-                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Lignes</label>
-                  <Slider value={rows} min={1} max={20} onChange={setRows} />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Colonnes</label>
-                  <Slider value={columns} min={1} max={6} onChange={setColumns} />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-        {assembly === "form" && (
-          <div className="mt-4">
-            <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Champs</label>
-            <Slider value={formFields} min={1} max={10} onChange={setFormFields} />
-          </div>
-        )}
-      </div>
+      {/* Conteneur unique (même mise en page que Commentaires, Calendrier, Tableau blanc) */}
+      <div
+        className="rounded-xl overflow-hidden border"
+        style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)" }}
+      >
+        {/* Barre de contrôle (style barre contexte des autres simulateurs) */}
+        <div
+          className="px-4 py-3 border-b"
+          style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
+        >
+          <label className="block text-sm font-medium mb-2" style={{ color: "var(--bpm-text-primary)" }}>Assemblage</label>
+          <Selectbox
+            options={ASSEMBLY_OPTIONS}
+            value={assembly}
+            onChange={(v) => setAssembly(v ?? "dashboard")}
+            placeholder="Choisir"
+          />
+          {(assembly === "dashboard" || assembly === "list") && (
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {assembly === "dashboard" && (
+                <>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Métriques</label>
+                    <Slider value={metrics} min={1} max={6} onChange={setMetrics} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Lignes tableau</label>
+                    <Slider value={rows} min={1} max={15} onChange={setRows} />
+                  </div>
+                </>
+              )}
+              {assembly === "list" && (
+                <>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Lignes</label>
+                    <Slider value={rows} min={1} max={20} onChange={setRows} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Colonnes</label>
+                    <Slider value={columns} min={1} max={6} onChange={setColumns} />
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+          {assembly === "form" && (
+            <div className="mt-4">
+              <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Champs</label>
+              <Slider value={formFields} min={1} max={10} onChange={setFormFields} />
+            </div>
+          )}
+        </div>
 
-      {preview}
+        {/* Zone aperçu (même bloc que le contenu principal des autres simulateurs) */}
+        <div className="p-4">
+          {preview}
+        </div>
+      </div>
 
       <nav className="doc-pagination mt-8">
         <Link href="/modules/skeleton" style={{ color: "var(--bpm-accent-cyan)" }}>← Retour au module Skeleton</Link>

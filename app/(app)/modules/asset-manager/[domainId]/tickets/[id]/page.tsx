@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Selectbox } from "@/components/bpm";
+import { Panel, Button, Spinner, Selectbox, Badge, Card, Progress } from "@/components/bpm";
+import { FicheHeader, FicheSectionCard, FicheFieldGrid, FicheNav, FicheSkeleton } from "@/components/fiche";
 
 type Ticket = {
   id: string;
@@ -36,6 +37,13 @@ const STATUS_OPTIONS = [
   { value: "resolved", label: "Résolu" },
   { value: "closed", label: "Clos" },
 ];
+
+function statusBadgeVariant(s: string): "primary" | "success" | "warning" | "error" | "default" {
+  if (s === "resolved" || s === "closed") return "success";
+  if (s === "new" || s === "open") return "primary";
+  if (s === "in_progress" || s === "on_hold" || s === "pending") return "warning";
+  return "default";
+}
 
 export default function AssetManagerTicketDetailPage() {
   const params = useParams();
@@ -84,18 +92,14 @@ export default function AssetManagerTicketDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="doc-page flex justify-center py-12">
-        <Spinner size="medium" />
-      </div>
-    );
+    return <FicheSkeleton sections={2} withSla withForm />;
   }
 
   if (!ticket) {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Ticket introuvable">Ce ticket n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
-        <Link href={`/modules/asset-manager/${domainId}/tickets`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des tickets</Link>
+        <FicheNav backLink={`/modules/asset-manager/${domainId}/tickets`} backLabel="← Liste des tickets" />
       </div>
     );
   }
@@ -108,96 +112,113 @@ export default function AssetManagerTicketDetailPage() {
   const slaHours = config?.priorities?.find((p) => p.id === ticket.priorityId)?.sla_hours ?? 48;
   const elapsedHours = (Date.now() - new Date(ticket.openedAt).getTime()) / (1000 * 60 * 60);
   const slaPercent = isOpen && slaHours > 0 ? Math.min(150, Math.round((elapsedHours / slaHours) * 100)) : 0;
-  const slaColor =
-    !isOpen ? "var(--bpm-text-secondary)" : slaPercent >= 100 ? "var(--bpm-accent)" : slaPercent >= 80 ? "var(--bpm-accent-amber, #f59e0b)" : "var(--bpm-accent-mint)";
+  const slaExceeded = isOpen && slaPercent >= 100;
+
+  const statusLabel = STATUS_OPTIONS.find((o) => o.value === ticket.status)?.label ?? ticket.status;
 
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}/tickets`}>Tickets</Link> → {ticket.reference}
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>{ticket.title}</h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {ticket.reference} — Ouvert le {new Date(ticket.openedAt).toLocaleDateString("fr-FR")} — {getPriorityLabel(ticket.priorityId)} — {getCategoryLabel(ticket.categoryId)}
-        </p>
-      </div>
+      <FicheHeader
+        breadcrumb={
+          <>
+            <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> → <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}/tickets`} style={{ color: "var(--bpm-accent-cyan)" }}>Tickets</Link> → {ticket.reference}
+          </>
+        }
+        title={ticket.title}
+        subtitle={
+          <>
+            <Badge variant="default">{ticket.reference}</Badge>
+            <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Ouvert le {new Date(ticket.openedAt).toLocaleDateString("fr-FR")}</span>
+            <Badge variant="default">{getPriorityLabel(ticket.priorityId)}</Badge>
+            <Badge variant="default">{getCategoryLabel(ticket.categoryId)}</Badge>
+            <Badge variant={statusBadgeVariant(ticket.status)}>{statusLabel}</Badge>
+          </>
+        }
+      />
 
       {isOpen && (
-        <Panel variant="info" title="SLA" className="mt-4">
-          <div className="flex justify-between items-center mb-1 text-sm">
-            <span style={{ color: "var(--bpm-text-secondary)" }}>Temps consommé (objectif : {slaHours} h)</span>
-            <span className="tabular-nums font-medium" style={{ color: slaColor }}>{slaPercent} %</span>
+        <FicheSectionCard title="SLA" className="mt-4">
+          <Progress
+            value={Math.min(100, slaPercent)}
+            max={100}
+            label={`Temps consommé (objectif : ${slaHours} h)`}
+            showValue
+          />
+          <div className="mt-2">
+            {slaExceeded ? (
+              <Badge variant="error">SLA dépassé</Badge>
+            ) : (
+              <Badge variant="success">SLA OK</Badge>
+            )}
           </div>
-          <div className="h-3 rounded-full overflow-hidden" style={{ background: "var(--bpm-bg-secondary)" }}>
-            <div
-              className="h-full rounded-full transition-[width]"
-              style={{ width: `${Math.min(100, slaPercent)}%`, background: slaColor }}
-            />
-          </div>
-          {slaPercent >= 100 && (
-            <p className="text-xs mt-1" style={{ color: "var(--bpm-accent)" }}>SLA dépassé</p>
-          )}
-        </Panel>
+        </FicheSectionCard>
       )}
 
-      <Panel variant="info" title="Informations">
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Demandeur</dt>
-          <dd>{ticket.requester?.name ?? ticket.requester?.email ?? "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Assigné à</dt>
-          <dd>{ticket.assignee?.name ?? "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Actif lié</dt>
-          <dd>{ticket.asset ? `${ticket.asset.reference} — ${ticket.asset.label}` : "—"}</dd>
-        </dl>
-        <div className="text-sm" style={{ color: "var(--bpm-text-primary)" }}>
-          <div style={{ color: "var(--bpm-text-secondary)", marginBottom: 4 }}>Description</div>
-          <div className="whitespace-pre-wrap rounded p-3" style={{ background: "var(--bpm-bg-secondary)" }}>{ticket.description}</div>
+      <FicheSectionCard title="Informations" className="mt-4">
+        <FicheFieldGrid
+          withDividers
+          items={[
+            { label: "Demandeur", value: ticket.requester?.name ?? ticket.requester?.email ?? "" },
+            { label: "Assigné à", value: ticket.assignee?.name ?? "" },
+            { label: "Actif lié", value: ticket.asset ? `${ticket.asset.reference} — ${ticket.asset.label}` : "" },
+          ]}
+        />
+        <div className="mt-4">
+          <p className="text-xs font-semibold uppercase mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Description</p>
+          <div className="whitespace-pre-wrap rounded-lg p-3 text-sm" style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-primary)" }}>
+            {ticket.description}
+          </div>
         </div>
-      </Panel>
+      </FicheSectionCard>
 
       {(ticket.status === "resolved" || ticket.status === "closed") && (
-        <Panel variant="info" title="Connaissances" className="mt-6">
+        <FicheSectionCard title="Connaissances" className="mt-4">
           <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
             Créez un article à partir de ce ticket pour enrichir les connaissances.
           </p>
           <Link href={`/modules/asset-manager/${domainId}/knowledge/new?fromTicket=${ticket.id}`}>
             <Button variant="outline" size="small">Publier en connaissances</Button>
           </Link>
-        </Panel>
+        </FicheSectionCard>
       )}
 
-      <Panel variant="info" title="Modifier le ticket" className="mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Selectbox
-            label="Statut"
-            value={editStatus}
-            onChange={(v) => setEditStatus(String(v))}
-            options={STATUS_OPTIONS}
-          />
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Solution (si résolu)</label>
-            <textarea
-              value={editSolution}
-              onChange={(e) => setEditSolution(e.target.value)}
-              rows={4}
-              className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-              placeholder="Décrire la solution..."
+      <Card variant="outlined" className="mt-4">
+        <div className="bpm-card-body p-4">
+          <h3 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modifier le ticket</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Selectbox
+              label="Statut"
+              value={editStatus}
+              onChange={(v) => setEditStatus(String(v))}
+              options={STATUS_OPTIONS}
             />
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Solution (si résolu)</label>
+              <textarea
+                value={editSolution}
+                onChange={(e) => setEditSolution(e.target.value)}
+                rows={4}
+                className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+                placeholder="Décrire la solution..."
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <Button variant="primary" size="medium" onClick={handleSave} disabled={saving}>
+              {saving ? "Enregistrement…" : "Enregistrer"}
+            </Button>
           </div>
         </div>
-        <div className="mt-4">
-          <Button size="small" onClick={handleSave} disabled={saving}>{saving ? "Enregistrement…" : "Enregistrer"}</Button>
-        </div>
-      </Panel>
+      </Card>
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/tickets`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des tickets</Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link>
-      </nav>
+      <FicheNav
+        backLink={`/modules/asset-manager/${domainId}/tickets`}
+        backLabel="← Liste des tickets"
+        secondaryLinks={[{ href: `/modules/asset-manager/${domainId}`, label: "Tableau de bord" }]}
+      />
     </div>
   );
 }

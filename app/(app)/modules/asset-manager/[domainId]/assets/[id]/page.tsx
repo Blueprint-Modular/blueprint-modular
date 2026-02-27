@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Selectbox, Input } from "@/components/bpm";
+import { Panel, Button, Spinner, Selectbox, Input, Badge, Card, EmptyState, Metric } from "@/components/bpm";
+import { FicheHeader, FicheSectionCard, FicheFieldGrid, FicheNav, FicheSkeleton } from "@/components/fiche";
 import type { DomainConfig } from "@/lib/asset-manager/get-domain-config";
 
 type Asset = {
@@ -267,93 +268,78 @@ export default function AssetDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="doc-page flex justify-center py-12">
-        <Spinner size="medium" />
-      </div>
-    );
+    return <FicheSkeleton sections={5} withMetrics withList withForm />;
   }
 
   if (!asset) {
     return (
       <div className="doc-page">
-        <div className="doc-page-header mb-6">
-          <nav className="doc-breadcrumb">
-            <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link>
-          </nav>
-          <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Gestion de parc</h1>
-        </div>
         <Panel variant="warning" title="Actif introuvable">
           L&apos;actif demandé n&apos;existe pas ou vous n&apos;y avez pas accès.
         </Panel>
-        <nav className="doc-pagination mt-6">
-          <Link href={`/modules/asset-manager/${domainId}/assets`} style={{ color: "var(--bpm-accent-cyan)" }}>← Retour à la liste</Link>
-        </nav>
+        <FicheNav backLink={`/modules/asset-manager/${domainId}/assets`} backLabel="← Liste des actifs" />
       </div>
     );
   }
 
   const attrsByKey = Object.fromEntries(asset.attributes.map((a) => [a.key, a]));
 
+  const statusBadgeVariant = (sid: string) =>
+    sid === "en_service" ? "success" : sid === "out_of_service" || sid === "disposed" ? "error" : "default";
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}/assets`}>{config?.asset_label_plural ?? "Actifs"}</Link> → {asset.reference}
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
-          {asset.label}
-        </h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {asset.reference} — {getTypeLabel(asset.assetTypeId)} — {getStatusLabel(asset.statusId)}
-        </p>
-      </div>
+      <FicheHeader
+        breadcrumb={
+          <>
+            <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> → <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}/assets`} style={{ color: "var(--bpm-accent-cyan)" }}>{config?.asset_label_plural ?? "Actifs"}</Link> → {asset.reference}
+          </>
+        }
+        title={asset.label}
+        subtitle={
+          <>
+            <Badge variant="default">{asset.reference}</Badge>
+            <Badge variant="default">{getTypeLabel(asset.assetTypeId)}</Badge>
+            <Badge variant={statusBadgeVariant(asset.statusId)}>{getStatusLabel(asset.statusId)}</Badge>
+          </>
+        }
+      />
 
-      <Panel variant="info" title="Informations générales">
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Référence</dt>
-          <dd>{asset.reference}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Type</dt>
-          <dd>{getTypeLabel(asset.assetTypeId)}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Statut</dt>
-          <dd>{getStatusLabel(asset.statusId)}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Étape de cycle de vie</dt>
-          <dd>
-            <Selectbox
-              label=""
-              value={asset.lifecycleStage ?? ""}
-              onChange={(v) => handleLifecycleChange(String(v))}
-              options={[{ value: "", label: "— Non défini" }, ...lifecycleStages.map((s) => ({ value: s.id, label: s.label }))]}
-              placeholder="Choisir"
-            />
-            {savingLifecycle && <span className="ml-2 text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Enregistrement…</span>}
-          </dd>
-          {asset.brand && (
-            <>
-              <dt style={{ color: "var(--bpm-text-secondary)" }}>Marque</dt>
-              <dd>{asset.brand}</dd>
-            </>
-          )}
-          {asset.model && (
-            <>
-              <dt style={{ color: "var(--bpm-text-secondary)" }}>Modèle</dt>
-              <dd>{asset.model}</dd>
-            </>
-          )}
-          {asset.serialNumber && (
-            <>
-              <dt style={{ color: "var(--bpm-text-secondary)" }}>N° série</dt>
-              <dd>{asset.serialNumber}</dd>
-            </>
-          )}
-        </dl>
-      </Panel>
+      <FicheSectionCard title="Informations générales" className="mt-4">
+        <FicheFieldGrid
+          withDividers
+          items={[
+            { label: "Référence", value: asset.reference },
+            { label: "Type", value: getTypeLabel(asset.assetTypeId), asBadge: true, badgeVariant: "default" },
+            { label: "Statut", value: getStatusLabel(asset.statusId), asBadge: true, badgeVariant: statusBadgeVariant(asset.statusId) },
+            {
+              label: "Étape de cycle de vie",
+              value: (
+                <span className="flex items-center gap-2">
+                  <Selectbox
+                    label=""
+                    value={asset.lifecycleStage ?? ""}
+                    onChange={(v) => handleLifecycleChange(String(v))}
+                    options={[{ value: "", label: "— Non défini" }, ...lifecycleStages.map((s) => ({ value: s.id, label: s.label }))]}
+                    placeholder="Choisir"
+                  />
+                  {savingLifecycle && <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>Enregistrement…</span>}
+                </span>
+              ),
+            },
+            ...(asset.brand ? [{ label: "Marque", value: asset.brand }] : []),
+            ...(asset.model ? [{ label: "Modèle", value: asset.model }] : []),
+            ...(asset.serialNumber ? [{ label: "N° série", value: asset.serialNumber }] : []),
+          ]}
+        />
+      </FicheSectionCard>
 
       {config?.asset_types && asset.attributes.length > 0 && (
-        <Panel variant="info" title="Caractéristiques" className="mt-4">
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-            {config.asset_types
+        <FicheSectionCard title="Caractéristiques" className="mt-4">
+          <FicheFieldGrid
+            withDividers
+            items={config.asset_types
               .find((t) => t.id === asset.assetTypeId)
               ?.fields.filter((f) => attrsByKey[f.key])
               .map((f) => {
@@ -363,22 +349,15 @@ export default function AssetDetailPage() {
                 else if (a?.valueNumber != null) val = String(a.valueNumber);
                 else if (a?.valueDate) val = new Date(a.valueDate).toLocaleDateString("fr-FR");
                 else if (a?.valueBool != null) val = a.valueBool ? "Oui" : "Non";
-                return (
-                  <span key={f.key} className="col-span-2 md:col-span-1 flex gap-2">
-                    <dt style={{ color: "var(--bpm-text-secondary)", minWidth: "8rem" }}>{f.label}</dt>
-                    <dd>{val}</dd>
-                  </span>
-                );
-              })}
-          </dl>
-        </Panel>
+                return { label: f.label, value: val };
+              }) ?? []}
+          />
+        </FicheSectionCard>
       )}
 
-      <Panel variant="info" title="Historique des mouvements" className="mt-4">
+      <FicheSectionCard title="Historique des mouvements" className="mt-4">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-            {movements.length} mouvement{movements.length !== 1 ? "s" : ""}
-          </span>
+          <Metric label="Mouvements" value={movements.length} border={false} />
           <Button
             size="small"
             variant="outline"
@@ -388,7 +367,10 @@ export default function AssetDetailPage() {
           </Button>
         </div>
         {showMovementForm && (
-          <form onSubmit={handleAddMovement} className="mb-4 p-4 rounded-lg border border-[var(--bpm-border)]" style={{ background: "var(--bpm-bg-secondary)" }}>
+          <Card variant="outlined" className="mb-4">
+            <div className="bpm-card-body p-4">
+              <h4 className="text-sm font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>Nouveau mouvement</h4>
+              <form onSubmit={handleAddMovement}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
               <Selectbox
                 label="Type"
@@ -420,17 +402,23 @@ export default function AssetDetailPage() {
                 placeholder="Commentaire"
               />
             </div>
-            <Button type="submit" size="small" className="mt-3" disabled={savingMovement}>
+            <Button type="submit" size="medium" variant="primary" disabled={savingMovement}>
               {savingMovement ? "Enregistrement…" : "Enregistrer le mouvement"}
             </Button>
-          </form>
+              </form>
+            </div>
+          </Card>
         )}
         {loadingMovements ? (
           <div className="flex justify-center py-6">
             <Spinner size="small" />
           </div>
         ) : movements.length === 0 ? (
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun mouvement enregistré.</p>
+          <EmptyState
+            title="Aucun mouvement"
+            description="Aucun mouvement enregistré."
+            action={<Button size="small" variant="outline" onClick={() => setShowMovementForm(true)}>+ Ajouter un mouvement</Button>}
+          />
         ) : (
           <ul className="space-y-2">
             {movements.map((m) => (
@@ -441,55 +429,49 @@ export default function AssetDetailPage() {
                 <span className="font-medium" style={{ color: "var(--bpm-text-primary)", minWidth: "10rem" }}>
                   {new Date(m.date).toLocaleDateString("fr-FR")}
                 </span>
-                <span className="rounded px-2 py-0.5 text-xs font-medium" style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}>
-                  {MOVEMENT_TYPE_LABELS[m.movementType] ?? m.movementType}
-                </span>
+                <Badge variant="primary">{MOVEMENT_TYPE_LABELS[m.movementType] ?? m.movementType}</Badge>
                 {m.reason && <span style={{ color: "var(--bpm-text-secondary)" }}>{m.reason}</span>}
                 {m.notes && <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>— {m.notes}</span>}
               </li>
             ))}
           </ul>
         )}
-      </Panel>
+      </FicheSectionCard>
 
-      <Panel variant="info" title="Tickets" className="mt-4">
+      <FicheSectionCard title="Tickets" className="mt-4">
         {loadingTickets ? (
           <div className="flex justify-center py-4">
             <Spinner size="small" />
           </div>
         ) : tickets.length === 0 ? (
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun ticket lié à cet actif.</p>
+          <EmptyState
+            title="Aucun ticket"
+            description="Aucun ticket lié à cet actif."
+            action={<Link href={`/modules/asset-manager/${domainId}/tickets/new`}><Button size="small" variant="outline">+ Nouveau ticket</Button></Link>}
+          />
         ) : (
           <ul className="space-y-2">
             {tickets.map((t) => (
               <li key={t.id} className="flex flex-wrap items-baseline gap-2 py-2 border-b border-[var(--bpm-border)] last:border-0 text-sm">
-                <Link
-                  href={`/modules/asset-manager/${domainId}/tickets/${t.id}`}
-                  className="font-medium hover:underline"
-                  style={{ color: "var(--bpm-accent-cyan)" }}
-                >
+                <Link href={`/modules/asset-manager/${domainId}/tickets/${t.id}`} className="font-medium hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
                   {t.reference}
                 </Link>
                 <span style={{ color: "var(--bpm-text-primary)" }}>{t.title}</span>
-                <span className="rounded px-2 py-0.5 text-xs" style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}>
-                  {t.status}
-                </span>
-                <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
-                  {new Date(t.openedAt).toLocaleDateString("fr-FR")}
-                </span>
+                <Badge variant="default">{t.status}</Badge>
+                <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>{new Date(t.openedAt).toLocaleDateString("fr-FR")}</span>
               </li>
             ))}
           </ul>
         )}
-      </Panel>
+      </FicheSectionCard>
 
-      <Panel variant="info" title="Contrats" className="mt-4">
+      <FicheSectionCard title="Contrats" className="mt-4">
         {loadingContracts ? (
           <div className="flex justify-center py-4">
             <Spinner size="small" />
           </div>
         ) : contracts.length === 0 ? (
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun contrat couvrant cet actif.</p>
+          <EmptyState title="Aucun contrat" description="Aucun contrat couvrant cet actif." />
         ) : (
           <ul className="space-y-2">
             {contracts.map((c) => {
@@ -497,69 +479,64 @@ export default function AssetDetailPage() {
               const isExpired = endDate ? endDate < new Date() : false;
               return (
                 <li key={c.id} className="flex flex-wrap items-baseline gap-2 py-2 border-b border-[var(--bpm-border)] last:border-0 text-sm">
-                  <Link
-                    href={`/modules/asset-manager/${domainId}/contracts/${c.id}`}
-                    className="font-medium hover:underline"
-                    style={{ color: "var(--bpm-accent-cyan)" }}
-                  >
+                  <Link href={`/modules/asset-manager/${domainId}/contracts/${c.id}`} className="font-medium hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
                     {c.reference}
                   </Link>
                   <span style={{ color: "var(--bpm-text-primary)" }}>{c.label}</span>
-                  <span className="rounded px-2 py-0.5 text-xs" style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}>
-                    {c.type}
-                  </span>
+                  <Badge variant="default">{c.type}</Badge>
                   {endDate && (
-                    <span
-                      className={`rounded px-2 py-0.5 text-xs font-medium ${isExpired ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300" : ""}`}
-                      style={!isExpired ? { background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" } : undefined}
-                    >
-                      Fin : {endDate.toLocaleDateString("fr-FR")}
-                    </span>
+                    <Badge variant={isExpired ? "error" : "default"}>Fin : {endDate.toLocaleDateString("fr-FR")}</Badge>
                   )}
                 </li>
               );
             })}
           </ul>
         )}
-      </Panel>
+      </FicheSectionCard>
 
-      <Panel variant="info" title="Dépendances / Cartographie" className="mt-4">
+      <FicheSectionCard title="Dépendances / Cartographie" className="mt-4">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-            {relations.length} relation{relations.length !== 1 ? "s" : ""}
-          </span>
+          <Metric label="Relations" value={relations.length} border={false} />
           <Button size="small" variant="outline" onClick={() => { setShowRelationForm((v) => !v); loadDomainAssetsForRelation(); }}>
             {showRelationForm ? "Annuler" : "+ Ajouter une relation"}
           </Button>
         </div>
         {showRelationForm && (
-          <form onSubmit={handleAddRelation} className="mb-4 p-4 rounded-lg border border-[var(--bpm-border)]" style={{ background: "var(--bpm-bg-secondary)" }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <Selectbox
-                label="Actif cible"
-                value={newRelationTargetId}
-                onChange={(v) => setNewRelationTargetId(String(v))}
-                options={domainAssets.map((a) => ({ value: a.id, label: `${a.reference} — ${a.label}` }))}
-                placeholder="Choisir un actif"
-              />
-              <Selectbox
-                label="Type de relation"
-                value={newRelationType}
-                onChange={(v) => setNewRelationType(String(v))}
-                options={Object.entries(RELATION_TYPE_LABELS).map(([value, label]) => ({ value, label }))}
-              />
+          <Card variant="outlined" className="mb-4">
+            <div className="bpm-card-body p-4">
+              <form onSubmit={handleAddRelation}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                  <Selectbox
+                    label="Actif cible"
+                    value={newRelationTargetId}
+                    onChange={(v) => setNewRelationTargetId(String(v))}
+                    options={domainAssets.map((a) => ({ value: a.id, label: `${a.reference} — ${a.label}` }))}
+                    placeholder="Choisir un actif"
+                  />
+                  <Selectbox
+                    label="Type de relation"
+                    value={newRelationType}
+                    onChange={(v) => setNewRelationType(String(v))}
+                    options={Object.entries(RELATION_TYPE_LABELS).map(([value, label]) => ({ value, label }))}
+                  />
+                </div>
+                <Button type="submit" size="medium" variant="primary" disabled={savingRelation || !newRelationTargetId}>
+                  {savingRelation ? "Enregistrement…" : "Ajouter"}
+                </Button>
+              </form>
             </div>
-            <Button type="submit" size="small" disabled={savingRelation || !newRelationTargetId}>
-              {savingRelation ? "Enregistrement…" : "Ajouter"}
-            </Button>
-          </form>
+          </Card>
         )}
         {loadingRelations ? (
           <div className="flex justify-center py-4">
             <Spinner size="small" />
           </div>
         ) : relations.length === 0 ? (
-          <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucune relation. Ajoutez une dépendance ou un lien avec un autre actif.</p>
+          <EmptyState
+            title="Aucune relation"
+            description="Ajoutez une dépendance ou un lien."
+            action={<Button size="small" variant="outline" onClick={() => { setShowRelationForm(true); loadDomainAssetsForRelation(); }}>+ Ajouter une relation</Button>}
+          />
         ) : (
           <ul className="space-y-2">
             {relations.map((rel) => {
@@ -568,9 +545,7 @@ export default function AssetDetailPage() {
               const direction = isSource ? "→" : "←";
               return (
                 <li key={rel.id} className="flex flex-wrap items-center gap-2 py-2 border-b border-[var(--bpm-border)] last:border-0 text-sm">
-                  <span className="rounded px-2 py-0.5 text-xs font-medium" style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}>
-                    {RELATION_TYPE_LABELS[rel.relationType] ?? rel.relationType}
-                  </span>
+                  <Badge variant="primary">{RELATION_TYPE_LABELS[rel.relationType] ?? rel.relationType}</Badge>
                   <span style={{ color: "var(--bpm-text-secondary)" }}>{direction}</span>
                   <Link href={`/modules/asset-manager/${domainId}/assets/${other.id}`} className="font-medium" style={{ color: "var(--bpm-accent-cyan)" }}>
                     {other.reference} — {other.label}
@@ -583,25 +558,22 @@ export default function AssetDetailPage() {
             })}
           </ul>
         )}
-      </Panel>
+      </FicheSectionCard>
 
       {asset.notes && (
-        <Panel variant="info" title="Notes" className="mt-4">
-          <p className="text-sm whitespace-pre-wrap">{asset.notes}</p>
-        </Panel>
+        <FicheSectionCard title="Notes" className="mt-4">
+          <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-primary)" }}>{asset.notes}</p>
+        </FicheSectionCard>
       )}
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/assets`} style={{ color: "var(--bpm-accent-cyan)" }}>
-          ← Liste des actifs
-        </Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>
-          Tableau de bord
-        </Link>
-        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>
-          Documentation
-        </Link>
-      </nav>
+      <FicheNav
+        backLink={`/modules/asset-manager/${domainId}/assets`}
+        backLabel="← Liste des actifs"
+        secondaryLinks={[
+          { href: `/modules/asset-manager/${domainId}`, label: "Tableau de bord" },
+          { href: "/modules/asset-manager/documentation", label: "Documentation" },
+        ]}
+      />
     </div>
   );
 }

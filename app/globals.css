@@ -560,14 +560,20 @@ textarea.bpm-textarea:focus {
   width: 200px;
   flex-shrink: 0;
   align-self: stretch;
-  border-right: 1px solid #E5E7EB;
+  border-right: 1px solid var(--bpm-sidebar-border);
   padding: 16px 12px;
-  background: var(--bpm-bg-secondary);
+  background: var(--bpm-sidebar-bg);
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
   position: relative;
+}
+/* Barre d'en-tête : s'arrête à droite de la sidebar secondaire (ne la coupe pas) */
+@media (min-width: 768px) {
+  .app-header-with-secondary-sidebar {
+    margin-left: 200px;
+  }
 }
 /* Desktop : sidebar secondaire fixe pleine hauteur (comme la sidebar principale, du haut de l'écran) */
 @media (min-width: 768px) {
@@ -584,27 +590,10 @@ textarea.bpm-textarea:focus {
     margin-left: 200px;
   }
 }
-/* Barre verticale pleine hauteur de l'écran (alignée bord gauche sidebar) */
-@media (min-width: 768px) {
-  .asset-manager-sidebar::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: var(--bpm-sidebar-width, 16rem);
-    width: 1px;
-    background: #E5E7EB;
-    pointer-events: none;
-    z-index: 5;
-  }
-}
 [data-theme="dark"] .asset-manager-sidebar {
-  border-right-color: var(--bpm-border);
-  background: var(--bpm-bg-secondary);
+  border-right-color: var(--bpm-sidebar-border);
+  background: var(--bpm-sidebar-bg);
   box-shadow: inset 0 -1px 0 rgba(0,0,0,0.2);
-}
-[data-theme="dark"] .asset-manager-sidebar::after {
-  background: var(--bpm-border);
 }
 .asset-manager-sidebar-nav {
   display: flex;
@@ -613,6 +602,7 @@ textarea.bpm-textarea:focus {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  padding-top: 240px;
 }
 .asset-manager-sidebar-link {
   display: flex;
@@ -1053,6 +1043,36 @@ textarea.bpm-textarea:focus {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 16px;
+}
+.asset-manager-page .asset-manager-equipment-filters--collapsed {
+  padding: 8px 16px;
+}
+.asset-manager-page .asset-manager-equipment-filters__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  min-height: 36px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+.asset-manager-page .asset-manager-equipment-filters__toggle:hover {
+  color: var(--bpm-text-primary, #374151);
+}
+.asset-manager-page .asset-manager-equipment-filters__toggle:focus-visible {
+  outline: 2px solid var(--bpm-accent-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .asset-manager-page .asset-manager-equipment-filters__row {
   display: flex;

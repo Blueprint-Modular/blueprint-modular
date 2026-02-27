@@ -60,6 +60,8 @@ function AIHeaderIconButtons() {
 function AppLayoutInner({ children }: { children: React.ReactNode }) {
   const sidebar = useSidebar();
   const collapsed = sidebar?.collapsed ?? false;
+  const pathname = usePathname();
+  const hasSecondarySidebar = /^\/modules\/asset-manager\/[^/]+/.test(pathname ?? "");
 
   return (
     <div
@@ -78,7 +80,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
         className={`app-content-column flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"}`}
       >
           <header
-            className="pwa-title-bar sticky top-0 z-30 max-md:z-50 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2"
+            className={`pwa-title-bar sticky top-0 z-30 max-md:z-50 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2 ${hasSecondarySidebar ? "app-header-with-secondary-sidebar" : ""}`}
             style={{ background: "var(--bpm-bg-primary)" }}
           >
             <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--bpm-text-primary)" }}>

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Selectbox, Input } from "@/components/bpm";
+import { Panel, Button, Spinner, Selectbox, Input, Badge, Card } from "@/components/bpm";
+import { FicheHeader, FicheSectionCard, FicheFieldGrid, FicheNav, FicheSkeleton } from "@/components/fiche";
 
 type AssetContract = {
   id: string;
@@ -95,20 +96,14 @@ export default function AssetManagerContractDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="doc-page flex justify-center py-12">
-        <Spinner size="medium" />
-      </div>
-    );
+    return <FicheSkeleton singleSection />;
   }
 
   if (!contract) {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Contrat introuvable">Ce contrat n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
-        <nav className="doc-pagination mt-6">
-          <Link href={`/modules/asset-manager/${domainId}/contracts`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des contrats</Link>
-        </nav>
+        <FicheNav backLink={`/modules/asset-manager/${domainId}/contracts`} backLabel="← Liste des contrats" />
       </div>
     );
   }
@@ -117,90 +112,110 @@ export default function AssetManagerContractDetailPage() {
 
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}/contracts`}>Contrats</Link> → {contract.reference}
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>
-          {contract.label}
-        </h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {contract.reference} — {typeLabel}
-        </p>
-      </div>
+      <FicheHeader
+        breadcrumb={
+          <>
+            <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> → <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}/contracts`} style={{ color: "var(--bpm-accent-cyan)" }}>Contrats</Link> → {contract.reference}
+          </>
+        }
+        title={contract.label}
+        subtitle={
+          <>
+            <Badge variant="default">{contract.reference}</Badge>
+            <Badge variant="default">{typeLabel}</Badge>
+          </>
+        }
+      />
 
-      <Panel variant="info" title="Détail du contrat">
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-4">
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Référence</dt>
-          <dd>{contract.reference}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Type</dt>
-          <dd>{typeLabel}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Libellé</dt>
-          <dd>
-            <Input value={editLabel} onChange={(v) => setEditLabel(v)} placeholder="Libellé" />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Fournisseur</dt>
-          <dd>
-            <Input value={editSupplier} onChange={(v) => setEditSupplier(v)} placeholder="Fournisseur" />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Début</dt>
-          <dd>
-            <input
-              type="date"
-              value={editStartDate}
-              onChange={(e) => setEditStartDate(e.target.value)}
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-            />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Fin</dt>
-          <dd>
-            <input
-              type="date"
-              value={editEndDate}
-              onChange={(e) => setEditEndDate(e.target.value)}
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-            />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Montant (€)</dt>
-          <dd>
-            <Input value={editAmount} onChange={(v) => setEditAmount(v)} placeholder="Montant" />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Préavis (jours)</dt>
-          <dd>
-            <Input value={editNoticeDays} onChange={(v) => setEditNoticeDays(v)} placeholder="30" />
-          </dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Renouvellement auto</dt>
-          <dd>
-            <Selectbox
-              value={editAutoRenewal ? "yes" : "no"}
-              onChange={(v) => setEditAutoRenewal(v === "yes")}
-              options={[{ value: "no", label: "Non" }, { value: "yes", label: "Oui" }]}
-            />
-          </dd>
-        </dl>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Notes</label>
-          <textarea
-            value={editNotes}
-            onChange={(e) => setEditNotes(e.target.value)}
-            rows={3}
-            className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-            placeholder="Notes"
+      <Card variant="outlined" className="mt-4">
+        <div className="bpm-card-body p-4">
+          <h3 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>Détail du contrat</h3>
+          <FicheFieldGrid
+            withDividers
+            items={[
+              { label: "Référence", value: contract.reference },
+              { label: "Type", value: typeLabel, asBadge: true },
+              {
+                label: "Libellé",
+                value: <Input value={editLabel} onChange={(v) => setEditLabel(v)} placeholder="Libellé" />,
+              },
+              {
+                label: "Fournisseur",
+                value: <Input value={editSupplier} onChange={(v) => setEditSupplier(v)} placeholder="Fournisseur" />,
+              },
+              {
+                label: "Début",
+                value: (
+                  <input
+                    type="date"
+                    value={editStartDate}
+                    onChange={(e) => setEditStartDate(e.target.value)}
+                    className="w-full rounded-lg border px-2 py-1.5 text-sm"
+                    style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+                  />
+                ),
+              },
+              {
+                label: "Fin",
+                value: (
+                  <input
+                    type="date"
+                    value={editEndDate}
+                    onChange={(e) => setEditEndDate(e.target.value)}
+                    className="w-full rounded-lg border px-2 py-1.5 text-sm"
+                    style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+                  />
+                ),
+              },
+              {
+                label: "Montant (€)",
+                value: <Input value={editAmount} onChange={(v) => setEditAmount(v)} placeholder="Montant" />,
+              },
+              {
+                label: "Préavis (jours)",
+                value: <Input value={editNoticeDays} onChange={(v) => setEditNoticeDays(v)} placeholder="30" />,
+              },
+              {
+                label: "Renouvellement auto",
+                value: (
+                  <Selectbox
+                    value={editAutoRenewal ? "yes" : "no"}
+                    onChange={(v) => setEditAutoRenewal(v === "yes")}
+                    options={[{ value: "no", label: "Non" }, { value: "yes", label: "Oui" }]}
+                  />
+                ),
+              },
+            ]}
           />
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Notes</label>
+            <textarea
+              value={editNotes}
+              onChange={(e) => setEditNotes(e.target.value)}
+              rows={3}
+              className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
+              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+              placeholder="Notes"
+            />
+          </div>
+          <div className="mt-4">
+            <Button variant="primary" size="medium" onClick={handleSave} disabled={saving}>
+              {saving ? "Enregistrement…" : "Enregistrer"}
+            </Button>
+          </div>
         </div>
-        <Button size="small" onClick={handleSave} disabled={saving}>{saving ? "Enregistrement…" : "Enregistrer"}</Button>
-      </Panel>
+      </Card>
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/contracts`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des contrats</Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link>
-        <Link href="/modules/asset-manager/documentation" style={{ color: "var(--bpm-accent-cyan)" }}>Documentation</Link>
-      </nav>
+      <FicheNav
+        backLink={`/modules/asset-manager/${domainId}/contracts`}
+        backLabel="← Liste des contrats"
+        secondaryLinks={[
+          { href: `/modules/asset-manager/${domainId}`, label: "Tableau de bord" },
+          { href: "/modules/asset-manager/documentation", label: "Documentation" },
+        ]}
+      />
     </div>
   );
 }

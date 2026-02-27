@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { Panel, Button, Spinner } from "@/components/bpm";
+import { useParams } from "next/navigation";
+import { Panel, Button, Spinner, Badge, Metric } from "@/components/bpm";
+import { FicheHeader, FicheSectionCard, FicheNav, FicheSkeleton } from "@/components/fiche";
 
 type KnowledgeArticle = {
   id: string;
@@ -32,7 +33,6 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function AssetManagerKnowledgeDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const domainId = typeof params?.domainId === "string" ? params.domainId : "";
   const id = typeof params?.id === "string" ? params.id : "";
   const [article, setArticle] = useState<KnowledgeArticle | null>(null);
@@ -53,47 +53,54 @@ export default function AssetManagerKnowledgeDetailPage() {
   }, [domainId, id]);
 
   if (loading) {
-    return (
-      <div className="doc-page flex justify-center py-12">
-        <Spinner size="medium" />
-      </div>
-    );
+    return <FicheSkeleton sections={1} withMetrics />;
   }
 
   if (!article) {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Article introuvable">Cet article n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
-        <nav className="doc-pagination mt-6">
-          <Link href={`/modules/asset-manager/${domainId}/knowledge`} style={{ color: "var(--bpm-accent-cyan)" }}>← Connaissances</Link>
-        </nav>
+        <FicheNav backLink={`/modules/asset-manager/${domainId}/knowledge`} backLabel="← Connaissances" />
       </div>
     );
   }
 
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> →{" "}
-          <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}/knowledge`} style={{ color: "var(--bpm-accent-cyan)" }}>Connaissances</Link> → {article.title}
-        </nav>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>{article.title}</h1>
-          <Link href={`/modules/asset-manager/${domainId}/knowledge/${id}/edit`}>
-            <Button size="small" variant="outline">Modifier</Button>
-          </Link>
+      <FicheHeader
+        breadcrumb={
+          <>
+            <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> →{" "}
+            <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}/knowledge`} style={{ color: "var(--bpm-accent-cyan)" }}>Connaissances</Link> → {article.title}
+          </>
+        }
+        title={article.title}
+        subtitle={
+          <>
+            <Badge variant="default">{CATEGORY_LABELS[article.categoryId] ?? article.categoryId}</Badge>
+            {article.tags.length > 0 && article.tags.map((tag) => <Badge key={tag} variant="default">{tag}</Badge>)}
+            {article.publishedAt && (
+              <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+                Publié le {new Date(article.publishedAt).toLocaleDateString("fr-FR")}
+              </span>
+            )}
+          </>
+        }
+      />
+      <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
+        <div className="flex flex-wrap gap-3">
+          <Metric label="Vues" value={article.viewsCount} border={false} />
+          <Metric label="Utile" value={article.helpfulCount} border={false} />
+          <Metric label="Pas utile" value={article.notHelpfulCount} border={false} />
         </div>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {CATEGORY_LABELS[article.categoryId] ?? article.categoryId}
-          {article.tags.length > 0 && ` · ${article.tags.join(", ")}`}
-          {article.publishedAt && ` · Publié le ${new Date(article.publishedAt).toLocaleDateString("fr-FR")}`}
-        </p>
+        <Link href={`/modules/asset-manager/${domainId}/knowledge/${id}/edit`}>
+          <Button size="small" variant="outline">Modifier</Button>
+        </Link>
       </div>
 
-      <Panel variant="info" title="Contenu">
+      <FicheSectionCard title="Contenu" className="mt-4">
         <div
           className="prose prose-sm max-w-none"
           style={{ color: "var(--bpm-text-primary)" }}
@@ -106,18 +113,13 @@ export default function AssetManagerKnowledgeDetailPage() {
               .replace(/^# (.+)$/gm, "<h1 class='text-xl font-bold mt-2 mb-2'>$1</h1>"),
           }}
         />
-      </Panel>
+      </FicheSectionCard>
 
-      <div className="flex flex-wrap gap-2 mt-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-        <span>Vues : {article.viewsCount}</span>
-        <span>Utile : {article.helpfulCount}</span>
-        <span>Pas utile : {article.notHelpfulCount}</span>
-      </div>
-
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/knowledge`} style={{ color: "var(--bpm-accent-cyan)" }}>← Connaissances</Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link>
-      </nav>
+      <FicheNav
+        backLink={`/modules/asset-manager/${domainId}/knowledge`}
+        backLabel="← Connaissances"
+        secondaryLinks={[{ href: `/modules/asset-manager/${domainId}`, label: "Tableau de bord" }]}
+      />
     </div>
   );
 }

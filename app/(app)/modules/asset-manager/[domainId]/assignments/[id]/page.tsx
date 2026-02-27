@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Selectbox } from "@/components/bpm";
+import { Panel, Button, Spinner, Selectbox, Badge, Card } from "@/components/bpm";
+import { FicheHeader, FicheSectionCard, FicheFieldGrid, FicheNav, FicheSkeleton } from "@/components/fiche";
 
 type Assignment = {
   id: string;
@@ -31,6 +32,14 @@ const STATUS_OPTIONS = [
   { value: "cancelled", label: "Annulé" },
 ];
 
+function statusBadgeVariant(s: string): "primary" | "success" | "warning" | "error" | "default" {
+  if (s === "returned") return "success";
+  if (s === "active") return "primary";
+  if (s === "overdue") return "error";
+  if (s === "cancelled") return "default";
+  return "default";
+}
+
 export default function AssetManagerAssignmentDetailPage() {
   const params = useParams();
   const domainId = typeof params?.domainId === "string" ? params.domainId : "";
@@ -45,7 +54,7 @@ export default function AssetManagerAssignmentDetailPage() {
 
   const handleReturn = () => {
     if (!assignment || assignment.status !== "active" || returning) return;
-    if (!confirm("Clôturer cette mise à Disposition et remettre l’actif en stock ?")) return;
+    if (!confirm("Clôturer cette mise à Disposition et remettre l'actif en stock ?")) return;
     setReturning(true);
     fetch(`/api/asset-manager/assignments/${id}/return`, { method: "POST", credentials: "include" })
       .then((r) => (r.ok ? r.json() : null))
@@ -96,97 +105,101 @@ export default function AssetManagerAssignmentDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="doc-page flex justify-center py-12">
-        <Spinner size="medium" />
-      </div>
-    );
+    return <FicheSkeleton sections={2} withForm />;
   }
 
   if (!assignment) {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Mise à Disposition introuvable">Cette MAD n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
-        <Link href={`/modules/asset-manager/${domainId}/assignments`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des MAD</Link>
+        <FicheNav backLink={`/modules/asset-manager/${domainId}/assignments`} backLabel="← Liste des MAD" />
       </div>
     );
   }
 
+  const statusLabel = STATUS_OPTIONS.find((o) => o.value === assignment.status)?.label ?? assignment.status;
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> →{" "}
-          <Link href={`/modules/asset-manager/${domainId}/assignments`}>MAD</Link> → {assignment.reference}
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>{assignment.reference}</h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {assignment.asset?.label ?? "—"} — Bénéficiaire : {assignment.assignee?.name ?? assignment.assignee?.email ?? "—"}
-        </p>
-      </div>
+      <FicheHeader
+        breadcrumb={
+          <>
+            <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> → <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> →{" "}
+            <Link href={`/modules/asset-manager/${domainId}/assignments`} style={{ color: "var(--bpm-accent-cyan)" }}>MAD</Link> → {assignment.reference}
+          </>
+        }
+        title={assignment.reference}
+        subtitle={
+          <>
+            <Badge variant="default">{assignment.asset?.label ?? "—"}</Badge>
+            <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+              Bénéficiaire : {assignment.assignee?.name ?? assignment.assignee?.email ?? "—"}
+            </span>
+            <Badge variant={statusBadgeVariant(assignment.status)}>{statusLabel}</Badge>
+          </>
+        }
+      />
 
       {assignment.status === "active" && (
-        <Panel variant="info" title="Restituer l’actif" className="mb-6">
+        <FicheSectionCard title="Restituer l'actif" className="mt-4">
           <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
-            Clôture la MAD, enregistre la date de retour et remet l’actif en stock.
+            Clôture la MAD, enregistre la date de retour et remet l'actif en stock.
           </p>
-          <Button variant="primary" size="small" onClick={handleReturn} disabled={returning}>
-            {returning ? "En cours…" : "Restituer l’actif"}
+          <Button variant="primary" size="medium" onClick={handleReturn} disabled={returning}>
+            {returning ? "En cours…" : "Restituer l'actif"}
           </Button>
-        </Panel>
+        </FicheSectionCard>
       )}
 
-      <Panel variant="info" title="Informations">
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Actif</dt>
-          <dd>{assignment.asset ? `${assignment.asset.reference} — ${assignment.asset.label}` : "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Bénéficiaire</dt>
-          <dd>{assignment.assignee?.name ?? assignment.assignee?.email ?? "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Début</dt>
-          <dd>{new Date(assignment.startDate).toLocaleDateString("fr-FR")}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Fin prévue</dt>
-          <dd>{assignment.expectedEndDate ? new Date(assignment.expectedEndDate).toLocaleDateString("fr-FR") : "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Fin réelle</dt>
-          <dd>{assignment.actualEndDate ? new Date(assignment.actualEndDate).toLocaleDateString("fr-FR") : "—"}</dd>
-          <dt style={{ color: "var(--bpm-text-secondary)" }}>Ticket lié</dt>
-          <dd>{assignment.ticket ? `${assignment.ticket.reference} — ${assignment.ticket.title}` : "—"}</dd>
-          {assignment.reason && (
-            <>
-              <dt style={{ color: "var(--bpm-text-secondary)" }}>Motif</dt>
-              <dd>{assignment.reason}</dd>
-            </>
-          )}
-        </dl>
-      </Panel>
+      <FicheSectionCard title="Informations" className="mt-4">
+        <FicheFieldGrid
+          withDividers
+          items={[
+            { label: "Actif", value: assignment.asset ? `${assignment.asset.reference} — ${assignment.asset.label}` : "" },
+            { label: "Bénéficiaire", value: assignment.assignee?.name ?? assignment.assignee?.email ?? "" },
+            { label: "Début", value: new Date(assignment.startDate).toLocaleDateString("fr-FR") },
+            { label: "Fin prévue", value: assignment.expectedEndDate ? new Date(assignment.expectedEndDate).toLocaleDateString("fr-FR") : "" },
+            { label: "Fin réelle", value: assignment.actualEndDate ? new Date(assignment.actualEndDate).toLocaleDateString("fr-FR") : "" },
+            { label: "Ticket lié", value: assignment.ticket ? `${assignment.ticket.reference} — ${assignment.ticket.title}` : "" },
+            ...(assignment.reason ? [{ label: "Motif", value: assignment.reason }] : []),
+          ]}
+        />
+      </FicheSectionCard>
 
-      <Panel variant="info" title="Modifier" className="mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Selectbox label="Statut" value={editStatus} onChange={(v) => setEditStatus(String(v))} options={STATUS_OPTIONS} />
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>État au retour</label>
-            <textarea
-              value={editConditionReturn}
-              onChange={(e) => setEditConditionReturn(e.target.value)}
-              rows={2}
-              className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
-              style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
-            />
+      <Card variant="outlined" className="mt-4">
+        <div className="bpm-card-body p-4">
+          <h3 className="text-base font-semibold mb-3" style={{ color: "var(--bpm-text-primary)" }}>Modifier</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Selectbox label="Statut" value={editStatus} onChange={(v) => setEditStatus(String(v))} options={STATUS_OPTIONS} />
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>État au retour</label>
+              <textarea
+                value={editConditionReturn}
+                onChange={(e) => setEditConditionReturn(e.target.value)}
+                rows={2}
+                className="bpm-textarea w-full rounded-lg border px-3 py-2 text-sm resize-y"
+                style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-primary)" }}
+              />
+            </div>
+            <label className="flex items-center gap-2 col-span-2">
+              <input type="checkbox" checked={editContractSigned} onChange={(e) => setEditContractSigned(e.target.checked)} />
+              <span style={{ color: "var(--bpm-text-primary)" }}>Contrat signé</span>
+            </label>
           </div>
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={editContractSigned} onChange={(e) => setEditContractSigned(e.target.checked)} />
-            <span style={{ color: "var(--bpm-text-primary)" }}>Contrat signé</span>
-          </label>
+          <div className="mt-4">
+            <Button variant="primary" size="medium" onClick={handleSave} disabled={saving}>
+              {saving ? "Enregistrement…" : "Enregistrer"}
+            </Button>
+          </div>
         </div>
-        <div className="mt-4">
-          <Button size="small" onClick={handleSave} disabled={saving}>{saving ? "Enregistrement…" : "Enregistrer"}</Button>
-        </div>
-      </Panel>
+      </Card>
 
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/assignments`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des MAD</Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link>
-      </nav>
+      <FicheNav
+        backLink={`/modules/asset-manager/${domainId}/assignments`}
+        backLabel="← Liste des MAD"
+        secondaryLinks={[{ href: `/modules/asset-manager/${domainId}`, label: "Tableau de bord" }]}
+      />
     </div>
   );
 }

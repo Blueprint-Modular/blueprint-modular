@@ -112,6 +112,13 @@ body {
   max-width: calc(100vw - var(--bpm-sidebar-width, 0));
   box-sizing: border-box;
 }
+/* Quand la sidebar secondaire (asset-manager) est ouverte : décaler le contenu pour ne pas laisser de zone blanche */
+@media (min-width: 768px) {
+  .app-layout-root[data-secondary-sidebar-open="true"] .app-content-column {
+    margin-left: calc(var(--bpm-sidebar-width) + 200px);
+    max-width: calc(100vw - var(--bpm-sidebar-width, 0) - 200px);
+  }
+}
 @media (display-mode: standalone) {
   .pwa-title-bar {
     position: fixed;
@@ -595,14 +602,10 @@ textarea.bpm-textarea:focus {
     width: 100%;
     min-height: 100vh;
     flex: 1;
-    z-index: 40;
+    z-index: 0;
   }
 }
-@media (min-width: 768px) {
-  .asset-manager-main-wrapper {
-    margin-left: 200px;
-  }
-}
+/* Plus de margin-left ici : le décalage est géré par app-content-column quand la sidebar secondaire est ouverte */
 [data-theme="dark"] .asset-manager-sidebar {
   border-right-color: var(--bpm-sidebar-border);
   background: var(--bpm-sidebar-bg);

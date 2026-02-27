@@ -100,6 +100,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
       className="app-layout-root min-h-screen flex"
       style={{ background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
       data-sidebar-collapsed={collapsed ? "true" : "false"}
+      data-secondary-sidebar-open={secondarySidebarMargin ? "true" : "false"}
     >
       {/* Bande grise à gauche : largeur = sidebar (64 ou 16) pour éviter bande blanche quand réduite */}
       <div
@@ -108,10 +109,10 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
         aria-hidden
       />
       <Sidebar />
-      {/* Sidebar secondaire Gestion de parc : rendue ici pour animer ouverture/fermeture */}
+      {/* Sidebar secondaire : décalée à droite de la sidebar principale (transition synchronisée) */}
       {showSecondarySidebar && domainId && (
         <div
-          className={`asset-manager-sidebar-outer hidden md:block overflow-hidden ${secondarySidebarMargin ? "asset-manager-sidebar-outer--open" : ""}`}
+          className={`asset-manager-sidebar-outer hidden md:block overflow-hidden transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"} ${secondarySidebarMargin ? "asset-manager-sidebar-outer--open" : ""}`}
           aria-hidden={!sidebarOpen}
         >
           <AssetManagerSidebar domainId={domainId} />

@@ -143,7 +143,7 @@ export function Sidebar() {
       <aside
         className={`
           group bpm-app-sidebar
-          fixed top-0 left-0 z-40 h-full flex flex-col
+          fixed top-0 left-0 z-50 h-full flex flex-col
           w-64 transition-[width] duration-200 ease-in-out
           hidden md:flex
           ${collapsed ? "md:w-16" : "md:w-64"}

@@ -600,13 +600,22 @@ textarea.bpm-textarea:focus {
   overflow-y: auto;
 }
 .asset-manager-sidebar-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 10px;
   font-size: 13px;
   color: var(--bpm-text-secondary);
   text-decoration: none;
   border-radius: 6px;
   transition: background 0.15s, color 0.15s;
+}
+.asset-manager-sidebar-link-icon {
+  color: inherit;
+  opacity: 0.85;
+}
+.asset-manager-sidebar-link--active .asset-manager-sidebar-link-icon {
+  opacity: 1;
 }
 .asset-manager-sidebar-link:hover {
   background: var(--bpm-sidebar-hover-bg);
@@ -638,6 +647,23 @@ textarea.bpm-textarea:focus {
   .asset-manager-sidebar {
     display: none;
   }
+}
+/* Barre d'onglets mobile (style bpm.tabs) : visible uniquement en mobile à la place de la sidebar */
+.asset-manager-mobile-tabs {
+  flex-shrink: 0;
+  background: var(--bpm-bg-primary);
+  -webkit-overflow-scrolling: touch;
+}
+.asset-manager-mobile-tabs .bpm-tabs-header {
+  padding-left: 4px;
+}
+.asset-manager-page .asset-manager-main-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 .asset-manager-page .doc-page {
   padding: 24px 32px 48px;
@@ -673,10 +699,10 @@ textarea.bpm-textarea:focus {
 }
 .asset-manager-page .doc-page-header h1,
 .asset-manager-page .doc-page-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   letter-spacing: -0.025em;
-  margin: 0 0 4px;
+  margin: 0 0 8px;
 }
 .asset-manager-page .doc-description {
   font-size: 13px;

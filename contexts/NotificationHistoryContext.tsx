@@ -99,6 +99,20 @@ export function NotificationHistoryProvider({ children }: { children: React.Reac
         };
         const updated = [newNotif, ...prev].slice(0, 100);
         saveToStorage(updated);
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("bpm-notification-toast", {
+              detail: {
+                id: newNotif.id,
+                message: newNotif.message,
+                type: newNotif.type,
+                title: newNotif.title,
+                pageName: newNotif.pageName,
+                pageIcon: newNotif.pageIcon,
+              },
+            })
+          );
+        }
         return updated;
       });
     },

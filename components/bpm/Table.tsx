@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { MetricValueLocale } from "./Metric";
 
 export interface TableColumn {
@@ -86,6 +87,7 @@ export function Table({
   valueGrouping = true,
   minWidth,
 }: TableProps) {
+  const isMobile = useIsMobile(768);
   const [sortColumn, setSortColumn] = useState<string | null>(defaultSortColumn);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(defaultSortDirection);
 
@@ -135,11 +137,12 @@ export function Table({
     });
   }, [data, sortColumn, sortDirection]);
 
-  const tableMinWidthStyle = minWidth != null ? { minWidth: `${minWidth}px` } : undefined;
+  const tableMinWidthStyle =
+    !isMobile && minWidth != null ? { minWidth: `${minWidth}px` } : undefined;
 
   return (
     <div
-      className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-350px)] rounded-lg border ${className}`}
+      className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-220px)] md:max-h-[calc(100vh-350px)] rounded-lg border ${className}`}
       style={{
         borderColor: "var(--bpm-border)",
         backgroundColor: "var(--bpm-surface)",

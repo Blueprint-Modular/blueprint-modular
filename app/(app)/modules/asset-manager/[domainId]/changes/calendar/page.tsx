@@ -102,12 +102,12 @@ export default function AssetManagerChangesCalendarPage() {
         </div>
       ) : (
         <Panel variant="info" title="Vue mensuelle">
-          <div className="grid grid-cols-7 gap-px rounded-lg overflow-hidden" style={{ background: "var(--bpm-border)" }}>
+          <div className="grid grid-cols-7 gap-px rounded-lg overflow-hidden calendar-month-grid" style={{ background: "var(--bpm-border)" }}>
             {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => (
               <div
                 key={day}
                 className="p-2 text-center text-xs font-medium"
-                style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}
+                style={{ background: "var(--bpm-sidebar-bg)", color: "var(--bpm-text-secondary)" }}
               >
                 {day}
               </div>
@@ -122,13 +122,13 @@ export default function AssetManagerChangesCalendarPage() {
               return (
                 <div
                   key={i}
-                  className="min-h-[80px] p-1 flex flex-col"
+                  className="min-h-[80px] flex flex-col calendar-month-cell"
                   style={{
-                    background: isCurrentMonth ? "var(--bpm-bg)" : "var(--bpm-bg-secondary)",
+                    background: isCurrentMonth ? "var(--bpm-bg-primary)" : "var(--bpm-sidebar-bg)",
                     color: isCurrentMonth ? "var(--bpm-text-primary)" : "var(--bpm-text-secondary)",
                   }}
                 >
-                  <span className="text-xs font-medium mb-1">{isCurrentMonth ? dayNum : ""}</span>
+                  <span className="calendar-month-day-num text-xs font-medium">{isCurrentMonth ? dayNum : ""}</span>
                   <div className="flex-1 space-y-0.5 overflow-auto">
                     {dayChanges.slice(0, 3).map((c) => (
                       <Link

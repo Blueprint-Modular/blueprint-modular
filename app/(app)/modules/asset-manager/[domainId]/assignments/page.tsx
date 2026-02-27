@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Download, UserCheck } from "lucide-react";
 import { Table, Spinner, Button, Chip, EmptyState } from "@/components/bpm";
-import { AssetManagerNav } from "../../AssetManagerNav";
 
 type Assignment = {
   id: string;
@@ -147,12 +146,11 @@ export default function AssetManagerAssignmentsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <AssetManagerNav />
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>Mise à disposition</h1>
+            <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>Mise à Disposition</h1>
             <p className="doc-description mt-0.5" style={{ color: "var(--bpm-text-secondary)" }}>
-              Suivi des mises à disposition d&apos;actifs.
+              Suivi des mises à Disposition d&apos;actifs.
             </p>
           </div>
           <Link href={`/modules/asset-manager/${domainId}/assignments/new`} className="asset-manager-cta-button">

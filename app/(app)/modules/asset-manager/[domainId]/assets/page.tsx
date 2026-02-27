@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Download, Package, ChevronRight } from "lucide-react";
 import { Table, Spinner, Panel, Button, Chip, EmptyState } from "@/components/bpm";
-import { AssetManagerNav } from "../../AssetManagerNav";
 
 interface Asset {
   id: string;
@@ -196,8 +195,7 @@ export default function AssetManagerAssetsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <AssetManagerNav />
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>
               {config?.asset_label_plural ?? "Équipements"}
@@ -206,54 +204,78 @@ export default function AssetManagerAssetsPage() {
               Liste des actifs avec filtres par type et statut.
             </p>
           </div>
-          <Link href={`/modules/asset-manager/${domainId}/assets/nouveau`} className="asset-manager-cta-button">
-            <Button variant="primary" size="small">+ Nouvel actif</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="small"
+              onClick={exportCsv}
+              disabled={assets.length === 0}
+              className="asset-manager-export-btn-header"
+            >
+              <Download size={18} className="shrink-0" />
+              <span className="asset-manager-export-label">Exporter</span>
+            </Button>
+            <Link href={`/modules/asset-manager/${domainId}/assets/nouveau`} className="asset-manager-cta-button">
+              <Button variant="primary" size="small">+ Nouvel actif</Button>
+            </Link>
+          </div>
         </div>
       </div>
 
-      <div className="asset-manager-filters flex flex-wrap items-center gap-2 overflow-x-auto">
-        <span className="text-xs font-medium mr-1" style={{ color: "var(--bpm-text-secondary)" }}>Type</span>
-        {typeOptions.map((opt) => (
-          <Chip
-            key={opt.value}
-            label={opt.label}
-            variant={filterType === opt.value ? "primary" : "default"}
-            onClick={() => updateFilter("assetTypeId", opt.value)}
-            className={filterType === opt.value ? "asset-manager-chip-active" : ""}
-          />
-        ))}
-        <span className="text-xs font-medium mx-2 mr-1" style={{ color: "var(--bpm-text-secondary)" }}>Statut</span>
-        {statusOptions.map((opt) => (
-          <Chip
-            key={opt.value}
-            label={opt.label}
-            variant={filterStatus === opt.value ? "primary" : "default"}
-            onClick={() => updateFilter("statusId", opt.value)}
-            className={filterStatus === opt.value ? "asset-manager-chip-active" : ""}
-          />
-        ))}
-        <span className="text-xs font-medium mx-2 mr-1" style={{ color: "var(--bpm-text-secondary)" }}>Cycle de vie</span>
-        {lifecycleOptions.map((opt) => (
-          <Chip
-            key={opt.value}
-            label={opt.label}
-            variant={filterLifecycle === opt.value ? "primary" : "default"}
-            onClick={() => updateFilter("lifecycleStage", opt.value)}
-            className={filterLifecycle === opt.value ? "asset-manager-chip-active" : ""}
-          />
-        ))}
-        <div className="ml-auto flex-shrink-0">
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={assets.length === 0}
-            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
-            title="Exporter CSV"
-          >
-            <Download size={18} />
-          </button>
+      <div className="asset-manager-equipment-filters">
+        <div className="asset-manager-equipment-filters__row">
+          <span className="asset-manager-equipment-filters__label">Type</span>
+          <div className="asset-manager-equipment-filters__chips">
+            {typeOptions.map((opt) => {
+              const isActive = filterType === opt.value;
+              const isReset = opt.value === "";
+              return (
+                <Chip
+                  key={opt.value || "all"}
+                  label={opt.label}
+                  variant={isActive ? "primary" : "default"}
+                  onClick={() => updateFilter("assetTypeId", isActive ? "" : opt.value)}
+                  className={`${isActive ? "asset-manager-chip-active" : ""} ${isReset ? "asset-manager-chip-reset" : ""}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div className="asset-manager-equipment-filters__row">
+          <span className="asset-manager-equipment-filters__label">Statut</span>
+          <div className="asset-manager-equipment-filters__chips">
+            {statusOptions.map((opt) => {
+              const isActive = filterStatus === opt.value;
+              const isReset = opt.value === "";
+              return (
+                <Chip
+                  key={opt.value || "all"}
+                  label={opt.label}
+                  variant={isActive ? "primary" : "default"}
+                  onClick={() => updateFilter("statusId", isActive ? "" : opt.value)}
+                  className={`${isActive ? "asset-manager-chip-active" : ""} ${isReset ? "asset-manager-chip-reset" : ""}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div className="asset-manager-equipment-filters__row">
+          <span className="asset-manager-equipment-filters__label">Cycle de vie</span>
+          <div className="asset-manager-equipment-filters__chips">
+            {lifecycleOptions.map((opt) => {
+              const isActive = filterLifecycle === opt.value;
+              const isReset = opt.value === "";
+              return (
+                <Chip
+                  key={opt.value || "all"}
+                  label={opt.label}
+                  variant={isActive ? "primary" : "default"}
+                  onClick={() => updateFilter("lifecycleStage", isActive ? "" : opt.value)}
+                  className={`${isActive ? "asset-manager-chip-active" : ""} ${isReset ? "asset-manager-chip-reset" : ""}`}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 

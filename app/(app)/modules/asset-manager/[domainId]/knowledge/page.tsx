@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+import { BookOpen } from "lucide-react";
+import { Table, Spinner, Panel, Button, Selectbox, EmptyState } from "@/components/bpm";
 
 type KnowledgeArticle = {
   id: string;
@@ -95,7 +96,7 @@ export default function AssetManagerKnowledgePage() {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Domaine inconnu">Vérifiez l&apos;URL.</Panel>
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion d&apos;actifs</Link>
+        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion de parc</Link>
       </div>
     );
   }
@@ -105,7 +106,7 @@ export default function AssetManagerKnowledgePage() {
       <div className="doc-page-header mb-6">
         <nav className="doc-breadcrumb">
           <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> →{" "}
-          <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion d&apos;actifs</Link> →{" "}
+          <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
           <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> → Connaissances
         </nav>
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -135,20 +136,29 @@ export default function AssetManagerKnowledgePage() {
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : articles.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucun article de connaissance"
+            description="Créez un premier article ou une procédure pour commencer."
+            icon={<BookOpen size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/knowledge/new`}>
+                <Button variant="primary" size="small">+ Nouvel article</Button>
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${articles.length} article(s)`}>
-          {articles.length === 0 ? (
-            <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucun article. Créez-en un avec « Nouvel article ».</p>
-          ) : (
-            <Table
-              columns={columns}
-              data={articles}
-              minWidth={560}
-              keyColumn="id"
-              onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/knowledge/${(row as KnowledgeArticle).id}`)}
-            />
-          )}
-        </Panel>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+          <Table
+            columns={columns}
+            data={articles}
+            minWidth={560}
+            keyColumn="id"
+            onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/knowledge/${(row as KnowledgeArticle).id}`)}
+          />
+        </div>
       )}
 
       <nav className="doc-pagination mt-8 flex flex-wrap gap-4">

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Download, Ticket as TicketIcon } from "lucide-react";
 import { Table, Spinner, Panel, Button, Chip, EmptyState } from "@/components/bpm";
-import { AssetManagerNav } from "../../AssetManagerNav";
 
 type Ticket = {
   id: string;
@@ -161,7 +160,7 @@ export default function AssetManagerTicketsPage() {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Domaine inconnu">Vérifiez l’URL.</Panel>
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion d’actifs</Link>
+        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion de parc</Link>
       </div>
     );
   }
@@ -196,8 +195,7 @@ export default function AssetManagerTicketsPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <AssetManagerNav />
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>Tickets</h1>
             <p className="doc-description mt-0.5" style={{ color: "var(--bpm-text-secondary)" }}>

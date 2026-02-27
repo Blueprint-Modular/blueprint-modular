@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
   var sidebar = document.querySelector('.doc-sidebar');
   if (!burger || !sidebar) return;
   burger.setAttribute('type', 'button');
+  burger.setAttribute('aria-expanded', 'false');
+  sidebar.classList.remove('open');
+  burger.classList.remove('open');
   var touchHandled = false;
   function toggleMenu() {
     sidebar.classList.toggle('open');

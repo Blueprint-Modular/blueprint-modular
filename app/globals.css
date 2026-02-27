@@ -103,7 +103,7 @@ body {
 }
 /* Racine du débordement : content-column ne doit pas dépasser (viewport - sidebar) */
 .app-layout-root {
-  overflow-x: hidden;
+  overflow-x: clip; /* clip préserve position:sticky des descendants (header) ; hidden le casse */
   width: 100%;
   max-width: 100vw;
 }
@@ -127,7 +127,9 @@ body {
     background: #fff !important;
   }
   .pwa-title-bar button,
-  .pwa-title-bar a {
+  .pwa-title-bar a,
+  .notification-popup,
+  .notification-popup * {
     -webkit-app-region: no-drag;
     app-region: no-drag;
     touch-action: manipulation;
@@ -449,7 +451,7 @@ textarea.bpm-textarea:focus {
 .wiki-tree-count { font-size: 12px; color: var(--bpm-text-secondary); }
 .wiki-tree-doc { font-size: 1em; line-height: 1; opacity: 0.85; }
 .wiki-content { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.wiki-article-list { display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; overflow-y: auto; padding-top: 30px; }
+.wiki-article-list { display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; overflow-y: auto; padding-top: 60px; }
 .wiki-card { display: block; padding: 16px 20px; border: 1px solid var(--bpm-border); border-radius: 8px; text-decoration: none; color: inherit; transition: border-color 0.15s; }
 .wiki-card:hover { border-color: var(--bpm-accent-cyan); }
 .wiki-card h3 { margin: 0 0 4px; font-size: 16px; }
@@ -514,7 +516,17 @@ textarea.bpm-textarea:focus {
 .bpm-markdown .hljs { background: var(--bpm-code-bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--bpm-code-border); overflow-x: auto; }
 .bpm-markdown pre code.hljs { padding: 0; background: transparent; }
 
-/* ========== Asset Manager — style inspiré Linear (composants BPM conservés) ========== */
+/* Calendrier mensuel (gestion de parc + module Calendrier) : espace autour du jour, gris homogène */
+.calendar-month-cell {
+  padding: 10px;
+}
+.calendar-month-day-num {
+  display: block;
+  padding: 4px 0 0 6px;
+  margin-bottom: 4px;
+}
+
+/* ========== Gestion de parc — style inspiré Linear (composants BPM conservés) ========== */
 .asset-manager-page {
   background: #F5F5F7;
   min-height: 100%;
@@ -708,9 +720,13 @@ textarea.bpm-textarea:focus {
   border-bottom: none;
 }
 /* Métriques (dashboard) : cartes compactes, bordure 12px */
+.asset-manager-page .asset-manager-metrics-grid {
+  align-items: stretch;
+}
 .asset-manager-page .asset-manager-metrics-grid a.block,
 .asset-manager-page .doc-page > .grid.mb-6 a.block {
-  display: block;
+  display: flex;
+  flex-direction: column;
   background: var(--bpm-surface);
   border: 1px solid #E5E7EB;
   border-radius: 12px;
@@ -718,7 +734,10 @@ textarea.bpm-textarea:focus {
   transition: border-color 0.15s, box-shadow 0.15s;
   text-decoration: none;
   color: inherit;
-  min-height: 80px;
+  min-height: 96px;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 .asset-manager-page .asset-manager-metrics-grid a.block:hover,
 .asset-manager-page .doc-page > .grid.mb-6 a.block:hover {
@@ -729,6 +748,11 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .doc-page > .grid.mb-6 a.block > div {
   border: none !important;
   min-width: 0;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 /* Chiffres des stat cards : plus marqués (audit Linear) */
 .asset-manager-page .asset-manager-metrics-grid a.block div.text-lg,
@@ -736,6 +760,11 @@ textarea.bpm-textarea:focus {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+  margin-top: 6px !important; /* +3px entre titre et nombre */
+}
+/* +3px entre nombre et date (Mise à jour) */
+.asset-manager-page .asset-manager-metrics-grid a.block > div > div.text-\[11px\] {
+  margin-top: calc(0.125rem + 6px) !important;
 }
 /* Dark mode : cartes avec box-shadow au lieu de bordure seule */
 [data-theme="dark"] .asset-manager-page .asset-manager-metrics-grid a.block,
@@ -747,8 +776,19 @@ textarea.bpm-textarea:focus {
 [data-theme="dark"] .asset-manager-page .doc-page > .grid.mb-6 a.block:hover {
   box-shadow: 0 0 0 1px rgba(0,163,226,0.35);
 }
+/* Colonnes avec largeur min pour éviter troncature et sauts de mise en page */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .asset-manager-page .asset-manager-metrics-grid {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .asset-manager-page .asset-manager-metrics-grid {
+    grid-template-columns: repeat(6, minmax(160px, 1fr));
+  }
+}
 /* Mobile : carousel horizontal pour stat cards */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .asset-manager-page .asset-manager-metrics-grid,
   .asset-manager-page .doc-page > .grid.mb-6 {
     display: flex;
@@ -763,8 +803,9 @@ textarea.bpm-textarea:focus {
   .asset-manager-page .asset-manager-metrics-grid a.block,
   .asset-manager-page .doc-page > .grid.mb-6 a.block {
     min-width: 160px;
+    flex: 0 0 auto;
+    height: auto;
     scroll-snap-align: start;
-    flex-shrink: 0;
   }
 }
 /* Ligne tableau : chevron au survol */
@@ -862,6 +903,124 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .asset-manager-export-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Export en haut à droite (page Équipements) */
+.asset-manager-page .asset-manager-export-btn-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent !important;
+  border-color: var(--bpm-border);
+  color: var(--bpm-text-secondary);
+}
+.asset-manager-page .asset-manager-export-btn-header:hover:not(:disabled) {
+  border-color: var(--bpm-accent-cyan);
+  color: var(--bpm-accent-cyan);
+}
+.asset-manager-page .asset-manager-export-label {
+  display: inline;
+}
+@media (max-width: 767px) {
+  .asset-manager-page .asset-manager-export-label {
+    display: none;
+  }
+}
+
+/* Filtres Équipements : groupes structurés (3 lignes) */
+.asset-manager-page .asset-manager-equipment-filters {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.asset-manager-page .asset-manager-equipment-filters__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+}
+.asset-manager-page .asset-manager-equipment-filters__label {
+  flex-shrink: 0;
+  width: 110px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-right: 12px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+}
+.asset-manager-page .asset-manager-equipment-filters__chips {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  min-height: 36px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.asset-manager-page .asset-manager-equipment-filters__chips::-webkit-scrollbar {
+  display: none;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip:hover {
+  background: #e5e7eb;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip.asset-manager-chip-active {
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important;
+  font-weight: 500;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip.asset-manager-chip-reset {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip.asset-manager-chip-reset:hover {
+  background: #f9fafb;
+}
+.asset-manager-page .asset-manager-equipment-filters .bpm-chip.asset-manager-chip-reset.asset-manager-chip-active {
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important;
+}
+@media (max-width: 767px) {
+  .asset-manager-page .asset-manager-equipment-filters__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .asset-manager-page .asset-manager-equipment-filters__label {
+    width: auto;
+    border-right: none;
+    padding-right: 0;
+    font-size: 10px;
+    padding-bottom: 0;
+  }
+  .asset-manager-page .asset-manager-equipment-filters__chips {
+    margin-left: 0;
+  }
 }
 /* Champs de formulaire dans les panels */
 .asset-manager-page [role="region"] input[type="text"],

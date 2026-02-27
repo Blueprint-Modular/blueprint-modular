@@ -66,12 +66,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       />
 
       <h3 className="text-base font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
+        Base de données
+      </h3>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        Le module Auth s&apos;appuie sur les tables <code>User</code> et <code>ApiKey</code> (schéma Prisma). En production, <code>DATABASE_URL</code> doit être défini. Pour la liste des structures BDD et prérequis par module, voir <code>docs/DATABASE.md</code> dans le dépôt.
+      </p>
+
+      <h3 className="text-base font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
         Variables d&apos;environnement
       </h3>
       <p className="mb-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
         À définir dans <code>.env</code> ou votre hébergeur :
       </p>
       <ul className="list-disc pl-6 mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <li><code>DATABASE_URL</code> — Connexion PostgreSQL (obligatoire pour la persistance des utilisateurs).</li>
         <li><code>GOOGLE_CLIENT_ID</code> et <code>GOOGLE_CLIENT_SECRET</code> — pour la connexion Google.</li>
         <li><code>NEXTAUTH_SECRET</code> — secret pour signer les JWT (obligatoire en production).</li>
         <li><code>NEXTAUTH_URL</code> — URL de l&apos;app (ex. <code>https://app.blueprint-modular.com</code>).</li>

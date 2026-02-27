@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+import { Download, FileText } from "lucide-react";
+import { Table, Spinner, Panel, Button, Selectbox, EmptyState } from "@/components/bpm";
 
 type AssetContract = {
   id: string;
@@ -96,7 +97,7 @@ export default function AssetManagerContractsPage() {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Domaine inconnu">Vérifiez l&apos;URL.</Panel>
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion d&apos;actifs</Link>
+        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion de parc</Link>
       </div>
     );
   }
@@ -105,7 +106,7 @@ export default function AssetManagerContractsPage() {
     <div className="doc-page">
       <div className="doc-page-header mb-6">
         <nav className="doc-breadcrumb">
-          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion d&apos;actifs</Link> →{" "}
+          <Link href="/modules">Modules</Link> → <Link href="/modules/asset-manager">Gestion de parc</Link> →{" "}
           <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> → Contrats
         </nav>
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -115,36 +116,40 @@ export default function AssetManagerContractsPage() {
               Garanties, maintenance, leasing, licences. Alertes fin de contrat.
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => {
-              const headers = ["Référence", "Libellé", "Type", "Fournisseur", "Début", "Fin", "Montant"];
-              const rows = filtered.map((c) => [
-                c.reference,
-                c.label,
-                TYPE_LABELS[c.type] ?? c.type,
-                c.supplier ?? "",
-                c.startDate ? new Date(c.startDate).toLocaleDateString("fr-FR") : "",
-                c.endDate ? new Date(c.endDate).toLocaleDateString("fr-FR") : "",
-                c.amount != null ? String(c.amount) : "",
-              ]);
-              const csv = [headers.join(";"), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))].join("\r\n");
-              const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = `contrats-${domainId}-${new Date().toISOString().slice(0, 10)}.csv`;
-              a.click();
-              URL.revokeObjectURL(url);
-            }}
-            disabled={filtered.length === 0}
-          >
-            Exporter CSV
-          </Button>
-          <Link href={`/modules/asset-manager/${domainId}/contracts/new`}>
-            <Button size="small">+ Nouveau contrat</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => {
+                const headers = ["Référence", "Libellé", "Type", "Fournisseur", "Début", "Fin", "Montant"];
+                const rows = filtered.map((c) => [
+                  c.reference,
+                  c.label,
+                  TYPE_LABELS[c.type] ?? c.type,
+                  c.supplier ?? "",
+                  c.startDate ? new Date(c.startDate).toLocaleDateString("fr-FR") : "",
+                  c.endDate ? new Date(c.endDate).toLocaleDateString("fr-FR") : "",
+                  c.amount != null ? String(c.amount) : "",
+                ]);
+                const csv = [headers.join(";"), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))].join("\r\n");
+                const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `contrats-${domainId}-${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              disabled={filtered.length === 0}
+              className="asset-manager-export-btn-header"
+            >
+              <Download size={18} className="shrink-0" />
+              <span className="asset-manager-export-label">Exporter</span>
+            </Button>
+            <Link href={`/modules/asset-manager/${domainId}/contracts/new`}>
+              <Button size="small">+ Nouveau contrat</Button>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -162,8 +167,21 @@ export default function AssetManagerContractsPage() {
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucun contrat enregistré"
+            description="Créez un premier contrat ou une garantie pour commencer."
+            icon={<FileText size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/contracts/new`}>
+                <Button variant="primary" size="small">+ Nouveau contrat</Button>
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${filtered.length} contrat(s)`}>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
             columns={columns}
             data={filtered}
@@ -171,7 +189,7 @@ export default function AssetManagerContractsPage() {
             keyColumn="id"
             onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/contracts/${(row as { id: string }).id}`)}
           />
-        </Panel>
+        </div>
       )}
 
       <nav className="doc-pagination mt-8 flex flex-wrap gap-4">

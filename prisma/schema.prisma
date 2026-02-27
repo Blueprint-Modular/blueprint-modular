@@ -190,7 +190,7 @@ model NewsletterArticle {
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
-// --- Module Asset Manager (actifs, tickets, mises à disposition) ---
+// --- Module Gestion de parc (actifs, tickets, mise à Disposition) ---
 model Asset {
   id              String    @id @default(cuid())
   domainId        String    @map("domain_id")

@@ -35,8 +35,11 @@ export default function WikiDocumentationPage() {
         <li><strong>Aide IA</strong> : depuis l&apos;éditeur, vous pouvez « Générer depuis des notes » (l&apos;IA structure vos notes en article Markdown) ou « Mettre en forme » (amélioration du texte existant). Ces actions appellent <code>POST /api/wiki/generate</code> et utilisent le serveur IA configuré (Ollama / Qwen).</li>
         <li><strong>Intégration avec l&apos;assistant IA</strong> : le module Wiki est enregistré dans le registry des modules. Quand vous discutez avec l&apos;assistant et que le module Wiki est sélectionné, le contenu des articles récents (titres + corps) est injecté dans le contexte pour que l&apos;IA puisse s&apos;y référer.</li>
       </ul>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <strong>Base de données et prérequis production</strong> : tables <code>WikiArticle</code>, <code>WikiRevision</code>, <code>WikiComment</code>, <code>WikiBacklink</code> ; détail dans <code>docs/DATABASE.md</code> du dépôt.
+      </p>
 
-      <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
+            <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
         Où sont sauvegardés les articles
       </h2>
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>

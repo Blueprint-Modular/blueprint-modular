@@ -19,7 +19,7 @@ Source unique : **`package.json`**. Après `npm run version:sync` : `pyproject.t
 
 ## 0. Structures BDD et modules
 
-Pour savoir **quelles tables** sont utilisées par chaque module (Wiki, Documents, Base contractuelle, Asset Manager, etc.) et les **configurations requises** (fichiers domaines, variables d'env), voir **[docs/DATABASE.md](docs/DATABASE.md)**. Les migrations Prisma doivent être à jour en production (voir §1 ci-dessous).
+Pour savoir **quelles tables** sont utilisées par chaque module (Wiki, Documents, Base contractuelle, Gestion de parc, etc.) et les **configurations requises** (fichiers domaines, variables d'env), voir **[docs/DATABASE.md](docs/DATABASE.md)**. Les migrations Prisma doivent être à jour en production (voir §1 ci-dessous).
 
 ---
 

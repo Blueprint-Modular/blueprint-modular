@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Table, Spinner, Panel, Button, Selectbox } from "@/components/bpm";
+import { Download, RefreshCw } from "lucide-react";
+import { Table, Spinner, Panel, Button, Selectbox, EmptyState } from "@/components/bpm";
 
 type ChangeRequest = {
   id: string;
@@ -94,7 +95,7 @@ export default function AssetManagerChangesPage() {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Domaine inconnu">Vérifiez l&apos;URL.</Panel>
-        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion d&apos;actifs</Link>
+        <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>← Gestion de parc</Link>
       </div>
     );
   }
@@ -104,7 +105,7 @@ export default function AssetManagerChangesPage() {
       <div className="doc-page-header mb-6">
         <nav className="doc-breadcrumb">
           <Link href="/modules" style={{ color: "var(--bpm-accent-cyan)" }}>Modules</Link> →{" "}
-          <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion d&apos;actifs</Link> →{" "}
+          <Link href="/modules/asset-manager" style={{ color: "var(--bpm-accent-cyan)" }}>Gestion de parc</Link> →{" "}
           <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link> → Changements
         </nav>
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -114,7 +115,7 @@ export default function AssetManagerChangesPage() {
               Demandes de changement (CAB), planification et suivi.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="outline"
               size="small"
@@ -138,8 +139,10 @@ export default function AssetManagerChangesPage() {
                 URL.revokeObjectURL(url);
               }}
               disabled={changes.length === 0}
+              className="asset-manager-export-btn-header"
             >
-              Exporter CSV
+              <Download size={18} className="shrink-0" />
+              <span className="asset-manager-export-label">Exporter</span>
             </Button>
             <Link href={`/modules/asset-manager/${domainId}/changes/calendar`}>
               <Button size="small" variant="outline">Calendrier</Button>
@@ -168,20 +171,29 @@ export default function AssetManagerChangesPage() {
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : changes.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucune demande de changement"
+            description="Créez une première demande (CAB) pour commencer."
+            icon={<RefreshCw size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/changes/new`}>
+                <Button variant="primary" size="small">+ Nouvelle demande</Button>
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${changes.length} demande(s)`}>
-          {changes.length === 0 ? (
-            <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucune demande. Créez-en une avec « Nouvelle demande ».</p>
-          ) : (
-            <Table
-              columns={columns}
-              data={changes}
-              minWidth={560}
-              keyColumn="id"
-              onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/changes/${(row as ChangeRequest).id}`)}
-            />
-          )}
-        </Panel>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+          <Table
+            columns={columns}
+            data={changes}
+            minWidth={560}
+            keyColumn="id"
+            onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/changes/${(row as ChangeRequest).id}`)}
+          />
+        </div>
       )}
 
       <nav className="doc-pagination mt-8 flex flex-wrap gap-4">

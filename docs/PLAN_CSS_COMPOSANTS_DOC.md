@@ -72,18 +72,18 @@ Ce document décrit les trois prochaines étapes pour structurer l’application
 
 - **Un endroit** (ou un ensemble cohérent) où sont décrites :
   - les **structures de BDD** que l’app et chaque module doivent avoir pour fonctionner en prod (tables, relations utiles) ;
-  - les **dépendances par module** (ex. Asset Manager → Asset, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest, etc. + config domaines dans `lib/asset-manager/config/`) ;
-  - les **variables d’environnement** et **fichiers de config** requis (ex. `DATABASE_URL`, `NEXTAUTH_*`, config domaines Asset Manager).
+  - les **dépendances par module** (ex. Gestion de parc → Asset, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest, etc. + config domaines dans `lib/asset-manager/config/`) ;
+  - les **variables d’environnement** et **fichiers de config** requis (ex. `DATABASE_URL`, `NEXTAUTH_*`, config domaines Gestion de parc).
 - **Launchers** : s’assurer que les « points d’entrée » (page Modules, documentation in-app, PWA) référencent ou renvoient vers cette doc (lien « Prérequis / BDD » ou section dédiée).
 
 ### Actions proposées
 
 | Action | Priorité | Détail |
 |--------|----------|--------|
-| Créer `docs/DATABASE.md` | Haute | Document qui liste : (1) Référence au schéma Prisma (`prisma/schema.prisma`) ; (2) Par module/feature (Wiki, Documents, Base contractuelle, Asset Manager, Newsletter, Auth, IA…), les modèles Prisma utilisés et, si besoin, les configs (fichiers JSON, domaines) ; (3) Variables d’env obligatoires pour la prod (DATABASE_URL, NEXTAUTH_URL, etc.). |
+| Créer `docs/DATABASE.md` | Haute | Document qui liste : (1) Référence au schéma Prisma (`prisma/schema.prisma`) ; (2) Par module/feature (Wiki, Documents, Base contractuelle, Gestion de parc, Newsletter, Auth, IA…), les modèles Prisma utilisés et, si besoin, les configs (fichiers JSON, domaines) ; (3) Variables d’env obligatoires pour la prod (DATABASE_URL, NEXTAUTH_URL, etc.). |
 | Lien depuis DEPLOY.md | Haute | Dans `DEPLOY.md`, ajouter une section « Structures BDD et modules » avec un lien vers `docs/DATABASE.md` et rappeler que les migrations doivent être à jour. |
 | Doc in-app / launchers | Moyenne | Dans la documentation in-app (ex. page « Démarrage » ou « Déploiement »), ajouter un lien vers les prérequis BDD (ou inclure un résumé + lien vers `docs/DATABASE.md`). Si une page « Launchers » ou « Prérequis » existe, y intégrer les infos BDD et env. |
-| Par module (optionnel) | Basse | Dans chaque module concerné (ex. Asset Manager), documenter en doc in-app les tables et configs qu’il utilise (ex. « Asset Manager utilise les tables Asset, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest et les fichiers lib/asset-manager/config/domain.*.json »). |
+| Par module (optionnel) | Basse | Dans chaque module concerné (ex. Gestion de parc), documenter en doc in-app les tables et configs qu’il utilise (ex. « Gestion de parc utilise les tables Asset, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest et les fichiers lib/asset-manager/config/domain.*.json »). |
 
 ---
 

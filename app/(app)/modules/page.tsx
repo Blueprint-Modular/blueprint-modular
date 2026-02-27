@@ -41,7 +41,7 @@ const MODULES_BY_CATEGORY: Record<(typeof CATEGORY_ORDER)[number], ModuleEntry[]
     { href: "/modules/keep-screen-on", label: "Keep screen on", description: "Gardez l'écran allumé pendant une présentation ou une réunion — durée réglable ou indéfinie.", icon: Sun, simulatorAndDoc: true, simulateurHref: "/modules/keep-screen-on" },
   ],
   "Données & reporting": [
-    { href: "/modules/asset-manager", label: "Asset Manager", description: "Gestion d'actifs, tickets et mise à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },
+    { href: "/modules/asset-manager", label: "Gestion de parc", description: "Gestion d'actifs, tickets et mise à disposition configurables par domaine (IT, maintenance).", icon: Package, simulatorAndDoc: true, simulateurHref: "/modules/asset-manager" },
     { href: "/modules/contracts", label: "Base contractuelle", description: "Centralisez contrats fournisseurs et CGV, analysez-les avec l'IA.", icon: FileText, simulatorAndDoc: true, simulateurHref: "/modules/contracts" },
     { href: "/modules/documents", label: "Analyse de documents", description: "Uploadez, analysez et interrogez vos documents PDF, Word et plus avec l'IA.", icon: FileText, simulatorAndDoc: true },
     { href: "/modules/export-planifie", label: "Export planifié", description: "Envoi périodique par email de rapports ou exports (PDF/CSV).", icon: Mail, simulatorAndDoc: true },

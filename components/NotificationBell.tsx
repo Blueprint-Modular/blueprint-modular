@@ -49,7 +49,9 @@ export function NotificationBell() {
   const [isClosing, setIsClosing] = useState(false);
   const [animActive, setAnimActive] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [popupPosition, setPopupPosition] = useState({ top: 0, right: 0 });
   const bellRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
   const mobileButtonRef = useRef<HTMLButtonElement>(null);
   const touchHandledRef = useRef(false);
 
@@ -127,12 +129,27 @@ export function NotificationBell() {
 
   useEffect(() => {
     if (isMobile || !isOpen) return;
-    const h = (e: MouseEvent) => {
-      if (bellRef.current && !bellRef.current.contains(e.target as Node)) requestClose();
+    const h = (e: PointerEvent) => {
+      const target = e.target as Node;
+      const inBell = bellRef.current?.contains(target);
+      const inPopup = popupRef.current?.contains(target);
+      if (!inBell && !inPopup) requestClose();
     };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
+    document.addEventListener("pointerdown", h);
+    return () => document.removeEventListener("pointerdown", h);
   }, [isOpen, isMobile, requestClose]);
+
+  /* Position du popup desktop (portal) : calculée à l'ouverture pour éviter débordement hors viewport */
+  useLayoutEffect(() => {
+    if (!isOpen || isClosing || isMobile) return;
+    const el = bellRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setPopupPosition({
+      top: rect.bottom + 10,
+      right: window.innerWidth - rect.right,
+    });
+  }, [isOpen, isClosing, isMobile]);
 
   const handleAnimEnd = (e: React.AnimationEvent) => {
     if (e.animationName === "notification-dock-close") {
@@ -335,6 +352,7 @@ export function NotificationBell() {
       type="button"
       className="notification-bell-button"
       onClick={toggle}
+      onPointerDown={(e) => e.preventDefault()}
       aria-label="Notifications"
       title="Notifications"
     >
@@ -343,14 +361,29 @@ export function NotificationBell() {
     </button>
   );
 
+  const desktopPopup =
+    isOpen || isClosing
+      ? createPortal(
+          <div
+            ref={popupRef}
+            className={popupClasses}
+            onAnimationEnd={handleAnimEnd}
+            style={{
+              position: "fixed",
+              top: `${popupPosition.top}px`,
+              right: `${popupPosition.right}px`,
+            }}
+          >
+            {panelContent}
+          </div>,
+          document.body
+        )
+      : null;
+
   return (
     <div className="notification-bell-container" ref={bellRef}>
       {buttonEl}
-      {(isOpen || isClosing) && (
-        <div className={popupClasses} onAnimationEnd={handleAnimEnd}>
-          {panelContent}
-        </div>
-      )}
+      {desktopPopup}
     </div>
   );
 }

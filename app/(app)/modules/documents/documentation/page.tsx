@@ -105,6 +105,9 @@ ollama pull qwen3:8b
         <li><strong>Formats acceptés</strong> : PDF uniquement (côté API actuel).</li>
         <li><strong>Taille max</strong> : dépend du serveur (proxy). En cas d&apos;erreur 413, augmenter <code>client_max_body_size</code> (nginx) ou la limite côté Next.js si configurée.</li>
       </ul>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <strong>Base de données et prérequis production</strong> : table <code>Document</code>, variables d&apos;environnement et déploiement détaillés dans <code>docs/DATABASE.md</code> du dépôt.
+      </p>
 
       <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
         API (résumé)

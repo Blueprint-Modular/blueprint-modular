@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Spinner, Selectbox, Button } from "@/components/bpm";
+import { ClipboardList } from "lucide-react";
+import { Panel, Spinner, Selectbox, Table, EmptyState } from "@/components/bpm";
 
 type AuditEntry = {
   id: string;
@@ -62,6 +63,47 @@ export default function AssetManagerAuditPage() {
     ...Object.entries(ACTION_LABELS).map(([id, label]) => ({ value: id, label })),
   ];
 
+  const columns = [
+    {
+      key: "timestamp",
+      label: "Date",
+      render: (val: unknown) => (val ? new Date(String(val)).toLocaleString("fr-FR") : "—"),
+    },
+    { key: "userId", label: "Utilisateur" },
+    {
+      key: "action",
+      label: "Action",
+      render: (val: unknown) => ACTION_LABELS[String(val)] ?? String(val),
+    },
+    {
+      key: "resourceType",
+      label: "Ressource",
+      render: (val: unknown) => RESOURCE_LABELS[String(val)] ?? String(val),
+    },
+    {
+      key: "resourceId",
+      label: "Détail",
+      render: (val: unknown, row: unknown) => {
+        const log = row as AuditEntry;
+        if (!log?.resourceId) return "—";
+        const href =
+          log.resourceType === "asset"
+            ? `/modules/asset-manager/${domainId}/assets/${log.resourceId}`
+            : log.resourceType === "ticket"
+              ? `/modules/asset-manager/${domainId}/tickets/${log.resourceId}`
+              : log.resourceType === "change"
+                ? `/modules/asset-manager/${domainId}/changes/${log.resourceId}`
+                : null;
+        if (!href) return log.resourceId.slice(0, 12) + "…";
+        return (
+          <Link href={href} className="hover:underline" style={{ color: "var(--bpm-accent-cyan)" }}>
+            {log.resourceId.slice(0, 12)}…
+          </Link>
+        );
+      },
+    },
+  ];
+
   if (!domainId) {
     return (
       <div className="doc-page">
@@ -105,53 +147,23 @@ export default function AssetManagerAuditPage() {
         <div className="flex justify-center py-12">
           <Spinner size="medium" />
         </div>
+      ) : logs.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucune entrée d'audit"
+            description="Les actions sur les actifs, tickets, contrats et changements apparaîtront ici."
+            icon={<ClipboardList size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+          />
+        </div>
       ) : (
-        <Panel variant="info" title={`${logs.length} entrée(s)`}>
-          {logs.length === 0 ? (
-            <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Aucune entrée d&apos;audit pour ce domaine.</p>
-          ) : (
-            <div className="space-y-2 overflow-x-auto">
-              {logs.map((log) => (
-                <div
-                  key={log.id}
-                  className="flex flex-wrap items-center gap-3 py-2 px-3 rounded border text-sm"
-                  style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}
-                >
-                  <span className="text-xs tabular-nums" style={{ color: "var(--bpm-text-secondary)", minWidth: "140px" }}>
-                    {new Date(log.timestamp).toLocaleString("fr-FR")}
-                  </span>
-                  <span className="font-medium">{log.userId}</span>
-                  <span className="rounded px-2 py-0.5 text-xs" style={{ background: "var(--bpm-bg)", color: "var(--bpm-text-primary)" }}>
-                    {ACTION_LABELS[log.action] ?? log.action}
-                  </span>
-                  <span style={{ color: "var(--bpm-text-secondary)" }}>{RESOURCE_LABELS[log.resourceType] ?? log.resourceType}</span>
-                  {log.resourceId && (
-                    <Link
-                      href={
-                        log.resourceType === "asset"
-                          ? `/modules/asset-manager/${domainId}/assets/${log.resourceId}`
-                          : log.resourceType === "ticket"
-                            ? `/modules/asset-manager/${domainId}/tickets/${log.resourceId}`
-                            : log.resourceType === "change"
-                              ? `/modules/asset-manager/${domainId}/changes/${log.resourceId}`
-                              : "#"
-                      }
-                      className="hover:underline"
-                      style={{ color: "var(--bpm-accent-cyan)" }}
-                    >
-                      {log.resourceId.slice(0, 12)}…
-                    </Link>
-                  )}
-                  {log.changedFields?.length > 0 && (
-                    <span className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
-                      Champs : {log.changedFields.join(", ")}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </Panel>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+          <Table
+            columns={columns}
+            data={logs}
+            minWidth={560}
+            keyColumn="id"
+          />
+        </div>
       )}
 
       <nav className="doc-pagination mt-8 flex flex-wrap gap-4">

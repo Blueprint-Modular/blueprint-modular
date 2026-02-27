@@ -69,7 +69,7 @@ npx prisma migrate deploy`}
         language="bash"
       />
       <p className="mt-2 mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
-        Les modèles Prisma <code>AiConversation</code> et <code>AiMessage</code> sont créés par les migrations. <code>DATABASE_URL</code> doit être défini dans <code>.env</code>.
+        Les modèles Prisma <code>AiConversation</code> et <code>AiMessage</code> sont créés par les migrations. <code>DATABASE_URL</code> doit être défini dans <code>.env</code>. Pour la liste des structures BDD et prérequis production par module, voir <code>docs/DATABASE.md</code> dans le dépôt.
       </p>
 
       <h3 className="text-base font-semibold mt-6 mb-2" style={{ color: "var(--bpm-text-primary)" }}>

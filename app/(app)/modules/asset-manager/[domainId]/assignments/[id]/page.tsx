@@ -45,7 +45,7 @@ export default function AssetManagerAssignmentDetailPage() {
 
   const handleReturn = () => {
     if (!assignment || assignment.status !== "active" || returning) return;
-    if (!confirm("Clôturer cette mise à disposition et remettre l’actif en stock ?")) return;
+    if (!confirm("Clôturer cette mise à Disposition et remettre l’actif en stock ?")) return;
     setReturning(true);
     fetch(`/api/asset-manager/assignments/${id}/return`, { method: "POST", credentials: "include" })
       .then((r) => (r.ok ? r.json() : null))
@@ -106,7 +106,7 @@ export default function AssetManagerAssignmentDetailPage() {
   if (!assignment) {
     return (
       <div className="doc-page">
-        <Panel variant="warning" title="Mise à disposition introuvable">Cette MAD n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
+        <Panel variant="warning" title="Mise à Disposition introuvable">Cette MAD n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
         <Link href={`/modules/asset-manager/${domainId}/assignments`} style={{ color: "var(--bpm-accent-cyan)" }}>← Liste des MAD</Link>
       </div>
     );

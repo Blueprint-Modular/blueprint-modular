@@ -1,4 +1,4 @@
-# Asset Manager — Reste à faire
+# Gestion de parc — Reste à faire
 
 État par rapport au CDC et aux compléments ITSM. Les **modèles Prisma** Phase 2/3 et infra sont déjà en place (migrations appliquées).
 

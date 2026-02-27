@@ -80,7 +80,7 @@ export default function AssetManagerAssignmentNewPage() {
           <Link href={`/modules/asset-manager/${domainId}`}>Tableau de bord</Link> →{" "}
           <Link href={`/modules/asset-manager/${domainId}/assignments`}>MAD</Link> → Nouvelle
         </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Nouvelle mise à disposition</h1>
+        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>Nouvelle mise à Disposition</h1>
       </div>
 
       <Panel variant="info" title="Créer une MAD">

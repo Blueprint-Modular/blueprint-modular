@@ -51,6 +51,9 @@ npx prisma migrate dev --name add_newsletter`}
       <p className="mb-4" style={{ color: "var(--bpm-text-secondary)" }}>
         <strong>NewsletterArticle</strong> : id, title, content, excerpt, publishedAt, archived, authorId, createdAt, updatedAt.
       </p>
+      <p className="mb-4 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <strong>Base de données et prérequis production</strong> : détail des structures et variables d&apos;environnement dans <code>docs/DATABASE.md</code> du dépôt.
+      </p>
 
       <h2 className="text-lg font-semibold mt-8 mb-2" style={{ color: "var(--bpm-text-primary)" }}>
         API

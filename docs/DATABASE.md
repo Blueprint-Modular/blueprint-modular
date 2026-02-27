@@ -55,7 +55,7 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 - **Relations** : `User`.
 - **Modules** : Module IA (chat, historique des conversations).
 
-### Asset Manager (gestion d’actifs, tickets, MAD, contrats actifs, connaissances, changements)
+### Gestion de parc (gestion d’actifs, tickets, MAD, contrats actifs, connaissances, changements)
 
 - **Tables** :
   - Actifs : `Asset`, `AssetAttribute`, `AssetMovement`, `CIRelation`
@@ -67,7 +67,7 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
   - Audit : `AuditLog`, `Permission`
 - **Relations** : `User` (createdBy, requester, assignee, technician, etc.).
 - **Config requise** : un fichier de configuration par domaine dans `lib/asset-manager/config/domain.<domainId>.json` (ex. `domain.it.json`, `domain.maintenance.json`). En déploiement standalone, ces fichiers doivent être copiés dans le build (voir `deploy/deploy-from-git.sh`).
-- **Modules** : Asset Manager (tableau de bord, actifs, tickets, MAD, contrats, connaissances, changements, CMDB, audit).
+- **Modules** : Gestion de parc (tableau de bord, actifs, tickets, MAD, contrats, connaissances, changements, CMDB, audit).
 
 ---
 
@@ -81,7 +81,7 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 | Base contractuelle | Contract | — |
 | Newsletter | NewsletterSettings, NewsletterArticle | — |
 | IA | AiConversation, AiMessage | — |
-| Asset Manager | Asset, AssetAttribute, AssetMovement, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest, CIRelation, AuditLog, Permission | `lib/asset-manager/config/domain.*.json` |
+| Gestion de parc | Asset, AssetAttribute, AssetMovement, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest, CIRelation, AuditLog, Permission | `lib/asset-manager/config/domain.*.json` |
 
 ---
 
@@ -89,7 +89,7 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 
 1. **PostgreSQL** : base créée, `DATABASE_URL` configurée.
 2. **Migrations** : exécuter `npx prisma migrate deploy` (fait automatiquement par `deploy-from-git.sh` si utilisé).
-3. **Asset Manager** : au moins un fichier `lib/asset-manager/config/domain.<id>.json` par domaine utilisé (ex. `it`, `maintenance`), et copie de `lib/asset-manager` dans le build standalone (voir [DEPLOY.md](DEPLOY.md) et `deploy/deploy-from-git.sh`).
+3. **Gestion de parc** : au moins un fichier `lib/asset-manager/config/domain.<id>.json` par domaine utilisé (ex. `it`, `maintenance`), et copie de `lib/asset-manager` dans le build standalone (voir [DEPLOY.md](DEPLOY.md) et `deploy/deploy-from-git.sh`).
 4. **NextAuth** : `NEXTAUTH_SECRET` et `NEXTAUTH_URL` renseignés.
 
 Pour le détail des étapes de déploiement, voir [DEPLOY.md](DEPLOY.md).

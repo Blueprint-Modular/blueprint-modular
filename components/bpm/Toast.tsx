@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { useNotificationHistory } from "@/contexts/NotificationHistoryContext";
 import { getNotificationLevel } from "@/lib/notificationLevels";
 import "./Toast.css";
+
+const TOAST_DURATION_MS = 5000;
 
 type ToastItem = {
   id: number;
@@ -32,10 +34,39 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const { addNotification } = useNotificationHistory();
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const ev = e as CustomEvent<ToastItem>;
+      const d = ev.detail;
+      if (!d?.message) return;
+      setToasts((prev) => {
+        const isDuplicate = prev.some(
+          (t) => t.message === d.message && t.type === d.type && t.title === d.title && t.pageName === d.pageName
+        );
+        if (isDuplicate) return prev;
+        const id = typeof d.id === "number" ? d.id : Date.now();
+        const item: ToastItem = {
+          id,
+          message: d.message,
+          type: d.type ?? "info",
+          title: d.title ?? null,
+          pageName: d.pageName ?? null,
+          pageIcon: d.pageIcon ?? null,
+        };
+        setTimeout(() => {
+          setToasts((current) => current.filter((t) => t.id !== id));
+        }, TOAST_DURATION_MS);
+        return [...prev, item];
+      });
+    };
+    window.addEventListener("bpm-notification-toast", handler);
+    return () => window.removeEventListener("bpm-notification-toast", handler);
+  }, []);
+
   const showToast = (
     message: string,
     type = "info",
-    duration = 5000,
+    duration = TOAST_DURATION_MS,
     title: string | null = null,
     pageName: string | null = null,
     pageIcon: string | null = null,

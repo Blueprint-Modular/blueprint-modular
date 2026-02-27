@@ -1,6 +1,6 @@
 # Compléments ITSM — Module asset-manager Blueprint Modular
 
-Éléments additionnels au cahier des charges v1.0 (actifs, tickets, mises à disposition).  
+Éléments additionnels au cahier des charges v1.0 (actifs, tickets, mise à Disposition).  
 Roadmap : Phase 1 ✅ → Phase 2 (cycle de vie, contrats, KB, changements) → Phase 3 (CMDB, escalade avancée).
 
 ---

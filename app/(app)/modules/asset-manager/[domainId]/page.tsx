@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Monitor, Ticket, UserCheck, FileText, BookOpen, RefreshCw } from "lucide-react";
 import { Button, Spinner, Metric, Table, Panel } from "@/components/bpm";
-import { AssetManagerNav } from "../AssetManagerNav";
 import type { DomainConfig } from "@/lib/asset-manager/get-domain-config";
 
 const ACCENT = {
@@ -16,6 +15,17 @@ const ACCENT = {
   knowledge: "#06b6d4",
   changes: "#ec4899",
 } as const;
+
+function formatLastUpdated(iso: string | null | undefined): string {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    if (!Number.isFinite(d.getTime())) return "—";
+    return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+  } catch {
+    return "—";
+  }
+}
 
 type Asset = {
   id: string;
@@ -44,6 +54,14 @@ export default function AssetManagerDomainPage() {
     ticketsSlaRisk: 0,
     assetsOutOfService: 0,
   });
+  const [lastUpdated, setLastUpdated] = useState<{
+    assets: string | null;
+    tickets: string | null;
+    assignments: string | null;
+    contracts: string | null;
+    knowledge: string | null;
+    changes: string | null;
+  }>({ assets: null, tickets: null, assignments: null, contracts: null, knowledge: null, changes: null });
 
   useEffect(() => {
     if (!domainId) return;
@@ -84,6 +102,25 @@ export default function AssetManagerDomainPage() {
         }).length;
         const assetsOutOfService = assetList.filter((a: { statusId: string }) => a.statusId === "out_of_service").length;
         setAlerts({ contractsExpiring30, ticketsSlaRisk, assetsOutOfService });
+        const ticketList = Array.isArray(tickets) ? tickets : [];
+        const assignmentList = Array.isArray(assignments) ? assignments : [];
+        const contractList = Array.isArray(contracts) ? contracts : [];
+        const knowledgeList = Array.isArray(knowledge) ? knowledge : [];
+        const changeList = Array.isArray(changes) ? changes : [];
+        const latest = (arr: { updatedAt?: string | null }[]) => {
+          if (!arr?.length) return null;
+          const dates = arr.map((x) => (x?.updatedAt ? new Date(x.updatedAt).getTime() : 0)).filter(Boolean);
+          if (!dates.length) return null;
+          return new Date(Math.max(...dates)).toISOString();
+        };
+        setLastUpdated({
+          assets: assetList[0]?.updatedAt ?? null,
+          tickets: latest(ticketList),
+          assignments: latest(assignmentList),
+          contracts: latest(contractList),
+          knowledge: latest(knowledgeList),
+          changes: latest(changeList),
+        });
       })
       .finally(() => setLoading(false));
   }, [domainId]);
@@ -165,8 +202,7 @@ export default function AssetManagerDomainPage() {
   return (
     <div className="doc-page">
       <div className="doc-page-header">
-        <AssetManagerNav />
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="doc-page-title text-2xl font-semibold" style={{ color: "var(--bpm-text-primary)" }}>
               Gestion d&apos;actifs
@@ -181,8 +217,8 @@ export default function AssetManagerDomainPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mb-6 asset-manager-metrics-grid">
-        <Link href={`/modules/asset-manager/${domainId}/assets`} className="block">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-6 mb-6 asset-manager-metrics-grid">
+        <Link href={`/modules/asset-manager/${domainId}/assets`} className="block min-w-0 overflow-hidden">
           <Metric
             label={config.asset_label_plural}
             value={assets.length}
@@ -190,10 +226,10 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<Monitor size={iconSize} />}
             accentColor={ACCENT.assets}
-            subtext={assets.length === 0 ? "Aucun actif enregistré" : "Mise à jour : —"}
+            subtext={assets.length === 0 ? "Aucun actif enregistré" : `Mise à jour : ${formatLastUpdated(lastUpdated.assets)}`}
           />
         </Link>
-        <Link href={`/modules/asset-manager/${domainId}/tickets`} className="block">
+        <Link href={`/modules/asset-manager/${domainId}/tickets`} className="block min-w-0 overflow-hidden">
           <Metric
             label={`${config.ticket_label_singular}s`}
             value={ticketCount}
@@ -201,10 +237,10 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<Ticket size={iconSize} />}
             accentColor={ACCENT.tickets}
-            subtext={ticketCount === 0 ? "Aucun ticket" : "Mise à jour : —"}
+            subtext={ticketCount === 0 ? "Aucun ticket" : `Mise à jour : ${formatLastUpdated(lastUpdated.tickets)}`}
           />
         </Link>
-        <Link href={`/modules/asset-manager/${domainId}/assignments`} className="block">
+        <Link href={`/modules/asset-manager/${domainId}/assignments`} className="block min-w-0 overflow-hidden">
           <Metric
             label={`${config.assignment_label}s`}
             value={assignmentCount}
@@ -212,10 +248,10 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<UserCheck size={iconSize} />}
             accentColor={ACCENT.assignments}
-            subtext={assignmentCount === 0 ? "Aucune MAD" : "Mise à jour : —"}
+            subtext={assignmentCount === 0 ? "Aucune MAD" : `Mise à jour : ${formatLastUpdated(lastUpdated.assignments)}`}
           />
         </Link>
-        <Link href={`/modules/asset-manager/${domainId}/contracts`} className="block">
+        <Link href={`/modules/asset-manager/${domainId}/contracts`} className="block min-w-0 overflow-hidden">
           <Metric
             label="Contrats"
             value={contractCount}
@@ -223,10 +259,10 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<FileText size={iconSize} />}
             accentColor={ACCENT.contracts}
-            subtext={contractCount === 0 ? "Aucun contrat" : "Mise à jour : —"}
+            subtext={contractCount === 0 ? "Aucun contrat" : `Mise à jour : ${formatLastUpdated(lastUpdated.contracts)}`}
           />
         </Link>
-        <Link href={`/modules/asset-manager/${domainId}/knowledge`} className="block">
+        <Link href={`/modules/asset-manager/${domainId}/knowledge`} className="block min-w-0 overflow-hidden">
           <Metric
             label="Connaissances"
             value={knowledgeCount}
@@ -234,10 +270,10 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<BookOpen size={iconSize} />}
             accentColor={ACCENT.knowledge}
-            subtext={knowledgeCount === 0 ? "Aucun article" : "Mise à jour : —"}
+            subtext={knowledgeCount === 0 ? "Aucun article" : `Mise à jour : ${formatLastUpdated(lastUpdated.knowledge)}`}
           />
         </Link>
-        <Link href={`/modules/asset-manager/${domainId}/changes`} className="block">
+        <Link href={`/modules/asset-manager/${domainId}/changes`} className="block min-w-0 overflow-hidden">
           <Metric
             label="Changements"
             value={changeCount}
@@ -245,7 +281,7 @@ export default function AssetManagerDomainPage() {
             border={false}
             icon={<RefreshCw size={iconSize} />}
             accentColor={ACCENT.changes}
-            subtext={changeCount === 0 ? "Aucun changement" : "Mise à jour : —"}
+            subtext={changeCount === 0 ? "Aucun changement" : `Mise à jour : ${formatLastUpdated(lastUpdated.changes)}`}
           />
         </Link>
       </div>

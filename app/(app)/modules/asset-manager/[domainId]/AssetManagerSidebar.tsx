@@ -32,7 +32,7 @@ export function AssetManagerSidebar({ domainId }: { domainId: string }) {
   const basePath = `/modules/asset-manager/${domainId}`;
 
   return (
-    <aside className="asset-manager-sidebar" aria-label="Navigation Gestion d'actifs">
+    <aside className="asset-manager-sidebar" aria-label="Navigation Gestion de parc">
       <nav className="asset-manager-sidebar-nav">
         {ITEMS.map((item) => {
           const href = item.path ? `${basePath}${item.path}` : basePath;

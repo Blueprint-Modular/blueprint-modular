@@ -5,7 +5,7 @@ const ENTRIES = [
     version: "0.1.21",
     date: "2025-02-26",
     items: [
-      "Module Gestion d'actifs : refonte UX (cartes métriques, onglets, filtres chips, empty state, tableaux avec badges)",
+      "Module Gestion de parc : refonte UX (cartes métriques, onglets, filtres chips, empty state, tableaux avec badges)",
       "Cohérence gris : Calendrier, Keep screen on, Commentaires et Tableau blanc alignés sur la sidebar",
       "Version : source unique package.json, npm run version:sync, footer app dynamique",
     ],

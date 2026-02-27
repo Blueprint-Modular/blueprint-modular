@@ -116,10 +116,10 @@ body {
   box-sizing: border-box;
 }
 /* Quand la sidebar secondaire (asset-manager) est ouverte : décaler le contenu pour ne pas laisser de zone blanche */
+/* Sidebar secondaire déjà dans le flow flex → pas de margin-left sur la colonne (évite double comptage) */
 @media (min-width: 768px) {
   .app-layout-root[data-secondary-sidebar-open="true"] .app-content-column {
-    margin-left: calc(var(--bpm-sidebar-width) + var(--bpm-secondary-sidebar-width));
-    max-width: calc(100vw - var(--bpm-sidebar-width, 0) - var(--bpm-secondary-sidebar-width));
+    margin-left: 0;
   }
   /* Supprimer l'espace blanc entre la sidebar secondaire et le contenu (pas de padding gauche sur le main) */
   .app-layout-root[data-secondary-sidebar-open="true"] .app-content-column .app-main {

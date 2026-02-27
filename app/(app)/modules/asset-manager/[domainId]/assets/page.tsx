@@ -265,18 +265,6 @@ export default function AssetManagerAssetsPage() {
             })}
           </div>
         </div>
-        <div className="flex justify-end mt-2">
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={assets.length === 0}
-            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
-            title="Exporter CSV"
-          >
-            <Download size={18} />
-          </button>
-        </div>
       </div>
 
       {loading ? (
@@ -297,7 +285,18 @@ export default function AssetManagerAssetsPage() {
           />
         </div>
       ) : (
-        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+        <div className="asset-manager-table-export-wrap">
+          <button
+            type="button"
+            onClick={exportCsv}
+            disabled={assets.length === 0}
+            className="asset-manager-export-btn asset-manager-export-btn-float flex items-center justify-center w-8 h-8 rounded-lg border"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
+            title="Exporter CSV"
+          >
+            <Download size={18} />
+          </button>
+          <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
             columns={columns}
             data={assets.map((a) => ({ id: a.id, reference: a.reference, label: a.label, assetTypeId: a.assetTypeId, statusId: a.statusId, lifecycleStage: a.lifecycleStage ?? null }))}
@@ -307,6 +306,7 @@ export default function AssetManagerAssetsPage() {
               if (id) router.push(`/modules/asset-manager/${domainId}/assets/${id}`);
             }}
           />
+          </div>
         </div>
       )}
 

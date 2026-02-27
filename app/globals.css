@@ -692,7 +692,7 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .bpm-table-wrapper,
 .asset-manager-page .rounded-lg.border.overflow-hidden {
   border-radius: 8px !important;
-  border: 1px solid var(--bpm-border) !important;
+  border: none !important;
   box-shadow: none !important;
   overflow-x: auto;
   overflow-y: auto;
@@ -706,7 +706,8 @@ textarea.bpm-textarea:focus {
 }
 [data-theme="dark"] .asset-manager-page .bpm-table-wrapper,
 [data-theme="dark"] .asset-manager-page .rounded-lg.border.overflow-hidden {
-  border-color: var(--bpm-border) !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .asset-manager-page .bpm-table thead th {
   font-size: 12px !important;
@@ -833,13 +834,11 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .asset-manager-cta-button {
   display: inline-flex;
 }
-/* CTA et tous les boutons : mêmes dimensions et police que le bouton « + Nouvel article » du Wiki (.btn-primary) */
+/* CTA : mêmes dimensions que le bouton « + Nouvel article » du Wiki (.btn-primary) — pas de largeur fixe */
 .asset-manager-page .asset-manager-cta-button button,
 .asset-manager-page .asset-manager-cta-button .rounded-lg {
   min-height: auto;
   height: auto;
-  min-width: 200px;
-  width: 200px;
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
@@ -943,6 +942,23 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .asset-manager-export-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Export en déport au survol du tableau (comme badge sur la cloche) */
+.asset-manager-page .asset-manager-table-export-wrap {
+  position: relative;
+}
+.asset-manager-page .asset-manager-export-btn-float {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+.asset-manager-page .asset-manager-table-export-wrap:hover .asset-manager-export-btn-float {
+  opacity: 1;
 }
 
 /* Export en haut à droite (page Équipements) */

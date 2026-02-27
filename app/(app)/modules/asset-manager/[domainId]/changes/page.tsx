@@ -154,7 +154,27 @@ export default function AssetManagerChangesPage() {
             </Link>
           )}
         </div>
-        <div className="flex justify-end mt-2">
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <Spinner size="medium" />
+        </div>
+      ) : changes.length === 0 ? (
+        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
+          <EmptyState
+            title="Aucune demande de changement"
+            description="Créez une première demande (CAB) pour commencer."
+            icon={<RefreshCw size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
+            action={
+              <Link href={`/modules/asset-manager/${domainId}/changes/new`}>
+                <Button variant="primary" size="small">+ Nouvelle demande</Button>
+              </Link>
+            }
+          />
+        </div>
+      ) : (
+        <div className="asset-manager-table-export-wrap">
           <button
             type="button"
             onClick={() => {
@@ -177,41 +197,21 @@ export default function AssetManagerChangesPage() {
               URL.revokeObjectURL(url);
             }}
             disabled={changes.length === 0}
-            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
+            className="asset-manager-export-btn asset-manager-export-btn-float flex items-center justify-center w-8 h-8 rounded-lg border"
             style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
             title="Exporter CSV"
           >
             <Download size={18} />
           </button>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <Spinner size="medium" />
-        </div>
-      ) : changes.length === 0 ? (
-        <div className="rounded-xl border bg-[var(--bpm-surface)] p-4" style={{ border: "1px solid #E5E7EB", borderRadius: 12 }}>
-          <EmptyState
-            title="Aucune demande de changement"
-            description="Créez une première demande (CAB) pour commencer."
-            icon={<RefreshCw size={64} style={{ color: "var(--bpm-text-secondary)", opacity: 0.6 }} />}
-            action={
-              <Link href={`/modules/asset-manager/${domainId}/changes/new`}>
-                <Button variant="primary" size="small">+ Nouvelle demande</Button>
-              </Link>
-            }
-          />
-        </div>
-      ) : (
-        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
-          <Table
-            columns={columns}
-            data={changes}
-            minWidth={560}
-            keyColumn="id"
-            onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/changes/${(row as ChangeRequest).id}`)}
-          />
+          <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+            <Table
+              columns={columns}
+              data={changes}
+              minWidth={560}
+              keyColumn="id"
+              onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/changes/${(row as ChangeRequest).id}`)}
+            />
+          </div>
         </div>
       )}
 

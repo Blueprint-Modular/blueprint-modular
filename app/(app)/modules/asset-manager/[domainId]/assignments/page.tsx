@@ -178,18 +178,6 @@ export default function AssetManagerAssignmentsPage() {
             })}
           </div>
         </div>
-        <div className="flex justify-end mt-2">
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={filtered.length === 0}
-            className="asset-manager-export-btn flex items-center justify-center w-8 h-8 rounded-lg border"
-            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
-            title="Exporter CSV"
-          >
-            <Download size={18} />
-          </button>
-        </div>
       </div>
 
       {loading ? (
@@ -210,14 +198,26 @@ export default function AssetManagerAssignmentsPage() {
           />
         </div>
       ) : (
-        <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
-          <Table
-            columns={columnsWithBadges}
-            data={filtered}
-            minWidth={560}
-            keyColumn="id"
-            onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/assignments/${row.id}`)}
-          />
+        <div className="asset-manager-table-export-wrap">
+          <button
+            type="button"
+            onClick={exportCsv}
+            disabled={filtered.length === 0}
+            className="asset-manager-export-btn asset-manager-export-btn-float flex items-center justify-center w-8 h-8 rounded-lg border"
+            style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-surface)", color: "var(--bpm-text-secondary)" }}
+            title="Exporter CSV"
+          >
+            <Download size={18} />
+          </button>
+          <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
+            <Table
+              columns={columnsWithBadges}
+              data={filtered}
+              minWidth={560}
+              keyColumn="id"
+              onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/assignments/${row.id}`)}
+            />
+          </div>
         </div>
       )}
 

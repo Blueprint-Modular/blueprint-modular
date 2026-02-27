@@ -305,6 +305,7 @@ export default function ContractsPage() {
           <Table
             columns={columns}
             data={data}
+            minWidth={560}
             onRowClick={(row) => {
               const id = (row as { id?: string }).id;
               if (id) router.push(`/modules/contracts/${id}`);

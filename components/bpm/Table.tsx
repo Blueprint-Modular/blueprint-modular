@@ -11,6 +11,8 @@ export interface TableColumn {
   render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
   /** Décimales pour cette colonne (surcharge valueDecimals du tableau). */
   decimals?: number;
+  /** Si true, l'en-tête de colonne ne passe pas à la ligne (whitespace-nowrap). */
+  noWrap?: boolean;
 }
 
 export interface TableProps {
@@ -30,6 +32,8 @@ export interface TableProps {
   valueDecimals?: number;
   /** Séparateur de milliers (true = 1 000,50). */
   valueGrouping?: boolean;
+  /** Largeur minimale du tableau en px (déclenche le scroll horizontal dans le wrapper si conteneur plus étroit). Non défini = pas de min-width. */
+  minWidth?: number;
 }
 
 function getSortValue(val: unknown): string | number {
@@ -80,6 +84,7 @@ export function Table({
   valueLocale = "fr-FR",
   valueDecimals = 0,
   valueGrouping = true,
+  minWidth,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState<string | null>(defaultSortColumn);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(defaultSortDirection);
@@ -130,6 +135,8 @@ export function Table({
     });
   }, [data, sortColumn, sortDirection]);
 
+  const tableMinWidthStyle = minWidth != null ? { minWidth: `${minWidth}px` } : undefined;
+
   return (
     <div
       className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-350px)] rounded-lg border ${className}`}
@@ -140,18 +147,19 @@ export function Table({
       data-name={name ?? undefined}
       data-key-column={keyColumn ?? undefined}
     >
-      <div className="bpm-table-container w-full">
+      <div className="bpm-table-container w-full" style={tableMinWidthStyle}>
         <table
           className={`bpm-table w-full border-collapse ${
             striped ? "bpm-table-striped" : ""
-          } ${hover ? "bpm-table-hover" : ""} ${onRowClick ? "bpm-table-clickable" : ""}`}
+          } ${hover ? "bpm-table-hover" : ""          } ${onRowClick ? "bpm-table-clickable" : ""}`}
+          style={tableMinWidthStyle}
         >
           <thead>
             <tr>
               {columns.map((col, idx) => (
                 <th
                   key={col.key || idx}
-                  className={`bpm-table-th px-4 py-3 text-sm font-medium whitespace-nowrap border ${
+                  className={`bpm-table-th px-4 py-3 text-sm font-medium border ${col.noWrap ? "bpm-table-th--nowrap" : ""} ${
                     sortColumn === col.key
                       ? `bpm-table-sorted bpm-table-sorted-${sortDirection}`
                       : ""

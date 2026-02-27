@@ -176,6 +176,7 @@ export default function AssetManagerChangesPage() {
             <Table
               columns={columns}
               data={changes}
+              minWidth={560}
               keyColumn="id"
               onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/changes/${(row as ChangeRequest).id}`)}
             />

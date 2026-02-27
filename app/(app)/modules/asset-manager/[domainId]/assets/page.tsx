@@ -279,6 +279,7 @@ export default function AssetManagerAssetsPage() {
           <Table
             columns={columns}
             data={assets.map((a) => ({ id: a.id, reference: a.reference, label: a.label, assetTypeId: a.assetTypeId, statusId: a.statusId, lifecycleStage: a.lifecycleStage ?? null }))}
+            minWidth={560}
             onRowClick={(row) => {
               const id = (row as { id?: string }).id;
               if (id) router.push(`/modules/asset-manager/${domainId}/assets/${id}`);

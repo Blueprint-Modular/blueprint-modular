@@ -271,6 +271,7 @@ export default function AssetManagerTicketsPage() {
       ) : (
         <div className="rounded-lg border overflow-hidden" style={{ borderColor: "var(--bpm-border)" }}>
           <Table
+            minWidth={560}
             columns={columns.map((col) =>
               col.key === "status"
                 ? {

@@ -184,6 +184,7 @@ export default function DocumentsPage() {
           <Table
             columns={columns}
             data={tableData}
+            minWidth={900}
             striped
             hover
             onRowClick={(row) => {

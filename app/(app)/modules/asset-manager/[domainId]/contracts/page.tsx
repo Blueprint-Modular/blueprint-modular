@@ -167,6 +167,7 @@ export default function AssetManagerContractsPage() {
           <Table
             columns={columns}
             data={filtered}
+            minWidth={560}
             keyColumn="id"
             onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/contracts/${(row as { id: string }).id}`)}
           />

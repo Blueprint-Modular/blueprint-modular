@@ -207,6 +207,7 @@ export default function AssetManagerAssignmentsPage() {
           <Table
             columns={columnsWithBadges}
             data={filtered}
+            minWidth={560}
             keyColumn="id"
             onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/assignments/${row.id}`)}
           />

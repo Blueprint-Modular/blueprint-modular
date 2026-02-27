@@ -143,6 +143,7 @@ export default function AssetManagerKnowledgePage() {
             <Table
               columns={columns}
               data={articles}
+              minWidth={560}
               keyColumn="id"
               onRowClick={(row) => router.push(`/modules/asset-manager/${domainId}/knowledge/${(row as KnowledgeArticle).id}`)}
             />

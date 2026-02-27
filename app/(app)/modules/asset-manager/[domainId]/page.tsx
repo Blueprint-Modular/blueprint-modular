@@ -317,6 +317,7 @@ export default function AssetManagerDomainPage() {
             <Table
               columns={columns}
               data={tableData}
+              minWidth={560}
               onRowClick={(row) => {
                 const id = (row as { id?: string }).id;
                 if (id) window.location.href = `/modules/asset-manager/${domainId}/assets/${id}`;

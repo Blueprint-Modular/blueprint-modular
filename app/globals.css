@@ -586,18 +586,21 @@ textarea.bpm-textarea:focus {
   overflow: hidden;
   position: relative;
 }
-/* Wrapper sidebar secondaire : animation ouverture / fermeture */
+/* Wrapper sidebar secondaire : animation ouverture / fermeture, aligné sous le header (h-14 = 56px) */
 .asset-manager-sidebar-outer {
   width: 0;
   flex-shrink: 0;
   overflow: hidden;
-  transition: width 250ms ease-out;
+  transition: width 250ms ease-out, padding-top 250ms ease-out;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: var(--bpm-sidebar-bg);
+  padding-top: 0;
 }
 .asset-manager-sidebar-outer--open {
   width: var(--bpm-secondary-sidebar-width);
+  padding-top: 56px;
 }
 /* Quand la sidebar est dans le wrapper animé : rester dans le flux pour remplir le wrapper (pas de position fixed) */
 @media (min-width: 768px) {
@@ -625,7 +628,7 @@ textarea.bpm-textarea:focus {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-top: 8px;
+  padding-top: 12px;
 }
 .asset-manager-sidebar-link {
   display: flex;

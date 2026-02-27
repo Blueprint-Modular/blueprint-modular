@@ -101,6 +101,9 @@ body {
   .app-layout-root[data-sidebar-collapsed="true"] { --bpm-sidebar-width: 4rem; }
   .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 16rem; }
 }
+:root {
+  --bpm-secondary-sidebar-width: 240px;
+}
 /* Racine du débordement : content-column ne doit pas dépasser (viewport - sidebar) */
 .app-layout-root {
   overflow-x: clip; /* clip préserve position:sticky des descendants (header) ; hidden le casse */
@@ -115,8 +118,12 @@ body {
 /* Quand la sidebar secondaire (asset-manager) est ouverte : décaler le contenu pour ne pas laisser de zone blanche */
 @media (min-width: 768px) {
   .app-layout-root[data-secondary-sidebar-open="true"] .app-content-column {
-    margin-left: calc(var(--bpm-sidebar-width) + 200px);
-    max-width: calc(100vw - var(--bpm-sidebar-width, 0) - 200px);
+    margin-left: calc(var(--bpm-sidebar-width) + var(--bpm-secondary-sidebar-width));
+    max-width: calc(100vw - var(--bpm-sidebar-width, 0) - var(--bpm-secondary-sidebar-width));
+  }
+  /* Supprimer l'espace blanc entre la sidebar secondaire et le contenu (pas de padding gauche sur le main) */
+  .app-layout-root[data-secondary-sidebar-open="true"] .app-content-column .app-main {
+    padding-left: 0;
   }
 }
 @media (display-mode: standalone) {
@@ -564,7 +571,7 @@ textarea.bpm-textarea:focus {
   overflow: hidden;
 }
 .asset-manager-sidebar {
-  width: 200px;
+  width: var(--bpm-secondary-sidebar-width);
   flex-shrink: 0;
   align-self: stretch;
   border-right: 1px solid var(--bpm-sidebar-border);
@@ -579,7 +586,7 @@ textarea.bpm-textarea:focus {
   overflow: hidden;
   position: relative;
 }
-/* Wrapper sidebar secondaire : animation ouverture (0 → 200px) / fermeture (200px → 0) */
+/* Wrapper sidebar secondaire : animation ouverture / fermeture */
 .asset-manager-sidebar-outer {
   width: 0;
   flex-shrink: 0;
@@ -590,7 +597,7 @@ textarea.bpm-textarea:focus {
   min-height: 100vh;
 }
 .asset-manager-sidebar-outer--open {
-  width: 200px;
+  width: var(--bpm-secondary-sidebar-width);
 }
 /* Quand la sidebar est dans le wrapper animé : rester dans le flux pour remplir le wrapper (pas de position fixed) */
 @media (min-width: 768px) {
@@ -678,6 +685,11 @@ textarea.bpm-textarea:focus {
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+}
+@media (min-width: 768px) {
+  .app-layout-root[data-secondary-sidebar-open="true"] .asset-manager-main-wrapper {
+    padding-left: 12px;
+  }
 }
 .asset-manager-page .doc-page {
   padding: 24px 32px 48px;

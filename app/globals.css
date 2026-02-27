@@ -102,7 +102,7 @@ body {
   .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 16rem; }
 }
 :root {
-  --bpm-secondary-sidebar-width: 240px;
+  --bpm-secondary-sidebar-width: 220px;
 }
 /* Racine du débordement : content-column ne doit pas dépasser (viewport - sidebar) */
 .app-layout-root {
@@ -625,7 +625,7 @@ textarea.bpm-textarea:focus {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-top: 240px;
+  padding-top: 16px;
 }
 .asset-manager-sidebar-link {
   display: flex;

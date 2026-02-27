@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Panel, Button, Spinner, Selectbox } from "@/components/bpm";
+import { Panel, Button, Spinner, Selectbox, Badge } from "@/components/bpm";
 
 type ChangeRequest = {
   id: string;
@@ -27,6 +27,54 @@ const STATUS_LABELS: Record<string, string> = {
   scheduled: "Planifié", in_progress: "En cours", completed: "Terminé", failed: "Échoué", cancelled: "Annulé",
 };
 const RISK_LABELS: Record<string, string> = { low: "Faible", medium: "Moyen", high: "Élevé", critical: "Critique" };
+
+function getRiskBandColor(riskLevel: string): string {
+  switch (riskLevel) {
+    case "critical": return "#ef4444";
+    case "high": return "#f59e0b";
+    case "medium": return "var(--bpm-accent-cyan)";
+    case "low": return "var(--bpm-accent-mint)";
+    default: return "var(--bpm-border)";
+  }
+}
+
+function getRiskBadgeVariant(riskLevel: string): "error" | "warning" | "primary" | "success" | "default" {
+  switch (riskLevel) {
+    case "critical": return "error";
+    case "high": return "warning";
+    case "medium": return "primary";
+    case "low": return "success";
+    default: return "default";
+  }
+}
+
+function getStatusBadgeVariant(status: string): "success" | "warning" | "error" | "default" {
+  switch (status) {
+    case "approved":
+    case "completed":
+      return "success";
+    case "rejected":
+    case "failed":
+    case "cancelled":
+      return "error";
+    case "draft":
+    case "submitted":
+    case "cab_review":
+    case "scheduled":
+    case "in_progress":
+      return "warning";
+    default:
+      return "default";
+  }
+}
+
+function formatRollbackDisplay(value: string): React.ReactNode {
+  const trimmed = (value ?? "").trim();
+  if (!trimmed || trimmed.toUpperCase() === "NC") {
+    return <span className="italic" style={{ color: "var(--bpm-text-secondary)" }}>— Non renseigné</span>;
+  }
+  return trimmed;
+}
 
 export default function AssetManagerChangeDetailPage() {
   const params = useParams();
@@ -103,23 +151,59 @@ export default function AssetManagerChangeDetailPage() {
     return (
       <div className="doc-page">
         <Panel variant="warning" title="Demande introuvable">Cette demande n&apos;existe pas ou vous n&apos;y avez pas accès.</Panel>
-        <nav className="doc-pagination mt-6">
-          <Link href={`/modules/asset-manager/${domainId}/changes`} style={{ color: "var(--bpm-accent-cyan)" }}>← Changements</Link>
+        <nav className="doc-pagination mt-6 flex flex-wrap gap-2">
+          <Link href={`/modules/asset-manager/${domainId}/changes`}>
+            <Button variant="outline" size="small" className="border-transparent bg-transparent">← Changements</Button>
+          </Link>
         </nav>
       </div>
     );
   }
 
+  const bandColor = getRiskBandColor(change.riskLevel);
+
   return (
     <div className="doc-page">
-      <div className="doc-page-header mb-6">
-        <nav className="doc-breadcrumb">
-          <Link href={`/modules/asset-manager/${domainId}/changes`} style={{ color: "var(--bpm-accent-cyan)" }}>Changements</Link> → {change.reference}
-        </nav>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--bpm-text-primary)" }}>{change.title}</h1>
-        <p className="doc-description mt-1" style={{ color: "var(--bpm-text-secondary)" }}>
-          {change.reference} — {TYPE_LABELS[change.type] ?? change.type} — {RISK_LABELS[change.riskLevel] ?? change.riskLevel}
-        </p>
+      {/* Header with colored band and badges */}
+      <div
+        className="rounded-lg pl-4 pr-4 py-4 mb-6 border-l-4 flex flex-wrap items-start justify-between gap-4"
+        style={{
+          background: "var(--bpm-surface)",
+          borderColor: bandColor,
+          borderLeftWidth: 4,
+        }}
+      >
+        <div className="min-w-0 flex-1">
+          <nav className="doc-breadcrumb mb-1">
+            <Link href={`/modules/asset-manager/${domainId}/changes`} style={{ color: "var(--bpm-accent-cyan)" }}>Changements</Link>
+            <span style={{ color: "var(--bpm-text-secondary)" }}> → </span>
+            <span>{change.reference}</span>
+          </nav>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            <h1 className="text-2xl font-bold m-0" style={{ color: "var(--bpm-text-primary)" }}>
+              {change.title}
+            </h1>
+            <span
+              className="font-mono text-xs px-2 py-1 rounded"
+              style={{ background: "var(--bpm-bg-secondary)", color: "var(--bpm-text-secondary)" }}
+            >
+              {change.reference}
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            <Badge variant={change.type === "emergency" ? "error" : change.type === "standard" ? "success" : "primary"}>
+              {TYPE_LABELS[change.type] ?? change.type}
+            </Badge>
+            <Badge variant={getRiskBadgeVariant(change.riskLevel)}>
+              {RISK_LABELS[change.riskLevel] ?? change.riskLevel}
+            </Badge>
+          </div>
+        </div>
+        <div className="flex-shrink-0">
+          <Badge variant={getStatusBadgeVariant(change.status)}>
+            {STATUS_LABELS[change.status] ?? change.status}
+          </Badge>
+        </div>
       </div>
 
       {(change.status === "draft" || change.status === "submitted") && (
@@ -160,39 +244,81 @@ export default function AssetManagerChangeDetailPage() {
         </Panel>
       )}
 
-      <Panel variant="info" title="Statut" className="mb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Selectbox
-            label=""
-            value={change.status}
-            onChange={(v) => handleStatusChange(String(v))}
-            options={Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label }))}
-          />
-          {saving && <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Enregistrement…</span>}
+      {/* Single panel: grid + full-width sections + footer */}
+      <Panel variant="info" title="" icon={false} className="mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Statut</label>
+            <div className="flex flex-wrap items-center gap-2">
+              <Selectbox
+                label=""
+                value={change.status}
+                onChange={(v) => handleStatusChange(String(v))}
+                options={Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label }))}
+              />
+              {saving && <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>Enregistrement…</span>}
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Type</label>
+            <span className="text-sm" style={{ color: "var(--bpm-text-primary)" }}>{TYPE_LABELS[change.type] ?? change.type}</span>
+          </div>
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Priorité</label>
+            <span className="text-sm" style={{ color: "var(--bpm-text-primary)" }}>{RISK_LABELS[change.riskLevel] ?? change.riskLevel}</span>
+          </div>
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: "var(--bpm-text-secondary)" }}>Dates</label>
+            <p className="text-sm m-0" style={{ color: "var(--bpm-text-primary)" }}>
+              {change.plannedStart || change.plannedEnd
+                ? [
+                    change.plannedStart ? `Début prévu : ${new Date(change.plannedStart).toLocaleDateString("fr-FR")}` : null,
+                    change.plannedEnd ? `Fin prévue : ${new Date(change.plannedEnd).toLocaleDateString("fr-FR")}` : null,
+                  ].filter(Boolean).join(" · ")
+                : "—"}
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t pt-4 mt-4" style={{ borderColor: "var(--bpm-border)" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-semibold" style={{ background: bandColor, color: "#fff" }}>i</span>
+            <span className="font-semibold text-sm" style={{ color: "var(--bpm-text-primary)" }}>Description</span>
+          </div>
+          <p className="text-sm whitespace-pre-wrap pl-8 m-0" style={{ color: "var(--bpm-text-primary)" }}>{change.description}</p>
+        </div>
+
+        <div className="border-t pt-4 mt-4" style={{ borderColor: "var(--bpm-border)" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-semibold" style={{ background: bandColor, color: "#fff" }}>i</span>
+            <span className="font-semibold text-sm" style={{ color: "var(--bpm-text-primary)" }}>Impact</span>
+          </div>
+          <p className="text-sm whitespace-pre-wrap pl-8 m-0" style={{ color: "var(--bpm-text-primary)" }}>{change.impact}</p>
+        </div>
+
+        <div className="border-t pt-4 mt-4" style={{ borderColor: "var(--bpm-border)" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-semibold" style={{ background: bandColor, color: "#fff" }}>i</span>
+            <span className="font-semibold text-sm" style={{ color: "var(--bpm-text-primary)" }}>Plan de rollback</span>
+          </div>
+          <div className="text-sm whitespace-pre-wrap pl-8 m-0" style={{ color: "var(--bpm-text-primary)" }}>
+            {formatRollbackDisplay(change.rollbackPlan)}
+          </div>
+        </div>
+
+        <div className="border-t pt-4 mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs" style={{ borderColor: "var(--bpm-border)", color: "var(--bpm-text-secondary)" }}>
+          <span>Créé le {new Date(change.createdAt).toLocaleString("fr-FR")}</span>
+          <span>Modifié le {new Date(change.updatedAt).toLocaleString("fr-FR")}</span>
         </div>
       </Panel>
 
-      <Panel variant="info" title="Description" className="mb-4">
-        <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-primary)" }}>{change.description}</p>
-      </Panel>
-
-      <Panel variant="info" title="Impact" className="mb-4">
-        <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-primary)" }}>{change.impact}</p>
-      </Panel>
-
-      <Panel variant="info" title="Plan de rollback" className="mb-4">
-        <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-primary)" }}>{change.rollbackPlan}</p>
-      </Panel>
-
-      <p className="text-xs" style={{ color: "var(--bpm-text-secondary)" }}>
-        Créé le {new Date(change.createdAt).toLocaleString("fr-FR")}
-        {change.plannedStart && ` · Début prévu : ${new Date(change.plannedStart).toLocaleDateString("fr-FR")}`}
-        {change.plannedEnd && ` · Fin prévue : ${new Date(change.plannedEnd).toLocaleDateString("fr-FR")}`}
-      </p>
-
-      <nav className="doc-pagination mt-8 flex flex-wrap gap-4">
-        <Link href={`/modules/asset-manager/${domainId}/changes`} style={{ color: "var(--bpm-accent-cyan)" }}>← Changements</Link>
-        <Link href={`/modules/asset-manager/${domainId}`} style={{ color: "var(--bpm-accent-cyan)" }}>Tableau de bord</Link>
+      <nav className="doc-pagination flex flex-wrap gap-2">
+        <Link href={`/modules/asset-manager/${domainId}/changes`}>
+          <Button variant="outline" size="small" className="border-transparent bg-transparent">← Changements</Button>
+        </Link>
+        <Link href={`/modules/asset-manager/${domainId}`}>
+          <Button variant="outline" size="small" className="border-transparent bg-transparent">Tableau de bord →</Button>
+        </Link>
       </nav>
     </div>
   );

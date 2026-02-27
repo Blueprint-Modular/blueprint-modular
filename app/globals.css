@@ -628,7 +628,7 @@ textarea.bpm-textarea:focus {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-top: 12px;
+  padding-top: 200px;
 }
 .asset-manager-sidebar-link {
   display: flex;

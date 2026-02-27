@@ -691,9 +691,15 @@ textarea.bpm-textarea:focus {
 }
 .asset-manager-page .doc-page {
   padding: 24px 32px 48px;
-  margin: 0 auto;
+  width: 100%;
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
+}
+/* Utiliser toute la largeur pour éviter l'espace blanc à droite */
+.asset-manager-page .doc-page > * {
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
 .asset-manager-page .doc-page-header {

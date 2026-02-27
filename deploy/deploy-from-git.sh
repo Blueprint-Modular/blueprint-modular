@@ -114,6 +114,9 @@ if [ -f "$REPO_DIR/package.json" ] && [ -f "$REPO_DIR/next.config.mjs" ]; then
     cp -r .next/static .next/standalone/.next/static
     cp -r .next/server .next/standalone/.next/
     cp -r public .next/standalone/public
+    # Config domaines Asset Manager (getDomainConfig lit depuis process.cwd()/lib/asset-manager/config)
+    mkdir -p .next/standalone/lib
+    cp -r lib/asset-manager .next/standalone/lib/
     chmod +x deploy/run-app.sh
     if command -v pm2 >/dev/null 2>&1; then
       if pm2 describe "$APP_PM2_NAME" >/dev/null 2>&1; then

@@ -162,6 +162,22 @@ body {
   background: rgba(26, 75, 143, 0.35);
 }
 
+/* Tableaux BPM responsives : scroll horizontal sur mobile/PWA, touch-friendly */
+.bpm-table-wrapper {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+.bpm-table-container {
+  min-width: 0;
+}
+.bpm-table {
+  min-width: 560px;
+}
+
 /* Titres des pages app (réduits par rapport à text-2xl / text-lg) */
 .app-main h1 {
   font-size: 1.25rem;
@@ -436,7 +452,9 @@ textarea.bpm-textarea:focus {
 /* Base contractuelle — même traitement que documents / IA */
 .contracts-page { max-width: 1200px; width: 100%; min-width: 0; box-sizing: border-box; }
 .contracts-page .bpm-selectbox { border: none !important; }
-.contracts-page .bpm-table-wrapper { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.contracts-page .bpm-table-wrapper { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.contracts-page .bpm-table-container,
+.contracts-page .bpm-table { min-width: 560px; }
 .contracts-page .doc-page-header + div { margin-top: 0.5rem; }
 .doc-import-analyze-button { border: none; }
 
@@ -604,8 +622,15 @@ textarea.bpm-textarea:focus {
 .asset-manager-page .rounded-lg.border.overflow-hidden {
   border-radius: 12px !important;
   border: 1px solid #E5E7EB !important;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   background: var(--bpm-surface) !important;
+}
+.asset-manager-page .bpm-table-container,
+.asset-manager-page .bpm-table {
+  min-width: 560px;
 }
 [data-theme="dark"] .asset-manager-page .bpm-table-wrapper,
 [data-theme="dark"] .asset-manager-page .rounded-lg.border.overflow-hidden {

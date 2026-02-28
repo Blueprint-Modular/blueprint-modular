@@ -1,0 +1,14 @@
+{
+  "name": "create-bpm",
+  "version": "0.1.31",
+  "description": "Create a Blueprint Modular app",
+  "bin": {
+    "create-bpm": "./index.js",
+    "bpm": "./index.js"
+  },
+  "files": ["index.js", "template/"],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "prompts": "^2.4.2"
+  }
+}

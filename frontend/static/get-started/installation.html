@@ -76,9 +76,18 @@
       <p>Selon ce que vous utilisez :</p>
       <ul>
         <li><strong>Runtime Python</strong> (<code>bpm run</code>) : Python 3.9+, pip, puis <code>pip install blueprint-modular</code>.</li>
-        <li><strong>Application dashboard</strong> (Next.js, modules Wiki, IA, Documents, Gestion de parc, etc.) : Node.js, npm, PostgreSQL, Prisma (via <code>npm install</code> et <code>npx prisma migrate deploy</code>). Voir <a href="https://github.com/remigit55/blueprint-modular/blob/master/docs/DATABASE.md">docs/DATABASE.md</a> et <a href="../deploy/platforms.html">Déployer</a>.</li>
-        <li><strong>Modules IA</strong> (assistant chat, analyse de documents, sandbox par IA) : serveur <strong>Ollama</strong> + au moins un <strong>modèle de langage</strong>. Voir la section <a href="#modeles-ia">Modèles d’IA</a> ci-dessous.</li>
+        <li><strong>Application dashboard</strong> (Next.js, modules Wiki, IA, Documents, Gestion de parc, etc.) : Node.js, npm, PostgreSQL, Prisma (via <code>npm install</code> et <code>npx prisma migrate deploy</code>). Voir <a href="https://github.com/Blueprint-Modular/blueprint-modular/blob/master/docs/DATABASE.md">docs/DATABASE.md</a> et <a href="../deploy/platforms.html">Déployer</a>.</li>
+        <li><strong>IA locale dans le runtime Python</strong> (<code>bpm.ask</code>, <code>bpm.chat</code>, etc.) : <code>bpm setup</code> installe Ollama et le modèle par défaut. Voir <a href="#modeles-ia">Modèles d’IA</a> <a href="#workflow">Workflow de démarrage</a>.</li>
       </ul>
+
+      <h2 id="workflow">Workflow de démarrage (recommandé)</h2>
+      <p>Pour créer et lancer une app BPM avec IA locale en quelques commandes :</p>
+      <pre><code class="language-bash">pip install blueprint-modular
+bpm setup
+bpm init --name mon-app
+cd mon-app
+bpm run app.py</code></pre>
+      <p><code>bpm setup</code> installe Ollama si besoin, démarre le service et télécharge le modèle par défaut (ex. <code>llama3.2</code>). Ensuite vous pouvez utiliser <code>bpm.ask()</code>, <code>bpm.chat()</code>, <code>bpm.summarize()</code> et <code>bpm.analyze()</code> dans votre <code>app.py</code>.</p>
 
       <h2 id="modeles-ia">Modèles d’IA (Ollama)</h2>
       <p>Pour le module IA, l’analyse de documents et le sandbox « Par IA », l’application utilise par défaut <strong>Ollama</strong> en local. Il faut installer Ollama puis télécharger au moins un modèle.</p>
@@ -105,16 +114,15 @@
       <pre><code class="language-bash">pip install blueprint-modular</code></pre>
 
       <h2>Installation depuis les sources</h2>
-      <p>Le dépôt GitHub est <strong>privé</strong>. Pour utiliser Blueprint Modular, utilisez <code>pip install blueprint-modular</code> (ci-dessus). L'installation depuis les sources (<code>git clone</code> puis <code>pip install -e .</code>) ne concerne que les personnes ayant accès au dépôt (contributeurs, équipe interne).</p>
-      <p>Si vous avez accès : <code>git clone</code> du dépôt, puis <code>cd blueprint-modular</code> et <code>pip install -e .</code> (avec un venv recommandé).</p>
+      <p>Le dépôt est <strong>open source</strong> : <a href="https://github.com/Blueprint-Modular/blueprint-modular">github.com/Blueprint-Modular/blueprint-modular</a>. Pour la plupart des usages, <code>pip install blueprint-modular</code> suffit. Pour contribuer ou développer le package : <code>git clone https://github.com/Blueprint-Modular/blueprint-modular.git</code>, puis <code>cd blueprint-modular</code> et <code>pip install -e .</code> (venv recommandé).</p>
 
       <h2>Lancer une app</h2>
       <pre><code class="language-bash">bpm run app.py</code></pre>
-      <p>L'app est servie sur <code>http://localhost:8501</code> (port et host configurables avec <code>--port</code> et <code>--host</code>).</p>
+      <p>L'app est servie sur <code>http://localhost:8501</code> (port par défaut 8501, host et port configurables avec <code>--port</code> et <code>--host</code>).</p>
 
       <h2>Scaffolder une app vide</h2>
-      <pre><code class="language-bash">bpm init</code></pre>
-      <p>Génère <code>app.py</code>, <code>requirements.txt</code> et <code>app.config.js</code> (structure minimale pour démarrer).</p>
+      <pre><code class="language-bash">bpm init --name mon-app</code></pre>
+      <p>Génère le dossier <code>mon-app</code> avec <code>app.py</code>, <code>requirements.txt</code> et <code>README.md</code>. Puis <code>cd mon-app</code> et <code>bpm run app.py</code>.</p>
 
       <h2>Vérifier l'installation</h2>
       <pre><code class="language-bash">bpm --version</code></pre>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -54,7 +54,10 @@
         <p class="hero-code-label" data-i18n="landing.hero.code_label">D&#233;marrage en une minute</p>
         <p class="hero-code-note" style="margin-bottom:0.5rem;font-size:0.9rem;opacity:0.9;">Disponible sur <a href="https://pypi.org/project/blueprint-modular/" style="color:var(--bpm-accent,#2563eb);">PyPI</a>.</p>
         <div class="hero-code">
-          <pre><code>pip install blueprint-modular &amp;&amp; bpm run app.py</code></pre>
+          <pre><code>pip install blueprint-modular
+bpm setup
+bpm init --name mon-app &amp;&amp; cd mon-app
+bpm run app.py</code></pre>
         </div>
       </div>
     </section>

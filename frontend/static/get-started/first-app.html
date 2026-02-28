@@ -72,7 +72,16 @@
       </nav>
 
       <h1>Première app</h1>
-      <p class="lead">Tutoriel pas à pas : créer un dashboard de métriques de vente.</p>
+      <p class="lead">Tutoriel pas à pas : créer une app BPM et la lancer avec IA locale.</p>
+
+      <h2>Démarrage rapide (workflow complet)</h2>
+      <p>Après <a href="installation.html">installation</a>, le flux recommandé est :</p>
+      <pre><code class="language-bash">pip install blueprint-modular
+bpm setup
+bpm init --name mon-app
+cd mon-app
+bpm run app.py</code></pre>
+      <p>Ouvrez <code>http://localhost:8501</code>. Vous pouvez ensuite ajouter <code>bpm.ask()</code>, <code>bpm.chat()</code>, <code>bpm.summarize()</code> ou <code>bpm.analyze()</code> dans <code>app.py</code> (Ollama est prêt après <code>bpm setup</code>).</p>
 
       <h2>Ce que vous allez créer</h2>
       <p>Un dashboard de ventes avec 3 métriques, un tableau et un graphique d'évolution du CA.</p>

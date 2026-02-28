@@ -67,14 +67,14 @@
       <h1>Versions</h1>
       <p class="lead">Historique des versions de Blueprint Modular et contenu de chaque version.</p>
 
-      <h2>v0.1.27 (actuelle)</h2>
+      <h2>v0.1.29 (actuelle)</h2>
       <ul>
         <li><strong>Module Gestion d&apos;actifs</strong> : refonte UX (inspiration Linear) — cartes métriques compactes avec icônes et couleurs d&apos;accent par domaine, onglets bpm.tabs en haut, breadcrumb discret, filtres en chips (32px, scroll horizontal mobile), export CSV en icône, empty state centré avec CTA, tableaux avec en-têtes semi-bold et hover, badges Statut/Priorité, bouton CTA 40px, fond #F5F5F7 et cartes 12px.</li>
         <li><strong>Cohérence visuelle</strong> : harmonisation du gris (sidebar) — en-têtes et bulles du Calendrier, Keep screen on, Commentaires et Tableau blanc utilisent <code>var(--bpm-sidebar-bg)</code>.</li>
         <li><strong>Version</strong> : source unique <code>package.json</code>, script <code>npm run version:sync</code> pour aligner pyproject.toml, bpm/__init__.py et doc statique ; app lit la version dans le footer.</li>
         <li><strong>Composants BPM</strong> : LoadingBar (6 variantes), Transition (4 variantes), Spinner (isoBlocks, modularRings, hexSegments, modularGrid).</li>
         <li><strong>Audits</strong> : Wiki, Base contractuelle, Documents — nav complète ; Module IA — panneau contexte, Réessayer, sélecteur provider ; contract-analyzer retour partiel en cas d&apos;erreur.</li>
-        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.27, Trusted Publishing via tag <code>v*</code>). Déploiement prod : vitrine, doc et app via <code>deploy-vps-remote.ps1</code>.</li>
+        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.29, Trusted Publishing via tag <code>v*</code>). Déploiement prod : vitrine, doc et app via <code>deploy-vps-remote.ps1</code>.</li>
         <li><strong>Wiki</strong> : modèle enrichi (excerpt, tags, révisions, commentaires, backlinks), migration Prisma, seed 3 articles pour tests IA.</li>
       </ul>
 
@@ -83,7 +83,7 @@
         <li><strong>Module Templates</strong> : audit 360° — simulateur sans Panel, flux en 2 étapes (choix du modèle puis champs), correction bug sélection (P0) et bouton « Créer » désactivé + message d'erreur (P1), toast de succès, champs démo par type de modèle, doc structure du modèle.</li>
         <li><strong>Composants</strong> : audit 360° — graphiques SVG (line, bar, area, scatter) responsives avec <code>viewBox</code> et <code>width: 100%</code> ; tooltip accessible au tactile (tap) et au clavier (focus) ; FAB au-dessus de la bottom nav sur mobile ; Progress avec ARIA ; Input avec label associé et <code>min-h-[44px]</code> ; Audio <code>w-full</code>.</li>
         <li>Doc statique : correctifs mise en page (Dépannage, Ce qu'il reste à faire), badge « Vue d'ensemble » supprimé sur la page Modules.</li>
-        <li>Package Python sur PyPI (version 0.1.27, Trusted Publishing via tag <code>v*</code>).</li>
+        <li>Package Python sur PyPI (version 0.1.29, Trusted Publishing via tag <code>v*</code>).</li>
       </ul>
 
       <h2>v0.1.18</h2>
@@ -99,14 +99,14 @@
       <ul>
         <li><strong>Wiki IA</strong> : bouton « Aide IA » sur la page d'édition — mettre en forme le contenu actuel ou générer un article depuis des notes (stream SSE, <code>POST /api/wiki/generate</code>).</li>
         <li><strong>Module IA</strong> : contenu des articles wiki récents inclus dans le contexte (<code>/api/wiki?withContent=true</code>) pour que l'assistant puisse s'appuyer sur le texte des articles.</li>
-        <li>Package Python sur PyPI (version 0.1.27). Déploiement prod.</li>
+        <li>Package Python sur PyPI (version 0.1.29). Déploiement prod.</li>
       </ul>
 
       <h2>v0.1.10</h2>
       <ul>
         <li>Auth modules : <code>getSessionOrTestUser</code> partout (dont Sandbox Par IA) ; option <code>SKIP_AUTH_FOR_TEST=true</code> documentée dans <code>deploy/app-env.example</code> pour utiliser les modules sans connexion (démo/tests).</li>
         <li>UI : suppression du breadcrumb en double sur le détail des modules (Documents, Contrats).</li>
-        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.27, Trusted Publishing via tag <code>v*</code>).</li>
+        <li>Package Python sur PyPI : <code>pip install blueprint-modular</code> (version 0.1.29, Trusted Publishing via tag <code>v*</code>).</li>
       </ul>
 
       <h2>v0.1.9</h2>
@@ -154,7 +154,7 @@
           <a href="knowledge-base/faq.html">FAQ</a>
           <a href="knowledge-base/reste-a-faire.html">Ce qu'il reste à faire</a>
         </div>
-        <div class="footer-meta">Blueprint Modular v0.1.27</div>
+        <div class="footer-meta">Blueprint Modular v0.1.29</div>
       </footer>
     </main>
   </div>

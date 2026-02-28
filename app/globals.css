@@ -157,6 +157,9 @@ body {
   .app-content-column {
     padding-top: env(titlebar-area-height, 56px);
   }
+  .asset-manager-sidebar-outer--open {
+    padding-top: env(titlebar-area-height, 56px);
+  }
 }
 
 /* Barre de navigation mobile / PWA : liens cliquables sans délai */

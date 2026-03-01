@@ -23,9 +23,10 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
    Dans le repo (ex. `/home/ubuntu/blueprint-modular`) :
    ```bash
    cp deploy/app-env.example .env
-   # Éditer .env : DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL=https://app.blueprint-modular.com, GOOGLE_CLIENT_ID/SECRET
+   # Éditer .env : DATABASE_URL (ligne réelle sans #), NEXTAUTH_SECRET, NEXTAUTH_URL=https://app.blueprint-modular.com, GOOGLE_CLIENT_ID/SECRET
    ```
-   Générer un secret : `openssl rand -hex 32`
+   Générer un secret : `openssl rand -hex 32`  
+   En cas d’erreur Prisma « shadow database » en local, voir [docs/DATABASE.md](../docs/DATABASE.md) §5 et `./scripts/prisma-grant-createdb.sh`.
 
 4. **Base de données**  
    ```bash

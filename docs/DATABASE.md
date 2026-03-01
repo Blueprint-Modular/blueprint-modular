@@ -93,3 +93,71 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 4. **NextAuth** : `NEXTAUTH_SECRET` et `NEXTAUTH_URL` renseignés.
 
 Pour le détail des étapes de déploiement, voir [DEPLOY.md](DEPLOY.md).
+
+---
+
+## 5. Migration Phase 0 (multitenant) et seed
+
+Après le déploiement Phase 0 (Organization, Workspace, GeneratedApp, etc.), en **local** ou sur le **VPS** :
+
+### 5.1 Vérifier que `DATABASE_URL` est bien définie
+
+Le fichier `.env` doit contenir une **ligne réelle** (sans `#`) :
+
+```bash
+grep "^DATABASE_URL=" .env
+```
+
+Si rien ne s’affiche, éditer `.env` et ajouter (en remplaçant `USER`, `PASSWORD`, `HOST`, `DB` par vos valeurs) :
+
+```
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DB
+```
+
+### 5.2 Créer l’utilisateur et la base (première fois en local)
+
+Si PostgreSQL est installé mais la base ou l’utilisateur n’existent pas encore :
+
+- **Avec pgAdmin (Windows)** : se connecter au serveur en tant que `postgres`, ouvrir *Query Tool*, ouvrir le fichier [`scripts/setup-db-local.sql`](../scripts/setup-db-local.sql), remplacer `MON_MOT_DE_PASSE` (et éventuellement `blueprint_user`), puis exécuter.
+- **Avec psql** : `psql -U postgres -h localhost -f scripts/setup-db-local.sql` (après avoir édité le script avec le mot de passe voulu).
+
+Puis définir dans `.env` :
+
+```
+DATABASE_URL=postgresql://blueprint_user:MON_MOT_DE_PASSE@localhost:5432/blueprint_modular
+```
+
+**Si Prisma renvoie une erreur P1000 (Authentication failed)** :
+
+1. Vérifier que l’utilisateur et le mot de passe correspondent à ceux de PostgreSQL.
+2. Si le mot de passe contient des caractères spéciaux (`@`, `#`, `:`, `/`, `%`, etc.), il faut les **encoder en pourcentage** dans l’URL :
+   - `@` → `%40`
+   - `#` → `%23`
+   - `:` → `%3A`
+   - `/` → `%2F`
+   - `%` → `%25`
+3. Exemple : mot de passe `p@ss/word` → dans l’URL : `p%40ss%2Fword`.
+
+### 5.3 Droit CREATEDB pour la shadow database (Prisma migrate dev)
+
+En local, `prisma migrate dev` crée une base temporaire (shadow database). L’utilisateur PostgreSQL doit avoir le droit de créer des bases :
+
+```bash
+# Afficher l’utilisateur extrait de DATABASE_URL et la commande à exécuter
+./scripts/prisma-grant-createdb.sh
+```
+
+Puis exécuter la commande affichée (en superuser), par exemple :
+
+```bash
+sudo -u postgres psql -c "GRANT CREATEDB TO blueprint_user;"
+```
+
+### 5.4 Lancer la migration et le seed
+
+```bash
+npx prisma migrate dev --name add_multitenant
+npx tsx prisma/seed-organizations.ts
+```
+
+Sur le **VPS**, après un déploiement réussi (`.\scripts\deploy-vps-remote.ps1`), le fichier `prisma/seed-organizations.ts` est présent ; on peut lancer le seed depuis le serveur si la migration n’a pas encore été faite (en général `deploy-from-git.sh` exécute `prisma migrate deploy`).

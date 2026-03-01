@@ -1,5 +1,7 @@
 # À copier dans la racine du repo sur le VPS : cp deploy/app-env.example .env
 # Puis renseigner les valeurs (surtout DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL, Google OAuth).
+# DATABASE_URL doit être une ligne réelle (sans #). Pour Prisma migrate dev en local, l'utilisateur
+# PostgreSQL doit avoir CREATEDB (voir docs/DATABASE.md §5 et scripts/prisma-grant-createdb.sh).
 
 # NextAuth (obligatoire en prod)
 # NEXTAUTH_URL doit être EXACTEMENT l’URL publique de l’app (https, pas http).
@@ -15,7 +17,7 @@ NEXTAUTH_URL=https://app.blueprint-modular.com
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
-# Base de données (obligatoire)
+# Base de données (obligatoire) — remplacer user:password par l'utilisateur PostgreSQL réel
 DATABASE_URL=postgresql://user:password@localhost:5432/blueprint_modular
 
 # Ollama — modèles (VPS : ollama pull qwen3:8b && qwen3-embedding:4b && qwen3-vl:8b)

@@ -254,11 +254,7 @@ async function fetchDemoProductionData(period: DemoPeriod = "30d") {
 
 export async function getCachedDemoProductionData(period: DemoPeriod = "30d") {
   try {
-    return await unstable_cache(
-      fetchDemoProductionData,
-      ["demo-production-data", period],
-      { revalidate: 3600 }
-    )(period);
+    return await fetchDemoProductionData(period);
   } catch {
     return EMPTY_DEMO_DATA;
   }

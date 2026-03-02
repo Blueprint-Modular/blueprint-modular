@@ -15,7 +15,7 @@
     "version:sync": "node scripts/sync-version.js",
     "build:modules-bundle": "node scripts/build-modules-bundle.cjs",
     "seed:wiki": "node prisma/seed-wiki-procedures.cjs",
-    "seed:production": "tsx prisma/seed-production.ts"
+    "seed:production": "npx tsx prisma/seed-production.ts"
   },
   "prisma": {
     "seed": "node prisma/seed-wiki-procedures.cjs"

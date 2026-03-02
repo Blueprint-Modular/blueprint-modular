@@ -151,7 +151,7 @@ export default async function DemoProductionPage({
                 <Title level={2}>Alertes critiques actives</Title>
                 <div className="space-y-3">
                   {criticalAlerts.map((a) => (
-                    <Panel key={a.id} title={`${a.type} — ${a.line.name}`} variant="warning">
+                    <Panel key={a.id} title={`${a.type} — ${a.line?.name ?? "—"}`} variant="warning">
                       {a.message}
                     </Panel>
                   ))}

@@ -41,13 +41,15 @@ export function DemoProductionLayoutClient({
           </span>
         </div>
         <nav className="flex items-center gap-3 text-sm">
-          <Link
-            href="/docs"
+          <a
+            href="https://docs.blueprint-modular.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="underline"
             style={{ color: "var(--bpm-accent-cyan)" }}
           >
             Documentation
-          </Link>
+          </a>
           <Link
             href="/sandbox"
             className="underline"

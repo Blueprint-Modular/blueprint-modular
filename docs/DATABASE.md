@@ -69,6 +69,13 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 - **Config requise** : un fichier de configuration par domaine dans `lib/asset-manager/config/domain.<domainId>.json` (ex. `domain.it.json`, `domain.maintenance.json`). En déploiement standalone, ces fichiers doivent être copiés dans le build (voir `deploy/deploy-from-git.sh`).
 - **Modules** : Gestion de parc (tableau de bord, actifs, tickets, MAD, contrats, connaissances, changements, CMDB, audit).
 
+### Démo Production (TRS, lignes, sessions, alertes)
+
+- **Tables** : `Organization` (slug par défaut pour la démo), `ProductionLine`, `ProductionSession`, `ProductionAlert`.
+- **Relations** : `Organization` → lignes ; chaque ligne → sessions et alertes.
+- **Env** : `DEFAULT_ORG_SLUG` (optionnel, défaut `default`) pour l’org utilisée par la démo.
+- **Seed** : `npm run seed:production` (ou `npx tsx prisma/seed-production.ts`) après `seed-organizations` pour peupler lignes, sessions et alertes de démo.
+
 ---
 
 ## 3. Résumé par module (pour la doc / launchers)
@@ -82,6 +89,7 @@ Variables optionnelles selon les modules : clés API (IA, etc.), stockage fichie
 | Newsletter | NewsletterSettings, NewsletterArticle | — |
 | IA | AiConversation, AiMessage | — |
 | Gestion de parc | Asset, AssetAttribute, AssetMovement, Ticket, Assignment, AssetContract, KnowledgeArticle, ChangeRequest, CIRelation, AuditLog, Permission | `lib/asset-manager/config/domain.*.json` |
+| Démo Production | Organization, ProductionLine, ProductionSession, ProductionAlert | `DEFAULT_ORG_SLUG` (optionnel) |
 
 ---
 

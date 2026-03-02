@@ -48,7 +48,7 @@ Remplace le contenu de `lib/ai/prompt-templates.ts` par :
  */
 
 export const SYSTEM_PROMPT_BASE = `Tu es un assistant IA intégré à Blueprint Modular, 
-un framework de gestion d'entreprise utilisé par NXTFOOD (agroalimentaire, 120 collaborateurs) 
+un framework de gestion d'entreprise (ex. agroalimentaire, 120 collaborateurs) 
 et BEAM Consulting (gestion d'investissements). 
 
 Tu réponds TOUJOURS en français, de manière précise et structurée.
@@ -155,11 +155,11 @@ export const TEMPLATE_WIKI_GENERATION = ({
 }: {
   notes: string;
   articleType: "guide" | "procedure" | "best-practice" | "reference";
-  workspace: "nxtfood" | "beam" | "shared";
+  workspace: "production" | "beam" | "shared";
 }) => `${SYSTEM_PROMPT_BASE}
 
 Génère un article wiki structuré de type "${articleType}" 
-pour le workspace "${workspace === "nxtfood" ? "NXTFOOD" : workspace === "beam" ? "BEAM Consulting" : "partagé"}".
+pour le workspace "${workspace === "production" ? "Production" : workspace === "beam" ? "BEAM Consulting" : "partagé"}".
 
 Notes brutes à structurer :
 ${notes}
@@ -249,7 +249,7 @@ function extractJSON(response: string): string {
 ```
 
 **Séparation des workspaces :**
-Chaque contrat a un champ `workspace: "nxtfood" | "beam"`.
+Chaque contrat a un champ `workspace: "production" | "beam"`.
 Les requêtes API filtrent TOUJOURS par workspace.
 Ne jamais retourner des contrats d'un workspace dans une requête d'un autre.
 
@@ -323,7 +323,7 @@ Le streaming masque cette latence côté utilisateur.
 - ❌ Faire des calculs arithmétiques dans les prompts
 - ❌ Stocker l'URL du VPS dans le code source (uniquement dans .env)
 - ❌ Modifier `vllm-client.ts` ou `config.ts` — ils viennent d'être migrés
-- ❌ Mélanger les données NXTFOOD et BEAM dans la même requête
+- ❌ Mélanger les données Production et BEAM dans la même requête
 
 ---
 

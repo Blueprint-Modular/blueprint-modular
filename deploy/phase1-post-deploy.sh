@@ -1,6 +1,6 @@
 #!/bin/bash
 # Phase 1 — À lancer sur le VPS après git pull (ou après deploy-from-git.sh)
-# Applique les migrations, seed production NXTFOOD, redémarre l'app.
+# Applique les migrations, seed production, redémarre l'app.
 # Usage: ./deploy/phase1-post-deploy.sh
 # Prérequis: être dans le répertoire du repo (ex. cd ~/blueprint-modular)
 

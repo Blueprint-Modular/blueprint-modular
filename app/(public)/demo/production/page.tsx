@@ -1,85 +1,172 @@
 import Link from "next/link";
 import { getCachedDemoProductionData } from "@/lib/demo-production-data";
-import { DemoProductionDashboard } from "./DemoProductionDashboard";
+import type { DemoPeriod } from "@/lib/demo-production-data";
 import { DemoErrorBoundary } from "./DemoErrorBoundary";
+import {
+  Title,
+  Metric,
+  LineChart,
+  Progress,
+  Table,
+  Panel,
+  Grid,
+  Column,
+  Button,
+} from "@/components/bpm";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
-export default async function DemoProductionPage() {
+function parsePeriod(s: string | null): DemoPeriod {
+  if (s === "7d" || s === "30d" || s === "90d") return s;
+  return "30d";
+}
+
+export default async function DemoProductionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>;
+}) {
+  const params = await searchParams;
+  const period = parsePeriod(params.period ?? null);
   let data;
   try {
-    data = await getCachedDemoProductionData();
-  } catch (e) {
-    data = {
-      metrics: null,
-      lines: [],
-      alerts: [],
-    };
+    data = await getCachedDemoProductionData(period);
+  } catch {
+    data = { metrics: null, lines: [], alerts: [] };
   }
 
+  const metrics = data.metrics;
+  const lines = data.lines ?? [];
+  const alerts = data.alerts ?? [];
+  const criticalAlerts = alerts.filter((a) => a.severity === "critical").slice(0, 3);
+
   return (
-    <div className="min-h-screen" style={{ background: "var(--bpm-bg-secondary, #f5f5f5)" }}>
-      <header
-        className="sticky top-0 z-10 border-b px-4 py-3 flex items-center justify-between flex-wrap gap-2"
-        style={{
-          background: "var(--bpm-bg-primary)",
-          borderColor: "var(--bpm-border)",
-        }}
-      >
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="font-semibold text-lg"
-            style={{ color: "var(--bpm-text-primary)" }}
-          >
-            Blueprint Modular
-          </Link>
-          <span
-            className="text-sm px-2 py-1 rounded"
-            style={{
-              background: "var(--bpm-bg-secondary)",
-              color: "var(--bpm-text-secondary)",
-            }}
-          >
-            Démo Production
-          </span>
-        </div>
-        <nav className="flex items-center gap-3 text-sm">
-          <Link
-            href="/docs"
-            className="underline"
-            style={{ color: "var(--bpm-accent-cyan)" }}
-          >
-            Documentation
-          </Link>
-          <Link
-            href="/sandbox"
-            className="underline"
-            style={{ color: "var(--bpm-accent-cyan)" }}
-          >
-            App Builder
-          </Link>
-        </nav>
-      </header>
+    <DemoErrorBoundary>
+      <div className="space-y-6">
+        <Title level={1}>Vue globale</Title>
 
-      <div
-        className="mx-auto max-w-4xl px-4 py-3 text-center text-sm"
-        style={{
-          background: "rgba(245, 158, 11, 0.12)",
-          color: "#8a5a00",
-          borderBottom: "1px solid rgba(245, 158, 11, 0.3)",
-        }}
-      >
-        Démo — données fictives. Déployez votre propre instance pour connecter vos lignes et
-        indicateurs.
+        {metrics ? (
+          <>
+            <Grid cols={4}>
+              <Column>
+                <Metric
+                  label="TRS global"
+                  value={`${Number(metrics.globalTRS) ?? 0} %`}
+                  border
+                />
+              </Column>
+              <Column>
+                <Metric
+                  label="Taux de rejet"
+                  value={
+                    metrics.totalProduction > 0
+                      ? `${((Number(metrics.totalRejects) / metrics.totalProduction) * 100).toFixed(2)} %`
+                      : "0 %"
+                  }
+                  border
+                />
+              </Column>
+              <Column>
+                <Metric
+                  label="Pertes matière (%)"
+                  value={`${Number(metrics.globalLossRate) ?? 0} %`}
+                  border
+                />
+              </Column>
+              <Column>
+                <Metric
+                  label="Pièces produites"
+                  value={Number(metrics.totalProduction).toLocaleString("fr-FR")}
+                  border
+                />
+              </Column>
+            </Grid>
+
+            <Progress
+              value={Number(metrics.globalTRS) || 0}
+              max={Number(metrics.trsTarget) || 80}
+              label={`${Number(metrics.globalTRS).toFixed(2)}% / objectif ${metrics.trsTarget ?? 80}%`}
+              showValue
+            />
+            {Number(metrics.globalTRS) < 80 && (
+              <p className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+                TRS sous l&apos;objectif — couleur d&apos;alerte appliquée au besoin.
+              </p>
+            )}
+
+            {Array.isArray(metrics.trsEvolution) && metrics.trsEvolution.length > 0 && (
+              <div style={{ minHeight: 240 }}>
+                <Title level={2}>Évolution TRS (période)</Title>
+                <div style={{ width: "100%", maxWidth: 700, height: 220 }}>
+                  <LineChart
+                    data={metrics.trsEvolution.map((d) => ({
+                      x: typeof d.date === "string" ? d.date.slice(5) : String(d.date),
+                      y: Number(d.trs) || 0,
+                    }))}
+                    width={700}
+                    height={220}
+                  />
+                </div>
+              </div>
+            )}
+
+            <Title level={2}>Résumé des lignes</Title>
+            <Table
+              columns={[
+                { key: "name", label: "Ligne" },
+                { key: "code", label: "Code" },
+                { key: "todayTRS", label: "TRS %" },
+                { key: "status", label: "Statut" },
+                {
+                  key: "action",
+                  label: "Action",
+                  render: (_, row) => (
+                    <Link
+                      href={`/demo/production/lines/${row.code}?period=${period}`}
+                      className="text-sm underline"
+                      style={{ color: "var(--bpm-accent-cyan)" }}
+                    >
+                      Voir le détail →
+                    </Link>
+                  ),
+                },
+              ]}
+              data={lines.map((l) => ({
+                name: l.name,
+                code: l.code,
+                todayTRS: `${l.todayTRS} %`,
+                status: l.status,
+                action: null,
+              }))}
+              minWidth={500}
+            />
+
+            {criticalAlerts.length > 0 && (
+              <>
+                <Title level={2}>Alertes critiques actives</Title>
+                <div className="space-y-3">
+                  {criticalAlerts.map((a) => (
+                    <Panel key={a.id} title={`${a.type} — ${a.line.name}`} variant="warning">
+                      {a.message}
+                    </Panel>
+                  ))}
+                </div>
+                <Link href={`/demo/production/alerts?period=${period}`}>
+                  <Button variant="secondary" size="small">
+                    Voir toutes les alertes →
+                  </Button>
+                </Link>
+              </>
+            )}
+          </>
+        ) : (
+          <p style={{ color: "var(--bpm-text-secondary)" }}>
+            Aucune donnée production. Lancez le seed :{" "}
+            <code>npm run seed:production</code>
+          </p>
+        )}
       </div>
-
-      <main className="max-w-6xl mx-auto px-4 py-6">
-        <DemoErrorBoundary>
-          <DemoProductionDashboard data={data} />
-        </DemoErrorBoundary>
-      </main>
-    </div>
+    </DemoErrorBoundary>
   );
 }

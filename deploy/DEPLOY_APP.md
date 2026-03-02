@@ -49,8 +49,9 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
 
 ## Après chaque déploiement
 
-- Le script `deploy-from-git.sh` fait : vitrine + doc statiques + **build Next.js** + **PM2 restart** de l’app.
+- Le script `deploy-from-git.sh` fait : vitrine + doc statiques + **build Next.js** + **copie assets standalone** + **PM2 restart** de l’app.
 - L’app tourne sur le port 3000 ; Nginx proxy vers **app.blueprint-modular.com**.
+- **Si la prod s'affiche sans CSS** : en standalone, recopier les assets après le build. Ne pas faire seulement `npm run build` + `pm2 restart`. Lancer `./deploy/deploy-from-git.sh` ou après build manuel : `./deploy/copy-standalone-assets.sh` puis `pm2 restart blueprint-app`. Voir `npm run build:standalone`.
 
 ## Vérifier l’app
 
@@ -70,7 +71,7 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
 - **Ce qui prouve que le déploiement a bien pris en compte la Phase 0** : l’app **charge sans erreur 500** (tables `Organization`, `Workspace` présentes) ; Wiki, Contrats, Dashboard et autres modules fonctionnent comme avant.
 - **Optionnel** : si tu as exécuté `npx tsx prisma/seed-organizations.ts` sur le VPS après `migrate deploy`, l’organisation par défaut « My Organization » existe en base (pour usage futur par l’app ou l’API).
 
-## Phase 1 — Déploiement et validation (dashboard production NXTFOOD)
+## Phase 1 — Déploiement et validation (dashboard production)
 
 Après un `git pull` (ou après avoir exécuté `./deploy/deploy-from-git.sh`) pour une version Phase 1 :
 

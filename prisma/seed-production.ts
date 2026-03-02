@@ -1,7 +1,6 @@
 /**
- * Seed données production NXTFOOD (Phase 1).
+ * Seed données production (Phase 1).
  * S'accroche à l'organisation par défaut créée par seed-organizations (DEFAULT_ORG_SLUG).
- * Le nom affiché "NXTFOOD" est uniquement dans les données (libellés), pas dans le schéma.
  */
 import { PrismaClient } from "@prisma/client";
 
@@ -34,12 +33,12 @@ async function main() {
   await prisma.productionSession.deleteMany({ where: { organizationId: orgId } });
   await prisma.productionLine.deleteMany({ where: { organizationId: orgId } });
 
-  // 4 lignes de production (noms démo NXTFOOD — usine substituts viande végétaux)
+  // 4 lignes de production (noms démo — usine type agroalimentaire)
   const linesData = [
-    { name: "Ligne Extrudeur A (NXTFOOD)", code: "EXT-A", rate: 120 },
-    { name: "Ligne Extrudeur B (NXTFOOD)", code: "EXT-B", rate: 115 },
-    { name: "Ligne Formeur 1 (NXTFOOD)", code: "FORM-1", rate: 95 },
-    { name: "Ligne Conditionnement 1 (NXTFOOD)", code: "COND-1", rate: 150 },
+    { name: "Ligne Extrudeur A", code: "EXT-A", rate: 120 },
+    { name: "Ligne Extrudeur B", code: "EXT-B", rate: 115 },
+    { name: "Ligne Formeur 1", code: "FORM-1", rate: 95 },
+    { name: "Ligne Conditionnement 1", code: "COND-1", rate: 150 },
   ];
 
   const createdLines = await Promise.all(
@@ -194,7 +193,7 @@ async function main() {
     where: { organizationId: orgId },
   });
 
-  console.log("✅ Seed production NXTFOOD terminé");
+  console.log("✅ Seed production terminé");
   console.log(`   Org : ${org.name} (${DEFAULT_ORG_SLUG})`);
   console.log(`   Lignes : ${createdLines.length} (EXT-A, EXT-B, FORM-1, COND-1)`);
   console.log(`   Sessions : ${sessionCount}`);

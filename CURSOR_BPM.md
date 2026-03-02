@@ -24,7 +24,7 @@ Suivi des fondations architecturales (Phase 0), du use case IA (Phase 1) et de l
 
 | # | Prompt | Statut | Note |
 |---|--------|--------|------|
-| 1 | Schéma + seed données NXTFOOD (ProductionLine, ProductionSession, ProductionAlert) | ✅ | seed:production, org par défaut |
+| 1 | Schéma + seed données production (ProductionLine, ProductionSession, ProductionAlert) | ✅ | seed:production, org par défaut |
 | 2 | Routes API production (lines, lines/[id], metrics, alerts, sessions) | ✅ | lib/compute pour calculs, assertOrganizationAccess |
 | 3 | System prompt Builder production + template + generateFromTemplate | ✅ | prompts.ts, production-dashboard.ts |
 | 4 | Dashboard Sandbox + démo publique (/demo/production, unstable_cache) | ✅ | Bouton « Charger exemple Production », isProduction → generateFromTemplate ; /api/demo/screenshot 501 |
@@ -45,4 +45,4 @@ Suivi des fondations architecturales (Phase 0), du use case IA (Phase 1) et de l
 | Date | Événement |
 |------|-----------|
 | 2025-03-01 | Phase 0 complète — 9 fondations architecturales. Tag `phase-0-complete`. Migration `add_multitenant` et seed-organizations à lancer en local quand la base est disponible. |
-| 2025-02-27 | Phase 1 complète — dashboard production NXTFOOD, API production, Builder template, démo publique, assistant contextuel. Tag `phase-1-complete`. |
+| 2025-02-27 | Phase 1 complète — dashboard production, API production, Builder template, démo publique, assistant contextuel. Tag `phase-1-complete`. |

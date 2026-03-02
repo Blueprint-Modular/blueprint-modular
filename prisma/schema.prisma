@@ -213,7 +213,7 @@ model Contract {
   id                String    @id @default(cuid())
   title             String
   contractType      String    @map("contract_type")   // 'supplier' | 'cgv' | 'other'
-  workspace         String    // 'nxtfood' | 'beam' (legacy)
+  workspace         String    // 'production' | 'beam' (legacy)
   organizationId    String?   @map("organization_id")
   filePath          String    @map("file_path")
   fileHash          String    @map("file_hash")
@@ -538,7 +538,7 @@ model Permission {
   @@index([roleId])
 }
 
-// --- Production NXTFOOD (Phase 1 — dashboard suivi production) ---
+// --- Production (Phase 1 — dashboard suivi production) ---
 
 model ProductionLine {
   id             String   @id @default(cuid())

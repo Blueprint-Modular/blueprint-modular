@@ -202,4 +202,4 @@ Modèle **`AuditLog`** (Prisma) :
 
 ---
 
-*Compléments v1.1 — BEAM Consulting pour NXTFOOD | Blueprint Modular `asset-manager`*
+*Compléments v1.1 — BEAM Consulting | Blueprint Modular `asset-manager`*

@@ -66,7 +66,7 @@ Accordion, Avatar, Badge, Breadcrumb, Button, Card, Checkbox, Chip, CodeBlock, C
 1. **Pas de FastAPI** : tout reste dans Next.js (API routes + Prisma). Pas de création d’un backend Python séparé.
 2. **Chat IA** : AIChat + `/api/ai/chat` utilisent par défaut **Ollama** (vllmClient) avec **contexte modules** (registry) ; Anthropic en option (`provider_name: "claude"`).
 3. **Schéma Prisma** : `WikiArticle` (title, content, slug, parentId, authorId, isPublished) ; `Document` (filename, analysisStatus, supplier, client, dates, summary, keyPoints, commitments, rawText). Le prompt Phase 1 prévoit un modèle **Contract** plus riche (workspace, contract_type, extracted_data JSON) et un **Wiki** avec category, tags, summary, ai_generated, workspace. À étendre via migrations.
-4. **Workspace** : NXTFOOD / BEAM demandés dans le prompt ; aucun champ `workspace` actuellement dans Prisma. À ajouter où nécessaire (Contract, Wiki si partagé).
+4. **Workspace** : production / BEAM demandés dans le prompt ; aucun champ `workspace` actuellement dans Prisma. À ajouter où nécessaire (Contract, Wiki si partagé).
 5. **Conventions UI** : tout en **bpm.*** (composants existants), **français**, responsive. Pas de librairies UI externes.
 6. **Auth** : NextAuth en place ; session utilisée dans les API. Pas de rôles par workspace dans le schéma actuel.
 

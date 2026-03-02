@@ -1,5 +1,5 @@
 /**
- * Template pré-validé BPM pour le dashboard production NXTFOOD.
+ * Template pré-validé BPM pour le dashboard production.
  * Référence pour le Builder : structure attendue, composants corrects, appels API.
  * Données : GET /api/production/lines, /api/production/metrics, /api/production/alerts.
  */

@@ -10,7 +10,7 @@ Document généré à partir de :
 ### 1.1 Prompts et templates
 
 - **Enrichir `lib/ai/prompt-templates.ts`**  
-  Remplacer `SYSTEM_PROMPT_BASE` par la version orientée NXTFOOD/BEAM (français, « le LLM commente, jamais il ne calcule »).  
+  Remplacer `SYSTEM_PROMPT_BASE` par la version orientée métier (français, « le LLM commente, jamais il ne calcule »).  
   Ajouter ou aligner les templates :  
   `SYSTEM_PROMPT_WITH_CONTEXT`, `TEMPLATE_ANALYSE_DONNEES`, `TEMPLATE_ANALYSE_CONTRAT`, `TEMPLATE_WIKI_GENERATION`, `TEMPLATE_SYNTHESE_STRATEGIQUE`.
 
@@ -23,7 +23,7 @@ Document généré à partir de :
   - Valider au minimum `executive_summary` et `overall_risk_level`.  
   - Retourner un objet partiel si certains champs manquent (ne pas faire planter l’app).  
 - **Séparation des workspaces**  
-  S’assurer que toutes les requêtes contrats filtrent par `workspace` (nxtfood / beam) et ne renvoient jamais les données d’un autre workspace.
+  S’assurer que toutes les requêtes contrats filtrent par `workspace` (production / beam) et ne renvoient jamais les données d’un autre workspace.
 
 ### 1.3 Wiki IA
 
@@ -51,13 +51,13 @@ Document généré à partir de :
 Ce document décrit la cible « une nuit » (assistant, contrats, wiki). Une partie est déjà couverte par l’existant Next.js (API sous `app/api/`, pas de backend FastAPI séparé). Reste à aligner avec les critères de succès :
 
 - [ ] **Assistant** : répond à « quels modules sont disponibles ? » et à des questions sur les données d’un module enregistré (contexte bien injecté).  
-- [ ] **Contrats** : upload PDF → analyse déclenchée (mock ou Ollama) ; liste avec filtres NXTFOOD / BEAM strictement séparés.  
+- [ ] **Contrats** : upload PDF → analyse déclenchée (mock ou Ollama) ; liste avec filtres production / BEAM strictement séparés.  
 - [x] **Wiki** : création manuelle d’articles ; génération depuis notes brutes (`POST /api/wiki/generate`) ; mise en forme IA sur l’édition ; transcription vocale (Whisper) sur nouvel article et assistant IA.  
 - [ ] **Aucune dépendance** vers OpenAI / ChatGPT / service cloud IA (Ollama local uniquement pour cette phase).
 
 Points d’attention issus du doc :  
 - Utiliser uniquement les composants `bpm.*` pour l’UI.  
-- Séparation stricte des workspaces (NXTFOOD / BEAM).  
+- Séparation stricte des workspaces (production / BEAM).  
 - Mocks de dev pour analyse de contrat et génération wiki si besoin.
 
 ---
@@ -91,7 +91,7 @@ Points d’attention issus du doc :
 | Haute    | IA — Prompts       | Enrichir `prompt-templates.ts` (SYSTEM_PROMPT_BASE + templates analyse données, contrat, wiki, synthèse). |
 | Haute    | IA — Contrats      | Robustifier `contract-analyzer.ts` (extractJSON, TEMPLATE_ANALYSE_CONTRAT, validation, réponses partielles). |
 | —        | IA — Wiki          | Fait : `POST /api/wiki/generate` (stream, génération + mise en forme), Aide IA sur édition, contenu wiki dans le module IA ; transcription vocale Whisper (VoiceRecorder, `/api/wiki/transcribe`) sur nouvel article et assistant IA. |
-| Moyenne  | Données / Sécurité | Vérifier filtrage workspace (nxtfood/beam) sur toutes les API contrats et wiki. |
+| Moyenne  | Données / Sécurité | Vérifier filtrage workspace (production/beam) sur toutes les API contrats et wiki. |
 | Moyenne  | Validation         | Tester assistant (modules disponibles + questions sur données) et sandbox « Par IA » (dashboard financier). |
 | Optionnel| Mission            | Droits owner/admin/user par module ; TOC / Pagefind / barre de lecture. |
 

@@ -200,7 +200,7 @@ class Contract(Base):
     # Identité
     title: str                    # Nom du fichier / titre détecté
     contract_type: str            # 'supplier' | 'cgv' | 'other'
-    workspace: str                # 'nxtfood' | 'beam'  ← bases séparées
+    workspace: str                # 'production' | 'beam'  ← bases séparées
     
     # Fichier
     file_path: str
@@ -298,7 +298,7 @@ class ContractAnalyzer:
 ```
 
 **Interface ContractList.jsx**
-- Filtres : workspace (NXTFOOD / BEAM), type, statut, période
+- Filtres : workspace (production / BEAM), type, statut, période
 - Colonnes : nom, fournisseur, type, date contrat, date fin, risque (badge coloré), statut analyse
 - Tri sur toutes les colonnes
 - Clic sur une ligne → ContractDetail
@@ -355,7 +355,7 @@ class WikiArticle(Base):
     tags: list[str]
     content: str                  # Markdown
     summary: str                  # Auto-généré (2-3 phrases)
-    workspace: str                # 'nxtfood' | 'beam' | 'shared'
+    workspace: str                # 'production' | 'beam' | 'shared'
     author: str
     ai_generated: bool
     source_notes: str | None      # Notes brutes ayant servi à la génération
@@ -367,7 +367,7 @@ class WikiArticle(Base):
 **WikiAIGenerator.jsx**
 - Textarea "Notes brutes" (coller du texte non structuré)
 - Sélecteur de type d'article (guide / procédure / bonne pratique)
-- Sélecteur de workspace (NXTFOOD / BEAM / Partagé)
+- Sélecteur de workspace (Production / BEAM / Partagé)
 - Bouton "Générer l'article" → appelle le LLM → affiche la preview markdown
 - Bouton "Modifier avant publication" → ouvre WikiEditor avec le contenu généré
 - Bouton "Publier directement"
@@ -468,7 +468,7 @@ POST /api/ai/context             → reçoit les données de modules, retourne c
 
 ## 🔒 SÉCURITÉ ET DONNÉES
 
-1. **Séparation des workspaces** — NXTFOOD et BEAM ont des données strictement séparées. Chaque requête doit inclure et valider le workspace. Ne jamais retourner des données d'un workspace dans une requête d'un autre.
+1. **Séparation des workspaces** — Production et BEAM ont des données strictement séparées. Chaque requête doit inclure et valider le workspace. Ne jamais retourner des données d'un workspace dans une requête d'un autre.
 2. **Validation des fichiers** — à l'upload, vérifier extension (PDF, DOCX, TXT) ET type MIME réel
 3. **Taille max** — 50 Mo par fichier
 4. **Sanitisation** — tout texte extrait des documents doit être sanitisé avant d'être injecté dans un prompt
@@ -517,7 +517,7 @@ Exemples de réponses mockées à prévoir :
 - [ ] L'assistant IA s'ouvre depuis le dashboard et répond à "quels modules sont disponibles ?"
 - [ ] L'assistant peut répondre à une question sur les données d'un module enregistré
 - [ ] On peut uploader un PDF contrat et voir l'analyse se lancer (mock ou réel)
-- [ ] La liste des contrats s'affiche avec filtres NXTFOOD / BEAM séparés
+- [ ] La liste des contrats s'affiche avec filtres Production / BEAM séparés
 - [ ] On peut créer un article wiki manuellement
 - [ ] On peut générer un article wiki depuis des notes brutes
 - [ ] Aucune dépendance vers OpenAI, ChatGPT ou tout service cloud IA

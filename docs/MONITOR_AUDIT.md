@@ -57,7 +57,7 @@
 | 2 | **Pas de raccourci pour envoyer la question.** Entrée envoie, mais casse le multiligne ; sur Mac, Cmd+Entrée est attendu. | Ctrl+Entrée / Cmd+Entrée pour envoyer, Entrée pour saut de ligne. Placeholder : "Ctrl+↵ pour envoyer". |
 | 3 | **Pas d’annulation du streaming.** Réponse 10 s, pas de bouton "Arrêter". | `AbortController` sur le fetch ; bouton "✕ Arrêter" qui `abort()`. |
 | 4 | **Pas de "copier la réponse" sur Q&R.** Après suggestion Claude, pas de copie rapide pour Teams/notes. | Bouton "Copier" sous chaque réponse streamée (comme sur le Résumé). |
-| 5 | **Une seule présentation en mémoire.** 3 scorecards (NXTFOOD, BEAM, autre) = réimport à chaque fois. | Gestionnaire multi-présentations en localStorage : liste `[{ id, title, slides }]`, menu déroulant header, Nouvelle / Dupliquer / Supprimer. |
+| 5 | **Une seule présentation en mémoire.** 3 scorecards (Production, BEAM, autre) = réimport à chaque fois. | Gestionnaire multi-présentations en localStorage : liste `[{ id, title, slides }]`, menu déroulant header, Nouvelle / Dupliquer / Supprimer. |
 | 6 | **Résumé sans questions loggées.** Si Q&R non utilisé, Claude peut inventer des "questions potentielles". | Dans le prompt : indiquer "questions_logged: []" et instruction "Si aucune question loggée, ne pas inventer de questions. Résumer uniquement les slides." |
 
 ---

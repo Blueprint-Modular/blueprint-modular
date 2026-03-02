@@ -38,7 +38,13 @@ function getPeriodBounds(period: DemoPeriod) {
   return from;
 }
 
-async function fetchDemoProductionData(period: DemoPeriod = "30d") {
+const EMPTY_DEMO_DATA = {
+  metrics: null,
+  lines: [],
+  alerts: [],
+};
+
+async function fetchDemoProductionDataUnsafe(period: DemoPeriod = "30d") {
   const org = await prisma.organization.findFirst({
     where: { slug: DEFAULT_ORG_SLUG },
   });
@@ -238,6 +244,14 @@ async function fetchDemoProductionData(period: DemoPeriod = "30d") {
   };
 }
 
+async function fetchDemoProductionData(period: DemoPeriod = "30d") {
+  try {
+    return await fetchDemoProductionDataUnsafe(period);
+  } catch {
+    return EMPTY_DEMO_DATA;
+  }
+}
+
 export async function getCachedDemoProductionData(period: DemoPeriod = "30d") {
   try {
     return await unstable_cache(
@@ -246,11 +260,7 @@ export async function getCachedDemoProductionData(period: DemoPeriod = "30d") {
       { revalidate: 3600 }
     )(period);
   } catch {
-    return {
-      metrics: null,
-      lines: [],
-      alerts: [],
-    };
+    return EMPTY_DEMO_DATA;
   }
 }
 

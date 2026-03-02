@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Title, Table, Badge, Button } from "@/components/bpm";
 import type { LineWithMetrics } from "@/lib/demo-production-data";
 import type { DemoPeriod } from "@/lib/demo-production-data";
@@ -20,6 +20,16 @@ export function DemoLinesClient({
   lines: LineWithMetrics[];
   period: DemoPeriod;
 }) {
+  const router = useRouter();
+
+  const handleRowClick = useCallback(
+    (row: Record<string, unknown>) => {
+      const code = row.codeForLink as string;
+      if (code) router.push(`/demo/production/lines/${code}?period=${period}`);
+    },
+    [period, router]
+  );
+
   const handleExportCSV = useCallback(() => {
     exportLinesCSV(lines, period);
   }, [lines, period]);
@@ -86,24 +96,12 @@ export function DemoLinesClient({
             { key: "todayPerformance", label: "Performance %", decimals: 1 },
             { key: "todayQuality", label: "Qualité %", decimals: 1 },
             { key: "activeSessions", label: "Sessions" },
-            {
-              key: "action",
-              label: "Action",
-              render: (_, row) => (
-                <Link
-                  href={`/demo/production/lines/${row.codeForLink}?period=${period}`}
-                  className="text-sm underline"
-                  style={{ color: "var(--bpm-accent-cyan)" }}
-                >
-                  Détail →
-                </Link>
-              ),
-            },
           ]}
           data={tableData}
           defaultSortColumn="todayTRS"
           defaultSortDirection="desc"
           minWidth={800}
+          onRowClick={handleRowClick}
         />
       </div>
     </div>

@@ -13,7 +13,7 @@ export function DemoProductionLayoutClient({
   return (
     <div
       className="min-h-screen"
-      style={{ background: "var(--bpm-bg-secondary, #f5f5f5)" }}
+      style={{ background: "var(--bpm-bg-primary, #ffffff)" }}
     >
       <header
         className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 print:hidden"

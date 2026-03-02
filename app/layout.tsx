@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { APP_VERSION } from "@/lib/version";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
 import { NotificationProviders } from "@/components/NotificationProviders";
@@ -8,6 +9,7 @@ import { PwaSwRegister } from "@/components/PwaSwRegister";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.blueprint-modular.com";
 const DEFAULT_DESC = "Briques Python/React pour vos interfaces métier. Sans HTML ni JavaScript.";
+const FAVICON_QUERY = `?v=${APP_VERSION}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -17,10 +19,10 @@ export const metadata: Metadata = {
   manifest: "/manifest",
   icons: {
     icon: [
-      { url: "/img/icon-pwa-512.png", type: "image/png", sizes: "512x512" },
-      { url: "/img/icon-pwa-192.png", type: "image/png", sizes: "192x192" },
+      { url: `/img/icon-pwa-512.png${FAVICON_QUERY}`, type: "image/png", sizes: "512x512" },
+      { url: `/img/icon-pwa-192.png${FAVICON_QUERY}`, type: "image/png", sizes: "192x192" },
     ],
-    apple: "/img/icon-pwa-512.png",
+    apple: `/img/icon-pwa-512.png${FAVICON_QUERY}`,
   },
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
@@ -52,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="fr" dir="ltr" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/img/icon-pwa-512.png" type="image/png" sizes="512x512" />
+        <link rel="icon" href={`/img/icon-pwa-512.png${FAVICON_QUERY}`} type="image/png" sizes="512x512" />
         <meta charSet="utf-8" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

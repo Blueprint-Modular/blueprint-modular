@@ -1,4 +1,3 @@
-import { getSessionOrTestUser, isSkipAuthForTest } from "@/lib/auth";
 import { builderAI } from "@/lib/ai/builder";
 
 export const dynamic = "force-dynamic";
@@ -6,9 +5,6 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const result = await getSessionOrTestUser();
-  if (!result && !isSkipAuthForTest()) return new Response("Unauthorized", { status: 401 });
-
   const { description } = (await req.json().catch(() => ({}))) as { description?: string };
   if (!description?.trim()) {
     return new Response(JSON.stringify({ error: "description required" }), { status: 400 });

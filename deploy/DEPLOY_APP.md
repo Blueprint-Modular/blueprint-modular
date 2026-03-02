@@ -58,6 +58,18 @@ En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la 
 - **Logs** : `pm2 logs blueprint-app`
 - **Statut** : `pm2 status blueprint-app`
 
+### Savoir si le déploiement est terminé
+
+1. **Dans le terminal** (où tu as lancé `.\scripts\deploy-vps-remote.ps1`) : attendre la ligne **`✅ Déploiement terminé.`** avec la version déployée (ex. `02a3db0`) et les chemins Vitrine / Doc / App.
+2. **En SSH sur le VPS** : `pm2 status blueprint-app` → la colonne **status** doit être **online** et **restart** peut avoir augmenté de 1 après un `pm2 restart`.
+3. **Fichier de version** : ouvrir **https://blueprint-modular.com/version.txt** (ou docs) : tu dois voir le hash court du commit (ex. `02a3db0`) et la date du dernier déploiement.
+
+### Modifications visibles après ce déploiement (Phase 0 multitenant)
+
+- **Aucun changement d’interface** : les modèles Organization / Workspace sont en base et utilisables par l’API ; il n’y a pas encore de sélecteur d’organisation ou d’espace dans l’UI.
+- **Ce qui prouve que le déploiement a bien pris en compte la Phase 0** : l’app **charge sans erreur 500** (tables `Organization`, `Workspace` présentes) ; Wiki, Contrats, Dashboard et autres modules fonctionnent comme avant.
+- **Optionnel** : si tu as exécuté `npx tsx prisma/seed-organizations.ts` sur le VPS après `migrate deploy`, l’organisation par défaut « My Organization » existe en base (pour usage futur par l’app ou l’API).
+
 ## Service Prompteur API (optionnel, module Monitor)
 
 Le module **Monitor** (téléprompte IA) appelle l’API `https://app.blueprint-modular.com/api/prompteur/*`. En prod, Nginx proxy cette voie vers un service Python séparé (port 8001).

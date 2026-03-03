@@ -3,7 +3,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { Button, Modal, Input, Textarea, Chip, Selectbox } from "@/components/bpm";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 type View = "jour" | "semaine" | "mois";
 
@@ -302,12 +301,9 @@ export default function CalendrierSimulateurPage() {
   const dayLanes = useMemo(() => computeLanes(dayEvents), [dayEvents]);
   const maxLaneDay = dayEvents.length ? Math.max(...Array.from(dayLanes.values())) + 1 : 1;
 
-  const isMobile = useIsMobile();
-  const totalCells = Math.ceil((startPad + daysInMonth) / 7) * 7;
-  const monthLabel = new Date(year, month).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
 
   /** Desktop : affichage mensuel « grand calendrier » (format de l’ancienne page /calendrier, hors Panel). */
-  if (!isMobile) {
+  if (false) {
     return (
       <div className="doc-page">
         <div className="doc-page-header">
@@ -323,7 +319,7 @@ export default function CalendrierSimulateurPage() {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-2">
             <Button size="small" variant="outline" onClick={() => setFocusDate(addMonths(focusDate, -1))} aria-label="Mois précédent">←</Button>
-            <span className="capitalize font-medium min-w-[180px] text-center" style={{ color: "var(--bpm-text-primary)" }}>{monthLabel}</span>
+            <span className="capitalize font-medium min-w-[180px] text-center" style={{ color: "var(--bpm-text-primary)" }}>{new Date(year, month).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</span>
             <Button size="small" variant="outline" onClick={() => setFocusDate(addMonths(focusDate, 1))} aria-label="Mois suivant">→</Button>
             <Button size="small" variant="secondary" onClick={goToday}>Aujourd&apos;hui</Button>
           </div>
@@ -361,7 +357,7 @@ export default function CalendrierSimulateurPage() {
               {day}
             </div>
           ))}
-          {Array.from({ length: totalCells }, (_, i) => {
+          {Array.from({ length: Math.ceil((startPad + daysInMonth) / 7) * 7 }, (_, i) => {
             const dayNum = i - startPad + 1;
             const isCurrentMonth = dayNum >= 1 && dayNum <= daysInMonth;
             const dateStr = isCurrentMonth ? `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}` : "";
@@ -408,28 +404,31 @@ export default function CalendrierSimulateurPage() {
         </nav>
 
         <Modal isOpen={!!selectedEvent} onClose={() => setSelectedEvent(null)} title={selectedEvent?.titre} size="small">
-          {selectedEvent && (
-            <div className="space-y-3 text-sm">
-              <p className="m-0"><strong>Date :</strong> {selectedEvent.date}</p>
-              <p className="m-0"><strong>Heure :</strong> {formatHeureDisplay(selectedEvent.heure)}{selectedEvent.duree ? ` (${selectedEvent.duree} min)` : ""}</p>
-              {selectedEvent.recurrence && (
-                <p className="m-0"><strong>Récurrence :</strong> {selectedEvent.recurrence === "daily" ? "Tous les jours" : selectedEvent.recurrence === "weekly" ? "Toutes les semaines" : "Tous les mois"}</p>
-              )}
-              {selectedEvent.lieu && <p className="m-0"><strong>Lieu :</strong> {selectedEvent.lieu}</p>}
-              {selectedEvent.categorie && <p className="m-0"><strong>Catégorie :</strong> {selectedEvent.categorie}</p>}
-              {selectedEvent.statut && <p className="m-0"><strong>Statut :</strong> {selectedEvent.statut}</p>}
-              {selectedEvent.description && <p className="m-0"><strong>Description :</strong> {selectedEvent.description}</p>}
-              {selectedEvent.participants && selectedEvent.participants.length > 0 && (
-                <p className="m-0"><strong>Participants :</strong> {selectedEvent.participants.join(", ")}</p>
-              )}
-              <div className="flex gap-2 pt-2">
-                {selectedEvent._user && (
-                  <Button variant="secondary" size="small" onClick={() => handleDeleteEvent(selectedEvent)}>Supprimer</Button>
+          {selectedEvent ? (() => {
+            const ev: CalEvent = selectedEvent!;
+            return (
+              <div className="space-y-3 text-sm">
+                <p className="m-0"><strong>Date :</strong> {ev.date}</p>
+                <p className="m-0"><strong>Heure :</strong> {formatHeureDisplay(ev.heure)}{ev.duree ? ` (${ev.duree} min)` : ""}</p>
+                {ev.recurrence && (
+                  <p className="m-0"><strong>Récurrence :</strong> {ev.recurrence === "daily" ? "Tous les jours" : ev.recurrence === "weekly" ? "Toutes les semaines" : "Tous les mois"}</p>
                 )}
-                <Button variant="secondary" size="small" onClick={() => setSelectedEvent(null)}>Fermer</Button>
+                {ev.lieu && <p className="m-0"><strong>Lieu :</strong> {ev.lieu}</p>}
+                {ev.categorie && <p className="m-0"><strong>Catégorie :</strong> {ev.categorie}</p>}
+                {ev.statut && <p className="m-0"><strong>Statut :</strong> {ev.statut}</p>}
+                {ev.description && <p className="m-0"><strong>Description :</strong> {ev.description}</p>}
+                {ev.participants && ev.participants.length > 0 && (
+                  <p className="m-0"><strong>Participants :</strong> {ev.participants.join(", ")}</p>
+                )}
+                <div className="flex gap-2 pt-2">
+                  {ev._user && (
+                    <Button variant="secondary" size="small" onClick={() => handleDeleteEvent(ev)}>Supprimer</Button>
+                  )}
+                  <Button variant="secondary" size="small" onClick={() => setSelectedEvent(null)}>Fermer</Button>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })() : null}
         </Modal>
 
         <EventFormModal open={formOpen} onClose={() => setFormOpen(false)} onSubmit={handleAddEvent} defaultDate={focusKey} />
@@ -437,7 +436,6 @@ export default function CalendrierSimulateurPage() {
     );
   }
 
-  /** Mobile : onglets Jour / Semaine / Mois */
   return (
     <div className="doc-page">
       <div className="doc-page-header">

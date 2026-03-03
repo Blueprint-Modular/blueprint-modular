@@ -69,11 +69,6 @@ const navItems = [
   { href: "/settings", label: "Paramètres", icon: IconParametres },
 ];
 
-const LOGO_CANDIDATES = ["/img/logo-bpm.png", "/img/logo-bpm-nom.jpg", "/img/logo-bpm-nom.png"];
-/** Couleurs fixes du logo (ne varient pas avec le wizard / couleur d'accent) */
-const LOGO_BLUE = "#1a4b8f";
-const LOGO_CYAN = "#00a3e0";
-
 export function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -82,13 +77,7 @@ export function Sidebar() {
   const collapsed = sidebarCtx?.collapsed ?? false;
   const setCollapsed = sidebarCtx?.setCollapsed ?? (() => {});
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [logoError, setLogoError] = useState(false);
-  const [logoIndex, setLogoIndex] = useState(0);
-  const logoSrc = LOGO_CANDIDATES[logoIndex] ?? LOGO_CANDIDATES[0];
-  const handleLogoError = () => {
-    if (logoIndex < LOGO_CANDIDATES.length - 1) setLogoIndex((i) => i + 1);
-    else setLogoError(true);
-  };
+  const [sidebarHovered, setSidebarHovered] = useState(false);
 
   const NavIcon = ({
     icon: Icon,
@@ -101,7 +90,7 @@ export function Sidebar() {
     return (
       <Link
         href={href}
-        className={`flex items-center transition ${compact ? "flex-col gap-0.5 py-2 min-w-0 rounded-lg flex-1 basis-0 justify-center" : "gap-3 px-3 py-2.5 rounded-lg hover:bg-[var(--bpm-sidebar-hover-bg)]"}`}
+        className={`flex items-center transition-[background-color,color] duration-150 ease-out ${compact ? "flex-col gap-0.5 py-2 min-w-0 rounded-lg flex-1 basis-0 justify-center" : "gap-3 px-3 py-2.5 rounded-md hover:bg-[var(--bpm-sidebar-hover-bg)]"}`}
         style={{
           background: compact ? "transparent" : isActive ? "var(--bpm-sidebar-active-bg)" : "transparent",
           color: compact ? (isActive ? "var(--bpm-accent-cyan)" : "var(--bpm-sidebar-text)") : "var(--bpm-sidebar-text)",
@@ -144,7 +133,7 @@ export function Sidebar() {
         className={`
           group bpm-app-sidebar
           fixed top-0 left-0 z-50 h-full flex flex-col
-          w-64 transition-[width] duration-200 ease-in-out
+          w-64 transition-[width] duration-[0.25s] ease-in-out
           hidden md:flex
           ${collapsed ? "md:w-16" : "md:w-64"}
         `}
@@ -154,65 +143,33 @@ export function Sidebar() {
           borderRight: "1px solid var(--bpm-sidebar-border)",
           fontWeight: 400,
         }}
+        onMouseEnter={() => setSidebarHovered(true)}
+        onMouseLeave={() => setSidebarHovered(false)}
       >
-        {/* Header : logo + collapse (style type PortfolioManagement : logo centré en haut) */}
-        <div
-          className="relative flex flex-col items-center justify-center px-4 pb-5 shrink-0"
-          style={{ paddingTop: "2.5rem" }}
-        >
-          <Link href="/dashboard" className="flex flex-col items-center justify-center w-full min-h-[2.5rem] gap-1">
-            {collapsed ? (
-              !logoError ? (
-                <Image
-                  src={logoSrc}
-                  alt="Blueprint Modular"
-                  width={80}
-                  height={80}
-                  className="h-20 w-auto object-contain"
-                  priority
-                  onError={handleLogoError}
-                />
-              ) : (
-                <span className="font-bold text-sm truncate" style={{ color: LOGO_BLUE }}>BPM</span>
-              )
-            ) : (
-              <>
-                {!logoError ? (
-                  <Image
-                    src={logoSrc}
-                    alt="Blueprint Modular"
-                    width={300}
-                    height={100}
-                    className="h-[6.25rem] w-auto object-contain"
-                    priority
-                    onError={handleLogoError}
-                  />
-                ) : null}
-                <span className="font-bold text-xl tracking-tight">
-                  <span style={{ color: LOGO_BLUE }}>Blueprint</span>
-                  <span style={{ color: LOGO_CYAN }}> Modular</span>
-                </span>
-              </>
-            )}
-          </Link>
+        {/* Header : titre .Modular à gauche + collapse à droite (style .Maker) */}
+        <div className={`flex items-center shrink-0 px-3 pt-6 pb-4 ${collapsed ? "justify-center min-h-[2.5rem]" : "justify-between gap-2 min-h-[2.5rem]"}`}>
+          {!collapsed && (
+            <Link
+              href="/dashboard"
+              className="flex items-center min-w-0 flex-1 text-left font-semibold text-[1.25rem] truncate transition-opacity duration-150"
+              style={{ color: "var(--bpm-sidebar-text)" }}
+            >
+              <span className="truncate">.Modular</span>
+            </Link>
+          )}
           <button
             type="button"
-            className="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--bpm-sidebar-hover-bg)] transition opacity-0 group-hover:opacity-100 focus:opacity-100 focus-visible:opacity-100 duration-200"
+            className={`flex items-center justify-center w-8 h-8 shrink-0 rounded-md transition-all duration-150 hover:bg-[var(--bpm-sidebar-hover-bg)] ${sidebarHovered || collapsed ? "opacity-100" : "opacity-0 focus:opacity-100 focus-visible:opacity-100"}`}
             style={{ color: "var(--bpm-sidebar-text)" }}
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Ouvrir" : "Réduire"}
           >
-            <ChevronLeft className={`w-5 h-5 transition-transform ${collapsed ? "rotate-180" : ""}`} />
+            <ChevronLeft className={`w-5 h-5 transition-transform duration-200 ${collapsed ? "rotate-180" : ""}`} />
           </button>
         </div>
 
-        {/* Navigation principale */}
-        <nav className="flex-1 overflow-y-auto p-3 pt-10 space-y-0.5" aria-label="Navigation principale">
-          {!collapsed && (
-            <span className="block text-xs font-normal uppercase tracking-wider mb-2 px-3" style={{ color: "var(--bpm-sidebar-text-muted)" }}>
-              Navigation
-            </span>
-          )}
+        {/* Liens principaux (sans en-tête "Navigation") */}
+        <nav className="flex-1 overflow-y-auto p-3 pt-2 space-y-0.5" aria-label="Navigation principale">
           {navItems.map((item) => (
             <NavIcon key={item.href} href={item.href} label={item.label} icon={item.icon} />
           ))}
@@ -222,7 +179,7 @@ export function Sidebar() {
         <div className="p-3 border-t shrink-0 space-y-2" style={{ borderColor: "var(--bpm-sidebar-border)" }}>
           <button
             type="button"
-            className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[var(--bpm-sidebar-hover-bg)] transition"
+            className="flex items-center gap-3 w-full px-3 py-2 rounded-md hover:bg-[var(--bpm-sidebar-hover-bg)] transition-[background-color] duration-150 ease-out"
             style={{ color: "var(--bpm-sidebar-text)" }}
             onClick={toggleTheme}
           >
@@ -256,7 +213,7 @@ export function Sidebar() {
                 <button
                   type="button"
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="w-full px-3 py-2.5 rounded-lg text-sm font-normal transition border"
+                  className="w-full px-3 py-2.5 rounded-md text-sm font-normal transition-[background-color,border-color] duration-150 ease-out border"
                   style={{
                     color: "var(--bpm-sidebar-text)",
                     background: "var(--bpm-bg-primary)",

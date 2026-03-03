@@ -14,13 +14,13 @@
   --bpm-color-link-hover: #0082b8;
   --bpm-accent-mint: #45d09e;
   --bpm-accent-light: #b2ebf2;
-  /* Sidebar : style myportfolio BEAM (gris très clair, bordure discrète, lien actif gris) */
-  --bpm-sidebar-bg: #f8f8f8;
-  --bpm-sidebar-text: #333;
-  --bpm-sidebar-text-muted: #666;
-  --bpm-sidebar-border: rgb(237, 237, 237);
-  --bpm-sidebar-active-bg: #e0e0e0;
-  --bpm-sidebar-hover-bg: rgb(235, 235, 235);
+  /* Sidebar : aligné .Maker (gris #f7f7f7, bordure rgba, texte rgb(61,61,58)) */
+  --bpm-sidebar-bg: #f7f7f7;
+  --bpm-sidebar-text: rgb(61, 61, 58);
+  --bpm-sidebar-text-muted: rgb(138, 137, 132);
+  --bpm-sidebar-border: rgba(31, 30, 29, 0.2);
+  --bpm-sidebar-active-bg: #e8e8e8;
+  --bpm-sidebar-hover-bg: #ebebeb;
   --bpm-sidebar-logout-border: #cccccc;
   --bpm-border: rgb(237, 237, 237);
   --bpm-code-bg: #f5f5f5;
@@ -99,8 +99,8 @@ body {
   --bpm-sidebar-width: 0;
 }
 @media (min-width: 768px) {
-  .app-layout-root[data-sidebar-collapsed="true"] { --bpm-sidebar-width: 4rem; }
-  .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 16rem; }
+  .app-layout-root[data-sidebar-collapsed="true"] { --bpm-sidebar-width: 56px; }
+  .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 220px; }
 }
 :root {
   --bpm-secondary-sidebar-width: 220px;

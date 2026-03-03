@@ -3,7 +3,13 @@ import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 
+// Alias @ vers racine du repo pour que les composants bpm qui importent @/lib, @/hooks, etc. résolvent au build.
+const repoRoot = resolve(__dirname, '../..')
+
 export default defineConfig({
+  resolve: {
+    alias: { '@': repoRoot },
+  },
   plugins: [
     react(),
     dts({ insertTypesEntry: true }),

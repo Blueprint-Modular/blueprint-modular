@@ -34,11 +34,21 @@ export async function POST(req: Request) {
             }
           }
         } else {
-          await builderAI.stream(description, (chunk) => {
-            controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ type: "chunk", t: chunk })}\n\n`)
-            );
-          });
+          await builderAI.stream(
+            description,
+            (chunk) => {
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ type: "chunk", t: chunk })}\n\n`)
+              );
+            },
+            {
+              onSpec: (spec) => {
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ type: "spec", spec })}\n\n`)
+                );
+              },
+            }
+          );
         }
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`)

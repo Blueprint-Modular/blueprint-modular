@@ -13,7 +13,9 @@
     "jsx": "react-jsx",
     "strict": true,
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "baseUrl": ".",
+    "paths": { "@/*": ["../../*"] }
   },
   "include": ["src"]
 }

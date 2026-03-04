@@ -100,8 +100,8 @@ body {
 }
 /* Sidebar en overlay : le corps garde toujours la place de la sidebar fermée (56px), la sidebar ouverte s’affiche par-dessus */
 @media (min-width: 768px) {
-  .app-layout-root[data-sidebar-collapsed="true"],
-  .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 56px; }
+  .app-layout-root[data-sidebar-collapsed="true"] { --bpm-sidebar-width: 56px; }
+  .app-layout-root[data-sidebar-collapsed="false"] { --bpm-sidebar-width: 220px; }
 }
 :root {
   --bpm-secondary-sidebar-width: 220px;

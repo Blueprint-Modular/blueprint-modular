@@ -88,22 +88,32 @@ import {
 } from "../../../components/bpm";
 
 export type { CrudPageProps, CrudColumn, CrudField } from "../../../components/bpm";
+export type { TableColumn, TableProps as TablePropsBpm } from "../../../components/bpm/Table";
+import type { TableColumn as TableColumnType } from "../../../components/bpm/Table";
+export type { TabsProps, TabItem, TabsItems } from "../../../components/bpm/Tabs";
+import type { TabsItems } from "../../../components/bpm/Tabs";
+export type { MetricProps as MetricPropsBpm } from "../../../components/bpm/Metric";
+export type { SpinnerProps as SpinnerPropsBpm, SpinnerSize } from "../../../components/bpm/Spinner";
 
-// --- Types locaux (Page, Title, Metric, Table, Chat) avec props sémantiques optionnelles ---
+/** Wrapper : (props) => createElement(Component, props) — API toujours en objet */
+function wrap<P extends object>(Component: React.ComponentType<P>) {
+  return (props: P) => React.createElement(Component, props);
+}
 
-interface PageProps {
+// --- Types locaux (Page, Title, Metric, Table, Chat) — API explicite en objet ---
+
+export interface PageProps {
   children: React.ReactNode;
 }
 
-interface TitleProps {
+export interface TitleProps {
   children: React.ReactNode;
 }
 
-interface MetricProps {
+export interface MetricProps {
   label: string;
   value: number | string;
   delta?: number | string;
-  /** Sémantique Mind v0 — optionnel */
   semantic?: string;
   domain?: string;
   threshold?: number;
@@ -111,9 +121,12 @@ interface MetricProps {
   direction?: "higher_is_better" | "lower_is_better";
 }
 
-interface TableProps {
+export interface TableProps {
+  columns?: TableColumnType[];
   data: Record<string, unknown>[];
-  /** Sémantique Mind v0 — optionnel */
+  onRowClick?: (row: Record<string, unknown>) => void;
+  searchable?: boolean;
+  pagination?: boolean;
   semantic?: string;
   domain?: string;
 }
@@ -184,9 +197,12 @@ function Metric({
   );
 }
 
-function Table({ data }: TableProps) {
+function Table({ data, columns: _columns }: TableProps) {
   if (!data?.length) return null;
-  const cols = Object.keys(data[0]);
+  const keys = Object.keys(data[0]);
+  const cols = _columns?.length
+    ? _columns.map((c) => ({ key: c.key, label: c.label ?? c.key }))
+    : keys.map((key) => ({ key, label: key }));
   return (
     <table
       style={{
@@ -199,7 +215,7 @@ function Table({ data }: TableProps) {
         <tr>
           {cols.map((c) => (
             <th
-              key={c}
+              key={c.key}
               style={{
                 textAlign: "left",
                 padding: "0.5rem 0.75rem",
@@ -209,7 +225,7 @@ function Table({ data }: TableProps) {
                 fontWeight: 600,
               }}
             >
-              {c}
+              {c.label}
             </th>
           ))}
         </tr>
@@ -219,13 +235,13 @@ function Table({ data }: TableProps) {
           <tr key={i} style={{ borderBottom: "1px solid #f1f5f9" }}>
             {cols.map((c) => (
               <td
-                key={c}
+                key={c.key}
                 style={{
                   padding: "0.5rem 0.75rem",
                   fontSize: "0.9rem",
                 }}
               >
-                {String(row[c] ?? "")}
+                {String(row[c.key] ?? "")}
               </td>
             ))}
           </tr>
@@ -364,90 +380,111 @@ function Chat({
   );
 }
 
-// --- Export bpm unifié (70 composants) ---
+/** Normalise page(arg) : accepte { children } ou children directement (rétrocompat) */
+function normalizePageArg(arg: PageProps | React.ReactNode): PageProps {
+  if (arg !== null && typeof arg === "object" && !React.isValidElement(arg) && "children" in arg) {
+    return arg as PageProps;
+  }
+  return { children: arg as React.ReactNode };
+}
+
+/** Normalise tabs(arg) : accepte { tabs, defaultTab? } ou tableau (rétrocompat) */
+function normalizeTabsArg(
+  arg: React.ComponentProps<typeof Tabs> | TabsItems
+): React.ComponentProps<typeof Tabs> {
+  if (Array.isArray(arg)) {
+    return { tabs: arg };
+  }
+  if (arg !== null && typeof arg === "object" && "tabs" in arg) {
+    return arg as React.ComponentProps<typeof Tabs>;
+  }
+  return { tabs: [] };
+}
+
+// --- Export bpm unifié : API toujours (props: objet) => ReactNode ---
 export const bpm = {
-  page: Page,
-  title: Title,
-  title1: Title1,
-  title2: Title2,
-  title3: Title3,
-  title4: Title4,
-  metric: Metric,
-  table: Table,
-  chat: Chat,
-  accordion: Accordion,
-  altairChart: AltairChart,
-  areaChart: AreaChart,
-  assistantPanel: AssistantPanel,
-  audio: Audio,
-  autocomplete: Autocomplete,
-  avatar: Avatar,
-  badge: Badge,
-  barChart: BarChart,
-  barcode: Barcode,
-  breadcrumb: Breadcrumb,
-  button: Button,
-  caption: Caption,
-  card: Card,
-  checkbox: Checkbox,
-  chip: Chip,
-  codeBlock: CodeBlock,
-  crud: CrudPage,
-  colorPicker: ColorPicker,
-  column: Column,
-  container: Container,
-  dateInput: DateInput,
-  dateRangePicker: DateRangePicker,
-  divider: Divider,
-  drawer: Drawer,
-  empty: Empty,
-  emptyState: EmptyState,
-  expander: Expander,
-  fab: FAB,
-  fileUploader: FileUploader,
-  grid: Grid,
-  highlightBox: HighlightBox,
-  html: Html,
-  image: Image,
-  input: Input,
-  jsonViewer: JsonViewer,
-  lineChart: LineChart,
-  loadingBar: LoadingBar,
-  map: Map,
-  markdown: Markdown,
-  message: Message,
-  modal: Modal,
-  numberInput: NumberInput,
-  nfcBadge: NfcBadge,
-  offlineIndicator: OfflineIndicator,
-  pagination: Pagination,
-  panel: Panel,
-  pdfViewer: PdfViewer,
-  plotlyChart: PlotlyChart,
-  popover: Popover,
-  progress: Progress,
-  qrCode: QRCode,
-  radioGroup: RadioGroup,
-  rating: Rating,
-  scatterChart: ScatterChart,
-  selectbox: Selectbox,
-  skeleton: Skeleton,
-  slider: Slider,
-  spinner: Spinner,
-  spinnerDot: SpinnerDot,
-  statusBox: StatusBox,
-  stepper: Stepper,
-  tabs: Tabs,
-  text: Text,
-  textarea: Textarea,
-  theme: Theme,
-  timeInput: TimeInput,
-  timeline: Timeline,
-  toast: Toast,
-  tooltip: Tooltip,
-  topNav: TopNav,
-  treeview: Treeview,
-  video: Video,
-  // Title export from bpm (alias pour usage avancé)
-  titleBpm: TitleBpm,
+  page: (arg: PageProps | React.ReactNode) => React.createElement(Page, normalizePageArg(arg)),
+  title: wrap<TitleProps>(Title),
+  title1: wrap(Title1),
+  title2: wrap(Title2),
+  title3: wrap(Title3),
+  title4: wrap(Title4),
+  metric: wrap<MetricProps>(Metric),
+  table: wrap<TableProps>(Table),
+  chat: wrap<ChatProps>(Chat),
+  accordion: wrap(Accordion),
+  altairChart: wrap(AltairChart),
+  areaChart: wrap(AreaChart),
+  assistantPanel: wrap(AssistantPanel),
+  audio: wrap(Audio),
+  autocomplete: wrap(Autocomplete),
+  avatar: wrap(Avatar),
+  badge: wrap(Badge),
+  barChart: wrap(BarChart),
+  barcode: wrap(Barcode),
+  breadcrumb: wrap(Breadcrumb),
+  button: wrap(Button),
+  caption: wrap(Caption),
+  card: wrap(Card),
+  checkbox: wrap(Checkbox),
+  chip: wrap(Chip),
+  codeBlock: wrap(CodeBlock),
+  crud: wrap(CrudPage),
+  colorPicker: wrap(ColorPicker),
+  column: wrap(Column),
+  container: wrap(Container),
+  dateInput: wrap(DateInput),
+  dateRangePicker: wrap(DateRangePicker),
+  divider: wrap(Divider),
+  drawer: wrap(Drawer),
+  empty: wrap(Empty),
+  emptyState: wrap(EmptyState),
+  expander: wrap(Expander),
+  fab: wrap(FAB),
+  fileUploader: wrap(FileUploader),
+  grid: wrap(Grid),
+  highlightBox: wrap(HighlightBox),
+  html: wrap(Html),
+  image: wrap(Image),
+  input: wrap(Input),
+  jsonViewer: wrap(JsonViewer),
+  lineChart: wrap(LineChart),
+  loadingBar: wrap(LoadingBar),
+  map: wrap(Map),
+  markdown: wrap(Markdown),
+  message: wrap(Message),
+  modal: wrap(Modal),
+  numberInput: wrap(NumberInput),
+  nfcBadge: wrap(NfcBadge),
+  offlineIndicator: wrap(OfflineIndicator),
+  pagination: wrap(Pagination),
+  panel: wrap(Panel),
+  pdfViewer: wrap(PdfViewer),
+  plotlyChart: wrap(PlotlyChart),
+  popover: wrap(Popover),
+  progress: wrap(Progress),
+  qrCode: wrap(QRCode),
+  radioGroup: wrap(RadioGroup),
+  rating: wrap(Rating),
+  scatterChart: wrap(ScatterChart),
+  selectbox: wrap(Selectbox),
+  skeleton: wrap(Skeleton),
+  slider: wrap(Slider),
+  spinner: wrap(Spinner),
+  spinnerDot: wrap(SpinnerDot),
+  statusBox: wrap(StatusBox),
+  stepper: wrap(Stepper),
+  tabs: (arg: React.ComponentProps<typeof Tabs> | TabsItems) =>
+    React.createElement(Tabs, normalizeTabsArg(arg)),
+  text: wrap(Text),
+  textarea: wrap(Textarea),
+  theme: wrap(Theme),
+  timeInput: wrap(TimeInput),
+  timeline: wrap(Timeline),
+  toast: wrap(Toast),
+  tooltip: wrap(Tooltip),
+  topNav: wrap(TopNav),
+  treeview: wrap(Treeview),
+  video: wrap(Video),
+  titleBpm: wrap(TitleBpm),
 };

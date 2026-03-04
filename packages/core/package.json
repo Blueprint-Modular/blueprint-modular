@@ -1,6 +1,6 @@
 {
   "name": "@blueprint-modular/core",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Blueprint Modular — composants React pour apps de données",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -10,7 +10,9 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css"
   },
   "files": ["dist/"],
   "scripts": {

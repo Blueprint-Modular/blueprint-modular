@@ -28,6 +28,11 @@ export default defineConfig({
           react: 'React',
           'react-dom': 'ReactDOM',
         },
+        assetFileNames: (assetInfo) => {
+          const name = assetInfo.name || '';
+          if (name.endsWith('.css')) return 'style.css';
+          return '[name].[ext]';
+        },
       },
     },
   },

@@ -1,0 +1,27 @@
+/* Variables BPM — tête du CSS généré (@blueprint-modular/core) */
+:root {
+  --bpm-accent: #2563eb;
+  --bpm-accent-hover: #1d4ed8;
+  --bpm-background: #ffffff;
+  --bpm-surface: #f8fafc;
+  --bpm-border: #e2e8f0;
+  --bpm-text-primary: #0f172a;
+  --bpm-text-secondary: #64748b;
+  --bpm-text-muted: #94a3b8;
+  --bpm-success: #16a34a;
+  --bpm-warning: #d97706;
+  --bpm-error: #dc2626;
+  --bpm-radius: 8px;
+  --bpm-radius-sm: 4px;
+  --bpm-radius-lg: 12px;
+}
+
+[data-theme="dark"] {
+  --bpm-accent: #3b82f6;
+  --bpm-background: #0f172a;
+  --bpm-surface: #1e293b;
+  --bpm-border: #334155;
+  --bpm-text-primary: #f1f5f9;
+  --bpm-text-secondary: #94a3b8;
+  --bpm-text-muted: #94a3b8;
+}

@@ -2,6 +2,8 @@
 
 En prod, **blueprint-modular.com** et **docs.blueprint-modular.com** servent la vitrine et la doc statiques. L’app Next.js (Wiki, Module IA, Documents, doc composants avec sandbox) est servie sur **app.blueprint-modular.com**.
 
+**Changement de serveur / problèmes de transfert, CSS ou code** → voir **[REDEPLOY-NEW-SERVER.md](REDEPLOY-NEW-SERVER.md)** pour tout redéployer sur un nouveau VPS.
+
 ## Prérequis sur le VPS
 
 - **Node.js 20+** et npm (recommandé pour éviter les warnings « Unsupported engine » au build). Si le serveur a encore Node 18 : `bash deploy/upgrade-node-20.sh` (une fois en SSH sur le VPS).

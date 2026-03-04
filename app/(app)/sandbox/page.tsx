@@ -1870,23 +1870,6 @@ function SandboxContent() {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
-                onClick={() =>
-                  setAiDescription(
-                    "Crée un dashboard de suivi de production avec TRS par ligne, évolution sur 30 jours, alertes actives et taux de pertes matière"
-                  )
-                }
-                disabled={aiGenerating}
-                className="px-3 py-2 rounded-lg text-sm font-medium border transition"
-                style={{
-                  borderColor: "var(--bpm-border)",
-                  background: "var(--bpm-bg-secondary)",
-                  color: "var(--bpm-text-primary)",
-                }}
-              >
-                Charger exemple Production
-              </button>
-              <button
-                type="button"
                 onClick={generateFromAI}
                 disabled={aiGenerating || !aiDescription.trim()}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition"

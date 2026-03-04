@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "@/components/ThemeProvider";
-import { Sun, ChevronLeft } from "lucide-react";
+import { Sun } from "lucide-react";
 import { useState } from "react";
 import { SandboxIcon } from "@/components/icons/SandboxIcon";
 import { useSidebar } from "@/contexts/SidebarContext";
@@ -60,6 +60,22 @@ function IconDemo({ className }: { className?: string }) {
   );
 }
 
+/* Flèches ouverture/fermeture sidebar : même forme que .Maker (20×20) */
+function IconSidebarChevronLeft() {
+  return (
+    <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden>
+      <path d="M560-267.69 347.69-480 560-692.31 588.31-664l-184 184 184 184L560-267.69Z" />
+    </svg>
+  );
+}
+function IconSidebarChevronRight() {
+  return (
+    <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden>
+      <path d="m531.69-480-184-184L376-692.31 588.31-480 376-267.69 347.69-296l184-184Z" />
+    </svg>
+  );
+}
+
 const navItems = [
   { href: "/dashboard", label: "Accueil", icon: IconAccueil },
   { href: "/docs/components", label: "Composants", icon: IconComposants },
@@ -90,15 +106,14 @@ export function Sidebar() {
     return (
       <Link
         href={href}
-        className={`flex items-center transition-[background-color,color] duration-150 ease-out ${compact ? "flex-col gap-0.5 py-2 min-w-0 rounded-lg flex-1 basis-0 justify-center" : "gap-2.5 py-2 px-3 rounded-[6px] hover:bg-[var(--bpm-sidebar-hover-bg)] text-[14px]"}`}
-        style={{
-          background: compact ? "transparent" : isActive ? "var(--bpm-sidebar-active-bg)" : "transparent",
-          color: compact ? (isActive ? "var(--bpm-accent-cyan)" : "var(--bpm-sidebar-text)") : "var(--bpm-sidebar-text)",
-        }}
+        className={`bpm-sidebar-item ${compact ? "flex-col gap-0.5 py-2 min-w-0 rounded-lg flex-1 basis-0 justify-center" : ""}`}
+        style={compact ? undefined : { background: isActive ? "var(--bpm-sidebar-active-bg)" : "transparent" }}
         title={compact ? label : undefined}
       >
-        <Icon className="w-5 h-5 shrink-0" />
-        {showLabel && <span className={compact ? "text-xs font-normal truncate max-w-full text-center" : "font-normal truncate"}>{label}</span>}
+        <span className={compact ? "shrink-0" : "bpm-sidebar-icon-wrap"}>
+          <Icon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+        </span>
+        {showLabel && <span className={compact ? "text-xs font-normal truncate max-w-full text-center" : "bpm-sidebar-item-label"}>{label}</span>}
       </Link>
     );
   };
@@ -128,68 +143,57 @@ export function Sidebar() {
       {/* Mobile : barre en bas (grise, style doc) */}
       {mobileNavBar}
 
-      {/* Desktop : sidebar verticale grise à gauche */}
+      {/* Desktop : sidebar verticale (présentation alignée .Maker ; border/background Modular) */}
       <aside
         className={`
-          group bpm-app-sidebar
+          bpm-app-sidebar
           fixed top-0 left-0 z-50 h-full flex flex-col
-          transition-[width] duration-[0.25s] ease-in-out
           hidden md:flex
-          py-3 px-2
-          ${collapsed ? "md:w-[56px]" : "md:w-[220px]"}
+          ${collapsed ? "md:w-[56px] md:min-w-[56px]" : "md:w-[220px] md:min-w-[220px]"}
         `}
         style={{
           background: "var(--bpm-sidebar-bg)",
-          color: "var(--bpm-sidebar-text)",
           borderRight: "1px solid var(--bpm-sidebar-border)",
-          fontWeight: 400,
         }}
         onMouseEnter={() => setSidebarHovered(true)}
         onMouseLeave={() => setSidebarHovered(false)}
       >
-        {/* Header : titre .Modular + collapse (aligné .Maker : même gauche que les items, 25px, espace sous le titre) */}
-        <div className={`flex items-center shrink-0 pt-1 min-h-[40px] ${collapsed ? "justify-center pb-2" : "justify-between gap-2 pl-3 pr-0 pb-4"}`}>
+        <div className="bpm-sidebar-toggle-row shrink-0">
           {!collapsed && (
-            <Link
-              href="/dashboard"
-              className="flex items-center min-w-0 flex-1 text-left font-semibold text-[25px] leading-tight truncate transition-opacity duration-150"
-              style={{ color: "var(--bpm-sidebar-text)" }}
-            >
-              <span className="truncate">.Modular</span>
+            <Link href="/dashboard" className="bpm-sidebar-title">
+              <span className="bpm-sidebar-item-label">.Modular</span>
             </Link>
           )}
           <button
             type="button"
-            className={`flex items-center justify-center w-8 h-8 shrink-0 rounded-[6px] transition-all duration-150 hover:bg-[var(--bpm-sidebar-hover-bg)] ${sidebarHovered ? "opacity-100" : "opacity-0 focus:opacity-100 focus-visible:opacity-100"}`}
-            style={{ color: "var(--bpm-sidebar-text)" }}
+            className={`bpm-sidebar-toggle-btn ${sidebarHovered ? "bpm-sidebar-toggle-btn-visible" : ""} focus:opacity-100 focus-visible:opacity-100`}
             onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Ouvrir" : "Réduire"}
+            aria-label={collapsed ? "Ouvrir le menu" : "Réduire le menu"}
           >
-            <ChevronLeft className={`w-5 h-5 transition-transform duration-200 ${collapsed ? "rotate-180" : ""}`} />
+            {collapsed ? <IconSidebarChevronRight /> : <IconSidebarChevronLeft />}
           </button>
         </div>
 
-        {/* Liens principaux (aligné .Maker : gap 2px entre items, padding 8px 12px, 10px entre icône et texte) */}
-        <nav className="flex-1 overflow-y-auto flex flex-col gap-0.5 min-h-0" aria-label="Navigation principale">
+        <nav className="bpm-sidebar-nav" aria-label="Navigation principale">
           {navItems.map((item) => (
             <NavIcon key={item.href} href={item.href} label={item.label} icon={item.icon} />
           ))}
         </nav>
 
-        {/* Bas : thème, utilisateur, déconnexion */}
-        <div className="pt-3 pb-2 px-2 border-t shrink-0 space-y-2" style={{ borderColor: "var(--bpm-sidebar-border)" }}>
+        <div className="bpm-sidebar-footer-wrap border-t shrink-0 space-y-2" style={{ borderColor: "var(--bpm-sidebar-border)" }}>
           <button
             type="button"
-            className="flex items-center gap-2.5 w-full py-2 px-3 rounded-[6px] hover:bg-[var(--bpm-sidebar-hover-bg)] transition-[background-color] duration-150 ease-out text-[14px]"
-            style={{ color: "var(--bpm-sidebar-text)" }}
+            className="bpm-sidebar-item w-full"
             onClick={toggleTheme}
           >
-            {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <IconThemeDark className="w-5 h-5 shrink-0" />}
-            {!collapsed && <span className="text-sm truncate">Thème</span>}
+            <span className="bpm-sidebar-icon-wrap">
+              {theme === "dark" ? <Sun style={{ width: 20, height: 20 }} /> : <IconThemeDark className="w-5 h-5" style={{ width: 20, height: 20 }} />}
+            </span>
+            <span className="bpm-sidebar-item-label">Thème</span>
           </button>
           {session?.user && (
             <>
-              <div className="flex items-center gap-3 px-1 py-1">
+              <div className="flex items-center gap-3 px-1 py-1" data-sidebar-user>
                 {session.user.image ? (
                   <Image src={session.user.image} alt="" width={32} height={32} className="w-8 h-8 rounded-full shrink-0 border-2" style={{ borderColor: "var(--bpm-sidebar-border)" }} />
                 ) : (
@@ -199,7 +203,7 @@ export function Sidebar() {
                 )}
                 {!collapsed && (
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold truncate" style={{ color: "var(--bpm-sidebar-text)" }}>
+                    <p className="text-sm font-bold truncate bpm-sidebar-item-label">
                       {session.user.name ?? "Utilisateur"}
                     </p>
                     {session.user.email && (

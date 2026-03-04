@@ -1,8 +1,9 @@
-# Deploiement sur le VPS OVH depuis Windows.
-# Prerequis : repo clone sur le VPS dans /home/ubuntu/blueprint-modular.
+# Deploiement sur le VPS depuis Windows.
+# Prerequis : repo clone sur le VPS dans /home/ubuntu/blueprint-modular (ou VPS_REMOTE_DIR).
 # Usage: .\scripts\deploy-vps-remote.ps1
-# Ou: .\scripts\deploy-vps-remote.ps1 -VpsHost 145.239.199.236 -User ubuntu
-# Voir COMMIT_DEPLOY.md pour la procedure complete.
+# Nouveau serveur : .\scripts\deploy-vps-remote.ps1 -VpsHost NOUVELLE_IP
+# Ou : $env:VPS_HOST = "NOUVELLE_IP"; .\scripts\deploy-vps-remote.ps1
+# Redéploiement complet (transfert, CSS, code) : voir deploy/REDEPLOY-NEW-SERVER.md
 
 param(
     [string]$VpsHost = $env:VPS_HOST,
@@ -11,14 +12,24 @@ param(
     [string]$RemoteDir = $env:VPS_REMOTE_DIR
 )
 
-# Valeurs par defaut pour le VPS OVH
-if (-not $VpsHost) { $VpsHost = "145.239.199.236" }
+# Valeurs par defaut
+if (-not $VpsHost) { $VpsHost = "51.83.88.18" }
 if (-not $User) { $User = "ubuntu" }
 if (-not $RemoteDir) { $RemoteDir = "/home/ubuntu/blueprint-modular" }
-if (-not $KeyPath) { $KeyPath = Join-Path $env:USERPROFILE ".ssh\portfolio_beam_key" }
+$SshDir = Join-Path $env:USERPROFILE ".ssh"
+if (-not $KeyPath) {
+    $candidates = @(
+        (Join-Path $SshDir "id_ed25519"),
+        (Join-Path $SshDir "id_rsa"),
+        (Join-Path $SshDir "portfolio_beam_key")
+    )
+    foreach ($k in $candidates) {
+        if (Test-Path $k) { $KeyPath = $k; break }
+    }
+}
 
 $SshArgs = @()
-if (Test-Path $KeyPath) { $SshArgs += "-i", $KeyPath }
+if ($KeyPath -and (Test-Path $KeyPath)) { $SshArgs += "-i", $KeyPath }
 $SshTarget = "${User}@${VpsHost}"
 
 # Deploy = fetch + reset --hard (ignore les modifs locales sur le VPS) + deploy-from-git.sh

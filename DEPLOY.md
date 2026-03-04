@@ -8,6 +8,7 @@
 | **Migration Prisma** | Sur le **VPS** (où `DATABASE_URL` est défini) : exécutée automatiquement par `deploy-from-git.sh` lors du déploiement. Sinon à la main : `npx prisma migrate deploy`. |
 | **Publication PyPI** | `git tag vX.Y.Z` puis `git push origin vX.Y.Z`. Incrémenter si version déjà sur PyPI. |
 | **Déploiement de l’app** | 1) Push sur `master`. 2) Depuis Windows : `.\scripts\deploy-vps-remote.ps1` — ou sur le VPS : `git pull && ./deploy/deploy-from-git.sh`. Vitrine + doc + build Next.js + Prisma migrate + PM2. |
+| **Nouveau serveur / redéploiement complet** | Voir **deploy/REDEPLOY-NEW-SERVER.md** (transfert, CSS, build, PM2). |
 
 ---
 

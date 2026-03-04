@@ -12,6 +12,7 @@
     "postinstall": "prisma generate --schema=prisma/schema.prisma",
     "generate:components": "python scripts/generate-bpm-components-json.py",
     "deploy": "echo 'Deploy: run .\\\\scripts\\\\deploy-vps-remote.ps1 from PowerShell (VPS only, no Vercel)'",
+    "publish:core": "npm run build --prefix packages/core && npm publish --access public --prefix packages/core",
     "version:sync": "node scripts/sync-version.js",
     "build:modules-bundle": "node scripts/build-modules-bundle.cjs",
     "seed:wiki": "node prisma/seed-wiki-procedures.cjs",

@@ -102,25 +102,23 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
       data-sidebar-collapsed={collapsed ? "true" : "false"}
       data-secondary-sidebar-open={secondarySidebarMargin ? "true" : "false"}
     >
-      {/* Bande grise à gauche : largeur = sidebar (64 ou 16) pour éviter bande blanche quand réduite */}
+      {/* Bande grise à gauche : largeur fixe 56px (sidebar fermée), la sidebar ouverte recouvre le corps */}
       <div
-        className={`hidden md:block fixed top-0 left-0 bottom-0 -z-10 transition-[width] duration-200 ease-in-out ${collapsed ? "w-16" : "w-64"}`}
+        className="hidden md:block fixed top-0 left-0 bottom-0 w-14 -z-10"
         style={{ background: "var(--bpm-sidebar-bg)" }}
         aria-hidden
       />
       <Sidebar />
-      {/* Sidebar secondaire : décalée à droite de la sidebar principale (transition synchronisée) */}
+      {/* Sidebar secondaire : marge fixe 56px (sidebar principale en overlay) */}
       {showSecondarySidebar && domainId && (
         <div
-          className={`asset-manager-sidebar-outer hidden md:block overflow-hidden transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"} ${secondarySidebarMargin ? "asset-manager-sidebar-outer--open" : ""}`}
+          className={`asset-manager-sidebar-outer hidden md:block overflow-hidden transition-[margin-left] duration-200 ease-in-out md:ml-14 ${secondarySidebarMargin ? "asset-manager-sidebar-outer--open" : ""}`}
           aria-hidden={!sidebarOpen}
         >
           <AssetManagerSidebar domainId={domainId} />
         </div>
       )}
-      <div
-        className={`app-content-column flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-in-out ${collapsed ? "md:ml-16" : "md:ml-64"}`}
-      >
+      <div className="app-content-column flex-1 flex flex-col min-h-screen md:ml-14">
           <header
             className="pwa-title-bar sticky top-0 z-30 max-md:z-50 flex h-14 shrink-0 items-center justify-end px-3 sm:px-4 gap-2"
             style={{ background: "var(--bpm-bg-primary)" }}

@@ -187,7 +187,7 @@ export function Sidebar() {
             onClick={toggleTheme}
           >
             <span className="bpm-sidebar-icon-wrap">
-              {theme === "dark" ? <Sun style={{ width: 20, height: 20 }} /> : <IconThemeDark className="w-5 h-5" style={{ width: 20, height: 20 }} />}
+              {theme === "dark" ? <Sun className="w-5 h-5" /> : <IconThemeDark className="w-5 h-5" />}
             </span>
             <span className="bpm-sidebar-item-label">Thème</span>
           </button>

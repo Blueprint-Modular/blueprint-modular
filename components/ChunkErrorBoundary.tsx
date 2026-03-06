@@ -51,22 +51,39 @@ export class ChunkErrorBoundary extends React.Component<Props, State> {
           <p style={{ color: "var(--bpm-text-secondary)", marginBottom: 16, maxWidth: 400 }}>
             Cette page a peut-être été mise à jour. Rechargez la page pour charger la dernière version.
           </p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            style={{
-              padding: "10px 20px",
-              background: "var(--bpm-accent-cyan)",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            Recharger la page
-          </button>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              style={{
+                padding: "10px 20px",
+                background: "var(--bpm-accent-cyan)",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Recharger la page
+            </button>
+            <button
+              type="button"
+              onClick={() => this.setState({ hasError: false, isChunkError: false })}
+              style={{
+                padding: "10px 20px",
+                background: "transparent",
+                color: "var(--bpm-text-secondary)",
+                border: "1px solid var(--bpm-border)",
+                borderRadius: 8,
+                fontSize: 14,
+                cursor: "pointer",
+              }}
+            >
+              Continuer quand même
+            </button>
+          </div>
         </div>
       );
     }

@@ -5,9 +5,13 @@ import dynamic from "next/dynamic";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export interface PlotlyChartProps {
+  /** Tableau de traces Plotly (ex. [{type:'bar', x:[], y:[]}]). Obligatoire. */
   data?: object[];
+  /** Config layout Plotly (title, xaxis, yaxis, etc.). */
   layout?: object;
+  /** Config Plotly (responsive, displayModeBar, etc.). */
   config?: object;
+  /** Hauteur en pixels. Default: 400. */
   height?: number;
   width?: number | string;
   className?: string;

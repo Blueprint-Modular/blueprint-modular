@@ -6,9 +6,13 @@ import { createPortal } from "react-dom";
 export type SelectboxOption = string | { value: string; label: string };
 
 export interface SelectboxProps {
+  /** Label affiché au-dessus. */
   label?: string;
+  /** Liste d'options. Format : string[] ou [{value, label}]. */
   options?: SelectboxOption[];
+  /** Valeur sélectionnée (contrôlé). */
   value?: string | null;
+  /** Callback — reçoit la valeur string sélectionnée. */
   onChange?: (value: string) => void;
   disabled?: boolean;
   help?: string | null;

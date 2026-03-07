@@ -3,11 +3,16 @@
 import React, { useId } from "react";
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> {
+  /** Label affiché au-dessus du champ. */
   label?: string;
+  /** Valeur contrôlée. */
   value?: string;
+  /** Callback — reçoit la valeur string, pas un Event. Ex: (v) => setValue(v) */
   onChange?: (value: string) => void;
   placeholder?: string;
+  /** Type HTML. Default: 'text'. */
   type?: "text" | "email" | "password" | "number" | "search" | "date";
+  /** Désactive le champ. */
   disabled?: boolean;
   className?: string;
 }

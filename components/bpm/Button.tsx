@@ -3,12 +3,18 @@
 import React from "react";
 
 export interface ButtonProps {
+  /** Contenu du bouton — obligatoire. */
   children: React.ReactNode;
+  /** Handler clic. */
   onClick?: () => void;
+  /** Style visuel. Default: 'primary'. */
   variant?: "primary" | "secondary" | "outline";
+  /** Taille. Default: 'medium'. */
   size?: "small" | "medium" | "large";
+  /** Désactive le bouton. */
   disabled?: boolean;
   type?: "button" | "submit";
+  /** Bouton pleine largeur. */
   fullWidth?: boolean;
   className?: string;
 }

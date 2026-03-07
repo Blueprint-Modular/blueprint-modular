@@ -11,6 +11,7 @@
     "lint": "next lint",
     "postinstall": "prisma generate --schema=prisma/schema.prisma",
     "generate:components": "python scripts/generate-bpm-components-json.py",
+    "generate:llms": "python scripts/generate-llms-txt.py",
     "deploy": "echo 'Deploy: run .\\\\scripts\\\\deploy-vps-remote.ps1 from PowerShell (VPS only, no Vercel)'",
     "publish:core": "cd packages/core && npm install && npm run build && npm publish --access public",
     "version:sync": "node scripts/sync-version.js",

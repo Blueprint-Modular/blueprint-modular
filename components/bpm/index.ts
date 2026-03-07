@@ -1,5 +1,7 @@
 export { Metric } from "./Metric";
 export type { MetricProps, MetricValueLocale } from "./Metric";
+export { MetricRow } from "./MetricRow";
+export type { MetricRowProps } from "./MetricRow";
 export { Button } from "./Button";
 export type { ButtonProps } from "./Button";
 export { Panel } from "./Panel";

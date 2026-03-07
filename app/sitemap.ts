@@ -20,6 +20,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/modules/documents`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/modules/notification`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/sandbox`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
-    { url: `${BASE}/settings`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
   ];
 }

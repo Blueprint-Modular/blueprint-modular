@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Boxes, FolderOpen, Sparkles } from "lucide-react";
+import { Boxes, FolderOpen } from "lucide-react";
 import { SandboxIcon } from "@/components/icons/SandboxIcon";
 import { StartBuildingBlock } from "@/components/StartBuildingBlock";
 import type { Metadata } from "next";
@@ -11,12 +11,6 @@ export const metadata: Metadata = {
 };
 
 const quickLinks = [
-  {
-    href: "/settings/wizard",
-    label: "Assistant de configuration",
-    description: "Paramétrer l'app en quelques étapes : thème, couleur, clés API, notifications",
-    icon: Sparkles,
-  },
   {
     href: "/docs/components",
     label: "Composants",

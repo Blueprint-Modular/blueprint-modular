@@ -1,6 +1,6 @@
 {
   "name": "@blueprint-modular/core",
-  "version": "0.1.38",
+  "version": "0.1.43",
   "description": "Blueprint Modular — composants React pour apps de données",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -14,7 +14,10 @@
     "./style.css": "./dist/style.css",
     "./dist/style.css": "./dist/style.css"
   },
-  "files": ["dist/", "USAGE.md"],
+  "files": [
+    "dist/",
+    "USAGE.md"
+  ],
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch"

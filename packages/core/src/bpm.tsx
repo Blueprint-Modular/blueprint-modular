@@ -47,6 +47,7 @@ import {
   Map,
   Markdown,
   Message,
+  MetricRow,
   Modal,
   NumberInput,
   NfcBadge,
@@ -88,6 +89,7 @@ import {
 } from "../../../components/bpm";
 
 export type { CrudPageProps, CrudColumn, CrudField } from "../../../components/bpm";
+export type { MetricRowProps } from "../../../components/bpm";
 export type { TableProps as TablePropsBpm } from "../../../components/bpm/Table";
 
 /** Colonne pour bpm.table — API documentée. */
@@ -100,6 +102,7 @@ export interface TableColumn {
 export type { TabsProps, TabItem, TabsItems } from "../../../components/bpm/Tabs";
 import type { TabsItems } from "../../../components/bpm/Tabs";
 export type { MetricProps as MetricPropsBpm } from "../../../components/bpm/Metric";
+import type { MetricRowProps } from "../../../components/bpm";
 import type { SpinnerProps } from "../../../components/bpm/Spinner";
 export type { SpinnerProps as SpinnerPropsBpm, SpinnerSize } from "../../../components/bpm/Spinner";
 
@@ -418,6 +421,7 @@ export const bpm = {
   title3: wrap(Title3),
   title4: wrap(Title4),
   metric: wrap<MetricProps>(Metric),
+  metricRow: wrap<MetricRowProps>(MetricRow),
   table: wrap<TableProps>(Table),
   chat: wrap<ChatProps>(Chat),
   accordion: wrap(Accordion),

@@ -16,7 +16,7 @@ export default function DocPlotlyPage() {
       </div>
       <div className="sandbox-container">
         <div className="sandbox-preview">
-          <PlotlyChart width={400} height={300} />
+          <PlotlyChart width="400px" height={300} />
         </div>
         <div className="sandbox-code">
           <pre><code>{'bpm.plotly(iframe_src="...")  # ou sans iframe_src = placeholder'}</code></pre>

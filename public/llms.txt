@@ -64,7 +64,7 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 
 ### bpm.badge
 ```
-  children*: React.ReactNode
+  children*: React.ReactNode  — PARENT: bpm.table (colonne statut) | bpm.metric | bpm.card. INTERDIT: texte long >20 chars — utiliser bpm.chip. ASSOCIÉ: bpm.table, bpm.metric, bpm.statusBox.
   variant?: BadgeVariant  — Style / couleur du badge. Valeurs : 'default' | 'primary' | 'success' | 'warning' | 'error'. Default: 'default'.
   className?: string
 ```
@@ -393,7 +393,7 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
 
 ### bpm.panel
 ```
-  variant?: "info" | "success" | "warning" | "error"
+  variant?: "info" | "success" | "warning" | "error"  — PARENT: page directe | bpm.grid | bpm.tabs (contenu onglet). INTERDIT: bpm.panel imbriqué trop profond (max 2 niveaux). ASSOCIÉ: bpm.title, bpm.metric, bpm.table, bpm.plotlyChart.
   title?: string | null
   icon?: string | null | false
   inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style zone type Executive Summary).

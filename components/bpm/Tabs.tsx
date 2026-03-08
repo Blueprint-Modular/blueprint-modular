@@ -11,7 +11,9 @@ export interface TabItem {
 export type TabsItems = (string | TabItem)[];
 
 export interface TabsProps {
+  /** Onglets : tableau de { label, content } ou chaînes (label uniquement). */
   tabs?: TabsItems;
+  /** Index de l'onglet actif au montage. Default: 0. */
   defaultTab?: number;
   onChange?: (index: number) => void;
   className?: string;

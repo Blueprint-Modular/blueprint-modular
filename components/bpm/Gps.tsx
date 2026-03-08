@@ -21,11 +21,11 @@ export interface GpsProps {
   /** Hauteur de la carte en px. Default: 300. */
   height?: number;
   className?: string;
-  /** display = affichage position, picker = sélection d'un point sur la carte. Default: "display". */
+  /** Mode : 'display' = affichage position, 'picker' = sélection d'un point sur la carte. Default: 'display'. */
   mode?: "display" | "picker";
   /** Position courante (mode picker). */
   value?: { lat: number; lng: number } | null;
-  /** Callback à chaque déplacement du marker (mode picker). */
+  /** Callback à chaque déplacement du marker ou clic sur la carte (mode picker). */
   onChange?: (coords: { lat: number; lng: number }) => void;
 }
 

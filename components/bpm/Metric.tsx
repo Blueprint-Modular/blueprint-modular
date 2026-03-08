@@ -7,8 +7,11 @@ import { useBPMContext } from "@/lib/ai/context";
 export type MetricValueLocale = "fr-FR" | "en-US" | "de-DE" | string;
 
 export interface MetricProps {
+  /** Libellé affiché au-dessus de la valeur. */
   label: string;
+  /** Valeur principale (string ou number). */
   value: string | number;
+  /** Variation affichée. Format string (ex. "+12%") ou number. */
   delta?: number | string | null;
   /** Nom optionnel pour référencer la métrique dans le chat IA : $metric:name ou @name */
   name?: string | null;

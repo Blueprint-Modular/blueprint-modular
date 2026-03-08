@@ -6,6 +6,7 @@ export type BadgeVariant = "default" | "primary" | "success" | "warning" | "erro
 
 export interface BadgeProps {
   children: React.ReactNode;
+  /** Style / couleur du badge. Valeurs : 'default' | 'primary' | 'success' | 'warning' | 'error'. Default: 'default'. */
   variant?: BadgeVariant;
   className?: string;
 }

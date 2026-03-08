@@ -7,7 +7,7 @@ export interface PaginationProps {
   page: number;
   /** Nombre total de pages. */
   totalPages: number;
-  /** Callback au changement de page. */
+  /** Callback au changement de page. Reçoit le numéro de page. */
   onPageChange: (page: number) => void;
   /** Taille de page (optionnel, pour affichage). */
   pageSize?: number;

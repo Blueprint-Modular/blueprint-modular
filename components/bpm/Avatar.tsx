@@ -5,20 +5,24 @@ import React, { useRef, useState } from "react";
 export type AvatarSize = "small" | "medium" | "large";
 
 export interface AvatarProps {
+  /** URL de l'image de l'avatar. */
   src?: string | null;
+  /** Texte alternatif (accessibilité). */
   alt?: string;
+  /** Initiales affichées si pas d'image. Ex. "JD". */
   initials?: string;
+  /** Taille de l'avatar. Valeurs : 'small' | 'medium' | 'large'. Default: 'medium'. */
   size?: AvatarSize;
   className?: string;
-  /** Affiche l'avatar dans un bloc type sidebar : avatar + name + subtitle, optionnellement bouton déconnexion */
+  /** Affiche l'avatar dans un bloc type sidebar : avatar + name + subtitle, optionnellement bouton déconnexion. Valeurs : 'default' | 'sidebar'. Default: 'default'. */
   variant?: "default" | "sidebar";
-  /** Nom affiché à côté de l'avatar (variant sidebar) */
+  /** Nom affiché à côté de l'avatar (variant sidebar). */
   name?: string;
-  /** Sous-titre (ex. email) sous le nom (variant sidebar) */
+  /** Sous-titre (ex. email) sous le nom (variant sidebar). */
   subtitle?: string;
-  /** Callback déconnexion (variant sidebar) ; si fourni, affiche un bouton */
+  /** Callback déconnexion (variant sidebar) ; si fourni, affiche un bouton. */
   onLogout?: () => void;
-  /** Libellé du bouton déconnexion (variant sidebar) */
+  /** Libellé du bouton déconnexion (variant sidebar). Default: 'Se déconnecter'. */
   logoutLabel?: string;
   /** Active le mode édition : overlay crayon au survol, file picker au clic. */
   editable?: boolean;

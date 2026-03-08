@@ -62,6 +62,9 @@ import {
   QRCode,
   Rating,
   FileUploader,
+  Video,
+  Audio,
+  Gps,
 } from "@/components/bpm";
 
 const DEMO_CARD_STYLE: React.CSSProperties = {
@@ -112,10 +115,19 @@ export default function ComponentsPage() {
   const [inputValue, setInputValue] = useState("");
   const [selectValue, setSelectValue] = useState<string | null>("Actif");
   const [tabIndex, setTabIndex] = useState(0);
+  const [textareaVal, setTextareaVal] = useState("");
+  const [numberVal, setNumberVal] = useState<number | null>(0);
+  const [checkboxVal, setCheckboxVal] = useState(false);
+  const [dateVal, setDateVal] = useState<Date | string | null>(null);
+  const [autocompleteVal, setAutocompleteVal] = useState("");
+  const [stepperStep, setStepperStep] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ratingVal, setRatingVal] = useState(4);
+  const [gpsPickerVal, setGpsPickerVal] = useState<{ lat: number; lng: number } | null>(null);
 
   return (
-    <div style={{ background: "#f8fafc", minHeight: "100vh", paddingBottom: 80 }}>
-      {/* Header fixe */}
+    <div style={{ background: "#f8fafc", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
+      {/* Header fixe — paddingTop sur le container pour ne pas couvrir le contenu sur mobile */}
       <header
         style={{
           position: "sticky",
@@ -148,6 +160,8 @@ export default function ComponentsPage() {
           display: "flex",
           flexWrap: "wrap",
           gap: 8,
+          overflowX: "auto",
+          whiteSpace: "nowrap",
         }}
       >
         {SECTIONS.map((s) => (
@@ -170,6 +184,7 @@ export default function ComponentsPage() {
           maxWidth: 1200,
           margin: "0 auto",
           padding: "24px 16px",
+          paddingTop: 16,
         }}
       >
         {/* SECTION 1 — Typographie */}
@@ -235,7 +250,9 @@ export default function ComponentsPage() {
               <Spinner size="medium" />
             </DemoCard>
             <DemoCard label="bpm.skeleton">
-              <Skeleton width={200} height={20} />
+              <div style={{ width: "100%", maxWidth: 400 }}>
+                <Skeleton width={200} height={20} />
+              </div>
             </DemoCard>
             <DemoCard label="bpm.highlightBox" wide>
               <HighlightBox
@@ -267,12 +284,12 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.textarea">
               <Textarea
                 label="Description"
-                value=""
-                onChange={() => {}}
+                value={textareaVal}
+                onChange={setTextareaVal}
               />
             </DemoCard>
             <DemoCard label="bpm.numberInput">
-              <NumberInput label="Quantité" value={0} onChange={() => {}} />
+              <NumberInput label="Quantité" value={numberVal} onChange={setNumberVal} />
             </DemoCard>
             <DemoCard label="bpm.selectbox">
               <Selectbox
@@ -283,7 +300,7 @@ export default function ComponentsPage() {
               />
             </DemoCard>
             <DemoCard label="bpm.checkbox">
-              <Checkbox label="J'accepte les conditions" checked={false} onChange={() => {}} />
+              <Checkbox label="J'accepte les conditions" checked={checkboxVal} onChange={setCheckboxVal} />
             </DemoCard>
             <DemoCard label="bpm.toggle">
               <Toggle
@@ -314,7 +331,7 @@ export default function ComponentsPage() {
               />
             </DemoCard>
             <DemoCard label="bpm.dateInput">
-              <DateInput label="Date de livraison" value={null} onChange={() => {}} />
+              <DateInput label="Date de livraison" value={dateVal} onChange={setDateVal} />
             </DemoCard>
             <DemoCard label="bpm.colorPicker">
               <ColorPicker
@@ -331,8 +348,8 @@ export default function ComponentsPage() {
                   { value: "Lyon", label: "Lyon" },
                   { value: "Marseille", label: "Marseille" },
                 ]}
-                value=""
-                onChange={() => {}}
+                value={autocompleteVal}
+                onChange={setAutocompleteVal}
               />
             </DemoCard>
           </Grid>
@@ -358,11 +375,17 @@ export default function ComponentsPage() {
               </Container>
             </DemoCard>
             <DemoCard label="bpm.grid + bpm.metric" wide>
-              <Grid cols={3} gap={16}>
-                <Metric label="CA" value="142 500 €" />
-                <Metric label="Commandes" value="1 284" />
-                <Metric label="Clients" value="342" />
-              </Grid>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                <div style={{ minWidth: 120, flex: "1 1 120px" }}>
+                  <Metric label="CA" value="142 500 €" />
+                </div>
+                <div style={{ minWidth: 120, flex: "1 1 120px" }}>
+                  <Metric label="Commandes" value="1 284" />
+                </div>
+                <div style={{ minWidth: 120, flex: "1 1 120px" }}>
+                  <Metric label="Clients" value="342" />
+                </div>
+              </div>
             </DemoCard>
             <DemoCard label="bpm.column" wide>
               <Column columns={2}>
@@ -411,7 +434,8 @@ export default function ComponentsPage() {
               </MetricRow>
             </DemoCard>
             <DemoCard label="bpm.table" wide>
-              <Table
+              <div style={{ border: "1px solid var(--bpm-border)", borderRadius: 8, overflow: "hidden" }}>
+                <Table
                 columns={[
                   { key: "nom", label: "Nom" },
                   { key: "statut", label: "Statut" },
@@ -423,6 +447,7 @@ export default function ComponentsPage() {
                   { nom: "Carol", statut: "Actif", valeur: "21 300 €" },
                 ]}
               />
+              </div>
             </DemoCard>
             <DemoCard label="bpm.plotlyChart" wide>
               <PlotlyChart
@@ -470,14 +495,15 @@ export default function ComponentsPage() {
                   { label: "Étape 2" },
                   { label: "Étape 3" },
                 ]}
-                currentStep={1}
+                currentStep={stepperStep}
+                onStepClick={setStepperStep}
               />
             </DemoCard>
             <DemoCard label="bpm.pagination" wide>
               <Pagination
-                page={1}
+                page={currentPage}
                 totalPages={10}
-                onPageChange={() => {}}
+                onPageChange={setCurrentPage}
               />
             </DemoCard>
             <DemoCard label="bpm.treeview" wide>
@@ -571,7 +597,20 @@ export default function ComponentsPage() {
               </Popover>
             </DemoCard>
             <DemoCard label="bpm.fab">
-              <FAB onClick={() => {}} label="Ajouter" />
+              <div
+                style={{
+                  position: "relative",
+                  height: 80,
+                  border: "1px dashed var(--bpm-border)",
+                  borderRadius: 8,
+                  background: "#f8fafc",
+                }}
+              >
+                <FAB onClick={() => alert("FAB cliqué")} icon="+" />
+                <Caption style={{ marginTop: 8, display: "block" }}>
+                  bpm.fab — bouton flottant, se positionne en bas à droite de son conteneur parent
+                </Caption>
+              </div>
             </DemoCard>
           </Grid>
         </section>
@@ -581,7 +620,27 @@ export default function ComponentsPage() {
           <Title2 style={{ marginBottom: 16 }}>Médias & Utilitaires</Title2>
           <Grid cols={2} gap={16}>
             <DemoCard label="bpm.avatar">
-              <Avatar initials="JD" size="medium" />
+              <Avatar initials="JD" size="medium" editable onImageChange={(f) => console.log(f)} />
+            </DemoCard>
+            <DemoCard label="bpm.avatar sidebar">
+              <Avatar
+                initials="JD"
+                name="Jean Dupont"
+                subtitle="jean@example.com"
+                variant="sidebar"
+                onLogout={() => {}}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.video">
+              <Video
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                controls
+                width={400}
+                height={225}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.audio">
+              <Audio src="https://www.w3schools.com/html/horse.mp3" controls />
             </DemoCard>
             <DemoCard label="bpm.image" wide>
               <Image
@@ -595,10 +654,27 @@ export default function ComponentsPage() {
               <QRCode value="https://blueprint-modular.com" size={128} />
             </DemoCard>
             <DemoCard label="bpm.rating">
-              <Rating value={4} max={5} onChange={() => {}} />
+              <Rating value={ratingVal} max={5} onChange={setRatingVal} />
             </DemoCard>
             <DemoCard label="bpm.fileUploader" wide>
               <FileUploader label="Importer un fichier" onFiles={() => {}} />
+            </DemoCard>
+          </Grid>
+
+          {/* Section GPS (après Médias) */}
+          <Title2 style={{ marginTop: 32, marginBottom: 16 }}>bpm.gps</Title2>
+          <Grid cols={1} gap={16}>
+            <DemoCard label="bpm.gps — affichage position" wide>
+              <Gps label="Position actuelle" showMap height={250} />
+            </DemoCard>
+            <DemoCard label="bpm.gps — sélection d'un point" wide>
+              <Gps
+                label="Sélectionner un point"
+                mode="picker"
+                value={gpsPickerVal}
+                onChange={setGpsPickerVal}
+                height={250}
+              />
             </DemoCard>
           </Grid>
         </section>

@@ -326,7 +326,11 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.autocomplete">
               <Autocomplete
                 label="Recherche"
-                options={["Paris", "Lyon", "Marseille"]}
+                options={[
+                  { value: "Paris", label: "Paris" },
+                  { value: "Lyon", label: "Lyon" },
+                  { value: "Marseille", label: "Marseille" },
+                ]}
                 value=""
                 onChange={() => {}}
               />

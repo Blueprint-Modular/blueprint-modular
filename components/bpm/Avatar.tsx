@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 
 export type AvatarSize = "small" | "medium" | "large";
 
@@ -20,6 +20,10 @@ export interface AvatarProps {
   onLogout?: () => void;
   /** Libellé du bouton déconnexion (variant sidebar) */
   logoutLabel?: string;
+  /** Active le mode édition : overlay crayon au survol, file picker au clic. */
+  editable?: boolean;
+  /** Callback appelé avec le File sélectionné. */
+  onImageChange?: (file: File) => void;
 }
 
 const sizeMap: Record<AvatarSize, string> = {
@@ -28,8 +32,14 @@ const sizeMap: Record<AvatarSize, string> = {
   large: "w-12 h-12 text-base",
 };
 
+const overlayIconSizeMap: Record<AvatarSize, number> = {
+  small: 14,
+  medium: 16,
+  large: 20,
+};
+
 export function Avatar({
-  src,
+  src: srcProp,
   alt,
   initials,
   size = "medium",
@@ -39,8 +49,27 @@ export function Avatar({
   subtitle,
   onLogout,
   logoutLabel = "Se déconnecter",
+  editable = false,
+  onImageChange,
 }: AvatarProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const src = previewSrc ?? srcProp;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (previewSrc) URL.revokeObjectURL(previewSrc);
+    const url = URL.createObjectURL(file);
+    setPreviewSrc(url);
+    onImageChange?.(file);
+    e.target.value = "";
+  };
+
   const s = sizeMap[size];
+  const iconSize = overlayIconSizeMap[size];
+  const showEditableOverlay = editable && variant === "default";
+
   const avatarEl = (
     <span
       className={`bpm-avatar inline-flex items-center justify-center rounded-full overflow-hidden flex-shrink-0 ${s} ${className}`.trim()}
@@ -60,6 +89,55 @@ export function Avatar({
   );
 
   if (variant !== "sidebar") {
+    if (showEditableOverlay) {
+      return (
+        <span
+          className={`bpm-avatar-editable-wrapper rounded-full overflow-hidden inline-block ${s}`.trim()}
+          style={{ position: "relative" }}
+        >
+          {avatarEl}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            aria-hidden
+            onChange={handleFileChange}
+          />
+          <span
+            role="button"
+            tabIndex={0}
+            aria-label="Changer la photo"
+            onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "inherit",
+              background: "rgba(0,0,0,0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: 0,
+              transition: "opacity 0.2s",
+              cursor: "pointer",
+            }}
+            className="bpm-avatar-overlay"
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = "0"; }}
+            onFocus={(e) => { e.currentTarget.style.opacity = "1"; }}
+            onBlur={(e) => { e.currentTarget.style.opacity = "0"; }}
+          >
+            <span style={{ color: "#fff", fontSize: iconSize }}>✎</span>
+          </span>
+        </span>
+      );
+    }
     return avatarEl;
   }
 

@@ -16,6 +16,7 @@ import {
   Progress,
   LoadingBar,
   Spinner,
+  SpinnerDot,
   Skeleton,
   HighlightBox,
   EmptyState,
@@ -28,6 +29,8 @@ import {
   RadioGroup,
   Slider,
   DateInput,
+  DateRangePicker,
+  TimeInput,
   ColorPicker,
   Autocomplete,
   Panel,
@@ -65,6 +68,22 @@ import {
   Video,
   Audio,
   Gps,
+  Theme,
+  Empty,
+  Html,
+  Transition,
+  LineChart,
+  BarChart,
+  AreaChart,
+  ScatterChart,
+  AltairChart,
+  Map,
+  Barcode,
+  NfcBadge,
+  PdfViewer,
+  OfflineIndicator,
+  AssistantPanel,
+  CrudPage,
 } from "@/components/bpm";
 
 const DEMO_CARD_STYLE: React.CSSProperties = {
@@ -102,9 +121,10 @@ const SECTIONS = [
   { id: "navigation", label: "Navigation" },
   { id: "overlays", label: "Overlays & Interactions" },
   { id: "media", label: "Médias & Utilitaires" },
+  { id: "specialized", label: "Spécialisés" },
 ];
 
-const COMPONENT_COUNT = 60;
+const COMPONENT_COUNT = 83;
 
 export default function ComponentsPage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -124,6 +144,10 @@ export default function ComponentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [ratingVal, setRatingVal] = useState(4);
   const [gpsPickerVal, setGpsPickerVal] = useState<{ lat: number; lng: number } | null>(null);
+  const [dateRangeStart, setDateRangeStart] = useState<Date | null>(null);
+  const [dateRangeEnd, setDateRangeEnd] = useState<Date | null>(null);
+  const [timeVal, setTimeVal] = useState<Date | null>(null);
+  const [transitionIndex, setTransitionIndex] = useState(0);
 
   return (
     <div style={{ background: "#f8fafc", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
@@ -209,6 +233,9 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.markdown" wide>
               <Markdown text="**Gras**, *italique*, `code inline`, [lien](#)." />
             </DemoCard>
+            <DemoCard label="bpm.html" wide>
+              <Html html="<p>Contenu <strong>HTML</strong> rendu (à utiliser avec contenu de confiance ou sanitized).</p>" />
+            </DemoCard>
           </Grid>
         </section>
 
@@ -252,6 +279,28 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.skeleton">
               <div style={{ width: "100%", maxWidth: 400 }}>
                 <Skeleton width={200} height={20} />
+              </div>
+            </DemoCard>
+            <DemoCard label="bpm.skeleton lines">
+              <div style={{ width: "100%", maxWidth: 400 }}>
+                <Skeleton variant="text" height={16} lines={3} />
+              </div>
+            </DemoCard>
+            <DemoCard label="bpm.spinnerDot">
+              <SpinnerDot />
+            </DemoCard>
+            <DemoCard label="bpm.transition" wide>
+              <Transition activeIndex={transitionIndex} variant="fade">
+                {[
+                  <Text key="1">Vue 1 — Contenu alterné.</Text>,
+                  <Text key="2">Vue 2 — Transition fluide.</Text>,
+                  <Text key="3">Vue 3 — Carousel simple.</Text>,
+                ]}
+              </Transition>
+              <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+                {[0, 1, 2].map((i) => (
+                  <Button key={i} onClick={() => setTransitionIndex(i)}>{i + 1}</Button>
+                ))}
               </div>
             </DemoCard>
             <DemoCard label="bpm.highlightBox" wide>
@@ -352,6 +401,17 @@ export default function ComponentsPage() {
                 onChange={setAutocompleteVal}
               />
             </DemoCard>
+            <DemoCard label="bpm.dateRangePicker">
+              <DateRangePicker
+                label="Période"
+                start={dateRangeStart}
+                end={dateRangeEnd}
+                onChange={(s, e) => { setDateRangeStart(s); setDateRangeEnd(e); }}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.timeInput">
+              <TimeInput label="Heure de début" value={timeVal} onChange={setTimeVal} />
+            </DemoCard>
           </Grid>
         </section>
 
@@ -410,6 +470,14 @@ export default function ComponentsPage() {
                   { title: "Question 2", content: <Text>Réponse 2.</Text> },
                 ]}
               />
+            </DemoCard>
+            <DemoCard label="bpm.theme">
+              <Theme variant="toggle" label="Thème clair / sombre" />
+            </DemoCard>
+            <DemoCard label="bpm.empty" wide>
+              <Empty>
+                <Caption>Conteneur vide (bpm.empty) — espace réservé ou zone minimale.</Caption>
+              </Empty>
             </DemoCard>
           </Grid>
         </section>
@@ -520,6 +588,67 @@ export default function ComponentsPage() {
                   { id: "2", label: "Dossier B" },
                 ]}
               />
+            </DemoCard>
+            <DemoCard label="bpm.table (état vide)" wide>
+              <Table
+                columns={[
+                  { key: "ref", label: "Référence" },
+                  { key: "libelle", label: "Libellé" },
+                ]}
+                data={[]}
+                emptyMessage="Aucune commande pour cette période."
+              />
+            </DemoCard>
+            <DemoCard label="bpm.lineChart" wide>
+              <LineChart
+                data={[
+                  { x: "Jan", y: 42 },
+                  { x: "Fév", y: 58 },
+                  { x: "Mar", y: 51 },
+                  { x: "Avr", y: 67 },
+                  { x: "Mai", y: 73 },
+                ]}
+                width={400}
+                height={200}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.barChart" wide>
+              <BarChart
+                data={[
+                  { x: "Lyon", y: 120 },
+                  { x: "Paris", y: 280 },
+                  { x: "Marseille", y: 95 },
+                ]}
+                width={400}
+                height={200}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.areaChart" wide>
+              <AreaChart
+                data={[
+                  { x: 1, y: 30 },
+                  { x: 2, y: 45 },
+                  { x: 3, y: 38 },
+                  { x: 4, y: 52 },
+                ]}
+                width={400}
+                height={200}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.scatterChart" wide>
+              <ScatterChart
+                data={[
+                  { x: 10, y: 20 },
+                  { x: 30, y: 45 },
+                  { x: 50, y: 35 },
+                  { x: 70, y: 60 },
+                ]}
+                width={400}
+                height={200}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.altairChart" wide>
+              <AltairChart width={400} height={200} />
             </DemoCard>
           </Grid>
         </section>
@@ -659,6 +788,22 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.fileUploader" wide>
               <FileUploader label="Importer un fichier" onFiles={() => {}} />
             </DemoCard>
+            <DemoCard label="bpm.map" wide>
+              <Map lat={45.75} lng={4.85} width="100%" height={220} />
+            </DemoCard>
+            <DemoCard label="bpm.barcode">
+              <Barcode value="3760123456789" format="EAN13" height={50} />
+            </DemoCard>
+            <DemoCard label="bpm.nfcBadge">
+              <NfcBadge label="NFC actif" variant="success" />
+            </DemoCard>
+            <DemoCard label="bpm.pdfViewer" wide>
+              <PdfViewer
+                src="https://www.w3.org/WAI/WCAG21/Techniques/pdf/pdf.pdf"
+                title="Exemple PDF"
+                height={300}
+              />
+            </DemoCard>
           </Grid>
 
           {/* Section GPS (après Médias) */}
@@ -674,6 +819,39 @@ export default function ComponentsPage() {
                 value={gpsPickerVal}
                 onChange={setGpsPickerVal}
                 height={250}
+              />
+            </DemoCard>
+          </Grid>
+        </section>
+
+        {/* SECTION 9 — Spécialisés */}
+        <section id="specialized" style={{ marginBottom: 48 }}>
+          <Title2 style={{ marginBottom: 16 }}>Spécialisés</Title2>
+          <Grid cols={1} gap={16}>
+            <DemoCard label="bpm.offlineIndicator" wide>
+              <OfflineIndicator />
+            </DemoCard>
+            <DemoCard label="bpm.assistantPanel" wide>
+              <AssistantPanel
+                title="Assistant démo"
+                demoAnswers={{
+                  "Pourquoi mon TRS est-il en baisse cette semaine ?": "Vérifiez les arrêts planifiés (ligne 2) et les pannes non prévues du 3 mars.",
+                  "Quelle ligne a le plus mauvais TRS ?": "La ligne 3 affiche un TRS de 67 % sur la période.",
+                }}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.crudPage" wide>
+              <CrudPage
+                title="Exemple CRUD"
+                endpoint="/api/demo/entities"
+                columns={[
+                  { key: "nom", label: "Nom" },
+                  { key: "statut", label: "Statut", type: "badge" },
+                ]}
+                fields={[
+                  { key: "nom", label: "Nom", type: "text", required: true },
+                  { key: "statut", label: "Statut", type: "select", options: [{ value: "Actif", label: "Actif" }, { value: "Inactif", label: "Inactif" }] },
+                ]}
               />
             </DemoCard>
           </Grid>

@@ -22,6 +22,7 @@ export interface ProgressProps {
  * - showValue (boolean, optionnel) — Afficher le pourcentage. Default: true.
  * - className (string, optionnel) — Classes CSS.
  * @usage Avancement commande, TRS ligne, objectif commercial.
+ * @context PARENT: bpm.panel | bpm.card | bpm.tabs. ASSOCIATED: bpm.metric, bpm.slider. FORBIDDEN: aucun.
  */
 export function Progress({
   value = 0,

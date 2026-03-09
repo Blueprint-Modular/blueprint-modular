@@ -21,6 +21,7 @@ export interface MarkdownProps {
  * - text (string) — Contenu Markdown (utiliser `---` pour une ligne horizontale).
  * - className (string, optionnel) — Classes CSS.
  * @usage Notices, FAQ, procédures, documentation produit.
+ * @context PARENT: bpm.panel | bpm.card | bpm.tabs. ASSOCIATED: bpm.title, bpm.codeBlock. FORBIDDEN: aucun.
  */
 export function Markdown({ text, className = "" }: MarkdownProps) {
   return (

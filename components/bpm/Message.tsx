@@ -27,6 +27,7 @@ const typeStyles: Record<MessageType, { bg: string; border: string }> = {
  * - children (ReactNode) — Texte du message.
  * - className (string, optionnel) — Classes CSS.
  * @usage Retour après enregistrement, validation formulaire, erreur API.
+ * @context PARENT: bpm.panel | bpm.modal | page directe. ASSOCIATED: bpm.button, bpm.input. FORBIDDEN: aucun.
  */
 export function Message({
   type = "info",

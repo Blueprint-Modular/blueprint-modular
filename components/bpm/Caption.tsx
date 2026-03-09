@@ -18,6 +18,10 @@ export interface CaptionProps {
  * - className (string, optionnel) — Classes CSS.
  * - style (object, optionnel) — Styles inline.
  * @usage Légendes de graphiques, sources de données, hints sous champs.
+ * @context
+ * PARENT: bpm.panel | bpm.card | bpm.plotlyChart.
+ * ASSOCIATED: bpm.plotlyChart, bpm.table, bpm.image.
+ * FORBIDDEN: aucun.
  */
 export function Caption({ children, className = "", style = {} }: CaptionProps) {
   return (

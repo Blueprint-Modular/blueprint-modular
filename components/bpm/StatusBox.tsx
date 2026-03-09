@@ -23,6 +23,10 @@ export interface StatusBoxProps {
  * - defaultExpanded (boolean, optionnel) — Ouvrir la zone dépliable au montage. Default: true.
  * - className (string, optionnel) — Classes CSS additionnelles.
  * @usage Indicateur de statut pour tableaux de bord, synchronisation données, connexion API.
+ * @context
+ * PARENT: bpm.panel | bpm.card | page directe.
+ * ASSOCIATED: bpm.metric, bpm.badge, bpm.spinner.
+ * FORBIDDEN: aucun.
  */
 export function StatusBox(p: StatusBoxProps) {
   const { label, state = "running", children, defaultExpanded = true, className = "" } = p;

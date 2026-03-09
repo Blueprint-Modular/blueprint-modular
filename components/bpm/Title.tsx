@@ -49,6 +49,7 @@ export interface TitleProps extends Omit<React.HTMLAttributes<HTMLHeadingElement
  * - onLogoClick (function, optionnel) — Clic sur le logo.
  * - className, style (optionnel) — Reste des props.
  * @usage En-têtes de page, titres de section, rapports.
+ * @context PARENT: page directe | bpm.panel | bpm.tabs. ASSOCIATED: bpm.metric, bpm.table. FORBIDDEN: aucun.
  */
 export function Title({
   children,

@@ -41,6 +41,7 @@ const DOT_COUNT = 14;
  * - className (string, optionnel) — Classes CSS.
  * - aria-label (string, optionnel) — Accessibilité.
  * @usage Import en cours, génération de rapport, upload fichier.
+ * @context PARENT: bpm.panel | page directe. ASSOCIATED: bpm.spinner, bpm.progress. FORBIDDEN: aucun.
  */
 export function LoadingBar({
   variant = "sweep",

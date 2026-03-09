@@ -22,6 +22,7 @@ export interface ToggleProps {
  * - disabled (boolean, optionnel) — Désactive le toggle. Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Paramètres utilisateur, options de module, activation de fonctionnalité.
+ * @context PARENT: bpm.panel | bpm.modal | bpm.card. ASSOCIATED: bpm.input, bpm.button. FORBIDDEN: aucun.
  */
 export function Toggle({
   label,

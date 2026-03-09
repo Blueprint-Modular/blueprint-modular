@@ -35,6 +35,7 @@ export interface TooltipProps {
  * - backgroundColor (string, optionnel) — Fond du tooltip.
  * - textColor (string, optionnel) — Couleur du texte.
  * @usage Aide sur boutons, explication de champs, raccourcis.
+ * @context PARENT: partout. ASSOCIATED: bpm.button, bpm.input. FORBIDDEN: aucun.
  */
 export function Tooltip({
   text,

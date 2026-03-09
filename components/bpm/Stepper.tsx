@@ -27,6 +27,7 @@ export interface StepperProps {
  * - onStepClick (function, optionnel) — Callback (index: number) au clic sur une etape.
  * - className (string, optionnel) — Classes CSS.
  * @usage Wizard de saisie, processus de validation, onboarding.
+ * @context PARENT: bpm.panel | bpm.modal. ASSOCIATED: bpm.transition, bpm.button. FORBIDDEN: aucun.
  */
 export function Stepper({
   steps = [],

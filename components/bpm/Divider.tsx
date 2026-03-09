@@ -24,6 +24,7 @@ export interface DividerProps {
  * - color (string, optionnel) — Couleur CSS. Default: var(--bpm-border).
  * - className (string, optionnel) — Classes CSS.
  * @usage Separation de sections, separateur ou dans formulaire.
+ * @context PARENT: bpm.panel | bpm.card | page. ASSOCIATED: bpm.input, bpm.button. FORBIDDEN: aucun.
  */
 export function Divider({
   label,

@@ -18,6 +18,7 @@ export interface CodeBlockProps {
  * - language (string, optionnel) — Langage pour coloration (bash, json, typescript…). Default: 'text'.
  * - className (string, optionnel) — Classes CSS.
  * @usage Documentation API, procédures d'installation, exemples de requêtes.
+ * @context PARENT: bpm.panel | bpm.card. ASSOCIATED: bpm.markdown, bpm.title. FORBIDDEN: aucun.
  */
 export function CodeBlock({ code, language = "text", className = "" }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);

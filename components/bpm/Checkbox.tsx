@@ -22,6 +22,7 @@ export interface CheckboxProps {
  * - disabled (boolean, optionnel) — Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage CGU, options formulaire, filtres liste.
+ * @context PARENT: bpm.modal | bpm.panel | bpm.card. ASSOCIATED: bpm.input, bpm.button. FORBIDDEN: aucun.
  */
 export function Checkbox({
   label,

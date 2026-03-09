@@ -18,6 +18,10 @@ export interface ContainerProps {
  * - className (string, optionnel) — Classes CSS.
  * - style (object, optionnel) — Styles inline.
  * @usage Wrapper de page, zone principale formulaire.
+ * @context
+ * PARENT: page directe | layout.
+ * ASSOCIATED: bpm.panel, bpm.grid, bpm.title.
+ * FORBIDDEN: aucun.
  */
 export function Container({ children, className = "", style = {} }: ContainerProps) {
   return <div className={"bpm-container " + className} style={style}>{children}</div>;

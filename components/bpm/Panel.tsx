@@ -33,6 +33,10 @@ const variantBorder: Record<string, string> = {
  * - children (ReactNode, optionnel) — Contenu.
  * - className (string, optionnel) — Classes CSS.
  * @usage Alertes production, notices légales, résumés chiffrés.
+ * @context
+ * PARENT: page directe | bpm.grid | bpm.tabs (contenu onglet).
+ * ASSOCIATED: bpm.title, bpm.metric, bpm.table, bpm.plotlyChart.
+ * FORBIDDEN: bpm.panel imbriqué trop profond (max 2 niveaux).
  */
 export function Panel({
   variant = "info",

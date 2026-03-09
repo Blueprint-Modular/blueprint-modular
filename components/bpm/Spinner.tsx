@@ -44,6 +44,10 @@ const accentColor = (neutral: boolean) =>
  * - neutral (boolean, optionnel) — Couleur grise au lieu de l'accent. Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Chargement de données, soumission formulaire, synchronisation.
+ * @context
+ * PARENT: partout — composant universel.
+ * ASSOCIATED: bpm.statusBox, bpm.loadingBar, bpm.message.
+ * FORBIDDEN: aucun.
  */
 export function Spinner({
   text = "Chargement...",

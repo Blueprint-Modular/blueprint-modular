@@ -33,6 +33,7 @@ export interface SkeletonProps {
  * - shimmer (boolean, optionnel) — Animation shimmer. Default: false.
  * - rounded ('sm' | 'md' | 'lg' | 'full', optionnel) — Bords arrondis. Default: 'md'.
  * @usage Chargement liste, fiche produit, tableau.
+ * @context PARENT: bpm.panel | bpm.card. ASSOCIATED: bpm.spinner, bpm.table. FORBIDDEN: aucun.
  */
 const roundedClass: Record<SkeletonRounded, string> = {
   sm: "rounded-sm",

@@ -45,6 +45,7 @@ function wait(ms: number): Promise<void> {
  * - onTransitionEnd (function, optionnel) — Callback fin de transition.
  * - className (string, optionnel) — Classes CSS.
  * @usage Wizard de saisie, carrousel d'étapes, changement de vue.
+ * @context PARENT: bpm.panel | bpm.modal. ASSOCIATED: bpm.stepper, bpm.button. FORBIDDEN: aucun.
  */
 export function Transition({
   activeIndex,

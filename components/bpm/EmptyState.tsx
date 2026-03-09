@@ -22,6 +22,7 @@ export interface EmptyStateProps {
  * - action (ReactNode, optionnel) — Bouton ou lien d'action.
  * - className (string, optionnel) — Classes CSS.
  * @usage Liste vide, recherche sans résultat, premier usage.
+ * @context PARENT: bpm.panel | bpm.card | bpm.table (contenu vide). ASSOCIATED: bpm.button, bpm.input. FORBIDDEN: aucun.
  */
 export function EmptyState({
   title = "Aucune donnée",

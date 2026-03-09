@@ -98,6 +98,7 @@ function JsonNode({
  * - maxHeight (number, optionnel) — Hauteur max en px avec scroll. Default: 400.
  * - className (string, optionnel) — Classes CSS.
  * @usage Inspection de payload API, logs structurés, configuration.
+ * @context PARENT: bpm.panel | bpm.modal. ASSOCIATED: bpm.codeBlock, bpm.message. FORBIDDEN: aucun.
  */
 export function JsonViewer({
   data,

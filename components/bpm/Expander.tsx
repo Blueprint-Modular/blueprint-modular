@@ -20,6 +20,7 @@ export interface ExpanderProps {
  * - defaultExpanded (boolean, optionnel) — Ouvert au montage. Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Détails commande, annexes contrat, section technique.
+ * @context PARENT: bpm.panel | bpm.card. ASSOCIATED: bpm.accordion, bpm.table. FORBIDDEN: aucun.
  */
 export function Expander({
   title,

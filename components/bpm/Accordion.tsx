@@ -26,6 +26,7 @@ export interface AccordionProps {
  * - defaultOpenIds (string[], optionnel) — IDs sections ouvertes au montage. Default: [].
  * - className (string, optionnel) — Classes CSS.
  * @usage FAQ, procedures, aide par theme.
+ * @context PARENT: bpm.panel | bpm.tabs. ASSOCIATED: bpm.expander, bpm.markdown. FORBIDDEN: bpm.accordion imbriqué dans bpm.accordion.
  */
 export function Accordion({
   sections = [],

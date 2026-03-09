@@ -21,6 +21,10 @@ export interface TextProps {
  * - className (string, optionnel) — Classes CSS.
  * - style (object, optionnel) — Styles inline.
  * @usage Corps de texte dans rapports, fiches produit, messages d'aide.
+ * @context
+ * PARENT: bpm.panel | bpm.card | bpm.modal.
+ * ASSOCIATED: bpm.caption, bpm.markdown, bpm.title.
+ * FORBIDDEN: aucun.
  */
 export function Text({ children, mono = false, className = "", style = {} }: TextProps) {
   return (

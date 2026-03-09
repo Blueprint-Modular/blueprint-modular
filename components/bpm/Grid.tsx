@@ -20,6 +20,10 @@ export interface GridProps {
  * - children (ReactNode, optionnel) — Contenu des cellules.
  * - className (string, optionnel) — Classes CSS.
  * @usage Dashboard KPIs, grille de cartes produit, formulaire multi-colonnes.
+ * @context
+ * PARENT: bpm.panel | bpm.tabs (contenu onglet) | page directe.
+ * ASSOCIATED: bpm.metric, bpm.card, bpm.column.
+ * FORBIDDEN: aucun.
  */
 export function Grid({
   cols = 1,

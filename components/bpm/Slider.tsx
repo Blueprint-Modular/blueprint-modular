@@ -28,6 +28,7 @@ export interface SliderProps {
  * - disabled (boolean, optionnel) — Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Parametres volume, seuil TRS, pourcentage objectif.
+ * @context PARENT: bpm.panel | bpm.modal | bpm.card. ASSOCIATED: bpm.input, bpm.progress. FORBIDDEN: aucun.
  */
 export function Slider({
   value,

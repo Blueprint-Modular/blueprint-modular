@@ -29,6 +29,7 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
  * - inverted (boolean, optionnel) — Fond sombre. Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Commentaire de commande, description produit, notes internes.
+ * @context PARENT: bpm.modal | bpm.panel | bpm.card. ASSOCIATED: bpm.input, bpm.button. FORBIDDEN: onChange absent si value contrôlé.
  */
 export function Textarea({
   label,

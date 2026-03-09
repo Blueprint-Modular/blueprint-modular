@@ -33,6 +33,10 @@ export interface CardProps {
  * - inverted (boolean, optionnel) — Fond sombre. Default: false.
  * - className (string, optionnel) — Classes CSS.
  * @usage Fiches produit, résumés contrat, cartes dashboard.
+ * @context
+ * PARENT: bpm.grid | bpm.tabs (contenu onglet) | page directe.
+ * ASSOCIATED: bpm.metric, bpm.button, bpm.badge.
+ * FORBIDDEN: bpm.card imbriqué trop profond (max 2 niveaux).
  */
 export function Card({
   title,

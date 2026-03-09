@@ -15,6 +15,7 @@ export interface MetricRowProps {
  * - children (ReactNode) — Un ou plusieurs bpm.metric.
  * - className (string, optionnel) — Classes CSS.
  * @usage Dashboard, résumé commande, indicateurs ligne de production.
+ * @context PARENT: bpm.panel | bpm.tabs | page directe. ASSOCIATED: bpm.metric, bpm.grid. FORBIDDEN: div custom comme parent.
  */
 export function MetricRow({ children, className = "" }: MetricRowProps) {
   return (

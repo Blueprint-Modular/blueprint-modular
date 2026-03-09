@@ -1,7 +1,7 @@
 # Vérification @blueprint-modular/core — Retour d'expérience
 
 **Date:** 2026-02-27  
-**Version après corrections:** 0.1.38  
+**Version après corrections:** 0.1.43  
 **Publish:** non effectué (attente validation).
 
 ---
@@ -83,7 +83,7 @@
 
 - `npm run build` : ✅ OK
 - `head -5 dist/style.css` : ✅ commence par `:root{--bpm-accent: #2563eb;...}`
-- Version : ✅ 0.1.38 (bump effectué, **non publié**)
+- Version : ✅ 0.1.43 (bump effectué, **non publié**)
 
 ---
 

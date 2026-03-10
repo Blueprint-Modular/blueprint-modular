@@ -96,6 +96,15 @@ import type { MetricRowProps } from "../../../components/bpm";
 import type { SpinnerProps } from "../../../components/bpm/Spinner";
 export type { SpinnerProps as SpinnerPropsBpm, SpinnerSize } from "../../../components/bpm/Spinner";
 
+/** Colonne pour bpm.table — API documentée (renderCell aligné avec Table.tsx render). */
+export interface TableColumn {
+  key: string;
+  label: string;
+  type?: "text" | "number" | "date" | "badge" | "boolean";
+  sortable?: boolean;
+  renderCell?: (value: unknown, row?: unknown) => React.ReactNode;
+}
+
 /** Wrapper : (props) => createElement(Component, props) — API toujours en objet */
 function wrap<P extends object>(Component: React.ComponentType<P>) {
   return (props: P) => React.createElement(Component, props);

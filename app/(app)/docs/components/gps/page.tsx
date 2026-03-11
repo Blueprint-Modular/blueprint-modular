@@ -90,7 +90,7 @@ export default function DocGpsPage() {
           <tr><td><code>onLocation</code></td><td><code>(coords) =&gt; void</code></td><td>—</td><td>Non</td><td>Callback quand la position est obtenue (mode display).</td></tr>
           <tr><td><code>height</code></td><td><code>number</code></td><td>300</td><td>Non</td><td>Hauteur de la carte en px.</td></tr>
           <tr><td><code>mode</code></td><td><code>&quot;display&quot; | &quot;picker&quot;</code></td><td>display</td><td>Non</td><td>display = affichage position, picker = sélection d&apos;un point.</td></tr>
-          <tr><td><code>value</code></td><td><code>{ lat: number; lng: number } | null</code></td><td>—</td><td>Non</td><td>Position courante (mode picker).</td></tr>
+          <tr><td><code>value</code></td><td><code>{'{ lat: number; lng: number } | null'}</code></td><td>—</td><td>Non</td><td>Position courante (mode picker).</td></tr>
           <tr><td><code>onChange</code></td><td><code>(coords) =&gt; void</code></td><td>—</td><td>Non</td><td>Callback à chaque déplacement du marker ou clic (mode picker).</td></tr>
           <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Classes CSS.</td></tr>
         </tbody>

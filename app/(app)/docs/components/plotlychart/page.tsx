@@ -66,7 +66,7 @@ export default function DocPlotlyChartPage() {
           </tr>
         </thead>
         <tbody>
-          <tr><td><code>data</code></td><td><code>object[]</code></td><td>—</td><td>Non</td><td>Tableau de traces Plotly (ex. [{type:&apos;bar&apos;, x:[], y:[]}]).</td></tr>
+          <tr><td><code>data</code></td><td><code>object[]</code></td><td>—</td><td>Non</td><td>{'Tableau de traces Plotly (ex. [{type:\'bar\', x:[], y:[]}]).'}</td></tr>
           <tr><td><code>layout</code></td><td><code>object</code></td><td>—</td><td>Non</td><td>Config layout Plotly (title, xaxis, yaxis, etc.).</td></tr>
           <tr><td><code>config</code></td><td><code>object</code></td><td>—</td><td>Non</td><td>Config Plotly (responsive, displayModeBar, etc.).</td></tr>
           <tr><td><code>height</code></td><td><code>number</code></td><td>380</td><td>Non</td><td>Hauteur en pixels.</td></tr>

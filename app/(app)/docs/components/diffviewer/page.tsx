@@ -83,7 +83,7 @@ export default function DocDiffViewerPage() {
           <tr><td><code>modified</code></td><td><code>string</code></td><td>—</td><td>Oui</td><td>Texte ou code modifié.</td></tr>
           <tr><td><code>language</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Langage pour la coloration (optionnel).</td></tr>
           <tr><td><code>mode</code></td><td><code>&quot;split&quot; | &quot;unified&quot;</code></td><td>split</td><td>Non</td><td>Affichage côte à côte ou unifié.</td></tr>
-          <tr><td><code>title</code></td><td><code>{ original?: string; modified?: string }</code></td><td>—</td><td>Non</td><td>Titres des colonnes (mode split).</td></tr>
+          <tr><td><code>title</code></td><td><code>{'{ original?: string; modified?: string }'}</code></td><td>—</td><td>Non</td><td>Titres des colonnes (mode split).</td></tr>
           <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Classes CSS.</td></tr>
         </tbody>
       </table>

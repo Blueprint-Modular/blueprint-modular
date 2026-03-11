@@ -581,8 +581,7 @@ export default function ComponentsPage() {
               </MetricRow>
             </DemoCard>
             <DemoCard label="bpm.table" wide>
-              <div style={{ border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
-                <Table
+              <Table
                 columns={[
                   { key: "nom", label: "Nom" },
                   { key: "statut", label: "Statut" },
@@ -594,7 +593,6 @@ export default function ComponentsPage() {
                   { nom: "Carol", statut: "Actif", valeur: "21 300 €" },
                 ]}
               />
-              </div>
             </DemoCard>
             <DemoCard label="bpm.plotlyChart" wide>
               <PlotlyChart
@@ -815,7 +813,7 @@ export default function ComponentsPage() {
                 onCancel={() => setConfirmModalOpen(false)}
                 title="Confirmer l'action"
                 message="Êtes-vous sûr de vouloir continuer ?"
-                variant="danger"
+                variant="info"
               />
             </DemoCard>
             <DemoCard label="bpm.toast">

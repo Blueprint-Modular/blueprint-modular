@@ -4,6 +4,19 @@ import { useState, useRef, useEffect } from "react";
 import { Panel, Markdown, Spinner } from "@/components/bpm";
 import { bpmComponentRegistry } from "@/lib/ai/context";
 
+function useDrawerBodyLock(open: boolean, onClose: () => void) {
+  useEffect(() => {
+    if (!open) return;
+    const onEscape = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onEscape);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onEscape);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+}
+
 const PRODUCTION_QUESTIONS = [
   "Pourquoi mon TRS est-il en baisse cette semaine ?",
   "Quelle ligne a le plus mauvais TRS ?",
@@ -16,7 +29,7 @@ export interface AssistantPanelProps {
   demoAnswers?: Record<string, string>;
   /** Titre du panneau */
   title?: string;
-  /** Rendu inline (pas de position fixed) pour la page démo /components. */
+  /** Utilise demoAnswers si fourni ; le panneau s'ouvre toujours en volet droit (drawer). */
   demo?: boolean;
   className?: string;
 }
@@ -33,6 +46,8 @@ export function AssistantPanel({
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useDrawerBodyLock(open, () => setOpen(false));
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -105,10 +120,7 @@ export function AssistantPanel({
   };
 
   return (
-    <div
-      className={className}
-      style={demo ? { position: "relative", minHeight: 320 } : undefined}
-    >
+    <div className={className} style={demo ? { position: "relative" } : undefined}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -123,32 +135,49 @@ export function AssistantPanel({
       </button>
 
       {open && (
-        <div
-          className={demo ? "flex flex-col mt-3 rounded-lg" : "fixed inset-0 z-[100] md:inset-auto md:left-auto md:right-0 md:top-0 md:h-full md:w-[420px] md:shadow-2xl flex flex-col"}
-          style={{
-            background: "var(--bpm-bg-primary)",
-            borderLeft: demo ? undefined : "1px solid var(--bpm-border)",
-            ...(demo ? { border: "1px solid var(--bpm-border)", maxHeight: 280, overflow: "hidden" } : {}),
-          }}
-        >
+        <>
           <div
-            className="flex shrink-0 items-center justify-between border-b px-4 py-3"
-            style={{ borderColor: "var(--bpm-border)" }}
+            role="presentation"
+            style={{ position: "fixed", inset: 0, background: "var(--bpm-overlay-bg)", zIndex: 9998 }}
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+          <div
+            className="flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: 420,
+              maxWidth: "100vw",
+              background: "var(--bpm-bg-primary)",
+              borderLeft: "1px solid var(--bpm-border)",
+              boxShadow: "var(--bpm-shadow)",
+              zIndex: 9999,
+              overflow: "hidden",
+            }}
           >
-            <span className="text-sm font-medium" style={{ color: "var(--bpm-text-primary)" }}>
-              {title}
-            </span>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="text-sm underline"
-              style={{ color: "var(--bpm-accent)" }}
+            <div
+              className="flex shrink-0 items-center justify-between border-b px-4 py-3"
+              style={{ borderColor: "var(--bpm-border)" }}
             >
-              Fermer
-            </button>
-          </div>
+              <span className="text-sm font-medium" style={{ color: "var(--bpm-text-primary)" }}>
+                {title}
+              </span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="text-sm underline"
+                style={{ color: "var(--bpm-accent)" }}
+              >
+                Fermer
+              </button>
+            </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
             <p className="text-xs font-medium" style={{ color: "var(--bpm-text-secondary)" }}>
               Questions pré-configurées
             </p>
@@ -202,8 +231,9 @@ export function AssistantPanel({
               </div>
             )}
             <div ref={bottomRef} />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

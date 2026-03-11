@@ -914,8 +914,8 @@ Composant bpm.toast — interface non parsée (voir BPM_API.md).
   text*: string
   children*: React.ReactNode
   position?: TooltipPlacement
-  backgroundColor?: string | null  — Couleur de fond du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-text-primary).
-  textColor?: string | null  — Couleur du texte du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-bg-primary).
+  backgroundColor?: string | null  — Couleur de fond du tooltip (hex, rgb ou nom CSS). Par défaut : noir.
+  textColor?: string | null  — Couleur du texte du tooltip (hex, rgb ou nom CSS). Par défaut : blanc.
 ```
 
 ## bpm.topNav

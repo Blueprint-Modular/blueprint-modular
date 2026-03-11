@@ -1,11 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef } from "react";
+import { DatePickerPopover } from "./DatePickerPopover";
 
-function toInputValue(d: Date | string | null | undefined): string {
-  if (!d) return "";
-  if (d instanceof Date) return d.toISOString().split("T")[0];
-  return String(d).split("T")[0];
+function formatDisplay(date: Date | string | null | undefined): string {
+  if (!date) return "";
+  const d = date instanceof Date ? date : new Date(String(date));
+  if (isNaN(d.getTime())) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${day}/${m}/${y}`;
 }
 
 export interface DateRangePickerProps {
@@ -20,23 +25,34 @@ export interface DateRangePickerProps {
 
 export function DateRangePicker(p: DateRangePickerProps) {
   const { label, start, end, onChange, disabled = false, min = null, max = null } = p;
-  const onStart = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!onChange) return;
-    const v = e.target.value;
-    const endVal = end instanceof Date ? end : end ? new Date(end) : null;
-    onChange(v ? new Date(v) : null, endVal);
-  };
-  const onEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!onChange) return;
-    const v = e.target.value;
-    const startVal = start instanceof Date ? start : start ? new Date(start) : null;
-    onChange(startVal, v ? new Date(v) : null);
-  };
-  const inputStyle = {
-    borderColor: "var(--bpm-border)",
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
+  const startRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+
+  const startVal = start ? (start instanceof Date ? start : new Date(String(start))) : null;
+  const endVal = end ? (end instanceof Date ? end : new Date(String(end))) : null;
+  const minDate = min ? (min instanceof Date ? min : new Date(String(min))) : null;
+  const maxDate = max ? (max instanceof Date ? max : new Date(String(max))) : null;
+
+  const triggerStyle = (open: boolean) => ({
+    padding: "8px 12px",
+    border: "1px solid var(--bpm-border)",
+    borderRadius: "var(--bpm-radius)",
     background: "var(--bpm-bg-primary)",
     color: "var(--bpm-text-primary)",
-  };
+    fontSize: "var(--bpm-font-size-base)",
+    cursor: disabled ? "not-allowed" : "pointer",
+    flex: 1,
+    minWidth: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 8,
+    borderColor: open ? "var(--bpm-accent)" : "var(--bpm-border)",
+    boxShadow: open ? "0 0 0 2px var(--bpm-accent-soft)" : "none",
+  } as React.CSSProperties);
+
   return (
     <div className="bpm-date-range-picker">
       {label && (
@@ -45,30 +61,80 @@ export function DateRangePicker(p: DateRangePickerProps) {
         </label>
       )}
       <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="date"
-          className="px-3 py-2 rounded-lg border text-sm flex-1 min-w-0"
-          style={inputStyle}
-          value={toInputValue(start)}
-          onChange={onStart}
-          disabled={disabled}
-          min={toInputValue(min) || undefined}
-          max={toInputValue(max) || undefined}
-        />
+        <div
+          ref={startRef}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          onClick={() => !disabled && setOpenStart((o) => !o)}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && !disabled) {
+              e.preventDefault();
+              setOpenStart((o) => !o);
+            }
+          }}
+          style={triggerStyle(openStart)}
+        >
+          <span style={{ color: startVal ? "var(--bpm-text-primary)" : "var(--bpm-text-muted)" }}>
+            {formatDisplay(start) || "JJ/MM/AAAA"}
+          </span>
+          <span style={{ color: "var(--bpm-text-muted)", flexShrink: 0 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+            </svg>
+          </span>
+        </div>
         <span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
           –
         </span>
-        <input
-          type="date"
-          className="px-3 py-2 rounded-lg border text-sm flex-1 min-w-0"
-          style={inputStyle}
-          value={toInputValue(end)}
-          onChange={onEnd}
-          disabled={disabled}
-          min={toInputValue(start) || toInputValue(min) || undefined}
-          max={toInputValue(max) || undefined}
-        />
+        <div
+          ref={endRef}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          onClick={() => !disabled && setOpenEnd((o) => !o)}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && !disabled) {
+              e.preventDefault();
+              setOpenEnd((o) => !o);
+            }
+          }}
+          style={triggerStyle(openEnd)}
+        >
+          <span style={{ color: endVal ? "var(--bpm-text-primary)" : "var(--bpm-text-muted)" }}>
+            {formatDisplay(end) || "JJ/MM/AAAA"}
+          </span>
+          <span style={{ color: "var(--bpm-text-muted)", flexShrink: 0 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+            </svg>
+          </span>
+        </div>
       </div>
+      {openStart && startRef.current && (
+        <DatePickerPopover
+          anchorRef={startRef}
+          value={startVal}
+          min={minDate}
+          max={maxDate ?? endVal ?? undefined}
+          onSelect={(date) => {
+            onChange?.(date, endVal);
+            setOpenStart(false);
+          }}
+          onClose={() => setOpenStart(false)}
+        />
+      )}
+      {openEnd && endRef.current && (
+        <DatePickerPopover
+          anchorRef={endRef}
+          value={endVal}
+          min={minDate ?? startVal ?? undefined}
+          max={maxDate}
+          onSelect={(date) => {
+            onChange?.(startVal, date);
+            setOpenEnd(false);
+          }}
+          onClose={() => setOpenEnd(false)}
+        />
+      )}
     </div>
   );
 }

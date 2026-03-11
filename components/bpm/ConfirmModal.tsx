@@ -33,7 +33,7 @@ export function ConfirmModal({
   message,
   confirmLabel = "Confirmer",
   cancelLabel = "Annuler",
-  variant = "danger",
+  variant = "info",
   isLoading = false,
 }: ConfirmModalProps) {
   useEffect(() => {

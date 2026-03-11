@@ -29,6 +29,36 @@ const BellIcon = () => (
   </svg>
 );
 
+const TYPE_ICONS: Record<string, React.ReactNode> = {
+  info: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+    </svg>
+  ),
+  success: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+    </svg>
+  ),
+  warning: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+    </svg>
+  ),
+  error: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+    </svg>
+  ),
+};
+
+const TYPE_COLORS: Record<string, string> = {
+  info: "var(--bpm-accent-cyan)",
+  success: "var(--bpm-success)",
+  warning: "var(--bpm-warning)",
+  error: "var(--bpm-error)",
+};
+
 function formatGroup(date: Date): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -147,15 +177,15 @@ export function NotificationCenter({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "16px 20px",
+                padding: "12px 16px",
                 borderBottom: "1px solid var(--bpm-border)",
                 background: "var(--bpm-bg-secondary)",
                 fontWeight: 600,
-                fontSize: "var(--bpm-font-size-lg)",
+                fontSize: "13px",
                 color: "var(--bpm-text)",
               }}
             >
-              <span style={{ fontWeight: 600, fontSize: "var(--bpm-font-size-lg)", color: "var(--bpm-text)", margin: 0 }}>
+              <span style={{ fontWeight: 600, fontSize: "13px", color: "var(--bpm-text)", margin: 0 }}>
                 Notifications
               </span>
               {unreadCount > 0 && (
@@ -163,8 +193,8 @@ export function NotificationCenter({
                   type="button"
                   onClick={() => { onReadAll(); }}
                   style={{
-                    padding: "4px 8px",
-                    fontSize: "var(--bpm-font-size-base)",
+                    padding: "2px 6px",
+                    fontSize: "11px",
                     border: "none",
                     borderRadius: "var(--bpm-radius-sm)",
                     background: "transparent",
@@ -184,89 +214,111 @@ export function NotificationCenter({
                   <div key={group}>
                     <div
                       style={{
-                        padding: "8px 16px",
-                        fontSize: "var(--bpm-font-size-sm)",
+                        padding: "6px 16px",
+                        fontSize: "10px",
                         fontWeight: 600,
                         color: "var(--bpm-text-muted)",
                         textTransform: "uppercase",
+                        letterSpacing: "0.5px",
                       }}
                     >
                       {group}
                     </div>
-                    {items.map((n) => (
-                      <div
-                        key={n.id}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => {
-                          onRead(n.id);
-                          if (n.link) window.open(n.link, "_self");
-                          setOpen(false);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
+                    {items.map((n) => {
+                      const type = n.type ?? "info";
+                      const iconColor = TYPE_COLORS[type] ?? TYPE_COLORS.info;
+                      return (
+                        <div
+                          key={n.id}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
                             onRead(n.id);
                             if (n.link) window.open(n.link, "_self");
                             setOpen(false);
-                          }
-                        }}
-                        style={{
-                          padding: "12px 16px",
-                          borderBottom: "1px solid var(--bpm-border)",
-                          background: n.read ? "transparent" : "var(--bpm-bg-secondary)",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <div
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              onRead(n.id);
+                              if (n.link) window.open(n.link, "_self");
+                              setOpen(false);
+                            }
+                          }}
                           style={{
-                            fontWeight: n.read ? 400 : 600,
-                            fontSize: "var(--bpm-font-size-base)",
-                            color: "var(--bpm-text)",
+                            padding: "12px 16px",
+                            borderBottom: "1px solid var(--bpm-border)",
+                            background: n.read ? "transparent" : "var(--bpm-bg-secondary)",
+                            cursor: "pointer",
                           }}
                         >
-                          {n.title}
-                        </div>
-                        {n.message && (
-                          <div
-                            style={{
-                              fontSize: "var(--bpm-font-size-sm)",
-                              color: "var(--bpm-text-muted)",
-                              marginTop: 4,
-                            }}
-                          >
-                            {n.message}
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 8,
+                              }}
+                            >
+                              <span style={{ flexShrink: 0, display: "flex", alignItems: "center", color: iconColor }}>
+                                {TYPE_ICONS[type] ?? TYPE_ICONS.info}
+                              </span>
+                              <span
+                                style={{
+                                  fontWeight: n.read ? 500 : 600,
+                                  fontSize: "12px",
+                                  color: "var(--bpm-text)",
+                                  lineHeight: 1.4,
+                                }}
+                              >
+                                {n.title}
+                              </span>
+                            </div>
+                            {n.message && (
+                              <div
+                                style={{
+                                  fontSize: "12px",
+                                  color: "var(--bpm-text-muted)",
+                                  lineHeight: 1.5,
+                                  paddingLeft: 24,
+                                }}
+                              >
+                                {n.message}
+                              </div>
+                            )}
+                            <div
+                              style={{
+                                fontSize: "10px",
+                                color: "var(--bpm-text-muted)",
+                                opacity: 0.85,
+                                paddingLeft: 24,
+                                marginTop: 2,
+                              }}
+                            >
+                              {n.timestamp.toLocaleString("fr-FR")}
+                            </div>
                           </div>
-                        )}
-                        <div
-                          style={{
-                            fontSize: "var(--bpm-font-size-sm)",
-                            color: "var(--bpm-text-muted)",
-                            marginTop: 4,
-                          }}
-                        >
-                          {n.timestamp.toLocaleString("fr-FR")}
+                          {onDelete && (
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); onDelete(n.id); }}
+                              style={{
+                                marginTop: 6,
+                                padding: "2px 8px",
+                                fontSize: "10px",
+                                border: "none",
+                                borderRadius: "var(--bpm-radius-sm)",
+                                background: "transparent",
+                                color: "var(--bpm-error)",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Supprimer
+                            </button>
+                          )}
                         </div>
-                        {onDelete && (
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); onDelete(n.id); }}
-                            style={{
-                              marginTop: 8,
-                              padding: "2px 8px",
-                              fontSize: "var(--bpm-font-size-sm)",
-                              border: "none",
-                              borderRadius: "var(--bpm-radius-sm)",
-                              background: "transparent",
-                              color: "var(--bpm-error)",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Supprimer
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 );
               })}

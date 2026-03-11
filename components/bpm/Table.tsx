@@ -170,7 +170,7 @@ export function Table({
       className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-220px)] md:max-h-[calc(100vh-350px)] ${className}`}
       style={{
         border: "1px solid var(--bpm-border)",
-        borderRadius: "var(--bpm-radius)",
+        borderRadius: "var(--bpm-radius-sm)",
         boxShadow: "none",
         outline: "none",
         overflow: "hidden",
@@ -191,7 +191,7 @@ export function Table({
               {columns.map((col, idx) => (
                 <th
                   key={col.key || idx}
-                  className={`bpm-table-th px-4 py-3 text-sm font-medium border ${col.noWrap ? "bpm-table-th--nowrap" : ""} ${
+                  className={`bpm-table-th px-3 py-2 text-sm font-medium border ${col.noWrap ? "bpm-table-th--nowrap" : ""} ${
                     sortColumn === col.key
                       ? `bpm-table-sorted bpm-table-sorted-${sortDirection}`
                       : ""
@@ -222,7 +222,7 @@ export function Table({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 py-12 text-center text-sm"
+                  className="px-3 py-12 text-center text-sm"
                   style={{
                     color: "var(--bpm-text-secondary)",
                     borderColor: "var(--bpm-border)",
@@ -247,7 +247,7 @@ export function Table({
                 {columns.map((col, colIdx) => (
                   <td
                     key={col.key || colIdx}
-                    className={`px-4 py-3 text-sm border ${col.className ?? ""}`}
+                    className={`px-3 py-2 text-sm border ${col.className ?? ""}`}
                     style={{
                       textAlign: getColumnAlign(col, data),
                       borderColor: "var(--bpm-border)",

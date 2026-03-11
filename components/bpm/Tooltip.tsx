@@ -17,9 +17,9 @@ export interface TooltipProps {
   text: string;
   children: React.ReactNode;
   position?: TooltipPlacement;
-  /** Couleur de fond du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-text-primary). */
+  /** Couleur de fond du tooltip (hex, rgb ou nom CSS). Par défaut : noir. */
   backgroundColor?: string | null;
-  /** Couleur du texte du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-bg-primary). */
+  /** Couleur du texte du tooltip (hex, rgb ou nom CSS). Par défaut : blanc. */
   textColor?: string | null;
 }
 
@@ -112,8 +112,8 @@ export function Tooltip({
         left: coords.left,
         top: coords.top,
         transform: getTransform(),
-        background: backgroundColor ?? "var(--bpm-text)",
-        color: textColor ?? "var(--bpm-bg-primary)",
+        background: backgroundColor ?? "#1a1a1a",
+        color: textColor ?? "#ffffff",
         borderRadius: "var(--bpm-radius)",
         fontSize: "var(--bpm-font-size-sm)",
         boxShadow: "var(--bpm-shadow)",

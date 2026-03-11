@@ -80,12 +80,14 @@ export function FilterPanel({
 
   const inputStyle: React.CSSProperties = {
     padding: "8px 12px",
+    minHeight: 40,
     border: "1px solid var(--bpm-border)",
-    borderRadius: "var(--bpm-radius-sm)",
+    borderRadius: "var(--bpm-radius)",
     background: "var(--bpm-bg-primary)",
     color: "var(--bpm-text)",
     fontSize: "var(--bpm-font-size-base)",
     minWidth: orientation === "vertical" ? "100%" : 120,
+    boxSizing: "border-box",
   };
 
   const buttonStyle: React.CSSProperties = {

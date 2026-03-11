@@ -39,7 +39,7 @@ export function FAB({ icon, label, onClick, position = "bottom-right", className
         e.currentTarget.style.background = "var(--bpm-accent)";
       }}
     >
-      {icon ?? <span style={{ fontSize: "var(--bpm-font-size-xl)", lineHeight: 1 }}>+</span>}
+      {icon ?? <span style={{ fontSize: "1.75rem", fontWeight: 300, lineHeight: 1 }}>+</span>}
     </button>
   );
 }

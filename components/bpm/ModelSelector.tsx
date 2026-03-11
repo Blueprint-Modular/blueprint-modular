@@ -191,7 +191,7 @@ export function ModelSelector({
           gap: 8,
           padding: "8px 12px",
           border: "1px solid var(--bpm-border)",
-          borderRadius: "var(--bpm-radius-sm)",
+          borderRadius: "var(--bpm-radius)",
           background: "var(--bpm-bg-primary)",
           color: "var(--bpm-text)",
           fontSize: "var(--bpm-font-size-base)",
@@ -202,7 +202,9 @@ export function ModelSelector({
         <span style={{ flex: 1, textAlign: "left" }}>
           {selectedModel ? selectedModel.label : "Sélectionner un modèle"}
         </span>
-        <span style={{ color: "var(--bpm-text-muted)" }}>{open ? "▲" : "▼"}</span>
+        <span style={{ color: "var(--bpm-text-muted)", fontSize: 10, lineHeight: 1 }} aria-hidden>
+          {open ? "▲" : "▼"}
+        </span>
       </button>
       {dropdownContent && createPortal(dropdownContent, document.body)}
     </div>

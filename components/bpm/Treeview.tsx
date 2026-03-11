@@ -53,9 +53,9 @@ function TreeNode(props: {
         )}
         <span className="text-sm">{node.label}</span>
       </div>
-      {hasChildren && open && node.children ? (
-        <div className="bpm-treeview-children">
-          {node.children.map((child) => (
+      {hasChildren ? (
+        <div className={`bpm-treeview-children ${open ? "bpm-treeview-children--expanded" : ""}`.trim()}>
+          {node.children!.map((child) => (
             <TreeNode key={child.id} node={child} level={level + 1} onSelect={onSelect} selectedId={selectedId} />
           ))}
         </div>

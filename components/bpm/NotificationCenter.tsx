@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export interface NotificationItem {
   id: string;
@@ -88,8 +88,22 @@ export function NotificationCenter({
   className = "",
 }: NotificationCenterProps) {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const list = notifications.slice(0, maxVisible);
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  useEffect(() => {
+    if (!closing) return;
+    const t = setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 140);
+    return () => clearTimeout(t);
+  }, [closing]);
+
+  const requestClose = () => {
+    setClosing(true);
+  };
 
   const byGroup = list.reduce<Record<string, NotificationItem[]>>((acc, n) => {
     const g = formatGroup(n.timestamp);
@@ -152,15 +166,15 @@ export function NotificationCenter({
       style={{ position: "relative", display: "inline-block" }}
     >
       <div onClick={() => setOpen((o) => !o)}>{trigger ?? defaultTrigger}</div>
-      {open && (
+      {(open || closing) && (
         <>
           <div
             role="presentation"
             style={{ position: "fixed", inset: 0, zIndex: 9998 }}
-            onClick={() => setOpen(false)}
+            onClick={requestClose}
           />
           <div
-            className="bpm-notification-center-popup"
+            className={`bpm-notification-center-popup ${closing ? "bpm-notification-center-popup--closing" : ""}`.trim()}
             style={{
               position: "absolute",
               top: "100%",

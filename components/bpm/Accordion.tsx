@@ -78,10 +78,12 @@ export function Accordion({
               id={`${id}-panel`}
               role="region"
               aria-labelledby={`${id}-head`}
-              className={`bpm-accordion-panel ${isOpen ? "block" : "hidden"}`}
+              className={`bpm-accordion-panel ${isOpen ? "bpm-accordion-panel--open" : ""}`.trim()}
             >
-              <div className="bpm-accordion-content px-4 py-3 border-t" style={{ borderColor: "var(--bpm-border)", color: "var(--bpm-text-primary)" }}>
-                {section.content}
+              <div className="bpm-accordion-panel-inner">
+                <div className="bpm-accordion-content px-4 py-3 border-t" style={{ borderColor: "var(--bpm-border)", color: "var(--bpm-text-primary)" }}>
+                  {section.content}
+                </div>
               </div>
             </div>
           </div>

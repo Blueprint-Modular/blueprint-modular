@@ -51,7 +51,7 @@ export function Stepper({
             >
               <button
                 type="button"
-                className="bpm-stepper-dot w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 border-2 disabled:cursor-default"
+                className={`bpm-stepper-dot w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 border-2 disabled:cursor-default ${isActive ? "bpm-stepper-dot--active" : ""} ${isPast ? "bpm-stepper-dot--completed" : ""}`.trim()}
                 style={{
                   borderColor: isPast || isActive ? "var(--bpm-accent)" : "var(--bpm-border)",
                   background: isPast ? "var(--bpm-accent)" : "var(--bpm-bg-primary)",

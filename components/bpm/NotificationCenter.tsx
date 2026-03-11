@@ -29,35 +29,43 @@ const BellIcon = () => (
   </svg>
 );
 
-const TYPE_ICONS: Record<string, React.ReactNode> = {
-  info: (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-    </svg>
-  ),
-  success: (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-    </svg>
-  ),
-  warning: (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-    </svg>
-  ),
-  error: (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-    </svg>
-  ),
+/** Noms d’icônes Material Symbols (Google Fonts), couleur unique #1f1f1f. */
+const TYPE_ICON_NAMES: Record<string, string> = {
+  info: "info",
+  success: "check_circle",
+  warning: "warning",
+  error: "error",
 };
 
-const TYPE_COLORS: Record<string, string> = {
-  info: "var(--bpm-accent-cyan)",
-  success: "var(--bpm-success)",
-  warning: "var(--bpm-warning)",
-  error: "var(--bpm-error)",
-};
+const NOTIFICATION_ICON_COLOR = "#1f1f1f";
+const NOTIFICATION_ICON_SIZE = 24;
+
+function NotificationTypeIcon({ type }: { type: "info" | "success" | "warning" | "error" }) {
+  const iconName = TYPE_ICON_NAMES[type] ?? TYPE_ICON_NAMES.info;
+  return (
+    <span
+      className="material-symbols-outlined bpm-material-icon"
+      role="img"
+      aria-hidden
+      style={{
+        fontFamily: "Material Symbols Outlined",
+        fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24",
+        fontSize: NOTIFICATION_ICON_SIZE,
+        width: NOTIFICATION_ICON_SIZE,
+        height: NOTIFICATION_ICON_SIZE,
+        minWidth: NOTIFICATION_ICON_SIZE,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        overflow: "hidden",
+        color: NOTIFICATION_ICON_COLOR,
+      }}
+    >
+      {iconName}
+    </span>
+  );
+}
 
 function formatGroup(date: Date): string {
   const now = new Date();
@@ -225,8 +233,7 @@ export function NotificationCenter({
                       {group}
                     </div>
                     {items.map((n) => {
-                      const type = n.type ?? "info";
-                      const iconColor = TYPE_COLORS[type] ?? TYPE_COLORS.info;
+                      const type = (n.type ?? "info") as "info" | "success" | "warning" | "error";
                       return (
                         <div
                           key={n.id}
@@ -260,8 +267,8 @@ export function NotificationCenter({
                                 gap: 8,
                               }}
                             >
-                              <span style={{ flexShrink: 0, display: "flex", alignItems: "center", color: iconColor }}>
-                                {TYPE_ICONS[type] ?? TYPE_ICONS.info}
+                              <span style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+                                <NotificationTypeIcon type={type} />
                               </span>
                               <span
                                 style={{

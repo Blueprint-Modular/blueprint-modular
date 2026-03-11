@@ -728,6 +728,7 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
   help?: string | null
   placeholder?: string
   required?: boolean
+  triggerHeight?: number  — Hauteur du trigger (px) pour alignement avec d'autres champs (ex. FilterPanel).
 ```
 
 ## bpm.skeleton

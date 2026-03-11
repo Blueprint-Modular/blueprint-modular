@@ -264,14 +264,15 @@ export function CrudPage({
         <h1 className="text-xl font-bold" style={{ color: "var(--bpm-text-primary)", margin: 0 }}>
           {title}
         </h1>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
           <Input
             type="search"
             placeholder="Rechercher..."
             value={search}
             onChange={setSearch}
+            style={{ minHeight: 40, height: 40, boxSizing: "border-box" }}
           />
-          <Button variant="primary" size="small" onClick={openCreate}>
+          <Button variant="primary" size="small" onClick={openCreate} className="!min-h-[40px] !h-[40px]">
             Nouveau
           </Button>
         </div>

@@ -19,6 +19,8 @@ export interface SelectboxProps {
   help?: string | null;
   placeholder?: string;
   required?: boolean;
+  /** Hauteur du trigger (px) pour alignement avec d'autres champs (ex. FilterPanel). */
+  triggerHeight?: number;
 }
 
 function getOptionValue(opt: SelectboxOption): string {
@@ -37,6 +39,7 @@ export function Selectbox({
   help = null,
   placeholder = "Sélectionner...",
   required = false,
+  triggerHeight,
 }: SelectboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -192,6 +195,7 @@ export function Selectbox({
             borderColor: "var(--bpm-border)",
             background: "var(--bpm-bg-primary)",
             color: displayValue && displayValue !== placeholder ? "var(--bpm-text-primary)" : "var(--bpm-text-secondary)",
+            ...(triggerHeight != null ? { minHeight: triggerHeight, height: triggerHeight, boxSizing: "border-box" as const } : {}),
           }}
           onClick={handleToggle}
           onKeyDown={(e) => {

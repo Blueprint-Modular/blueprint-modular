@@ -33,17 +33,32 @@ export function Pagination({
   const hasPrev = page > 1;
   const hasNext = page < totalPages;
 
+  const rowHeight = 36;
   return (
-    <nav className={`bpm-pagination ${className}`} aria-label="Pagination" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-      {label && <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginRight: 8 }}>{label}</span>}
+    <nav
+      className={`bpm-pagination ${className}`}
+      aria-label="Pagination"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        flexWrap: "wrap",
+        minHeight: rowHeight,
+      }}
+    >
+      {label && (
+        <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginRight: 8, display: "inline-flex", alignItems: "center", minHeight: rowHeight }}>
+          {label}
+        </span>
+      )}
       <button
         type="button"
         onClick={() => onPageChange(page - 1)}
         disabled={!hasPrev}
         aria-label="Page précédente"
         style={{
-          width: 36,
-          height: 36,
+          width: rowHeight,
+          height: rowHeight,
           padding: 0,
           display: "inline-flex",
           alignItems: "center",
@@ -55,12 +70,22 @@ export function Pagination({
           cursor: hasPrev ? "pointer" : "not-allowed",
           opacity: hasPrev ? 1 : 0.5,
           fontSize: "var(--bpm-font-size-base)",
-          lineHeight: 0,
+          lineHeight: 1,
+          flexShrink: 0,
         }}
       >
-        <span style={{ display: "inline-block", lineHeight: 1 }}>←</span>
+        ←
       </button>
-      <span className="text-sm" style={{ color: "var(--bpm-text-primary)" }}>
+      <span
+        className="text-sm"
+        style={{
+          color: "var(--bpm-text-primary)",
+          display: "inline-flex",
+          alignItems: "center",
+          minHeight: rowHeight,
+          lineHeight: 1,
+        }}
+      >
         Page {page} sur {totalPages}
       </span>
       <button
@@ -69,8 +94,8 @@ export function Pagination({
         disabled={!hasNext}
         aria-label="Page suivante"
         style={{
-          width: 36,
-          height: 36,
+          width: rowHeight,
+          height: rowHeight,
           padding: 0,
           display: "inline-flex",
           alignItems: "center",
@@ -82,13 +107,14 @@ export function Pagination({
           cursor: hasNext ? "pointer" : "not-allowed",
           opacity: hasNext ? 1 : 0.5,
           fontSize: "var(--bpm-font-size-base)",
-          lineHeight: 0,
+          lineHeight: 1,
+          flexShrink: 0,
         }}
       >
-        <span style={{ display: "inline-block", lineHeight: 1 }}>→</span>
+        →
       </button>
       {(pageSize != null && totalItems != null) && (
-        <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: 8 }}>
+        <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: 8, display: "inline-flex", alignItems: "center", minHeight: rowHeight }}>
           {totalItems} élément{totalItems > 1 ? "s" : ""}
         </span>
       )}

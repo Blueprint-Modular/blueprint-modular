@@ -70,6 +70,8 @@ export function FilterPanel({
     borderRadius: "var(--bpm-radius)",
   };
 
+  const FILTER_FIELD_HEIGHT = 40;
+
   const labelStyle: React.CSSProperties = {
     fontSize: "var(--bpm-font-size-sm)",
     fontWeight: 600,
@@ -80,7 +82,8 @@ export function FilterPanel({
 
   const inputStyle: React.CSSProperties = {
     padding: "8px 12px",
-    minHeight: 40,
+    height: FILTER_FIELD_HEIGHT,
+    minHeight: FILTER_FIELD_HEIGHT,
     border: "1px solid var(--bpm-border)",
     borderRadius: "var(--bpm-radius)",
     background: "var(--bpm-bg-primary)",
@@ -125,6 +128,7 @@ export function FilterPanel({
             value={(v as string) ?? ""}
             onChange={(val) => onChange(f.key, val || null)}
             placeholder="Tous"
+            triggerHeight={FILTER_FIELD_HEIGHT}
           />
         </div>
       );

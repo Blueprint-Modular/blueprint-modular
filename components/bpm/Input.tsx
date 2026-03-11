@@ -31,6 +31,15 @@ export function Input({
 }: InputProps) {
   const generatedId = useId();
   const id = idProp ?? generatedId;
+  const { style: propsStyle, ...restProps } = props;
+  const inputStyle: React.CSSProperties = {
+    borderColor: "var(--bpm-border)",
+    background: "var(--bpm-bg-primary)",
+    color: "var(--bpm-text)",
+    borderRadius: "var(--bpm-radius)",
+    fontSize: "var(--bpm-font-size-base)",
+    ...propsStyle,
+  };
   return (
     <div className={`bpm-input-wrap ${className}`.trim()}>
       {label && (
@@ -46,13 +55,7 @@ export function Input({
         id={id}
         type={type}
         className="bpm-input w-full px-3 py-2 border min-h-[44px]"
-        style={{
-          borderColor: "var(--bpm-border)",
-          background: "var(--bpm-bg-primary)",
-          color: "var(--bpm-text)",
-          borderRadius: "var(--bpm-radius)",
-          fontSize: "var(--bpm-font-size-base)",
-        }}
+        style={inputStyle}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         placeholder={placeholder}
@@ -66,7 +69,7 @@ export function Input({
           e.target.style.borderColor = "var(--bpm-border)";
           e.target.style.boxShadow = "none";
         }}
-        {...props}
+        {...restProps}
       />
     </div>
   );

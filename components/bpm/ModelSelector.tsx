@@ -99,11 +99,12 @@ export function ModelSelector({
               <div key={provider}>
                 <div
                   style={{
-                    padding: "8px 12px",
-                    fontSize: "var(--bpm-font-size-sm)",
+                    padding: "6px 12px",
+                    fontSize: "10px",
                     fontWeight: 600,
                     color: "var(--bpm-text-muted)",
                     textTransform: "uppercase",
+                    letterSpacing: "0.5px",
                     background: "var(--bpm-bg-secondary)",
                   }}
                 >
@@ -123,7 +124,7 @@ export function ModelSelector({
                       textAlign: "left",
                       padding: "10px 12px",
                       border: "none",
-                      background: m.id === selected ? "var(--bpm-accent-soft)" : "transparent",
+                      background: m.id === selected ? "var(--bpm-bg-secondary)" : "transparent",
                       color: "var(--bpm-text)",
                       fontSize: "var(--bpm-font-size-base)",
                       cursor: "pointer",

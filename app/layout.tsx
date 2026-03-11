@@ -54,6 +54,12 @@ export default function RootLayout({
   return (
     <html lang="fr" dir="ltr" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
         <link rel="icon" href={`/img/logo-bpm.png${FAVICON_QUERY}`} type="image/png" sizes="512x512" />
         <meta charSet="utf-8" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

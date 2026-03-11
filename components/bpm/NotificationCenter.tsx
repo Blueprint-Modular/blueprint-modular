@@ -251,6 +251,7 @@ export function NotificationCenter({
                       return (
                         <div
                           key={n.id}
+                          className={`bpm-notification-item bpm-notification-item--${type}`}
                           role="button"
                           tabIndex={0}
                           onClick={() => {

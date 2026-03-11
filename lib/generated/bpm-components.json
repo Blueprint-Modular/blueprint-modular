@@ -19,6 +19,24 @@
       "category": "Affichage de données"
     },
     {
+      "slug": "title1",
+      "name": "bpm.title1",
+      "description": "Titre niveau 1.",
+      "category": "Affichage de données"
+    },
+    {
+      "slug": "title2",
+      "name": "bpm.title2",
+      "description": "Titre niveau 2.",
+      "category": "Affichage de données"
+    },
+    {
+      "slug": "title3",
+      "name": "bpm.title3",
+      "description": "Titre niveau 3.",
+      "category": "Affichage de données"
+    },
+    {
       "slug": "text",
       "name": "bpm.text",
       "description": "Texte simple (niveau corps).",

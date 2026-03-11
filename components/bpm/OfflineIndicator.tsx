@@ -3,12 +3,18 @@
 import { useEffect, useState } from "react";
 import { getQueueSize, sync } from "@/lib/offline";
 
-export function OfflineIndicator() {
+export interface OfflineIndicatorProps {
+  /** Affiche le composant même sans file (pour démo / page composants). */
+  demo?: boolean;
+}
+
+export function OfflineIndicator({ demo = false }: OfflineIndicatorProps) {
   const [online, setOnline] = useState(true);
   const [queueSize, setQueueSize] = useState(0);
   const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
+    if (demo) return;
     setOnline(navigator.onLine);
     const updateQueue = async () => setQueueSize(await getQueueSize());
     updateQueue();
@@ -28,7 +34,7 @@ export function OfflineIndicator() {
       window.removeEventListener("offline", onOffline);
       clearInterval(interval);
     };
-  }, []);
+  }, [demo]);
 
   const handleSync = async () => {
     setSyncing(true);
@@ -37,7 +43,7 @@ export function OfflineIndicator() {
     setSyncing(false);
   };
 
-  if (online && queueSize === 0) return null;
+  if (!demo && online && queueSize === 0) return null;
 
   return (
     <div
@@ -57,10 +63,10 @@ export function OfflineIndicator() {
       <span>{online ? "🔄" : "⚠️"}</span>
       <span>
         {online
-          ? `${queueSize} entrée${queueSize > 1 ? "s" : ""} en attente`
+          ? `${queueSize} entrée${queueSize > 1 ? "s" : ""} en attente${demo ? " (démo)" : ""}`
           : `Hors ligne — ${queueSize} entrée${queueSize > 1 ? "s" : ""} en attente`}
       </span>
-      {online && queueSize > 0 && (
+      {online && queueSize > 0 && !demo && (
         <button
           type="button"
           onClick={handleSync}

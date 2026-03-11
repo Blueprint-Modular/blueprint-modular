@@ -31,7 +31,8 @@ export function Button({
   className = "",
 }: ButtonProps) {
   const isPrimary = variant === "primary";
-  const sizeClass = size === "small" ? "px-2 py-1 text-sm" : size === "large" ? "px-6 py-3 text-lg" : "px-4 py-2";
+  const sizeClass = size === "small" ? "px-3 py-2 text-sm" : size === "large" ? "px-6 py-3 text-lg" : "px-4 py-2";
+  const minHeight = size === "small" ? 36 : size === "large" ? 48 : 40;
 
   return (
     <button
@@ -42,6 +43,7 @@ export function Button({
         color: isPrimary ? "var(--bpm-accent-contrast)" : "var(--bpm-text)",
         border: variant === "outline" ? "1px solid var(--bpm-border)" : "none",
         borderRadius: "var(--bpm-radius)",
+        minHeight,
         opacity: disabled ? 0.6 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
         transition: "var(--bpm-transition)",

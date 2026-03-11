@@ -830,14 +830,16 @@ export default function ComponentsPage() {
               />
             </DemoCard>
             <DemoCard label="bpm.notificationCenter" wide>
-              <NotificationCenter
-                notifications={[
-                  { id: "1", title: "Info", message: "Notification exemple", timestamp: new Date(), read: false, type: "info" },
-                  { id: "2", title: "Succès", timestamp: new Date(Date.now() - 3600000), read: true, type: "success" },
-                ]}
-                onRead={(id) => console.log("Read", id)}
-                onReadAll={() => {}}
-              />
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <NotificationCenter
+                  notifications={[
+                    { id: "1", title: "Info", message: "Notification exemple", timestamp: new Date(), read: false, type: "info" },
+                    { id: "2", title: "Succès", timestamp: new Date(Date.now() - 3600000), read: true, type: "success" },
+                  ]}
+                  onRead={(id) => console.log("Read", id)}
+                  onReadAll={() => {}}
+                />
+              </div>
             </DemoCard>
             <DemoCard label="bpm.fab">
               <div
@@ -995,10 +997,11 @@ export default function ComponentsPage() {
               />
             </DemoCard>
             <DemoCard label="bpm.offlineIndicator" wide>
-              <OfflineIndicator />
+              <OfflineIndicator demo />
             </DemoCard>
             <DemoCard label="bpm.assistantPanel" wide>
               <AssistantPanel
+                demo
                 title="Assistant démo"
                 demoAnswers={{
                   "Pourquoi mon TRS est-il en baisse cette semaine ?": "Vérifiez les arrêts planifiés (ligne 2) et les pannes non prévues du 3 mars.",

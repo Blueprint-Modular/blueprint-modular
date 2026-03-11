@@ -50,23 +50,28 @@ export function Tooltip({
 
   const updatePosition = () => {
     const el = triggerRef.current;
-    if (!el) return;
+    if (!el || typeof window === "undefined") return;
     const rect = el.getBoundingClientRect();
     const gap = 8;
-    const tooltipHeight = 32;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const tooltipHeightEstimate = 48;
+    const tooltipWidthHalf = 100;
     let top = 0;
     let left = rect.left + rect.width / 2;
     if (position.startsWith("top")) {
-      top = rect.top - gap - tooltipHeight;
+      top = rect.top - gap - tooltipHeightEstimate;
     } else if (position.startsWith("bottom")) {
       top = rect.bottom + gap;
     } else {
-      top = rect.top + rect.height / 2 - tooltipHeight / 2;
+      top = rect.top + rect.height / 2 - tooltipHeightEstimate / 2;
     }
     if (position.includes("start")) left = rect.left;
     if (position.includes("end")) left = rect.right;
     if (position === "left") left = rect.left - gap;
     if (position === "right") left = rect.right + gap;
+    top = Math.max(gap, Math.min(vh - tooltipHeightEstimate - gap, top));
+    left = Math.max(tooltipWidthHalf, Math.min(vw - tooltipWidthHalf, left));
     setCoords({ top, left });
   };
 
@@ -112,6 +117,7 @@ export function Tooltip({
         borderRadius: "var(--bpm-radius)",
         fontSize: "var(--bpm-font-size-sm)",
         boxShadow: "var(--bpm-shadow)",
+        isolation: "isolate",
       }}
     >
       {text}

@@ -55,10 +55,10 @@ export function Pagination({
           cursor: hasPrev ? "pointer" : "not-allowed",
           opacity: hasPrev ? 1 : 0.5,
           fontSize: "var(--bpm-font-size-base)",
-          lineHeight: 1,
+          lineHeight: 0,
         }}
       >
-        ←
+        <span style={{ display: "inline-block", lineHeight: 1 }}>←</span>
       </button>
       <span className="text-sm" style={{ color: "var(--bpm-text-primary)" }}>
         Page {page} sur {totalPages}
@@ -82,10 +82,10 @@ export function Pagination({
           cursor: hasNext ? "pointer" : "not-allowed",
           opacity: hasNext ? 1 : 0.5,
           fontSize: "var(--bpm-font-size-base)",
-          lineHeight: 1,
+          lineHeight: 0,
         }}
       >
-        →
+        <span style={{ display: "inline-block", lineHeight: 1 }}>→</span>
       </button>
       {(pageSize != null && totalItems != null) && (
         <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: 8 }}>

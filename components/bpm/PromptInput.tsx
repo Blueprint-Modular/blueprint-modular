@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
+import { Button } from "./Button";
 
 export interface PromptInputProps {
   value: string;
@@ -121,14 +122,15 @@ export function PromptInput({
           {showTokenCount && tokenCount != null && (maxLength != null ? " · " : "")}
           {showTokenCount && tokenCount != null && `~${tokenCount} tokens`}
         </span>
-        <button
+        <Button
           type="button"
-          className="bpm-btn-submit"
+          variant="primary"
+          size="small"
           onClick={handleSubmitClick}
           disabled={disabled}
         >
           {isLoading ? "..." : "Envoyer"}
-        </button>
+        </Button>
       </div>
     </div>
   );

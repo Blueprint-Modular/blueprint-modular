@@ -174,7 +174,7 @@ export function Table({
         boxShadow: "none",
         outline: "none",
         overflow: "hidden",
-        backgroundColor: "var(--bpm-surface)",
+        backgroundColor: "var(--bpm-bg-primary)",
       }}
       data-name={name ?? undefined}
       data-key-column={keyColumn ?? undefined}
@@ -183,7 +183,7 @@ export function Table({
         <table
           className={`bpm-table w-full border-collapse ${
             striped ? "bpm-table-striped" : ""
-          } ${hover ? "bpm-table-hover" : ""          } ${onRowClick ? "bpm-table-clickable" : ""}`}
+          } ${hover ? "bpm-table-hover" : ""} ${onRowClick ? "bpm-table-clickable" : ""}`}
           style={tableMinWidthStyle}
         >
           <thead>
@@ -223,7 +223,11 @@ export function Table({
                 <td
                   colSpan={columns.length}
                   className="px-4 py-12 text-center text-sm"
-                  style={{ color: "var(--bpm-text-secondary)", borderColor: "var(--bpm-border)" }}
+                  style={{
+                    color: "var(--bpm-text-secondary)",
+                    borderColor: "var(--bpm-border)",
+                    backgroundColor: "var(--bpm-bg-primary)",
+                  }}
                 >
                   <span style={{ display: "inline-block", marginBottom: 8, fontSize: "var(--bpm-font-size-lg)" }} aria-hidden>—</span>
                   <div>{emptyMessage}</div>

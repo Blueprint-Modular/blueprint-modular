@@ -43,11 +43,12 @@ function MaterialIcon({
 }) {
   return (
     <span
-      className="material-symbols-outlined"
+      className="material-symbols-outlined bpm-material-icon"
       role="img"
       aria-hidden
       style={{
         fontFamily: "Material Symbols Outlined",
+        fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24",
         fontSize: size,
         width: size,
         height: size,

@@ -16,15 +16,18 @@ export interface AssistantPanelProps {
   demoAnswers?: Record<string, string>;
   /** Titre du panneau */
   title?: string;
+  /** Rendu inline (pas de position fixed) pour la page démo /components. */
+  demo?: boolean;
   className?: string;
 }
 
 export function AssistantPanel({
   demoAnswers,
   title = "Assistant Production",
+  demo = false,
   className = "",
 }: AssistantPanelProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(demo);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -102,11 +105,14 @@ export function AssistantPanel({
   };
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      style={demo ? { position: "relative", minHeight: 320 } : undefined}
+    >
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="fixed bottom-20 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg md:bottom-6"
+        className={demo ? "flex h-12 w-12 items-center justify-center rounded-full shadow-lg" : "fixed bottom-20 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg md:bottom-6"}
         style={{
           background: "var(--bpm-accent)",
           color: "var(--bpm-accent-contrast)",
@@ -118,10 +124,11 @@ export function AssistantPanel({
 
       {open && (
         <div
-          className="fixed inset-0 z-[100] md:inset-auto md:left-auto md:right-0 md:top-0 md:h-full md:w-[420px] md:shadow-2xl flex flex-col"
+          className={demo ? "flex flex-col mt-3 rounded-lg" : "fixed inset-0 z-[100] md:inset-auto md:left-auto md:right-0 md:top-0 md:h-full md:w-[420px] md:shadow-2xl flex flex-col"}
           style={{
             background: "var(--bpm-bg-primary)",
-            borderLeft: "1px solid var(--bpm-border)",
+            borderLeft: demo ? undefined : "1px solid var(--bpm-border)",
+            ...(demo ? { border: "1px solid var(--bpm-border)", maxHeight: 280, overflow: "hidden" } : {}),
           }}
         >
           <div

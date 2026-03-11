@@ -75,29 +75,31 @@ export function NotificationCenter({
         justifyContent: "center",
         width: 40,
         height: 40,
+        borderRadius: "50%",
+        flexShrink: 0,
       }}
       aria-label="Notifications"
     >
       <BellIcon />
       {unreadCount > 0 && (
         <span
+          className="bpm-notification-center-badge"
           style={{
             position: "absolute",
             top: 2,
             right: 3,
             minWidth: 15,
-            height: 18,
             padding: "1px 4px",
-            borderRadius: "var(--bpm-radius-sm)",
+            borderRadius: 8,
             background: "var(--bpm-error)",
-            color: "var(--bpm-accent-contrast)",
-            fontSize: "var(--bpm-font-size-sm)",
+            color: "white",
+            fontSize: 9,
             fontWeight: 700,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "1px solid var(--bpm-border)",
-            boxShadow: "var(--bpm-shadow)",
+            lineHeight: 1.4,
+            textAlign: "center",
+            border: "1px solid white",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.1)",
+            pointerEvents: "none",
           }}
         >
           {unreadCount > 99 ? "99+" : unreadCount}
@@ -132,7 +134,7 @@ export function NotificationCenter({
               maxHeight: 600,
               border: "1px solid var(--bpm-border)",
               borderRadius: "var(--bpm-radius)",
-              background: "var(--bpm-bg)",
+              background: "var(--bpm-bg-primary)",
               boxShadow: "var(--bpm-shadow)",
               display: "flex",
               flexDirection: "column",
@@ -147,7 +149,7 @@ export function NotificationCenter({
                 justifyContent: "space-between",
                 padding: "16px 20px",
                 borderBottom: "1px solid var(--bpm-border)",
-                background: "var(--bpm-bg-tertiary)",
+                background: "var(--bpm-bg-secondary)",
                 fontWeight: 600,
                 fontSize: "var(--bpm-font-size-lg)",
                 color: "var(--bpm-text)",

@@ -37,7 +37,7 @@ export function Input({
     background: "var(--bpm-bg-primary)",
     color: "var(--bpm-text)",
     borderRadius: "var(--bpm-radius)",
-    fontSize: "var(--bpm-font-size-base)",
+    fontSize: "var(--bpm-font-size-sm)",
     ...propsStyle,
   };
   return (
@@ -46,7 +46,7 @@ export function Input({
         <label
           htmlFor={id}
           className="bpm-input-label block text-sm font-medium mb-1"
-          style={{ color: "var(--bpm-text)", fontSize: "var(--bpm-font-size-base)" }}
+          style={{ color: "var(--bpm-text)", fontSize: "var(--bpm-font-size-sm)" }}
         >
           {label}
         </label>

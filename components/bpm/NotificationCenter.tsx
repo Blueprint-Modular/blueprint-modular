@@ -128,7 +128,7 @@ export function NotificationCenter({
             right: 3,
             minWidth: 15,
             padding: "1px 4px",
-            borderRadius: 8,
+            borderRadius: "var(--bpm-radius)",
             background: "var(--bpm-error)",
             color: "white",
             fontSize: 9,

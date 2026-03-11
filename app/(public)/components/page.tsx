@@ -581,18 +581,20 @@ export default function ComponentsPage() {
               </MetricRow>
             </DemoCard>
             <DemoCard label="bpm.table" wide>
-              <Table
-                columns={[
-                  { key: "nom", label: "Nom" },
-                  { key: "statut", label: "Statut" },
-                  { key: "valeur", label: "Valeur" },
-                ]}
-                data={[
-                  { nom: "Alice", statut: "Actif", valeur: "12 000 €" },
-                  { nom: "Bob", statut: "Inactif", valeur: "8 500 €" },
-                  { nom: "Carol", statut: "Actif", valeur: "21 300 €" },
-                ]}
-              />
+              <div className="component-showcase">
+                <Table
+                  columns={[
+                    { key: "nom", label: "Nom" },
+                    { key: "statut", label: "Statut" },
+                    { key: "valeur", label: "Valeur" },
+                  ]}
+                  data={[
+                    { nom: "Alice", statut: "Actif", valeur: "12 000 €" },
+                    { nom: "Bob", statut: "Inactif", valeur: "8 500 €" },
+                    { nom: "Carol", statut: "Actif", valeur: "21 300 €" },
+                  ]}
+                />
+              </div>
             </DemoCard>
             <DemoCard label="bpm.plotlyChart" wide>
               <PlotlyChart
@@ -670,14 +672,16 @@ export default function ComponentsPage() {
               />
             </DemoCard>
             <DemoCard label="bpm.table (état vide)" wide>
-              <Table
-                columns={[
-                  { key: "ref", label: "Référence" },
-                  { key: "libelle", label: "Libellé" },
-                ]}
-                data={[]}
-                emptyMessage="Aucune commande pour cette période."
-              />
+              <div className="component-showcase">
+                <Table
+                  columns={[
+                    { key: "ref", label: "Référence" },
+                    { key: "libelle", label: "Libellé" },
+                  ]}
+                  data={[]}
+                  emptyMessage="Aucune commande pour cette période."
+                />
+              </div>
             </DemoCard>
             <DemoCard label="bpm.lineChart" wide>
               <LineChart

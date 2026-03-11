@@ -485,6 +485,10 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
   border: 1px solid var(--bpm-border);
   box-shadow: none !important;
 }
+/* Page /components : éviter double bordure (DemoCard a déjà une bordure) */
+.component-showcase .bpm-table-wrapper {
+  border: none !important;
+}
 .bpm-table-container {
   min-width: 0;
   width: 100%;

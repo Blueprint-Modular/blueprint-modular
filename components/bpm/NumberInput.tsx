@@ -69,8 +69,8 @@ export function NumberInput({
         type="text"
         inputMode="decimal"
         autoComplete="off"
-        className="w-full px-3 py-2 rounded-lg border text-sm"
-        style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
+        className="w-full px-3 py-2 rounded-lg border text-sm min-h-[40px]"
+        style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)", minHeight: 40, boxSizing: "border-box" }}
         value={displayString}
         onChange={handleChange}
         onFocus={(e) => {

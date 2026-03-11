@@ -58,7 +58,7 @@ export function ChatInterface({
         flexDirection: "column",
         height,
         background: "var(--bpm-bg-primary)",
-        borderRadius: "var(--bpm-radius-lg)",
+        borderRadius: "var(--bpm-radius)",
         border: "1px solid var(--bpm-border)",
         overflow: "hidden",
       }}

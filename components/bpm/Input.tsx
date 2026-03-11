@@ -54,7 +54,7 @@ export function Input({
       <input
         id={id}
         type={type}
-        className="bpm-input w-full px-3 py-2 border min-h-[44px]"
+        className="bpm-input w-full px-3 py-2 border min-h-[40px]"
         style={inputStyle}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}

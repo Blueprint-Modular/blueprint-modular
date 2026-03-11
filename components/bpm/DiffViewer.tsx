@@ -91,7 +91,7 @@ export function DiffViewer({
         className={className ? `bpm-diff-viewer ${className}`.trim() : "bpm-diff-viewer"}
         style={{
           border: "1px solid var(--bpm-border)",
-          borderRadius: "var(--bpm-radius-sm)",
+          borderRadius: "var(--bpm-radius)",
           overflow: "hidden",
           fontSize: "var(--bpm-font-size-base)",
           background: "var(--bpm-bg-primary)",
@@ -209,7 +209,7 @@ export function DiffViewer({
       className={className ? `bpm-diff-viewer ${className}`.trim() : "bpm-diff-viewer"}
       style={{
         border: "1px solid var(--bpm-border)",
-        borderRadius: "var(--bpm-radius-sm)",
+        borderRadius: "var(--bpm-radius)",
         overflow: "hidden",
         fontSize: "var(--bpm-font-size-base)",
         background: "var(--bpm-bg-primary)",

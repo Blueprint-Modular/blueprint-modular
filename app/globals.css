@@ -500,13 +500,10 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
   border: 1px solid var(--bpm-border) !important;
 }
 /* Bordure externe 1px uniquement : pas de double trait avec les bords des cellules */
+/* Bordure externe : on supprime gauche / haut / bas des cellules pour éviter double trait avec le wrapper ; on garde la bordure droite de la dernière cellule pour un cadre complet. */
 .bpm-table-wrapper .bpm-table thead th:first-child,
 .bpm-table-wrapper .bpm-table tbody td:first-child {
   border-left: none !important;
-}
-.bpm-table-wrapper .bpm-table thead th:last-child,
-.bpm-table-wrapper .bpm-table tbody td:last-child {
-  border-right: none !important;
 }
 .bpm-table-wrapper .bpm-table thead th {
   border-top: none !important;

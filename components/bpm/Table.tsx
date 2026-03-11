@@ -170,7 +170,7 @@ export function Table({
       className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-220px)] md:max-h-[calc(100vh-350px)] ${className}`}
       style={{
         border: "1px solid var(--bpm-border)",
-        borderRadius: "var(--bpm-radius-sm)",
+        borderRadius: "var(--bpm-radius)",
         boxShadow: "none",
         outline: "none",
         overflow: "hidden",

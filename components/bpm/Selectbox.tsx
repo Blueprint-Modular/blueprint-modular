@@ -195,7 +195,9 @@ export function Selectbox({
             borderColor: "var(--bpm-border)",
             background: "var(--bpm-bg-primary)",
             color: displayValue && displayValue !== placeholder ? "var(--bpm-text-primary)" : "var(--bpm-text-secondary)",
-            ...(triggerHeight != null ? { minHeight: triggerHeight, height: triggerHeight, boxSizing: "border-box" as const } : {}),
+            minHeight: triggerHeight ?? 40,
+            height: triggerHeight ?? 40,
+            boxSizing: "border-box",
           }}
           onClick={handleToggle}
           onKeyDown={(e) => {

@@ -44,7 +44,7 @@ export function CodeBlock({ code, language = "text", className = "" }: CodeBlock
       <button
         type="button"
         onClick={copy}
-        className="absolute top-2 right-2 px-2 py-1 rounded text-xs font-medium opacity-80 group-hover:opacity-100"
+        className="absolute top-2 right-2 px-2 py-1.5 rounded-lg text-sm font-medium opacity-80 group-hover:opacity-100"
         style={{ background: "var(--bpm-accent)", color: "var(--bpm-accent-contrast)" }}
       >
         {copied ? "Copié" : "Copier"}

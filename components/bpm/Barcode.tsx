@@ -23,7 +23,7 @@ export function Barcode({
 }: BarcodeProps) {
   if (!value) {
     return (
-      <div className={"bpm-barcode " + className} style={{ height, background: "var(--bpm-bg-secondary)", borderRadius: "var(--bpm-radius-sm)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bpm-text-secondary)", fontSize: "var(--bpm-font-size-sm)" }}>
+      <div className={"bpm-barcode " + className} style={{ height, background: "var(--bpm-bg-secondary)", borderRadius: "var(--bpm-radius)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bpm-text-secondary)", fontSize: "var(--bpm-font-size-sm)" }}>
         Pas de valeur
       </div>
     );
@@ -36,7 +36,7 @@ export function Barcode({
   const totalWidth = bars.reduce((a, b) => a + b, 0) * barWidth;
 
   return (
-    <div className={"bpm-barcode " + className} style={{ background, padding: 8, borderRadius: "var(--bpm-radius-sm)", display: "inline-block" }}>
+    <div className={"bpm-barcode " + className} style={{ background, padding: 8, borderRadius: "var(--bpm-radius)", display: "inline-block" }}>
       <svg width={totalWidth} height={height} xmlns="http://www.w3.org/2000/svg">
         {bars.map((w, i) => {
           const x = bars.slice(0, i).reduce((a, b) => a + b, 0) * barWidth;

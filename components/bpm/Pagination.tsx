@@ -74,7 +74,7 @@ export function Pagination({
           flexShrink: 0,
         }}
       >
-        ←
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </button>
       <span
         className="text-sm"
@@ -111,7 +111,7 @@ export function Pagination({
           flexShrink: 0,
         }}
       >
-        →
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </button>
       {(pageSize != null && totalItems != null) && (
         <span className="text-sm" style={{ color: "var(--bpm-text-secondary)", marginLeft: 8, display: "inline-flex", alignItems: "center", minHeight: rowHeight }}>

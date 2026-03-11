@@ -58,8 +58,8 @@ export function Autocomplete(props: AutocompleteProps) {
           e.target.style.boxShadow = "none";
         }}
         placeholder={placeholder}
-        className="w-full px-3 py-2 rounded-lg border text-sm"
-        style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)", color: "var(--bpm-text-primary)" }}
+        className="w-full px-3 py-2 rounded-lg border text-sm min-h-[40px]"
+        style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)", color: "var(--bpm-text-primary)", minHeight: 40, boxSizing: "border-box" }}
       />
       {open && filtered.length > 0 ? (
         <ul className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded-lg border shadow-lg list-none m-0 p-1" style={{ background: "var(--bpm-bg-primary)", borderColor: "var(--bpm-border)" }}>

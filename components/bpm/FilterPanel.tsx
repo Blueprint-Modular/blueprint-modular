@@ -100,7 +100,7 @@ export function FilterPanel({
   const buttonDangerStyle: React.CSSProperties = {
     ...buttonStyle,
     background: "var(--bpm-error)",
-    color: "#fff",
+    color: "var(--bpm-accent-contrast)",
     borderColor: "var(--bpm-error)",
   };
 
@@ -237,7 +237,7 @@ export function FilterPanel({
           >
             {collapsed ? "Filtres" : "Filtres"}
             {activeCount > 0 && (
-              <span style={{ marginLeft: 8, background: "var(--bpm-accent)", color: "#fff", padding: "2px 8px", borderRadius: 4, fontSize: 12 }}>
+              <span style={{ marginLeft: 8, background: "var(--bpm-accent)", color: "var(--bpm-accent-contrast)", padding: "2px 8px", borderRadius: 4, fontSize: 12 }}>
                 {activeCount}
               </span>
             )}

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export interface ModelOption {
   id: string;
@@ -26,6 +27,9 @@ export function ModelSelector({
   className = "",
 }: ModelSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const triggerRef = useRef<HTMLDivElement>(null);
+
   const selectedModel = models.find((m) => m.id === selected);
   const byProvider = models.reduce<Record<string, ModelOption[]>>((acc, m) => {
     if (!acc[m.provider]) acc[m.provider] = [];
@@ -33,56 +37,65 @@ export function ModelSelector({
     return acc;
   }, {});
 
-  return (
-    <div
-      className={className ? `bpm-model-selector ${className}`.trim() : "bpm-model-selector"}
-      style={{ position: "relative", display: "inline-block" }}
-    >
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "8px 12px",
-          border: "1px solid var(--bpm-border)",
-          borderRadius: "var(--bpm-radius-sm)",
-          background: "var(--bpm-bg-primary)",
-          color: "var(--bpm-text-primary)",
-          fontSize: 14,
-          cursor: "pointer",
-          minWidth: 180,
-        }}
-      >
-        <span style={{ flex: 1, textAlign: "left" }}>
-          {selectedModel ? selectedModel.label : "Sélectionner un modèle"}
-        </span>
-        <span style={{ color: "var(--bpm-text-muted)" }}>{open ? "▲" : "▼"}</span>
-      </button>
-      {open && (
-        <>
-          <div
-            role="presentation"
-            style={{ position: "fixed", inset: 0, zIndex: 9998 }}
-            onClick={() => setOpen(false)}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              marginTop: 4,
-              zIndex: 9999,
-              minWidth: 280,
-              maxHeight: 320,
-              overflowY: "auto",
-              border: "1px solid var(--bpm-border)",
-              borderRadius: "var(--bpm-radius-md)",
-              background: "var(--bpm-bg-primary)",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-            }}
-          >
+  useEffect(() => {
+    if (!open) {
+      setDropdownStyle({});
+      return;
+    }
+    const update = () => {
+      if (!triggerRef.current) return;
+      const rect = triggerRef.current.getBoundingClientRect();
+      const radius = "var(--bpm-radius-md, 8px)";
+      setDropdownStyle({
+        position: "fixed",
+        top: rect.bottom + 4,
+        left: rect.left,
+        minWidth: Math.max(280, rect.width),
+        maxWidth: typeof window !== "undefined" ? Math.min(400, window.innerWidth - rect.left - 16) : 400,
+        maxHeight: typeof window !== "undefined" ? Math.min(320, window.innerHeight - rect.bottom - 16) : 320,
+        overflowY: "auto",
+        overflowX: "hidden",
+        border: "1px solid var(--bpm-border)",
+        borderRadius: radius,
+        background: "var(--bpm-bg-primary)",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+        zIndex: 9999,
+      });
+    };
+    const t = setTimeout(update, 10);
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open, models.length]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) setOpen(false);
+    };
+    if (open) {
+      document.addEventListener("keydown", onKey);
+      return () => document.removeEventListener("keydown", onKey);
+    }
+  }, [open]);
+
+  const dropdownContent =
+    open &&
+    typeof document !== "undefined" && (
+      <>
+        <div
+          role="presentation"
+          style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+          onClick={() => setOpen(false)}
+        />
+        <div
+          style={{ ...dropdownStyle }}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <div style={{ overflow: "hidden", borderRadius: "inherit" }}>
             {Object.entries(byProvider).map(([provider, list]) => (
               <div key={provider}>
                 <div
@@ -143,6 +156,7 @@ export function ModelSelector({
                         ))}
                         {m.contextWindow != null && (
                           <span
+                            title="Fenêtre de contexte : nombre de tokens que le modèle peut traiter en une fois"
                             style={{
                               padding: "2px 6px",
                               borderRadius: 4,
@@ -159,8 +173,39 @@ export function ModelSelector({
               </div>
             ))}
           </div>
-        </>
-      )}
+        </div>
+      </>
+    );
+
+  return (
+    <div
+      ref={triggerRef}
+      className={className ? `bpm-model-selector ${className}`.trim() : "bpm-model-selector"}
+      style={{ position: "relative", display: "inline-block" }}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "8px 12px",
+          border: "1px solid var(--bpm-border)",
+          borderRadius: "var(--bpm-radius-sm)",
+          background: "var(--bpm-bg-primary)",
+          color: "var(--bpm-text-primary)",
+          fontSize: 14,
+          cursor: "pointer",
+          minWidth: 180,
+        }}
+      >
+        <span style={{ flex: 1, textAlign: "left" }}>
+          {selectedModel ? selectedModel.label : "Sélectionner un modèle"}
+        </span>
+        <span style={{ color: "var(--bpm-text-muted)" }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {dropdownContent && createPortal(dropdownContent, document.body)}
     </div>
   );
 }

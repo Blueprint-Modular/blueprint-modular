@@ -23,6 +23,12 @@ export interface NotificationCenterProps {
   className?: string;
 }
 
+const BellIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f">
+    <path d="M200-209.23v-40h64.62v-316.92q0-78.39 49.61-137.89 49.62-59.5 125.77-74.11V-800q0-16.67 11.64-28.33Q463.28-840 479.91-840t28.36 11.67Q520-816.67 520-800v21.85q76.15 14.61 125.77 74.11 49.61 59.5 49.61 137.89v316.92H760v40H200Zm280-286.15Zm-.14 390.76q-26.71 0-45.59-18.98-18.89-18.98-18.89-45.63h129.24q0 26.85-19.03 45.73-19.02 18.88-45.73 18.88ZM304.62-249.23h350.76v-316.92q0-72.93-51.23-124.16-51.23-51.23-124.15-51.23-72.92 0-124.15 51.23-51.23 51.23-51.23 124.16v316.92Z" />
+  </svg>
+);
+
 function formatGroup(date: Date): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -57,35 +63,41 @@ export function NotificationCenter({
   const defaultTrigger = (
     <button
       type="button"
+      className="bpm-notification-center-trigger"
       style={{
         position: "relative",
         padding: 8,
         border: "none",
-        borderRadius: "var(--bpm-radius-sm)",
-        background: "var(--bpm-bg-secondary)",
-        color: "var(--bpm-text-primary)",
+        background: "transparent",
         cursor: "pointer",
-        fontSize: 18,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 40,
+        height: 40,
       }}
+      aria-label="Notifications"
     >
-      🔔
+      <BellIcon />
       {unreadCount > 0 && (
         <span
           style={{
             position: "absolute",
-            top: -2,
-            right: -2,
-            minWidth: 18,
+            top: 2,
+            right: 3,
+            minWidth: 15,
             height: 18,
-            padding: "0 5px",
-            borderRadius: 9,
+            padding: "1px 4px",
+            borderRadius: 8,
             background: "var(--bpm-error)",
-            color: "#fff",
-            fontSize: 11,
-            fontWeight: 600,
+            color: "var(--bpm-accent-contrast)",
+            fontSize: 9,
+            fontWeight: 700,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            border: "1px solid white",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.1)",
           }}
         >
           {unreadCount > 99 ? "99+" : unreadCount}
@@ -108,20 +120,23 @@ export function NotificationCenter({
             onClick={() => setOpen(false)}
           />
           <div
+            className="bpm-notification-center-popup"
             style={{
               position: "absolute",
               top: "100%",
               right: 0,
-              marginTop: 8,
+              marginTop: 10,
               zIndex: 9999,
-              width: 360,
-              maxHeight: 420,
+              width: 400,
+              maxWidth: "calc(100vw - 40px)",
+              maxHeight: 600,
               border: "1px solid var(--bpm-border)",
-              borderRadius: "var(--bpm-radius-md)",
+              borderRadius: 8,
               background: "var(--bpm-bg-primary)",
-              boxShadow: "0 12px 32px rgba(0,0,0,0.15)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
               display: "flex",
               flexDirection: "column",
+              overflow: "hidden",
             }}
           >
             <div
@@ -129,12 +144,12 @@ export function NotificationCenter({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: 12,
+                padding: "12px 16px",
                 borderBottom: "1px solid var(--bpm-border)",
                 background: "var(--bpm-bg-secondary)",
               }}
             >
-              <span style={{ fontWeight: 600, fontSize: 14, color: "var(--bpm-text-primary)" }}>
+              <span style={{ fontWeight: 600, fontSize: 18, color: "var(--bpm-text-primary)", margin: 0 }}>
                 Notifications
               </span>
               {unreadCount > 0 && (
@@ -143,11 +158,11 @@ export function NotificationCenter({
                   onClick={() => { onReadAll(); }}
                   style={{
                     padding: "4px 8px",
-                    fontSize: 12,
+                    fontSize: 14,
                     border: "none",
                     borderRadius: 4,
-                    background: "var(--bpm-accent)",
-                    color: "var(--bpm-accent-contrast)",
+                    background: "transparent",
+                    color: "var(--bpm-text-secondary)",
                     cursor: "pointer",
                   }}
                 >
@@ -155,7 +170,7 @@ export function NotificationCenter({
                 </button>
               )}
             </div>
-            <div style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
+            <div style={{ overflowY: "auto", flex: 1, minHeight: 0, maxHeight: 500 }}>
               {["Aujourd'hui", "Hier", "Plus ancien"].map((group) => {
                 const items = byGroup[group];
                 if (!items?.length) return null;
@@ -163,7 +178,7 @@ export function NotificationCenter({
                   <div key={group}>
                     <div
                       style={{
-                        padding: "8px 12px",
+                        padding: "8px 16px",
                         fontSize: 11,
                         fontWeight: 600,
                         color: "var(--bpm-text-muted)",
@@ -191,7 +206,7 @@ export function NotificationCenter({
                           }
                         }}
                         style={{
-                          padding: 12,
+                          padding: "12px 16px",
                           borderBottom: "1px solid var(--bpm-border)",
                           background: n.read ? "transparent" : "var(--bpm-bg-secondary)",
                           cursor: "pointer",

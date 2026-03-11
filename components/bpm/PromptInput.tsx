@@ -123,18 +123,9 @@ export function PromptInput({
         </span>
         <button
           type="button"
+          className="bpm-btn-submit"
           onClick={handleSubmitClick}
           disabled={disabled}
-          style={{
-            padding: "8px 16px",
-            borderRadius: "var(--bpm-radius-sm)",
-            border: "none",
-            background: disabled ? "var(--bpm-bg-tertiary)" : "var(--bpm-accent)",
-            color: disabled ? "var(--bpm-text-muted)" : "var(--bpm-accent-contrast)",
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: disabled ? "not-allowed" : "pointer",
-          }}
         >
           {isLoading ? "..." : "Envoyer"}
         </button>

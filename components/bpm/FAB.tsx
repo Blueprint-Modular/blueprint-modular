@@ -23,7 +23,7 @@ export function FAB({ icon, label, onClick, position = "bottom-right", className
       type="button"
       onClick={onClick}
       className={"bpm-fab fixed z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-0 cursor-pointer " + positionClasses[position] + " " + className}
-      style={{ background: "var(--bpm-accent-cyan)", color: "#fff" }}
+      style={{ background: "var(--bpm-accent-cyan)", color: "var(--bpm-accent-contrast)" }}
       title={label}
       aria-label={label ?? "Action"}
     >

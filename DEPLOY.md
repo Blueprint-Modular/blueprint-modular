@@ -89,3 +89,34 @@ La recherche sémantique (`POST /api/wiki/semantic-search`) utilise actuellement
 3. Adapter la route `semantic-search` pour une recherche par similarité cosine sur la colonne `embedding`.
 
 Sans pgvector, l’app fonctionne normalement avec la recherche full-text.
+
+---
+
+## 5. Modifications BPM (composants et charte) — déployer partout
+
+Pour que **toutes les modifications** (composants `components/bpm/*`, charte graphique) soient bien **déployées partout**, y compris l’app et l’API Next.js :
+
+### Deux sources de variables CSS à garder synchronisées
+
+| Fichier | Rôle |
+|--------|------|
+| **`app/globals.css`** | Variables BPM utilisées par l’**app Next.js** (pages, composants, API qui rend du HTML). C’est ce qui est servi sur **app.blueprint-modular.com**. |
+| **`packages/core/src/variables.css`** | Variables incluses dans le package npm **@blueprint-modular/core** (consommé par create-bpm, intégrations externes). |
+
+**Règle** : toute **nouvelle variable** ou modification de charte (couleur, radius, etc.) doit être appliquée dans **les deux fichiers** pour que l’app déployée et le package publié restent homogènes.
+
+Variables à aligner notamment : `--bpm-accent`, `--bpm-accent-contrast`, `--bpm-accent-hover`, `--bpm-radius`, `--bpm-radius-sm`, `--bpm-radius-md`, `--bpm-radius-lg`, `--bpm-bg-tertiary`, `--bpm-text-muted`.
+
+### Déploiement après modification des composants ou de la charte
+
+1. **App (et API)**  
+   Le build Next.js inclut `app/globals.css` et `components/bpm/*`. Un déploiement classique met donc à jour l’app **et** les réponses des routes sous `app/api/*` qui s’appuient sur ces assets.  
+   → Depuis la machine locale : `.\scripts\deploy-vps-remote.ps1`  
+   → Ou sur le VPS : `git pull && ./deploy/deploy-from-git.sh`
+
+2. **Package npm @blueprint-modular/core** (optionnel)  
+   Si des consommateurs externes (create-bpm, etc.) doivent recevoir les mêmes variables ou le même objet `bpm` :  
+   → `npm run publish:core`  
+   (build du package puis publication sur npm).
+
+En résumé : **modifier les deux CSS** pour la charte, **déployer l’app** pour que l’app et l’API voient les changements ; publier le core uniquement si vous voulez propager la version npm.

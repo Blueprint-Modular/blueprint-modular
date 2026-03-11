@@ -20,9 +20,9 @@ const VARIANT_STYLES: Record<
   ConfirmModalVariant,
   { buttonBg: string; buttonColor: string; icon: string }
 > = {
-  danger: { buttonBg: "var(--bpm-error)", buttonColor: "#fff", icon: "delete" },
-  warning: { buttonBg: "var(--bpm-warning)", buttonColor: "#fff", icon: "warning" },
-  info: { buttonBg: "var(--bpm-accent)", buttonColor: "#fff", icon: "info" },
+  danger: { buttonBg: "var(--bpm-error)", buttonColor: "var(--bpm-accent-contrast)", icon: "delete" },
+  warning: { buttonBg: "var(--bpm-warning)", buttonColor: "var(--bpm-accent-contrast)", icon: "warning" },
+  info: { buttonBg: "var(--bpm-accent)", buttonColor: "var(--bpm-accent-contrast)", icon: "info" },
 };
 
 export function ConfirmModal({
@@ -76,57 +76,79 @@ export function ConfirmModal({
       onClick={handleBackdropClick}
     >
       <div
+        className="bpm-confirm-modal"
         style={{
           background: "var(--bpm-bg-primary)",
-          borderRadius: "var(--bpm-radius-lg)",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          borderRadius: "var(--bpm-radius)",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
           maxWidth: 420,
           width: "100%",
-          padding: 24,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2
-          id="confirm-modal-title"
+        <div
+          className="bpm-confirm-modal-header"
           style={{
-            margin: 0,
-            fontSize: 18,
-            fontWeight: 600,
-            color: "var(--bpm-text-primary)",
-            marginBottom: 12,
+            padding: "12px 16px",
+            borderBottom: "1px solid var(--bpm-border)",
+            background: "var(--bpm-bg-secondary)",
           }}
         >
-          {title}
-        </h2>
-        <p
+          <h2
+            id="confirm-modal-title"
+            style={{
+              margin: 0,
+              fontSize: 18,
+              fontWeight: 600,
+              color: "var(--bpm-text-primary)",
+            }}
+          >
+            {title}
+          </h2>
+        </div>
+        <div
           style={{
-            margin: 0,
-            fontSize: 14,
-            color: "var(--bpm-text-secondary)",
-            lineHeight: 1.5,
-            marginBottom: 24,
+            padding: "16px 24px",
+            flex: 1,
           }}
         >
-          {message}
-        </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 14,
+              color: "var(--bpm-text-secondary)",
+              lineHeight: 1.5,
+            }}
+          >
+            {message}
+          </p>
+        </div>
         <div
           style={{
             display: "flex",
             justifyContent: "flex-end",
             gap: 12,
+            padding: "16px 24px",
+            borderTop: "1px solid var(--bpm-border)",
+            background: "var(--bpm-bg-primary)",
           }}
         >
           <button
             type="button"
+            className="bpm-confirm-modal-cancel"
             onClick={onCancel}
             disabled={isLoading}
             style={{
-              padding: "10px 20px",
+              padding: "8px 16px",
               border: "1px solid var(--bpm-border)",
-              borderRadius: "var(--bpm-radius-sm)",
-              background: "var(--bpm-bg-primary)",
-              color: "var(--bpm-text-secondary)",
+              borderRadius: "var(--bpm-radius)",
+              background: "transparent",
+              color: "var(--bpm-text-primary)",
               fontSize: 14,
+              fontWeight: 500,
               cursor: isLoading ? "not-allowed" : "pointer",
               opacity: isLoading ? 0.7 : 1,
             }}
@@ -135,12 +157,13 @@ export function ConfirmModal({
           </button>
           <button
             type="button"
+            className="bpm-confirm-modal-confirm"
             onClick={onConfirm}
             disabled={isLoading}
             style={{
-              padding: "10px 20px",
+              padding: "8px 16px",
               border: "none",
-              borderRadius: "var(--bpm-radius-sm)",
+              borderRadius: "var(--bpm-radius)",
               background: styles.buttonBg,
               color: styles.buttonColor,
               fontSize: 14,

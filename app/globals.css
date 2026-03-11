@@ -5,15 +5,23 @@
 :root {
   --bpm-bg-primary: #ffffff;
   --bpm-bg-secondary: #f0f0f0;
+  --bpm-bg-tertiary: #e8e8e8;
   --bpm-surface: #ffffff;
   --bpm-text-primary: #333;
   --bpm-text-secondary: #666;
+  --bpm-text-muted: #666;
   --bpm-accent: #00a3e2;
+  --bpm-accent-hover: #0082b8;
+  --bpm-accent-contrast: #ffffff;
   --bpm-accent-cyan: #00a3e2;
   --bpm-color-link: #00a3e2;
   --bpm-color-link-hover: #0082b8;
   --bpm-accent-mint: #45d09e;
   --bpm-accent-light: #b2ebf2;
+  --bpm-radius: 8px;
+  --bpm-radius-sm: 4px;
+  --bpm-radius-md: 8px;
+  --bpm-radius-lg: 12px;
   /* Sidebar : couleurs d’origine (ne pas reprendre .Maker) ; mise en page alignée via le composant */
   --bpm-sidebar-bg: #f7f7f7;
   --bpm-sidebar-text: #333;
@@ -34,9 +42,12 @@
 [data-theme="dark"] {
   --bpm-bg-primary: #1a1a1a;
   --bpm-bg-secondary: #1e1e1e;
+  --bpm-bg-tertiary: #2a2a2a;
   --bpm-surface: #252525;
   --bpm-text-primary: #f5f5f7;
   --bpm-text-secondary: #b0b0b0;
+  --bpm-text-muted: #b0b0b0;
+  --bpm-accent-contrast: #ffffff;
   --bpm-border: rgba(255, 255, 255, 0.1);
   /* Sidebar mode sombre : gris foncé */
   --bpm-sidebar-bg: rgb(49, 51, 63);
@@ -92,6 +103,20 @@ body {
   min-height: 100vh;
   padding-top: env(safe-area-inset-top, 0);
   padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* bpm.notificationCenter — cloche sans fond (design portfolio) */
+.bpm-notification-center-trigger,
+.bpm-notification-center-trigger:hover,
+.bpm-notification-center-trigger:active,
+.bpm-notification-center-trigger:focus,
+.bpm-notification-center-trigger:focus-visible {
+  background: none !important;
+  background-color: transparent !important;
+  outline: none;
+}
+[data-theme="dark"] .bpm-notification-center-trigger svg {
+  fill: var(--bpm-text-primary);
 }
 
 /* PWA Window Controls Overlay : barre de titre dans la zone système (env + app-region) */
@@ -409,6 +434,10 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
   border-radius: 8px;
   box-shadow: none;
 }
+.bpm-crud-page .bpm-table-wrapper {
+  border: 1px solid var(--bpm-border);
+  box-shadow: none;
+}
 .bpm-table-container {
   min-width: 0;
   width: 100%;
@@ -626,6 +655,27 @@ textarea.bpm-textarea:focus {
 .btn-primary { background: var(--bpm-accent); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
 .btn-primary:hover { background: #0082b8; }
 .btn-secondary { background: transparent; color: var(--bpm-text-primary); border: 1px solid var(--bpm-border); padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+
+/* Bouton Envoyer (bpm.promptInput / bpm.chatInterface) — même charte que boutons primaires */
+.bpm-btn-submit {
+  padding: 8px 16px;
+  border-radius: var(--bpm-radius);
+  border: none;
+  background: var(--bpm-accent);
+  color: var(--bpm-accent-contrast);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.bpm-btn-submit:hover:not(:disabled) {
+  background: var(--bpm-accent-hover);
+}
+.bpm-btn-submit:disabled {
+  background: var(--bpm-bg-tertiary);
+  color: var(--bpm-text-muted);
+  cursor: not-allowed;
+}
 
 /* Wiki */
 .wiki-page {

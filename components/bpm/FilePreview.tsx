@@ -10,9 +10,16 @@ export interface FilePreviewProps {
   height?: string | number;
   showDownload?: boolean;
   className?: string;
+  /** Props snake_case (API Python) — normalisées en interne */
+  file_url?: string;
+  file_name?: string;
+  mime_type?: string;
+  show_download?: boolean;
+  class_name?: string;
 }
 
-function inferMime(filename: string): string {
+function inferMime(filename: string | undefined): string {
+  if (filename == null || typeof filename !== "string") return "application/octet-stream";
   const ext = filename.split(".").pop()?.toLowerCase() ?? "";
   const map: Record<string, string> = {
     pdf: "application/pdf",
@@ -35,14 +42,14 @@ function inferMime(filename: string): string {
   return map[ext] ?? "application/octet-stream";
 }
 
-export function FilePreview({
-  url,
-  filename,
-  mimeType: mimeProp,
-  height = 400,
-  showDownload = true,
-  className = "",
-}: FilePreviewProps) {
+export function FilePreview(props: FilePreviewProps) {
+  const url = props.url ?? props.file_url ?? "";
+  const filename = props.filename ?? props.file_name ?? "";
+  const mimeProp = props.mimeType ?? props.mime_type;
+  const height = props.height ?? 400;
+  const showDownload = props.showDownload ?? props.show_download ?? true;
+  const className = props.className ?? props.class_name ?? "";
+
   const mime = mimeProp ?? inferMime(filename);
   const [error, setError] = useState<string | null>(null);
   const [textContent, setTextContent] = useState<string | null>(null);
@@ -54,8 +61,11 @@ export function FilePreview({
     mime === "application/javascript";
 
   useEffect(() => {
-    if (!isText || typeof fetch === "undefined") return;
     setError(null);
+  }, [url, filename]);
+
+  useEffect(() => {
+    if (!url || !isText || typeof fetch === "undefined") return;
     setTextContent(null);
     fetch(url)
       .then((r) => r.text())
@@ -64,6 +74,24 @@ export function FilePreview({
   }, [isText, url]);
 
   const h = typeof height === "number" ? `${height}px` : height;
+
+  if (!url || !filename) {
+    return (
+      <div
+        className={className ? `bpm-file-preview ${className}`.trim() : "bpm-file-preview"}
+        style={{
+          border: "1px solid var(--bpm-border)",
+          borderRadius: "var(--bpm-radius-md)",
+          padding: 24,
+          background: "var(--bpm-bg-secondary)",
+          color: "var(--bpm-error)",
+          fontSize: 14,
+        }}
+      >
+        bpm.filePreview : url et filename sont requis.
+      </div>
+    );
+  }
 
   if (isImage) {
     return (

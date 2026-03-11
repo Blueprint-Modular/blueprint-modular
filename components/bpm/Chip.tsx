@@ -29,7 +29,7 @@ export function Chip({
       } ${disabled ? "opacity-60" : ""} ${className}`.trim()}
       style={{
         background: variant === "primary" ? "var(--bpm-accent)" : "var(--bpm-bg-secondary)",
-        color: variant === "primary" ? "#fff" : "var(--bpm-text-primary)",
+        color: variant === "primary" ? "var(--bpm-accent-contrast)" : "var(--bpm-text-primary)",
         border: variant === "outline" ? "1px solid var(--bpm-border)" : "none",
       }}
       role={onDelete ? "button" : undefined}

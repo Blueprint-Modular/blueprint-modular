@@ -39,7 +39,7 @@ export function Button({
       className={`rounded-lg font-medium transition ${sizeClass} ${fullWidth ? "w-full" : ""} ${className}`}
       style={{
         background: isPrimary ? "var(--bpm-accent)" : "transparent",
-        color: isPrimary ? "#fff" : "var(--bpm-text-primary)",
+        color: isPrimary ? "var(--bpm-accent-contrast)" : "var(--bpm-text-primary)",
         border: variant === "outline" ? "1px solid var(--bpm-border)" : "none",
         opacity: disabled ? 0.6 : 1,
         cursor: disabled ? "not-allowed" : "pointer",

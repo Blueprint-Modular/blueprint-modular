@@ -64,7 +64,7 @@ export function Panel({
         <div className="flex items-center gap-2 mb-2">
           <span
             className="flex items-center justify-center w-6 h-6 rounded-full text-sm font-bold"
-            style={{ background: borderColor, color: "#fff" }}
+            style={{ background: borderColor, color: "var(--bpm-accent-contrast)" }}
           >
             {icon ?? iconChar}
           </span>

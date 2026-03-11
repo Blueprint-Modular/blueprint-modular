@@ -12,8 +12,8 @@ export default function DocAvatarPage() {
   const [variant, setVariant] = useState<AvatarVariant>("default");
   const [size, setSize] = useState<AvatarSize>("medium");
   const [initials, setInitials] = useState("JD");
-  const [name, setName] = useState("Rémi Cabrit");
-  const [subtitle, setSubtitle] = useState("remicabrit@gmail.com");
+  const [name, setName] = useState("Jean Dupont");
+  const [subtitle, setSubtitle] = useState("jean.dupont@example.com");
   const [showLogout, setShowLogout] = useState(true);
   const [logoutLabel, setLogoutLabel] = useState("Se déconnecter");
 
@@ -209,7 +209,7 @@ export default function DocAvatarPage() {
 
       <h2 className="text-lg font-semibold mt-8 mb-2">Exemples</h2>
       <CodeBlock code={'bpm.avatar(initials="JD", size="medium")\nbpm.avatar(initials="RC", size="large")'} language="python" />
-      <CodeBlock code={'# Dans une sidebar\nbpm.avatar(\n    variant="sidebar",\n    initials="RC",\n    name="Rémi Cabrit",\n    subtitle="remi@example.com",\n    on_logout=lambda: ...\n)'} language="python" />
+      <CodeBlock code={'# Dans une sidebar\nbpm.avatar(\n    variant="sidebar",\n    initials="JD",\n    name="Jean Dupont",\n    subtitle="jean.dupont@example.com",\n    on_logout=lambda: ...\n)'} language="python" />
 
       <div className="mt-6 p-4 rounded-xl border" style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-secondary)" }}>
         <p className="text-sm mb-3" style={{ color: "var(--bpm-text-secondary)" }}>

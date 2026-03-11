@@ -20,7 +20,7 @@ const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
   },
   primary: {
     background: "var(--bpm-accent-cyan)",
-    color: "#fff",
+    color: "var(--bpm-accent-contrast)",
     border: "none",
   },
   success: {

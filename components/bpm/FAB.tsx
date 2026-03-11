@@ -22,12 +22,24 @@ export function FAB({ icon, label, onClick, position = "bottom-right", className
     <button
       type="button"
       onClick={onClick}
-      className={"bpm-fab fixed z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-0 cursor-pointer " + positionClasses[position] + " " + className}
-      style={{ background: "var(--bpm-accent)", color: "var(--bpm-accent-contrast)" }}
+      className={"bpm-fab fixed z-50 flex items-center justify-center w-14 h-14 border-0 cursor-pointer " + positionClasses[position] + " " + className}
+      style={{
+        background: "var(--bpm-accent)",
+        color: "var(--bpm-accent-contrast)",
+        borderRadius: "50%",
+        boxShadow: "var(--bpm-shadow)",
+        transition: "var(--bpm-transition)",
+      }}
       title={label}
       aria-label={label ?? "Action"}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "var(--bpm-accent-hover)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "var(--bpm-accent)";
+      }}
     >
-      {icon ?? <span className="text-2xl leading-none">+</span>}
+      {icon ?? <span style={{ fontSize: "var(--bpm-font-size-xl)", lineHeight: 1 }}>+</span>}
     </button>
   );
 }

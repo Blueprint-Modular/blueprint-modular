@@ -19,7 +19,7 @@ export default function DocImagePage() {
       </div>
       <div className="sandbox-container">
         <div className="sandbox-preview">
-          <div style={{ width: 300, height: 200, border: "1px solid #ccc" }}>
+          <div style={{ width: 300, height: 200, border: "1px solid var(--bpm-border)" }}>
             <Image src={src} alt="Exemple" fit={fit} width={300} height={200} />
           </div>
         </div>

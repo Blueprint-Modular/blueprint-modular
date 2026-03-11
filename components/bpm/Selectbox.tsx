@@ -121,11 +121,14 @@ export function Selectbox({
   const dropdownContent = isOpen && !disabled && (
     <div
       ref={dropdownRef as React.RefObject<HTMLDivElement>}
-      className="bpm-selectbox-dropdown rounded-lg border shadow-lg py-1 overflow-auto"
+      className="bpm-selectbox-dropdown overflow-auto"
       style={{
         ...dropdownStyle,
         background: "var(--bpm-surface)",
-        borderColor: "var(--bpm-border)",
+        border: "1px solid var(--bpm-border)",
+        borderRadius: "var(--bpm-radius)",
+        boxShadow: "var(--bpm-shadow)",
+        padding: "4px 0",
       }}
       onMouseDown={(e) => e.stopPropagation()}
     >
@@ -139,19 +142,28 @@ export function Selectbox({
               key={idx}
               role="option"
               aria-selected={isSelected}
-              className="bpm-selectbox-option px-3 py-2 cursor-pointer text-sm"
+              className="bpm-selectbox-option cursor-pointer"
               style={{
-                background: isSelected ? "var(--bpm-bg-secondary)" : "transparent",
-                color: "var(--bpm-text-primary)",
+                padding: "8px 12px",
+                fontSize: "var(--bpm-font-size-base)",
+                background: isSelected ? "var(--bpm-accent)" : "transparent",
+                color: isSelected ? "var(--bpm-accent-contrast)" : "var(--bpm-text)",
+                transition: "var(--bpm-transition)",
               }}
               onClick={() => handleSelect(optValue)}
+              onMouseEnter={(e) => {
+                if (!isSelected) e.currentTarget.style.background = "var(--bpm-bg-secondary)";
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) e.currentTarget.style.background = "transparent";
+              }}
             >
               {optLabel}
             </div>
           );
         })
       ) : (
-        <div className="px-3 py-2 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+        <div style={{ padding: "8px 12px", fontSize: "var(--bpm-font-size-base)", color: "var(--bpm-text-muted)" }}>
           Aucune option disponible
         </div>
       )}

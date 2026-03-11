@@ -42,13 +42,20 @@ export function Pagination({
         disabled={!hasPrev}
         aria-label="Page précédente"
         style={{
-          padding: "6px 12px",
+          width: 36,
+          height: 36,
+          padding: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
           borderRadius: "var(--bpm-radius)",
           border: "1px solid var(--bpm-border)",
           background: "var(--bpm-bg-primary)",
-          color: "var(--bpm-text-primary)",
+          color: "var(--bpm-text)",
           cursor: hasPrev ? "pointer" : "not-allowed",
           opacity: hasPrev ? 1 : 0.5,
+          fontSize: "var(--bpm-font-size-base)",
+          lineHeight: 1,
         }}
       >
         ←
@@ -62,13 +69,20 @@ export function Pagination({
         disabled={!hasNext}
         aria-label="Page suivante"
         style={{
-          padding: "6px 12px",
+          width: 36,
+          height: 36,
+          padding: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
           borderRadius: "var(--bpm-radius)",
           border: "1px solid var(--bpm-border)",
           background: "var(--bpm-bg-primary)",
-          color: "var(--bpm-text-primary)",
+          color: "var(--bpm-text)",
           cursor: hasNext ? "pointer" : "not-allowed",
           opacity: hasNext ? 1 : 0.5,
+          fontSize: "var(--bpm-font-size-base)",
+          lineHeight: 1,
         }}
       >
         →

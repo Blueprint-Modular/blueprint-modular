@@ -47,13 +47,16 @@ function MaterialIcon({
       role="img"
       aria-hidden
       style={{
+        fontFamily: "Material Symbols Outlined",
         fontSize: size,
         width: size,
         height: size,
+        minWidth: size,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         flexShrink: 0,
+        overflow: "hidden",
         ...style,
       }}
     >
@@ -211,10 +214,14 @@ export function PageLayout({
                 <span
                   style={{
                     opacity: isCollapsed ? 0 : 1,
-                    transition: "opacity 0.15s ease",
+                    width: isCollapsed ? 0 : undefined,
+                    maxWidth: isCollapsed ? 0 : undefined,
                     overflow: "hidden",
                     whiteSpace: "nowrap",
                     textOverflow: "ellipsis",
+                    flex: isCollapsed ? "none" : 1,
+                    minWidth: isCollapsed ? 0 : 0,
+                    transition: "opacity 0.15s ease",
                   }}
                 >
                   {item.label}
@@ -272,9 +279,13 @@ export function PageLayout({
               <span
                 style={{
                   opacity: isCollapsed ? 0 : 1,
-                  transition: "opacity 0.15s ease",
+                  width: isCollapsed ? 0 : undefined,
+                  maxWidth: isCollapsed ? 0 : undefined,
                   overflow: "hidden",
                   whiteSpace: "nowrap",
+                  flex: isCollapsed ? "none" : 1,
+                  minWidth: isCollapsed ? 0 : 0,
+                  transition: "opacity 0.15s ease",
                 }}
               >
                 Thème

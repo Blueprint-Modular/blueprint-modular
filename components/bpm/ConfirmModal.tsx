@@ -132,7 +132,8 @@ export function ConfirmModal({
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
+            alignItems: "center",
             gap: 12,
             padding: "16px 24px",
             borderTop: "1px solid var(--bpm-border)",

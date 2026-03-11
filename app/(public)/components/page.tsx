@@ -102,9 +102,9 @@ import {
 } from "@/components/bpm";
 
 const DEMO_CARD_STYLE: React.CSSProperties = {
-  background: "#fff",
-  border: "1px solid var(--bpm-border, #e5e7eb)",
-  borderRadius: 8,
+  background: "var(--bpm-bg)",
+  border: "1px solid var(--bpm-border)",
+  borderRadius: "var(--bpm-radius)",
   padding: 16,
 };
 
@@ -119,7 +119,7 @@ function DemoCard({
 }) {
   return (
     <div style={{ gridColumn: wide ? "1 / -1" : undefined }}>
-      <Caption className="mb-1" style={{ display: "block", marginBottom: 4 }}>
+      <Caption className="mb-1" style={{ display: "block", marginBottom: 4, color: "var(--bpm-text-muted)" }}>
         {label}
       </Caption>
       <div style={DEMO_CARD_STYLE}>{children}</div>
@@ -174,15 +174,15 @@ export default function ComponentsPage() {
   const [modelSelectorId, setModelSelectorId] = useState("gpt-4o");
 
   return (
-    <div style={{ background: "#f8fafc", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
+    <div style={{ background: "var(--bpm-bg)", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
       {/* Header fixe — paddingTop sur le container pour ne pas couvrir le contenu sur mobile */}
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "var(--bpm-bg-primary, #fff)",
-          borderBottom: "1px solid var(--bpm-border, #e5e7eb)",
+          background: "var(--bpm-bg)",
+          borderBottom: "1px solid var(--bpm-border)",
           padding: "16px 24px",
           display: "flex",
           alignItems: "center",
@@ -203,7 +203,7 @@ export default function ComponentsPage() {
       <nav
         style={{
           padding: "12px 24px",
-          background: "var(--bpm-bg-secondary, #f1f5f9)",
+          background: "var(--bpm-bg-secondary)",
           borderBottom: "1px solid var(--bpm-border)",
           display: "flex",
           flexWrap: "wrap",
@@ -217,8 +217,8 @@ export default function ComponentsPage() {
             key={s.id}
             href={`#${s.id}`}
             style={{
-              fontSize: 14,
-              color: "var(--bpm-accent-cyan, #0ea5e9)",
+              fontSize: "var(--bpm-font-size-base)",
+              color: "var(--bpm-accent)",
               textDecoration: "none",
             }}
           >
@@ -524,7 +524,7 @@ export default function ComponentsPage() {
               </Empty>
             </DemoCard>
             <DemoCard label="bpm.pageLayout" wide>
-              <div style={{ height: 280, border: "1px solid var(--bpm-border)", borderRadius: 8, overflow: "hidden" }}>
+              <div style={{ height: 280, border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
                 <PageLayout
                   title="Démo"
                   items={[
@@ -578,7 +578,7 @@ export default function ComponentsPage() {
               </MetricRow>
             </DemoCard>
             <DemoCard label="bpm.table" wide>
-              <div style={{ border: "1px solid var(--bpm-border)", borderRadius: 8, overflow: "hidden" }}>
+              <div style={{ border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
                 <Table
                 columns={[
                   { key: "nom", label: "Nom" },
@@ -842,8 +842,8 @@ export default function ComponentsPage() {
                   position: "relative",
                   height: 80,
                   border: "1px dashed var(--bpm-border)",
-                  borderRadius: 8,
-                  background: "#f8fafc",
+                  borderRadius: "var(--bpm-radius)",
+                  background: "var(--bpm-bg)",
                 }}
               >
                 <FAB onClick={() => alert("FAB cliqué")} icon="+" />

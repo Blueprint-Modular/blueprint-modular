@@ -172,6 +172,7 @@ export function Table({
         border: "1px solid var(--bpm-border)",
         borderRadius: "var(--bpm-radius)",
         boxShadow: "none",
+        outline: "none",
         overflow: "hidden",
         backgroundColor: "var(--bpm-surface)",
       }}

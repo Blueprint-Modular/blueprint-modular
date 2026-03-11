@@ -24,7 +24,7 @@ export interface NotificationCenterProps {
 }
 
 const BellIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor" style={{ color: "var(--bpm-text)" }}>
+  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor" style={{ color: "var(--bpm-text-secondary)" }} aria-hidden>
     <path d="M200-209.23v-40h64.62v-316.92q0-78.39 49.61-137.89 49.62-59.5 125.77-74.11V-800q0-16.67 11.64-28.33Q463.28-840 479.91-840t28.36 11.67Q520-816.67 520-800v21.85q76.15 14.61 125.77 74.11 49.61 59.5 49.61 137.89v316.92H760v40H200Zm280-286.15Zm-.14 390.76q-26.71 0-45.59-18.98-18.89-18.98-18.89-45.63h129.24q0 26.85-19.03 45.73-19.02 18.88-45.73 18.88ZM304.62-249.23h350.76v-316.92q0-72.93-51.23-124.16-51.23-51.23-124.15-51.23-72.92 0-124.15 51.23-51.23 51.23-51.23 124.16v316.92Z" />
   </svg>
 );
@@ -132,7 +132,7 @@ export function NotificationCenter({
               maxHeight: 600,
               border: "1px solid var(--bpm-border)",
               borderRadius: "var(--bpm-radius)",
-              background: "var(--bpm-bg-primary)",
+              background: "var(--bpm-bg)",
               boxShadow: "var(--bpm-shadow)",
               display: "flex",
               flexDirection: "column",
@@ -140,13 +140,14 @@ export function NotificationCenter({
             }}
           >
             <div
+              className="bpm-notification-center-header"
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "16px 20px",
                 borderBottom: "1px solid var(--bpm-border)",
-                background: "var(--bpm-bg-secondary)",
+                background: "var(--bpm-bg-tertiary)",
                 fontWeight: 600,
                 fontSize: "var(--bpm-font-size-lg)",
                 color: "var(--bpm-text)",
@@ -165,7 +166,7 @@ export function NotificationCenter({
                     border: "none",
                     borderRadius: "var(--bpm-radius-sm)",
                     background: "transparent",
-                    color: "var(--bpm-text-secondary)",
+                    color: "var(--bpm-text-muted)",
                     cursor: "pointer",
                   }}
                 >
@@ -269,11 +270,16 @@ export function NotificationCenter({
               })}
               {list.length === 0 && (
                 <div
+                  className="bpm-notification-center-empty"
                   style={{
-                    padding: 24,
+                    padding: "40px 24px",
                     textAlign: "center",
                     color: "var(--bpm-text-muted)",
                     fontSize: "var(--bpm-font-size-base)",
+                    minHeight: 120,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   Aucune notification

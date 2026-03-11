@@ -45,7 +45,7 @@ export default function DocModalPage() {
             size={size}
             showCloseButton
           >
-            <p style={{ color: "var(--bpm-text-primary)" }}>
+            <p style={{ color: "var(--bpm-text)" }}>
               Contenu de la modal. Fermez avec le bouton ou Échap.
             </p>
           </Modal>

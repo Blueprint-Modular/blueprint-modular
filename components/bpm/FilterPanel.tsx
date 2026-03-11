@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Selectbox } from "./Selectbox";
 
 export interface FilterOption {
   label: string;
@@ -110,21 +111,19 @@ export function FilterPanel({
 
     if (f.type === "select") {
       const opts = f.options ?? [];
+      const selectOptions: { value: string; label: string }[] = [
+        { value: "", label: "Tous" },
+        ...opts.map((o) => ({ value: o.value, label: o.label })),
+      ];
       return (
         <div key={f.key} style={{ display: "flex", flexDirection: "column", minWidth: 140 }}>
           <label style={labelStyle}>{f.label}</label>
-          <select
-            style={inputStyle}
+          <Selectbox
+            options={selectOptions}
             value={(v as string) ?? ""}
-            onChange={(e) => onChange(f.key, e.target.value || null)}
-          >
-            <option value="">Tous</option>
-            {opts.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => onChange(f.key, val || null)}
+            placeholder="Tous"
+          />
         </div>
       );
     }
@@ -187,9 +186,19 @@ export function FilterPanel({
           <label style={labelStyle}>{f.label}</label>
           <input
             type="text"
+            className="bpm-input"
             style={inputStyle}
             value={(v as string) ?? ""}
             onChange={(e) => onChange(f.key, e.target.value)}
+            onFocus={(e) => {
+              e.target.style.outline = "none";
+              e.target.style.borderColor = "var(--bpm-accent)";
+              e.target.style.boxShadow = "var(--bpm-focus-ring)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "var(--bpm-border)";
+              e.target.style.boxShadow = "none";
+            }}
             placeholder="Rechercher..."
           />
         </div>

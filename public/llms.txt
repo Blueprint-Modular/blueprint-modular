@@ -298,7 +298,7 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   label?: string
   orientation?: "horizontal" | "vertical"
   thickness?: number  — Épaisseur en pixels (défaut 1).
-  color?: string  — Couleur de la ligne (CSS, ex. var(--bpm-border), #ccc, rgb(0,0,0)).
+  color?: string  — Couleur de la ligne (CSS, ex. var(--bpm-border)).
   className?: string
 ```
 
@@ -404,7 +404,7 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   momentDescription?: string | null  — Description "Moment" (affichée en italique, gris)
   rtbPoints?: string[] | null  — Points RTB (affichés séparés par ·)
   targetPoints?: string | string[] | null  — Points Cible (chaîne ou liste)
-  barColor?: string | null  — Couleur de la barre latérale (hex, rgb ou nom CSS). Par défaut : noir (#212121).
+  barColor?: string | null  — Couleur de la barre latérale (ex. var(--bpm-accent) ou var(--bpm-border)).
   className?: string
 ```
 
@@ -890,11 +890,11 @@ Composant bpm.title4 — voir @blueprint-modular/core ou BPM_API.md.
   level?: 1 | 2 | 3 | 4
   size?: string | null  — Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau.
   bold?: boolean | number | null  — Gras : true = 700, false = 400, ou nombre (ex. 600). Surcharge le défaut du niveau.
-  color?: string | null  — Couleur du texte (ex. "var(--bpm-text-primary)", "#333"). Surcharge la couleur par défaut.
+  color?: string | null  — Couleur du texte (ex. var(--bpm-text)). Surcharge la couleur par défaut.
   bar?: boolean  — Barre verticale sombre à gauche du titre (comme en-tête de section).
-  barColor?: string | null  — Couleur de la barre gauche (hex, rgb ou nom CSS). Ignoré si bar=false.
+  barColor?: string | null  — Couleur de la barre gauche (ex. var(--bpm-accent)). Ignoré si bar=false.
   inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style badge / scénario).
-  invertedBackground?: string | null  — Couleur de fond quand inverted=true (hex, rgb ou nom CSS). Par défaut : #1d1d1f.
+  invertedBackground?: string | null  — Couleur de fond quand inverted=true (ex. var(--bpm-text) pour contraste). Par défaut : thème sombre.
   logoUrl?: string | null  — Optional logo URL (e.g. from localStorage). Shown only when level === 1.
   onLogoClick?: () => void
 ```
@@ -909,8 +909,8 @@ Composant bpm.toast — interface non parsée (voir BPM_API.md).
   text*: string
   children*: React.ReactNode
   position?: TooltipPlacement
-  backgroundColor?: string | null  — Couleur de fond du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-text-primary).
-  textColor?: string | null  — Couleur du texte du tooltip (hex, rgb ou nom CSS). Par défaut : var(--bpm-bg-primary).
+  backgroundColor?: string | null  — Couleur de fond du tooltip. Par défaut : var(--bpm-text).
+  textColor?: string | null  — Couleur du texte du tooltip. Par défaut : var(--bpm-bg-primary).
 ```
 
 ## bpm.topNav

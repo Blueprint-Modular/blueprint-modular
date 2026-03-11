@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export interface NumberInputProps {
   label?: string;
@@ -25,13 +25,21 @@ export function NumberInput({
   help = null,
   placeholder = "",
 }: NumberInputProps) {
-  const [local, setLocal] = useState("");
+  const [displayString, setDisplayString] = useState(() =>
+    value !== undefined && value != null ? String(value) : ""
+  );
   const isControlled = value !== undefined;
-  const displayValue = isControlled ? (value != null ? String(value) : "") : local;
+
+  useEffect(() => {
+    if (!isControlled) return;
+    setDisplayString(value != null ? String(value) : "");
+  }, [isControlled, value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
-    if (!isControlled) setLocal(v);
+    const allowed = /^[-+]?(\d*\.?\d*|\.\d*)(e[-+]?\d*)?$/i;
+    if (v !== "" && !allowed.test(v)) return;
+    setDisplayString(v);
     const num = v === "" ? null : parseFloat(v);
     if (onChange && !disabled) onChange(Number.isNaN(num as number) ? null : num);
   };
@@ -39,12 +47,13 @@ export function NumberInput({
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.style.borderColor = "var(--bpm-border)";
     e.target.style.boxShadow = "none";
-    let val: number | null = displayValue === "" ? null : parseFloat(displayValue);
+    let val: number | null = displayString === "" ? null : parseFloat(displayString);
     if (val != null && !Number.isNaN(val)) {
       if (min != null && val < min) val = min;
       if (max != null && val > max) val = max;
     }
-    if (!isControlled) setLocal(val != null ? String(val) : "");
+    const normalized = val != null ? String(val) : "";
+    setDisplayString(normalized);
     if (onChange && !disabled) onChange(val);
   };
 
@@ -62,7 +71,7 @@ export function NumberInput({
         autoComplete="off"
         className="w-full px-3 py-2 rounded-lg border text-sm"
         style={{ borderColor: "var(--bpm-border)", background: "var(--bpm-bg-primary)", color: "var(--bpm-text-primary)" }}
-        value={displayValue}
+        value={displayString}
         onChange={handleChange}
         onFocus={(e) => {
           e.target.style.outline = "none";

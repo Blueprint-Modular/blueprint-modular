@@ -23,7 +23,7 @@
 
 :root {
   --bpm-bg-primary: #ffffff;
-  --bpm-bg-secondary: #f0f0f0;
+  --bpm-bg-secondary: #f0f2f5;
   --bpm-bg-tertiary: #e8e8e8;
   --bpm-surface: #ffffff;
   --bpm-text-primary: #333;
@@ -41,6 +41,15 @@
   --bpm-radius-sm: 4px;
   --bpm-radius-md: 8px;
   --bpm-radius-lg: 12px;
+  /* Transitions et micro-interactions */
+  --bpm-transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --bpm-transition-fast: all 0.12s ease;
+  --bpm-transition-spring: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Ombres et focus */
+  --bpm-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --bpm-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --bpm-focus-ring: 0 0 0 3px rgba(19, 121, 231, 0.15);
+  --bpm-bg-app: #f7f8fa;
   /* Sidebar : couleurs d’origine (ne pas reprendre .Maker) ; mise en page alignée via le composant */
   --bpm-sidebar-bg: #f7f7f7;
   --bpm-sidebar-text: #333;
@@ -54,8 +63,8 @@
   --bpm-code-border: rgb(237, 237, 237);
   /* Tableaux : bande striée plus claire que l'en-tête */
   --bpm-table-stripe: #f7f7f7;
-  --bpm-skeleton-bg: #f0f0f0;
-  --bpm-skeleton-shimmer-mid: #e0e0e0;
+  --bpm-skeleton-bg: #eef0f3;
+  --bpm-skeleton-shimmer-mid: #f8f9fb;
   /* Sémantique feedback (bpm.message, bpm.badge) — à conserver pour le sens */
   --bpm-success: #16a34a;
   --bpm-warning: #d97706;
@@ -81,6 +90,7 @@
   --bpm-text-secondary: #b0b0b0;
   --bpm-text-muted: #b0b0b0;
   --bpm-accent-contrast: #ffffff;
+  --bpm-bg-app: #121218;
   --bpm-border: rgba(255, 255, 255, 0.1);
   /* Sidebar mode sombre : gris foncé */
   --bpm-sidebar-bg: rgb(49, 51, 63);
@@ -130,6 +140,61 @@
   .bpm-skeleton { animation: none !important; }
   .bpm-skeleton--shimmer { animation: none !important; }
 }
+
+/* FAB : pulse discret, arrêt au hover + scale */
+@keyframes bpm-fab-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(19, 121, 231, 0.5); }
+  70%  { box-shadow: 0 0 0 10px rgba(19, 121, 231, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(19, 121, 231, 0); }
+}
+.bpm-fab {
+  animation: bpm-fab-pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.bpm-fab:hover {
+  animation: none;
+  transform: scale(1.08);
+}
+
+/* Progress bar : shimmer sur le fill */
+@keyframes bpm-progress-shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.bpm-progress-fill {
+  position: relative;
+  overflow: hidden;
+}
+.bpm-progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: bpm-progress-shimmer 1.8s ease-in-out infinite;
+}
+
+/* Badge : entrée animée */
+@keyframes bpm-badge-in {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.bpm-badge {
+  animation: bpm-badge-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Metric : barre accent en haut */
+.bpm-metric {
+  position: relative;
+  overflow: hidden;
+}
+.bpm-metric::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--bpm-accent), var(--bpm-accent-mint));
+  border-radius: var(--bpm-radius) var(--bpm-radius) 0 0;
+  margin: -16px -16px 12px -16px;
+}
+
 .bpm-skeleton-container {
   background: var(--bpm-bg-primary);
   transition: opacity 200ms ease-out;
@@ -140,7 +205,7 @@
 }
 
 html {
-  background: var(--bpm-bg-primary);
+  background: var(--bpm-bg-app);
   color: var(--bpm-text-primary);
   scrollbar-gutter: stable;
 }
@@ -452,11 +517,14 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
 .bpm-table-striped tbody tr:nth-of-type(even) {
   background: var(--bpm-table-stripe);
 }
+.bpm-table tbody tr {
+  transition: background-color 0.12s ease;
+}
 .bpm-table-hover tbody tr:hover {
-  background: var(--bpm-bg-secondary);
+  background: rgba(19, 121, 231, 0.04);
 }
 [data-theme="dark"] .bpm-table-hover tbody tr:hover {
-  background: var(--bpm-bg-tertiary);
+  background: rgba(19, 121, 231, 0.08);
 }
 .bpm-table-clickable tbody tr {
   cursor: pointer;
@@ -541,9 +609,18 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
   font-size: 0.9375rem;
 }
 
-/* Title levels (bpm.title) */
+/* Title levels (bpm.title) — contraste typo, letter-spacing premium */
 .bpm-title-level-1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }
+.bpm-title-level-1 .bpm-title-text {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
 .bpm-title-level-2 { font-size: 1.5rem; font-weight: 600; margin: 0.5rem 0; }
+.bpm-title-level-2 .bpm-title-text {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
 .bpm-title-level-3 { font-size: 1.25rem; font-weight: 600; margin: 0.5rem 0; }
 .bpm-title-level-4 { font-size: 1.125rem; font-weight: 600; margin: 0.5rem 0; }
 
@@ -578,6 +655,20 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
 .bpm-title-inverted.bpm-title-with-bar::before {
   background: var(--bpm-title-bar-color, #fff);
   left: 0.75rem;
+}
+
+/* Card : profondeur, ombre double couche, hover lift */
+.bpm-card:not(.bpm-card-inverted) {
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: var(--bpm-shadow-sm) !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+[data-theme="dark"] .bpm-card:not(.bpm-card-inverted) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.bpm-card:not(.bpm-card-inverted):hover {
+  box-shadow: var(--bpm-shadow-md) !important;
+  transform: translateY(-2px);
 }
 
 /* Card inverted (bpm.card inverted) — zone type Executive Summary */
@@ -640,13 +731,28 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
 }
 .skip-nav:focus { top: 0; outline: 2px solid var(--bpm-accent-cyan); outline-offset: 2px; }
 
-/* Champs de saisie : bordure couleur principale au focus (évite le noir par défaut) */
+/* Boutons primaires : relief, hover lift, active press */
+.bpm-btn { transition: var(--bpm-transition); }
+.bpm-btn-primary {
+  box-shadow: 0 1px 3px rgba(19, 121, 231, 0.25), 0 0 0 0 rgba(19, 121, 231, 0);
+}
+.bpm-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(19, 121, 231, 0.35);
+}
+.bpm-btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 3px rgba(19, 121, 231, 0.2);
+}
+
+/* Champs de saisie : focus ring accent */
 .bpm-input:focus,
 .bpm-textarea:focus,
 textarea.bpm-textarea:focus {
   outline: none !important;
   border-color: var(--bpm-accent) !important;
-  box-shadow: 0 0 0 2px rgba(0, 163, 226, 0.2);
+  box-shadow: var(--bpm-focus-ring) !important;
+  transition: var(--bpm-transition);
 }
 
 /* Selectbox (ex. Modèle) : même bleu qu’Input/Textarea au focus et à l’ouverture */
@@ -654,7 +760,8 @@ textarea.bpm-textarea:focus {
 .bpm-selectbox[aria-expanded="true"] {
   outline: none !important;
   border-color: var(--bpm-accent) !important;
-  box-shadow: 0 0 0 2px rgba(0, 163, 226, 0.2);
+  box-shadow: var(--bpm-focus-ring) !important;
+  transition: var(--bpm-transition);
 }
 
 .doc-breadcrumb { font-size: 12px; color: var(--bpm-text-secondary); margin-bottom: 8px; }
@@ -719,7 +826,7 @@ textarea.bpm-textarea:focus {
 .btn-primary:hover { background: #0082b8; }
 .btn-secondary { background: transparent; color: var(--bpm-text-primary); border: 1px solid var(--bpm-border); padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; }
 
-/* Bouton Envoyer (bpm.promptInput / bpm.chatInterface) — même charte que boutons primaires */
+/* Bouton Envoyer (bpm.promptInput / bpm.chatInterface) — même charte et relief que boutons primaires */
 .bpm-btn-submit {
   padding: 8px 16px;
   border-radius: var(--bpm-radius);
@@ -729,10 +836,17 @@ textarea.bpm-textarea:focus {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: var(--bpm-transition);
+  box-shadow: 0 1px 3px rgba(19, 121, 231, 0.25), 0 0 0 0 rgba(19, 121, 231, 0);
 }
 .bpm-btn-submit:hover:not(:disabled) {
   background: var(--bpm-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(19, 121, 231, 0.35);
+}
+.bpm-btn-submit:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 3px rgba(19, 121, 231, 0.2);
 }
 .bpm-btn-submit:disabled {
   background: var(--bpm-bg-tertiary);
@@ -1638,4 +1752,15 @@ textarea.bpm-textarea:focus {
   .wiki-print-only a { color: #1a4b8f; }
   .wiki-print-only pre,
   .wiki-print-only code { font-family: ui-monospace, "Cascadia Code", monospace; }
+}
+
+/* Accessibilité : réduire les animations si l'utilisateur le demande */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

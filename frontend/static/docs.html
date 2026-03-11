@@ -79,7 +79,9 @@
     <main class="doc-main">
       <h1>Blueprint Modular</h1>
       <p class="lead"><strong>Briques prêtes à l'emploi.</strong> Importez depuis <code>bpm</code>, le reste est déjà fait.</p>
-
+      <div class="doc-callout" style="margin:1rem 0;padding:1rem 1.25rem;background:var(--bpm-bg-secondary,#f5f5f5);border-radius:8px;border:1px solid var(--bpm-border,#e5e7eb);font-size:0.95rem;">
+        <strong>À qui s'adresse cette doc ?</strong> Aux <strong>développeurs Python</strong> : <code>pip install blueprint-modular</code>, <code>bpm run app.py</code>. Les exemples et la référence API décrivent l'<strong>API Python</strong> (<code>bpm.title()</code>, <code>bpm.table(df)</code>, etc.). L'<strong>application de démo</strong> (app.blueprint-modular.com) est en Next.js/React et affiche les mêmes briques en rendu React ; pour voir les 94 composants en live (sandbox) : <a href="https://app.blueprint-modular.com/docs/components" target="_blank" rel="noopener">app.blueprint-modular.com/docs/components</a>.
+      </div>
       <h2>Installation</h2>
       <pre><code>pip install blueprint-modular</code></pre>
       <p>Prérequis : Python 3.9+</p>
@@ -122,7 +124,7 @@ bpm.table(df)</code></pre>
         <li><strong>Registry <code>$</code> et <code>@</code></strong>  —  Réfs réactives (<code>bpm.ref</code>) et décorateurs (<code>@bpm.page</code>, <code>@bpm.sidebar</code>) dans le package Python <code>bpm</code>.</li>
         <li><strong>Layout piloté par config</strong>  —  Exemple <code>app.config.example.js</code> : un fichier pour sidebar, pages et liens ; dupliquer une app = modifier la config.</li>
         <li><strong>Réactivité granulaire</strong>  —  Store réactif (<code>reactiveStore.js</code>) et hook <code>useReactive(key)</code> côté frontend.</li>
-        <li><strong>94 composants bpm.*</strong>  —  Texte, données, graphiques, saisie, layout, panels, médias, status, chat. Catalogue et sandbox live sur <a href="https://app.blueprint-modular.com/docs/components" target="_blank" rel="noopener">app.blueprint-modular.com/docs/components</a>.</li>
+        <li><strong>Composants bpm.*</strong>  —  API Python (texte, données, graphiques, saisie, layout, etc.) ; 94 composants en rendu React sur l'app de démo. Catalogue Python dans cette doc ; visuels et sandbox React sur <a href="https://app.blueprint-modular.com/docs/components" target="_blank" rel="noopener">app.blueprint-modular.com/docs/components</a>.</li>
         <li><strong>App de démo (Next.js)</strong>  —  Assistant IA (contexte modules + contrats), Base contractuelle (upload PDF/DOCX, analyse IA, synthèse), Wiki, Documents, Veille, paramètres et sandbox composants sur <a href="https://app.blueprint-modular.com/dashboard">app.blueprint-modular.com</a>.</li>
       </ul>
 

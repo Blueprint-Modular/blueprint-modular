@@ -101,7 +101,7 @@ export function Metric({
 
   return (
     <div
-      className={`inline-block rounded-lg min-w-[140px] ${compact ? "p-3" : "p-4"} ${border ? "border" : ""}`}
+      className={`bpm-metric inline-block rounded-lg min-w-[140px] ${compact ? "p-3" : "p-4"} ${border ? "border" : ""}`}
       style={{
         background: "var(--bpm-surface)",
         ...(border ? { borderColor: "var(--bpm-border)" } : {}),

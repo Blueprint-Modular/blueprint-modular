@@ -37,7 +37,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`font-medium ${sizeClass} ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`bpm-btn ${isPrimary ? "bpm-btn-primary " : ""}font-medium ${sizeClass} ${fullWidth ? "w-full" : ""} ${className}`.trim()}
       style={{
         background: isPrimary ? "var(--bpm-accent)" : "transparent",
         color: isPrimary ? "var(--bpm-accent-contrast)" : "var(--bpm-text)",

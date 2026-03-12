@@ -207,7 +207,7 @@ export function ModelSelector({
           {open ? "▲" : "▼"}
         </span>
       </button>
-      {dropdownContent && createPortal(dropdownContent, document.body)}
+      {typeof document !== "undefined" && dropdownContent && createPortal(dropdownContent, document.body)}
     </div>
   );
 }

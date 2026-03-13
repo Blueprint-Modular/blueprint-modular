@@ -184,7 +184,7 @@ export default function ComponentsPage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "#fff",
+          background: "var(--bpm-bg)",
           borderBottom: "1px solid var(--bpm-border)",
           padding: "16px 24px",
           display: "flex",

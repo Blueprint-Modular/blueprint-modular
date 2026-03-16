@@ -169,13 +169,13 @@ export function Table({
     <div
       className={`bpm-table-wrapper overflow-auto max-h-[calc(100vh-220px)] md:max-h-[calc(100vh-350px)] ${className}`}
       style={{
-        border: "1px solid var(--bpm-border)",
-        borderRadius: "var(--bpm-radius)",
+        border: "1px solid var(--bpm-border, #e5e7eb)",
+        borderRadius: "var(--bpm-radius, 8px)",
         boxShadow: "none",
         outline: "none",
         overflowX: "auto",
         overflowY: "auto",
-        backgroundColor: "var(--bpm-bg-primary)",
+        backgroundColor: "var(--bpm-bg-primary, #ffffff)",
       }}
       data-name={name ?? undefined}
       data-key-column={keyColumn ?? undefined}
@@ -200,9 +200,9 @@ export function Table({
                   style={{
                     textAlign: getColumnAlign(col, data),
                     cursor: col.key ? "pointer" : "default",
-                    backgroundColor: "var(--bpm-bg-secondary)",
-                    borderColor: "var(--bpm-border)",
-                    color: "var(--bpm-text-secondary)",
+                    backgroundColor: "var(--bpm-bg-secondary, #f8fafc)",
+                    borderColor: "var(--bpm-border, #e5e7eb)",
+                    color: "var(--bpm-text-secondary, #64748b)",
                   }}
                   onClick={() => col.key && handleSort(col.key)}
                 >
@@ -225,12 +225,12 @@ export function Table({
                   colSpan={columns.length}
                   className="px-3 py-12 text-center text-sm"
                   style={{
-                    color: "var(--bpm-text-secondary)",
-                    borderColor: "var(--bpm-border)",
-                    backgroundColor: "var(--bpm-bg-primary)",
+                    color: "var(--bpm-text-secondary, #64748b)",
+                    borderColor: "var(--bpm-border, #e5e7eb)",
+                    backgroundColor: "var(--bpm-bg-primary, #ffffff)",
                   }}
                 >
-                  <span style={{ display: "inline-block", marginBottom: 8, fontSize: "var(--bpm-font-size-lg)" }} aria-hidden>—</span>
+                  <span style={{ display: "inline-block", marginBottom: 8, fontSize: "var(--bpm-font-size-lg, 1.125rem)" }} aria-hidden>—</span>
                   <div>{emptyMessage}</div>
                 </td>
               </tr>
@@ -241,8 +241,8 @@ export function Table({
                 className="bpm-table-tr border"
                 style={{
                   cursor: onRowClick ? "pointer" : "default",
-                  borderColor: "var(--bpm-border)",
-                  color: "var(--bpm-text-primary)",
+                  borderColor: "var(--bpm-border, #e5e7eb)",
+                  color: "var(--bpm-text-primary, #111827)",
                 }}
               >
                 {columns.map((col, colIdx) => (
@@ -251,7 +251,7 @@ export function Table({
                     className={`px-3 py-2 text-sm border ${col.className ?? ""}`}
                     style={{
                       textAlign: getColumnAlign(col, data),
-                      borderColor: "var(--bpm-border)",
+                      borderColor: "var(--bpm-border, #e5e7eb)",
                     }}
                   >
                     {col.render

@@ -80,6 +80,31 @@ export function PageLayout({
   const [sidebarHovered, setSidebarHovered] = useState(false);
   const showToggle = !isCollapsed || sidebarHovered;
 
+  const themeVars =
+    theme === "dark"
+      ? {
+          "--bpm-bg": "#0f172a",
+          "--bpm-bg-secondary": "#1e293b",
+          "--bpm-border": "#334155",
+          "--bpm-text": "#f1f5f9",
+          "--bpm-text-secondary": "#94a3b8",
+          "--bpm-accent": "#06b6d4",
+          "--bpm-radius": "6px",
+          "--bpm-font-size-base": "14px",
+          "--bpm-font-size-lg": "1.125rem",
+        }
+      : {
+          "--bpm-bg": "#ffffff",
+          "--bpm-bg-secondary": "#f8fafc",
+          "--bpm-border": "#e2e8f0",
+          "--bpm-text": "#0f172a",
+          "--bpm-text-secondary": "#64748b",
+          "--bpm-accent": "#06b6d4",
+          "--bpm-radius": "6px",
+          "--bpm-font-size-base": "14px",
+          "--bpm-font-size-lg": "1.125rem",
+        };
+
   return (
     <div
       style={{
@@ -87,7 +112,8 @@ export function PageLayout({
         height: "100vh",
         overflow: "hidden",
         background: "var(--bpm-bg)",
-      }}
+        ...themeVars,
+      } as React.CSSProperties}
     >
       <aside
         style={{
@@ -152,6 +178,7 @@ export function PageLayout({
               opacity: showToggle ? 1 : 0,
               pointerEvents: showToggle ? "auto" : "none",
               transition: "background-color 0.15s ease, opacity 0.15s ease",
+              outline: "none",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--bpm-bg-secondary)";
@@ -203,6 +230,7 @@ export function PageLayout({
                   borderRadius: "var(--bpm-radius)",
                   boxSizing: "border-box",
                   transition: "background-color 0.15s ease",
+                  outline: "none",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.background = "var(--bpm-bg-secondary)";
@@ -265,6 +293,7 @@ export function PageLayout({
                 fontSize: "var(--bpm-font-size-base)",
                 boxSizing: "border-box",
                 transition: "background-color 0.15s ease",
+                outline: "none",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "var(--bpm-bg-secondary)";

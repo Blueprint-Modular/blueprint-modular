@@ -103,10 +103,10 @@ export function Metric({
     <div
       className={`bpm-metric inline-block rounded-lg min-w-[140px] ${compact ? "p-3" : "p-4"} ${border ? "border" : ""}`}
       style={{
-        background: "var(--bpm-surface)",
-        ...(border ? { borderColor: "var(--bpm-border)" } : {}),
+        background: "var(--bpm-surface, #ffffff)",
+        ...(border ? { borderColor: "var(--bpm-border, #e5e7eb)" } : {}),
         ...(accentColor ? { borderLeftWidth: 4, borderLeftColor: accentColor } : {}),
-        color: "var(--bpm-text-primary)",
+        color: "var(--bpm-text-primary, #111827)",
         minHeight: compact ? "80px" : undefined,
       }}
       data-metric-name={name && name !== "" ? name : undefined}
@@ -115,12 +115,12 @@ export function Metric({
         {icon != null && (
           <span
             className="flex-shrink-0 flex items-center justify-center rounded"
-            style={{ color: accentColor || "var(--bpm-text-secondary)" }}
+            style={{ color: accentColor || "var(--bpm-text-secondary, #6b7280)" }}
           >
             {icon}
           </span>
         )}
-        <div className={`${compact ? "text-xs" : "text-sm"} truncate`} style={{ color: "var(--bpm-text-secondary)" }}>
+        <div className={`${compact ? "text-xs" : "text-sm"} truncate`} style={{ color: "var(--bpm-text-secondary, #6b7280)" }}>
           {label}
           {help && (
             <span className="ml-1" title={help}>
@@ -131,7 +131,7 @@ export function Metric({
       </div>
       <div className={compact ? "text-lg font-bold" : "text-xl font-bold"} style={compact ? { marginTop: 3 } : undefined}>{displayValue}</div>
       {(subtext != null && subtext !== "") && (
-        <div className={`${compact ? "text-[11px]" : "text-sm mt-1"}`} style={{ color: "var(--bpm-text-secondary)", ...(compact ? { marginTop: "calc(0.125rem + 3px)" } : {}) }}>
+        <div className={`${compact ? "text-[11px]" : "text-sm mt-1"}`} style={{ color: "var(--bpm-text-secondary, #6b7280)", ...(compact ? { marginTop: "calc(0.125rem + 3px)" } : {}) }}>
           {subtext}
         </div>
       )}

@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://app.blueprint-modular.com/docs" },
+};
+
 export default function DocsPage() {
   return (
     <div>

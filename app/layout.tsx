@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { APP_VERSION } from "@/lib/version";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -11,12 +11,20 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.blueprint-modul
 const DEFAULT_DESC = "Briques Python/React pour vos interfaces métier. Sans HTML ni JavaScript.";
 const FAVICON_QUERY = `?v=${process.env.NEXT_PUBLIC_FAVICON_V ?? APP_VERSION}`;
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: { default: "Blueprint Modular", template: "%s — Blueprint Modular" },
   description: DEFAULT_DESC,
   applicationName: "Blueprint Modular",
   manifest: "/manifest",
+  alternates: { canonical: BASE_URL },
   icons: {
     icon: [
       { url: `/img/logo-bpm.png${FAVICON_QUERY}`, type: "image/png", sizes: "512x512" },
@@ -24,10 +32,6 @@ export const metadata: Metadata = {
     ],
     apple: `/img/logo-bpm.png${FAVICON_QUERY}`,
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
-  ],
   appleWebApp: { capable: true, statusBarStyle: "default", title: "BPM" },
   openGraph: {
     type: "website",

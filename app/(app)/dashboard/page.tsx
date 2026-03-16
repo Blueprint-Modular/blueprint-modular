@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Accueil",
   description:
     "Tableau de bord Blueprint Modular — installez le package Python BPM et accédez à vos composants, modules et sandbox en un clic.",
+  alternates: { canonical: "https://app.blueprint-modular.com/dashboard" },
 };
 
 const quickLinks = [

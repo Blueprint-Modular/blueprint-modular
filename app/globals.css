@@ -692,11 +692,11 @@ html[data-theme="dark"] .bpm-app-sidebar .bpm-sidebar-footer-wrap {
   box-shadow: none !important;
 }
 .bpm-table-container {
-  min-width: 0;
+  min-width: min-content;
   width: 100%;
 }
 .bpm-table {
-  min-width: 0;
+  min-width: min-content;
   width: 100%;
   table-layout: auto;
   border: none;

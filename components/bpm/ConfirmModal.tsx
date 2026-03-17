@@ -132,8 +132,7 @@ export function ConfirmModal({
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            alignItems: "stretch",
             gap: 12,
             padding: "16px 24px",
             borderTop: "1px solid var(--bpm-border)",
@@ -142,29 +141,11 @@ export function ConfirmModal({
         >
           <button
             type="button"
-            className="bpm-confirm-modal-confirm"
-            onClick={onConfirm}
-            disabled={isLoading}
-            style={{
-              padding: "8px 16px",
-              border: "none",
-              borderRadius: "var(--bpm-radius)",
-              background: styles.buttonBg,
-              color: styles.buttonColor,
-              fontSize: "var(--bpm-font-size-base)",
-              fontWeight: 600,
-              cursor: isLoading ? "not-allowed" : "pointer",
-              opacity: isLoading ? 0.8 : 1,
-            }}
-          >
-            {isLoading ? "..." : confirmLabel}
-          </button>
-          <button
-            type="button"
             className="bpm-confirm-modal-cancel"
             onClick={onCancel}
             disabled={isLoading}
             style={{
+              flex: 1,
               padding: "8px 16px",
               border: "1px solid var(--bpm-border)",
               borderRadius: "var(--bpm-radius)",
@@ -177,6 +158,26 @@ export function ConfirmModal({
             }}
           >
             {cancelLabel}
+          </button>
+          <button
+            type="button"
+            className="bpm-confirm-modal-confirm"
+            onClick={onConfirm}
+            disabled={isLoading}
+            style={{
+              flex: 1,
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: "var(--bpm-radius)",
+              background: styles.buttonBg,
+              color: styles.buttonColor,
+              fontSize: "var(--bpm-font-size-base)",
+              fontWeight: 600,
+              cursor: isLoading ? "not-allowed" : "pointer",
+              opacity: isLoading ? 0.8 : 1,
+            }}
+          >
+            {isLoading ? "..." : confirmLabel}
           </button>
         </div>
       </div>

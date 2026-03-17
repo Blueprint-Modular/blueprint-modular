@@ -72,11 +72,13 @@ export function Selectbox({
     const update = () => {
       if (!selectboxRef.current) return;
       const rect = selectboxRef.current.getBoundingClientRect();
+      const minDropdownWidth = 220;
       setDropdownStyle({
         position: "fixed",
         top: rect.bottom + 4,
         left: rect.left,
-        width: rect.width,
+        width: Math.max(rect.width, minDropdownWidth),
+        minWidth: minDropdownWidth,
         maxHeight: 280,
         zIndex: 10002,
         overflow: "auto",
@@ -152,6 +154,9 @@ export function Selectbox({
                 background: isSelected ? "var(--bpm-accent)" : "transparent",
                 color: isSelected ? "var(--bpm-accent-contrast)" : "var(--bpm-text)",
                 transition: "var(--bpm-transition)",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
               onClick={() => handleSelect(optValue)}
               onMouseEnter={(e) => {

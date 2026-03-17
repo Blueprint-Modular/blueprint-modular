@@ -80,8 +80,8 @@ export function Avatar({
       role="img"
       aria-label={alt ?? (initials ? `Avatar ${initials}` : "Avatar")}
       style={{
-        background: "var(--bpm-bg-secondary)",
-        color: "var(--bpm-text-primary)",
+        background: "var(--bpm-accent)",
+        color: "var(--bpm-text-inverse, var(--bpm-accent-contrast, #fff))",
       }}
     >
       {src ? (

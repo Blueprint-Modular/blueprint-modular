@@ -74,7 +74,10 @@ export function Tabs({
           </button>
         ))}
       </div>
-      <div className="bpm-tabs-content py-4 w-full overflow-x-hidden">
+      <div
+        className="bpm-tabs-content py-4 w-full overflow-x-hidden"
+        style={{ background: "var(--bpm-bg-primary, #fff)" }}
+      >
         {activeContent}
       </div>
     </div>

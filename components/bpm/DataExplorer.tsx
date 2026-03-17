@@ -138,12 +138,13 @@ export function DataExplorer({
     >
       {(title || searchable || exportable) && (
         <div
+          className="bpm-data-explorer-toolbar"
           style={{
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
             gap: 12,
-            padding: 12,
+            padding: "12px 12px",
             borderBottom: "1px solid var(--bpm-border)",
             background: "var(--bpm-bg-secondary)",
           }}
@@ -168,7 +169,16 @@ export function DataExplorer({
           )}
         </div>
       )}
-      <div style={{ overflowX: "auto" }}>
+      <div
+        className="bpm-data-explorer-table-wrap"
+        style={{
+          overflowX: "auto",
+          paddingLeft: 12,
+          paddingRight: 12,
+          paddingBottom: 0,
+          paddingTop: 0,
+        }}
+      >
         <table
           style={{
             width: "100%",
@@ -179,11 +189,12 @@ export function DataExplorer({
         >
           <thead>
             <tr style={{ background: "var(--bpm-bg-secondary)" }}>
-              {columns.map((col) => (
+              {columns.map((col, colIndex) => (
                 <th
                   key={col.key}
                   style={{
                     padding: "10px 12px",
+                    paddingLeft: colIndex === 0 ? 0 : 12,
                     textAlign: "left",
                     borderBottom: "1px solid var(--bpm-border)",
                     fontWeight: 600,
@@ -221,8 +232,14 @@ export function DataExplorer({
                   borderBottom: "1px solid var(--bpm-border)",
                 }}
               >
-                {columns.map((col) => (
-                  <td key={col.key} style={{ padding: "10px 12px" }}>
+                {columns.map((col, colIndex) => (
+                  <td
+                    key={col.key}
+                    style={{
+                      padding: "10px 12px",
+                      paddingLeft: colIndex === 0 ? 0 : 12,
+                    }}
+                  >
                     {formatCell(row[col.key], col.type)}
                   </td>
                 ))}

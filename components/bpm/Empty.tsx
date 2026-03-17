@@ -9,5 +9,16 @@ export interface EmptyProps {
 }
 
 export function Empty({ children, className = "", style = {} }: EmptyProps) {
-  return <div className={"bpm-empty min-h-[1rem] " + className} style={style}>{children}</div>;
+  return (
+    <div
+      className={"bpm-empty min-h-[1rem] " + className}
+      style={{
+        width: "100%",
+        minWidth: 0,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
 }

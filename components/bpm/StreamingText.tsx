@@ -30,7 +30,13 @@ export function StreamingText({
   return (
     <div
       className={className ? `bpm-streaming-text ${className}`.trim() : "bpm-streaming-text"}
-      style={{ position: "relative", color: "var(--bpm-text-primary)" }}
+      style={{
+        position: "relative",
+        color: "var(--bpm-text-primary)",
+        width: "100%",
+        minWidth: 0,
+        overflowWrap: "break-word",
+      }}
     >
       {content ? (
         renderMarkdown ? (

@@ -76,6 +76,8 @@ export function PromptInput({
     <div
       className={className ? `bpm-prompt-input ${className}`.trim() : "bpm-prompt-input"}
       style={{
+        width: "100%",
+        minWidth: 0,
         border: "1px solid var(--bpm-border)",
         borderRadius: "var(--bpm-radius-md)",
         background: "var(--bpm-bg-primary)",

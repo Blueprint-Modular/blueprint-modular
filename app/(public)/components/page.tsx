@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Title,
   Title1,
@@ -104,7 +104,13 @@ import {
 /** Valeur hex pour props qui n'acceptent pas var() (ex. ColorPicker, Plotly), alignée avec --bpm-accent. */
 const BPM_ACCENT_HEX = "#00a3e2";
 
-/** Style de carte aligné sur /docs/components : nom composant + zone preview. */
+const DEMO_CARD_STYLE: React.CSSProperties = {
+  background: "var(--bpm-bg)",
+  border: "1px solid var(--bpm-border)",
+  borderRadius: "var(--bpm-radius)",
+  padding: 16,
+};
+
 function DemoCard({
   label,
   children,
@@ -115,49 +121,47 @@ function DemoCard({
   wide?: boolean;
 }) {
   return (
-    <div
-      style={{
-        gridColumn: wide ? "1 / -1" : undefined,
-        padding: 16,
-        borderRadius: 12,
-        border: "1px solid var(--bpm-border)",
-        background: "var(--bpm-surface)",
-        transition: "border-color 0.15s ease",
-      }}
-    >
-      <div
-        style={{
-          fontFamily: "ui-monospace, monospace",
-          fontSize: 13,
-          fontWeight: 500,
-          marginBottom: 8,
-          color: "var(--bpm-accent)",
-        }}
-      >
+    <div style={{ gridColumn: wide ? "1 / -1" : undefined }}>
+      <Caption className="mb-1" style={{ display: "block", marginBottom: 4, color: "var(--bpm-text-muted)" }}>
         {label}
-      </div>
-      <div
-        style={{
-          minHeight: 56,
-          padding: 12,
-          borderRadius: 8,
-          background: "var(--bpm-bg-secondary)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          flexWrap: "wrap",
-          gap: 8,
-        }}
-      >
-        {children}
-      </div>
+      </Caption>
+      <div style={DEMO_CARD_STYLE}>{children}</div>
     </div>
   );
 }
 
+/** Ligne tableau référence : label à gauche (fixe), contenu à droite, séparateur hr */
+function DemoRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 24,
+          paddingTop: 12,
+          paddingBottom: 12,
+          borderBottom: "1px solid var(--bpm-border)",
+        }}
+      >
+        <div style={{ minWidth: 200, flexShrink: 0, fontSize: 14, color: "var(--bpm-text-muted)" }}>
+          {label}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
+      </div>
+    </>
+  );
+}
+
 const SECTIONS = [
-  { id: "button", label: "Button" },
   { id: "typography", label: "Typographie" },
+  { id: "button", label: "Button" },
   { id: "feedback", label: "Feedback & Status" },
   { id: "forms", label: "Saisie" },
   { id: "layout", label: "Layout & Conteneurs" },
@@ -201,119 +205,16 @@ export default function ComponentsPage() {
     { id: "2", role: "assistant", content: "Bonjour, comment puis-je vous aider ?", timestamp: new Date() },
   ]);
   const [modelSelectorId, setModelSelectorId] = useState("gpt-4o");
-  const [buttonLoading, setButtonLoading] = useState<Record<string, boolean>>({});
-  const [segValue, setSegValue] = useState<string>("week");
-  const [bpmCore, setBpmCore] = useState<{ button: (props: Record<string, unknown>) => React.ReactNode } | null>(null);
-  useEffect(() => {
-    import("@blueprint-modular/core")
-      .then((m) => setBpmCore(m.bpm))
-      .catch(() => setBpmCore(null));
-  }, []);
-  const triggerLoading = (key: string) => {
-    setButtonLoading((p) => ({ ...p, [key]: true }));
-    setTimeout(() => setButtonLoading((p) => ({ ...p, [key]: false })), 2000);
-  };
-  const coreButton = (props: Record<string, unknown>): React.ReactNode => {
-    if (bpmCore?.button) return bpmCore.button(props);
-    const v = (props.variant as string) ?? "primary";
-    const s = (props.size as string) ?? "md";
-    const sizeMap = { sm: 32, md: 36, lg: 44 } as const;
-    const h = sizeMap[s as keyof typeof sizeMap] ?? 36;
-    const fontSize = s === "sm" ? 13 : s === "lg" ? 15 : 14;
-    const padding = s === "sm" ? "0 12px" : s === "lg" ? "0 20px" : "0 16px";
-    const fallbackChildren: React.ReactNode =
-      props.children != null
-        ? (props.children as React.ReactNode)
-        : typeof props["aria-label"] === "string"
-          ? props["aria-label"]
-          : "…";
-    const label = props.loading ? (typeof props.children === "string" ? props.children : "...") : fallbackChildren;
-    const common = {
-      height: h,
-      padding,
-      fontSize,
-      fontFamily: "inherit",
-      fontWeight: 500,
-      borderRadius: "var(--bpm-radius)",
-      cursor: props.disabled || props.loading ? "not-allowed" : "pointer",
-      opacity: props.disabled ? 0.42 : 1,
-      width: props.fullWidth ? "100%" : "auto",
-      border: "none",
-      outline: "none",
-      transition: "background 0.12s ease, color 0.12s ease",
-    } as const;
-    if (v === "destructive") {
-      return (
-        <button
-          type={(props.type as "button" | "submit") ?? "button"}
-          disabled={!!props.disabled || !!props.loading}
-          onClick={typeof props.onClick === "function" ? (props.onClick as () => void) : undefined}
-          style={{
-            ...common,
-            background: "var(--bpm-error)",
-            color: "#fff",
-            border: "1px solid var(--bpm-error-hover)",
-            boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
-          }}
-        >
-          {label}
-        </button>
-      );
-    }
-    if (v === "ghost" && props.raised) {
-      return (
-        <button
-          type={(props.type as "button" | "submit") ?? "button"}
-          disabled={!!props.disabled || !!props.loading}
-          onClick={typeof props.onClick === "function" ? (props.onClick as () => void) : undefined}
-          style={{
-            ...common,
-            background: "transparent",
-            color: "var(--bpm-text-secondary)",
-            border: "1px solid transparent",
-          }}
-          onMouseEnter={(e) => {
-            if (!props.disabled && !props.loading) {
-              e.currentTarget.style.background = "var(--bpm-surface)";
-              e.currentTarget.style.color = "var(--bpm-text-primary)";
-              e.currentTarget.style.boxShadow = "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))";
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "var(--bpm-text-secondary)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-        >
-          {label}
-        </button>
-      );
-    }
-    const variant = v === "ghost" || v === "link" ? "outline" : v;
-    const btnVariant = variant === "primary" ? "primary" : variant === "secondary" ? "secondary" : "outline";
-    return (
-      <Button
-        variant={btnVariant}
-        size={s === "sm" ? "small" : s === "lg" ? "large" : "medium"}
-        disabled={!!props.disabled}
-        fullWidth={!!props.fullWidth}
-        type={(props.type as "button" | "submit") ?? "button"}
-        onClick={typeof props.onClick === "function" ? (props.onClick as () => void) : undefined}
-      >
-        {label}
-      </Button>
-    );
-  };
 
   return (
-    <div style={{ background: "#fff", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
-      {/* Header fixe — style aligné /docs/components */}
+    <div style={{ background: "var(--bpm-bg)", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
+      {/* Header fixe — paddingTop sur le container pour ne pas couvrir le contenu sur mobile */}
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "#fff",
+          background: "var(--bpm-bg)",
           borderBottom: "1px solid var(--bpm-border)",
           padding: "16px 24px",
           display: "flex",
@@ -323,11 +224,11 @@ export default function ComponentsPage() {
           gap: 12,
         }}
       >
-        <Title level={1} style={{ margin: 0, color: "var(--bpm-text-primary)" }}>
+        <Title level={1} style={{ margin: 0 }}>
           Blueprint Components
         </Title>
-        <Caption style={{ margin: 0, color: "var(--bpm-text-secondary)" }}>
-          {COMPONENT_COUNT} composants bpm.* — Référence avec sandbox live. Cliquez sur les ancres pour naviguer.
+        <Caption style={{ margin: 0 }}>
+          {COMPONENT_COUNT} composants bpm.*
         </Caption>
       </header>
 
@@ -335,7 +236,7 @@ export default function ComponentsPage() {
       <nav
         style={{
           padding: "12px 24px",
-          background: "#fff",
+          background: "var(--bpm-bg-secondary)",
           borderBottom: "1px solid var(--bpm-border)",
           display: "flex",
           flexWrap: "wrap",
@@ -361,218 +262,16 @@ export default function ComponentsPage() {
 
       <Container
         style={{
-          maxWidth: 1400,
+          maxWidth: 1200,
           margin: "0 auto",
           padding: "24px 16px",
           paddingTop: 16,
-          background: "#fff",
         }}
       >
-        {/* SECTION — Button (bpm from @blueprint-modular/core) */}
-        <section id="button" style={{ marginBottom: 48 }}>
-          <Title2 style={{ marginBottom: 16 }}>Button</Title2>
-          <Grid cols={3} gap={16}>
-            <DemoCard label="Variants">
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-                {coreButton({ variant: "primary", children: "Primary" })}
-                {coreButton({ variant: "secondary", children: "Secondary" })}
-                {coreButton({ variant: "outline", children: "Outline" })}
-                {coreButton({ variant: "ghost", children: "Ghost" })}
-                {coreButton({ variant: "destructive", children: "Destructive" })}
-                {coreButton({ variant: "link", children: "Link" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Sizes">
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
-                {coreButton({ variant: "primary", size: "sm", children: "Small" })}
-                {coreButton({ variant: "secondary", size: "sm", children: "Small" })}
-                {coreButton({ variant: "ghost", size: "sm", children: "Small" })}
-                {coreButton({ variant: "primary", size: "md", children: "Medium" })}
-                {coreButton({ variant: "secondary", size: "md", children: "Medium" })}
-                {coreButton({ variant: "ghost", size: "md", children: "Medium" })}
-                {coreButton({ variant: "primary", size: "lg", children: "Large" })}
-                {coreButton({ variant: "secondary", size: "lg", children: "Large" })}
-                {coreButton({ variant: "ghost", size: "lg", children: "Large" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Icons" wide>
-              <p style={{ margin: "0 0 8px 0", fontSize: 13, color: "var(--bpm-text-secondary)" }}>
-                Props icon · iconRight · SVG inline — noms identiques Material Symbols
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                {coreButton({ variant: "primary", size: "md", icon: "add", children: "Nouveau" })}
-                {coreButton({ variant: "secondary", size: "md", icon: "download", children: "Exporter" })}
-                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer" })}
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                {coreButton({ variant: "primary", size: "md", iconRight: "arrow_forward", children: "Continuer" })}
-                {coreButton({ variant: "ghost", size: "md", iconRight: "more_horiz", children: "Voir plus" })}
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {coreButton({ variant: "primary", size: "md", icon: "add", "aria-label": "Ajouter" })}
-                {coreButton({ variant: "secondary", size: "md", icon: "settings", "aria-label": "Paramètres" })}
-                {coreButton({ variant: "outline", size: "md", icon: "edit", "aria-label": "Modifier" })}
-                {coreButton({ variant: "outline", size: "md", icon: "more_horiz", "aria-label": "Options" })}
-                {coreButton({ variant: "outline", size: "sm", icon: "filter_list", "aria-label": "Filtrer" })}
-                {coreButton({ variant: "destructive", size: "md", icon: "delete", "aria-label": "Supprimer" })}
-                {coreButton({ variant: "ghost", size: "lg", icon: "search", "aria-label": "Rechercher" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="States" wide>
-              <p style={{ margin: "0 0 8px 0", fontSize: 13, color: "var(--bpm-text-secondary)" }}>
-                Cliquer les boutons loading — simulation async 2s
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                {coreButton({ variant: "primary", size: "sm", children: "Défaut" })}
-                {coreButton({ variant: "secondary", size: "sm", children: "Défaut" })}
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                {coreButton({ variant: "primary", size: "sm", disabled: true, children: "Désactivé" })}
-                {coreButton({ variant: "secondary", size: "sm", disabled: true, children: "Désactivé" })}
-                {coreButton({ variant: "destructive", size: "sm", disabled: true, children: "Désactivé" })}
-                {coreButton({ variant: "ghost", size: "sm", disabled: true, children: "Désactivé" })}
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                {(["primary", "secondary", "outline", "destructive"] as const).map((v) => (
-                  <React.Fragment key={v}>
-                    {coreButton({
-                      variant: v,
-                      size: "sm",
-                      loading: !!buttonLoading[v],
-                      onClick: () => triggerLoading(v),
-                      children: buttonLoading[v] ? "Enregistrement..." : v.charAt(0).toUpperCase() + v.slice(1),
-                    })}
-                  </React.Fragment>
-                ))}
-              </div>
-              {coreButton({ variant: "primary", size: "md", fullWidth: true, children: "Pleine largeur" })}
-            </DemoCard>
-            <DemoCard label="Compositions — action cluster" wide>
-              <div style={{ display: "flex", gap: 8 }}>
-                {coreButton({ variant: "secondary", size: "sm", children: "Annuler" })}
-                {coreButton({ variant: "primary", size: "sm", children: "Enregistrer" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — danger confirm" wide>
-              <div style={{ display: "flex", gap: 8 }}>
-                {coreButton({ variant: "secondary", size: "sm", children: "Annuler" })}
-                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer définitivement" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — segmented" wide>
-              <div
-                style={{
-                  display: "inline-flex",
-                  borderRadius: "6px",
-                  border: "1px solid var(--bpm-border-strong, var(--bpm-border))",
-                  overflow: "hidden",
-                  boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
-                }}
-              >
-                {(["day", "week", "month"] as const).map((val, i) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setSegValue(val)}
-                    style={{
-                      height: 32,
-                      padding: "0 14px",
-                      fontSize: 13,
-                      fontFamily: "inherit",
-                      fontWeight: 500,
-                      border: "none",
-                      borderRight: i < 2 ? "1px solid var(--bpm-border-strong, var(--bpm-border))" : "none",
-                      cursor: "pointer",
-                      outline: "none",
-                      background: segValue === val ? "var(--bpm-text-primary)" : "var(--bpm-surface)",
-                      color: segValue === val ? "var(--bpm-text-inverse, #fff)" : "var(--bpm-text-secondary)",
-                      transition: "background 0.12s, color 0.12s",
-                    }}
-                  >
-                    {val === "day" ? "Jour" : val === "week" ? "Semaine" : "Mois"}
-                  </button>
-                ))}
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — toolbar text" wide>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 2,
-                  padding: 4,
-                  borderRadius: "8px",
-                  background: "var(--bpm-surface-raised, var(--bpm-bg-secondary))",
-                  border: "1px solid var(--bpm-border)",
-                  boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
-                }}
-              >
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_bold", "aria-label": "Gras" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_italic", "aria-label": "Italique" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_underlined", "aria-label": "Souligné" })}
-                <span style={{ width: 1, height: 18, background: "var(--bpm-border-strong, var(--bpm-border))", margin: "0 3px", borderRadius: 1 }} />
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_align_left", "aria-label": "Gauche" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_align_center", "aria-label": "Centre" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_align_right", "aria-label": "Droite" })}
-                <span style={{ width: 1, height: 18, background: "var(--bpm-border-strong, var(--bpm-border))", margin: "0 3px", borderRadius: 1 }} />
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "format_list_bulleted", "aria-label": "Liste" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "link", "aria-label": "Lien" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "image", "aria-label": "Image" })}
-                <span style={{ width: 1, height: 18, background: "var(--bpm-border-strong, var(--bpm-border))", margin: "0 3px", borderRadius: 1 }} />
-                {coreButton({ variant: "destructive", size: "sm", icon: "delete", "aria-label": "Supprimer" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — toolbar data" wide>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 2,
-                  padding: 4,
-                  borderRadius: "8px",
-                  background: "var(--bpm-surface-raised, var(--bpm-bg-secondary))",
-                  border: "1px solid var(--bpm-border)",
-                  boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
-                }}
-              >
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "filter_list", "aria-label": "Filtrer" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "sort", "aria-label": "Trier" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "search", "aria-label": "Rechercher" })}
-                <span style={{ width: 1, height: 18, background: "var(--bpm-border-strong, var(--bpm-border))", margin: "0 3px", borderRadius: 1 }} />
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "download", "aria-label": "Exporter" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "print", "aria-label": "Imprimer" })}
-                <span style={{ width: 1, height: 18, background: "var(--bpm-border-strong, var(--bpm-border))", margin: "0 3px", borderRadius: 1 }} />
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "view_column", "aria-label": "Colonnes" })}
-                {coreButton({ variant: "ghost", size: "sm", raised: true, icon: "density_medium", "aria-label": "Densité" })}
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — strip nav" wide>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                <div style={{ display: "inline-flex", gap: 4 }}>
-                  {coreButton({ variant: "secondary", size: "sm", icon: "chevron_left", "aria-label": "Précédent" })}
-                  {coreButton({ variant: "secondary", size: "sm", icon: "chevron_right", "aria-label": "Suivant" })}
-                </div>
-                <div style={{ display: "inline-flex", gap: 4 }}>
-                  {coreButton({ variant: "outline", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
-                  {coreButton({ variant: "ghost", size: "sm", icon: "more_horiz", "aria-label": "Options" })}
-                </div>
-              </div>
-            </DemoCard>
-            <DemoCard label="Compositions — strip social" wide>
-              <div style={{ display: "inline-flex", gap: 4 }}>
-                {coreButton({ variant: "ghost", size: "sm", icon: "thumb_up", "aria-label": "J'aime" })}
-                {coreButton({ variant: "ghost", size: "sm", icon: "share", "aria-label": "Partager" })}
-                {coreButton({ variant: "ghost", size: "sm", icon: "bookmark", "aria-label": "Sauvegarder" })}
-                {coreButton({ variant: "ghost", size: "sm", icon: "comment", "aria-label": "Commenter" })}
-              </div>
-            </DemoCard>
-          </Grid>
-        </section>
-
         {/* SECTION 1 — Typographie */}
         <section id="typography" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Typographie</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.title level 1">
               <Title level={1}>Titre niveau 1</Title>
             </DemoCard>
@@ -597,10 +296,66 @@ export default function ComponentsPage() {
           </Grid>
         </section>
 
+        {/* SECTION — Button (layout tableau label | contenu) */}
+        <section id="button" style={{ marginBottom: 48 }}>
+          <Title2 style={{ marginBottom: 16 }}>bpm.button</Title2>
+          <div style={{ background: "var(--bpm-bg)", border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
+            <DemoRow label="Variants">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, flexDirection: "column", alignItems: "flex-start" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <Button variant="primary">Primary</Button>
+                  <Button variant="secondary">Secondary</Button>
+                  <Button variant="outline">Outline</Button>
+                  <Button variant="ghost">Ghost</Button>
+                  <Button variant="destructive">Destructive</Button>
+                  <Button variant="link">Link</Button>
+                </div>
+              </div>
+            </DemoRow>
+            <DemoRow label="Sizes">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                <Button size="small">Small</Button>
+                <Button size="medium">Medium</Button>
+                <Button size="large">Large</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="Icons">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                <Button variant="ghost" iconRight="more_horiz">Voir plus</Button>
+                <Button variant="outline" icon="more_horiz">Options</Button>
+                <Button variant="outline" icon="filter_list" aria-label="Filtrer" />
+              </div>
+            </DemoRow>
+            <DemoRow label="Toolbar (ghost raised)">
+              <div style={{ display: "flex", gap: 8, padding: 8, background: "var(--bpm-bg-secondary)", borderRadius: "var(--bpm-radius)" }}>
+                <Button variant="ghost" raised icon="format_bold" aria-label="Gras" />
+                <Button variant="ghost" raised icon="format_italic" aria-label="Italique" />
+                <Button variant="ghost" raised icon="format_underlined" aria-label="Souligné" />
+              </div>
+            </DemoRow>
+            <DemoRow label="Strip nav">
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <Button variant="outline" icon="refresh">Actualiser</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="Pleine largeur">
+              <div style={{ width: 280 }}>
+                <Button fullWidth>Pleine largeur</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="Disabled / Loading">
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <Button disabled>Désactivé</Button>
+                <Button loading>Chargement</Button>
+              </div>
+            </DemoRow>
+          </div>
+        </section>
+
         {/* SECTION 2 — Feedback & Status */}
         <section id="feedback" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Feedback & Status</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.message success">
               <Message type="success">Opération réussie.</Message>
             </DemoCard>
@@ -657,7 +412,7 @@ export default function ComponentsPage() {
               </Transition>
               <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
                 {[0, 1, 2].map((i) => (
-                  <Button key={i} onClick={() => setTransitionIndex(i)}>{i + 1}</Button>
+                  <Button key={i} variant="secondary" onClick={() => setTransitionIndex(i)}>{i + 1}</Button>
                 ))}
               </div>
             </DemoCard>
@@ -680,7 +435,7 @@ export default function ComponentsPage() {
         {/* SECTION 3 — Saisie */}
         <section id="forms" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Saisie</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.input">
               <Input
                 label="Nom"
@@ -796,7 +551,7 @@ export default function ComponentsPage() {
         {/* SECTION 4 — Layout & Conteneurs */}
         <section id="layout" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Layout & Conteneurs</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.panel" wide>
               <Panel title="Panneau standard">
                 <Text>Contenu du panneau.</Text>
@@ -886,10 +641,8 @@ export default function ComponentsPage() {
               </ScrollContainer>
             </DemoCard>
             <DemoCard label="bpm.labelValue">
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <LabelValue label="Email" value="user@example.com" copyable />
-                <LabelValue label="Statut" value="Actif" valueStyle="accent" orientation="horizontal" />
-              </div>
+              <LabelValue label="Email" value="user@example.com" copyable />
+              <LabelValue label="Statut" value="Actif" valueStyle="accent" orientation="horizontal" />
             </DemoCard>
           </Grid>
         </section>
@@ -1109,7 +862,7 @@ export default function ComponentsPage() {
         {/* SECTION 7 — Overlays & Interactions */}
         <section id="overlays" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Overlays & Interactions</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.button + bpm.modal" wide>
               <Button onClick={() => setModalOpen(true)}>Ouvrir modal</Button>
               {modalOpen && (
@@ -1198,7 +951,7 @@ export default function ComponentsPage() {
         {/* SECTION 8 — Médias & Utilitaires */}
         <section id="media" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Médias & Utilitaires</Title2>
-          <Grid cols={3} gap={16}>
+          <Grid cols={2} gap={16}>
             <DemoCard label="bpm.avatar">
               <Avatar initials="JD" size="medium" editable onImageChange={(f) => console.log(f)} />
             </DemoCard>

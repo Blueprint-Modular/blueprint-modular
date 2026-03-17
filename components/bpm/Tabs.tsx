@@ -58,7 +58,7 @@ export function Tabs({
           <button
             key={tab.key ?? index}
             type="button"
-            className={`bpm-tab-button inline-flex items-center py-3 px-2 text-sm whitespace-nowrap flex-shrink-0 transition-colors ${
+            className={`bpm-tab-button flex items-center justify-center py-3 px-4 text-sm whitespace-nowrap flex-1 min-w-0 transition-colors ${
               activeTab === index ? "bpm-tab-active font-medium" : ""
             }`}
             style={{
@@ -73,7 +73,6 @@ export function Tabs({
             <span className="bpm-tab-button-text">{tab.label}</span>
           </button>
         ))}
-        <div className="flex-1 min-w-px" aria-hidden />
       </div>
       <div className="bpm-tabs-content py-4 w-full overflow-x-hidden">
         {activeContent}

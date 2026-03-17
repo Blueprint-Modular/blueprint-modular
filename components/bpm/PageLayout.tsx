@@ -88,7 +88,7 @@ export function PageLayout({
           "--bpm-border": "#334155",
           "--bpm-text": "#f1f5f9",
           "--bpm-text-secondary": "#94a3b8",
-          "--bpm-accent": "#06b6d4",
+          "--bpm-accent": "#00a3e2",
           "--bpm-radius": "6px",
           "--bpm-font-size-base": "14px",
           "--bpm-font-size-lg": "1.125rem",
@@ -99,7 +99,7 @@ export function PageLayout({
           "--bpm-border": "#e2e8f0",
           "--bpm-text": "#0f172a",
           "--bpm-text-secondary": "#64748b",
-          "--bpm-accent": "#06b6d4",
+          "--bpm-accent": "#00a3e2",
           "--bpm-radius": "6px",
           "--bpm-font-size-base": "14px",
           "--bpm-font-size-lg": "1.125rem",
@@ -206,56 +206,75 @@ export function PageLayout({
           {items.map((item) => {
             const isActive = currentItem === item.key;
             return (
-              <button
+              <div
                 key={item.key}
-                type="button"
-                onClick={() => onNavigate(item.key)}
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: isCollapsed ? 0 : "8px 12px",
-                  justifyContent: isCollapsed ? "center" : "flex-start",
+                  alignItems: "stretch",
                   width: isCollapsed ? 32 : "100%",
                   minWidth: isCollapsed ? 32 : undefined,
-                  height: 32,
-                  border: "none",
-                  borderLeft: isActive && !isCollapsed ? "2px solid var(--bpm-accent)" : "2px solid transparent",
-                  background: isActive ? "var(--bpm-bg-secondary)" : "transparent",
-                  color: isActive ? "var(--bpm-accent)" : "var(--bpm-text-secondary)",
-                  cursor: "pointer",
-                  font: "inherit",
-                  fontSize: "var(--bpm-font-size-base)",
-                  marginLeft: isCollapsed ? 0 : -2,
                   borderRadius: "var(--bpm-radius)",
-                  boxSizing: "border-box",
-                  transition: "background-color 0.15s ease",
-                  outline: "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.background = "var(--bpm-bg-secondary)";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.background = "transparent";
                 }}
               >
-                <MaterialIcon icon={item.icon} size={20} />
-                <span
+                {!isCollapsed && (
+                  <span
+                    style={{
+                      width: 2,
+                      flexShrink: 0,
+                      background: isActive ? "var(--bpm-accent)" : "transparent",
+                      borderRadius: 0,
+                    }}
+                    aria-hidden
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => onNavigate(item.key)}
                   style={{
-                    opacity: isCollapsed ? 0 : 1,
-                    width: isCollapsed ? 0 : undefined,
-                    maxWidth: isCollapsed ? 0 : undefined,
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    flex: isCollapsed ? "none" : 1,
-                    minWidth: isCollapsed ? 0 : 0,
-                    transition: "opacity 0.15s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    padding: isCollapsed ? 0 : "8px 12px",
+                    justifyContent: isCollapsed ? "center" : "flex-start",
+                    flex: 1,
+                    minWidth: 0,
+                    height: 32,
+                    border: "none",
+                    background: isActive ? "var(--bpm-bg-secondary)" : "transparent",
+                    color: isActive ? "var(--bpm-accent)" : "var(--bpm-text-secondary)",
+                    cursor: "pointer",
+                    font: "inherit",
+                    fontSize: "var(--bpm-font-size-base)",
+                    borderRadius: "var(--bpm-radius)",
+                    boxSizing: "border-box",
+                    transition: "background-color 0.15s ease",
+                    outline: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "var(--bpm-bg-secondary)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "transparent";
                   }}
                 >
-                  {item.label}
-                </span>
-              </button>
+                  <MaterialIcon icon={item.icon} size={20} />
+                  <span
+                    style={{
+                      opacity: isCollapsed ? 0 : 1,
+                      width: isCollapsed ? 0 : undefined,
+                      maxWidth: isCollapsed ? 0 : undefined,
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      flex: isCollapsed ? "none" : 1,
+                      minWidth: isCollapsed ? 0 : 0,
+                      transition: "opacity 0.15s ease",
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                </button>
+              </div>
             );
           })}
         </nav>

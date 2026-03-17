@@ -888,8 +888,10 @@ export default function ComponentsPage() {
               </ScrollContainer>
             </DemoCard>
             <DemoCard label="bpm.labelValue">
-              <LabelValue label="Email" value="user@example.com" copyable />
-              <LabelValue label="Statut" value="Actif" valueStyle="accent" orientation="horizontal" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <LabelValue label="Email" value="user@example.com" copyable />
+                <LabelValue label="Statut" value="Actif" valueStyle="accent" orientation="horizontal" />
+              </div>
             </DemoCard>
           </Grid>
         </section>

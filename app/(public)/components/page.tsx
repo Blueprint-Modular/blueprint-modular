@@ -207,14 +207,14 @@ export default function ComponentsPage() {
   const [modelSelectorId, setModelSelectorId] = useState("gpt-4o");
 
   return (
-    <div style={{ background: "var(--bpm-bg)", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
+    <div style={{ background: "#fff", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
       {/* Header fixe — paddingTop sur le container pour ne pas couvrir le contenu sur mobile */}
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "var(--bpm-bg)",
+          background: "#fff",
           borderBottom: "1px solid var(--bpm-border)",
           padding: "16px 24px",
           display: "flex",
@@ -347,6 +347,69 @@ export default function ComponentsPage() {
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                 <Button disabled>Désactivé</Button>
                 <Button loading>Chargement</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — action cluster">
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <Button variant="secondary">Annuler</Button>
+                <Button variant="primary">Enregistrer</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — danger confirm">
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <Button variant="secondary">Annuler</Button>
+                <Button variant="destructive" icon="delete">Supprimer définitivement</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — segmented (Jour / Semaine / Mois)">
+              <div style={{ display: "inline-flex", borderRadius: 6, overflow: "hidden", border: "1px solid #c8cdd6", boxShadow: "0 1px 2px rgba(0,0,0,0.08)" }}>
+                <Button variant="secondary" type="button" onClick={() => {}} style={{ borderRadius: 0, borderRight: "1px solid #c8cdd6" }}>Jour</Button>
+                <Button variant="primary" type="button" onClick={() => {}} style={{ borderRadius: 0, borderRight: "1px solid #c8cdd6" }}>Semaine</Button>
+                <Button variant="secondary" type="button" onClick={() => {}} style={{ borderRadius: 0 }}>Mois</Button>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — toolbar text">
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 0, border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
+                <Button variant="ghost" raised icon="format_bold" aria-label="Gras" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="format_italic" aria-label="Italique" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="format_underlined" aria-label="Souligné" style={{ borderRadius: 0 }}/>
+                <div style={{ width: 1, alignSelf: "stretch", background: "var(--bpm-border)" }} />
+                <Button variant="ghost" raised icon="format_align_left" aria-label="Aligner à gauche" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="format_align_center" aria-label="Centrer" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="format_align_right" aria-label="Aligner à droite" style={{ borderRadius: 0 }}/>
+                <div style={{ width: 1, alignSelf: "stretch", background: "var(--bpm-border)" }} />
+                <Button variant="ghost" raised icon="format_list_bulleted" aria-label="Liste" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="link" aria-label="Lien" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="image" aria-label="Image" style={{ borderRadius: 0 }}/>
+                <div style={{ width: 1, alignSelf: "stretch", background: "var(--bpm-border)" }} />
+                <Button variant="destructive" icon="delete" aria-label="Supprimer" style={{ borderRadius: 0 }}/>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — toolbar data">
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 0, border: "1px solid var(--bpm-border)", borderRadius: "var(--bpm-radius)", overflow: "hidden" }}>
+                <Button variant="ghost" raised icon="filter_list" aria-label="Filtrer" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="sort" aria-label="Trier" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="search" aria-label="Rechercher" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="download" aria-label="Télécharger" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="print" aria-label="Imprimer" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="view_column" aria-label="Colonnes" style={{ borderRadius: 0 }}/>
+                <Button variant="ghost" raised icon="density_medium" aria-label="Densité" style={{ borderRadius: 0 }}/>
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — strip nav">
+              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <Button variant="secondary" size="small" icon="chevron_left" aria-label="Précédent" />
+                <Button variant="secondary" size="small" icon="chevron_right" aria-label="Suivant" />
+                <Button variant="primary" size="small" icon="refresh" aria-label="Actualiser" />
+                <Button variant="secondary" size="small" icon="more_horiz" aria-label="Plus" />
+              </div>
+            </DemoRow>
+            <DemoRow label="COMPOSITIONS — strip social">
+              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <Button variant="ghost" size="small" icon="thumb_up" aria-label="J'aime" />
+                <Button variant="ghost" size="small" icon="share" aria-label="Partager" />
+                <Button variant="ghost" size="small" icon="bookmark" aria-label="Favori" />
+                <Button variant="ghost" size="small" icon="comment" aria-label="Commenter" />
               </div>
             </DemoRow>
           </div>
@@ -847,7 +910,7 @@ export default function ComponentsPage() {
                 ]}
               />
             </DemoCard>
-            <DemoCard label="bpm.topNav" wide>
+            <DemoCard label="bpm.topNav (composant)" wide>
               <TopNav
                 title="Blueprint App"
                 items={[
@@ -855,6 +918,35 @@ export default function ComponentsPage() {
                   { label: "Données", href: "#" },
                 ]}
               />
+            </DemoCard>
+            <DemoCard label="CONTEXT — bpm.topNav (ghost nav · icon utilities · primary CTA)" wide>
+              <nav
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 16,
+                  padding: "12px 16px",
+                  background: "var(--bpm-bg-primary)",
+                  border: "1px solid var(--bpm-border)",
+                  borderRadius: "var(--bpm-radius)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 6, background: "#00a3e2", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 18 }}>B</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <Button variant="ghost" size="small" icon="dashboard" style={{ background: "var(--bpm-bg-secondary)", borderLeft: "3px solid #00a3e2", borderRadius: 4 }}>Dashboard</Button>
+                    <Button variant="ghost" size="small" icon="folder">Projects</Button>
+                    <Button variant="ghost" size="small" icon="bar_chart">Analytics</Button>
+                    <Button variant="ghost" size="small" icon="settings">Settings</Button>
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Button variant="ghost" size="small" icon="notifications" aria-label="Notifications" />
+                  <Button variant="ghost" size="small" icon="person" aria-label="Profil" />
+                  <Button variant="primary" size="small" icon="add">Nouveau projet</Button>
+                </div>
+              </nav>
             </DemoCard>
           </Grid>
         </section>

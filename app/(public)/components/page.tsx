@@ -104,13 +104,7 @@ import {
 /** Valeur hex pour props qui n'acceptent pas var() (ex. ColorPicker, Plotly), alignée avec --bpm-accent. */
 const BPM_ACCENT_HEX = "#00a3e2";
 
-const DEMO_CARD_STYLE: React.CSSProperties = {
-  background: "var(--bpm-bg)",
-  border: "1px solid var(--bpm-border)",
-  borderRadius: "var(--bpm-radius)",
-  padding: 16,
-};
-
+/** Style de carte aligné sur /docs/components : nom composant + zone preview. */
 function DemoCard({
   label,
   children,
@@ -121,11 +115,42 @@ function DemoCard({
   wide?: boolean;
 }) {
   return (
-    <div style={{ gridColumn: wide ? "1 / -1" : undefined }}>
-      <Caption className="mb-1" style={{ display: "block", marginBottom: 4, color: "var(--bpm-text-muted)" }}>
+    <div
+      style={{
+        gridColumn: wide ? "1 / -1" : undefined,
+        padding: 16,
+        borderRadius: 12,
+        border: "1px solid var(--bpm-border)",
+        background: "var(--bpm-surface)",
+        transition: "border-color 0.15s ease",
+      }}
+    >
+      <div
+        style={{
+          fontFamily: "ui-monospace, monospace",
+          fontSize: 13,
+          fontWeight: 500,
+          marginBottom: 8,
+          color: "var(--bpm-accent)",
+        }}
+      >
         {label}
-      </Caption>
-      <div style={DEMO_CARD_STYLE}>{children}</div>
+      </div>
+      <div
+        style={{
+          minHeight: 56,
+          padding: 12,
+          borderRadius: 8,
+          background: "var(--bpm-bg-secondary)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -190,14 +215,14 @@ export default function ComponentsPage() {
     bpmCore ? bpmCore.button(props) : <span style={{ display: "inline-block", minWidth: 40, height: 32, borderRadius: 4, background: "var(--bpm-bg-secondary)" }} />;
 
   return (
-    <div style={{ background: "var(--bpm-bg)", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
-      {/* Header fixe — paddingTop sur le container pour ne pas couvrir le contenu sur mobile */}
+    <div style={{ background: "#fff", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
+      {/* Header fixe — style aligné /docs/components */}
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "var(--bpm-bg)",
+          background: "#fff",
           borderBottom: "1px solid var(--bpm-border)",
           padding: "16px 24px",
           display: "flex",
@@ -207,11 +232,11 @@ export default function ComponentsPage() {
           gap: 12,
         }}
       >
-        <Title level={1} style={{ margin: 0 }}>
+        <Title level={1} style={{ margin: 0, color: "var(--bpm-text-primary)" }}>
           Blueprint Components
         </Title>
-        <Caption style={{ margin: 0 }}>
-          {COMPONENT_COUNT} composants bpm.*
+        <Caption style={{ margin: 0, color: "var(--bpm-text-secondary)" }}>
+          {COMPONENT_COUNT} composants bpm.* — Référence avec sandbox live. Cliquez sur les ancres pour naviguer.
         </Caption>
       </header>
 
@@ -219,7 +244,7 @@ export default function ComponentsPage() {
       <nav
         style={{
           padding: "12px 24px",
-          background: "var(--bpm-bg-secondary)",
+          background: "#fff",
           borderBottom: "1px solid var(--bpm-border)",
           display: "flex",
           flexWrap: "wrap",
@@ -245,16 +270,17 @@ export default function ComponentsPage() {
 
       <Container
         style={{
-          maxWidth: 1200,
+          maxWidth: 1400,
           margin: "0 auto",
           padding: "24px 16px",
           paddingTop: 16,
+          background: "#fff",
         }}
       >
         {/* SECTION — Button (bpm from @blueprint-modular/core) */}
         <section id="button" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Button</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="Variants">
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {coreButton({ variant: "primary", children: "Primary" })}
@@ -441,7 +467,7 @@ export default function ComponentsPage() {
         {/* SECTION 1 — Typographie */}
         <section id="typography" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Typographie</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.title level 1">
               <Title level={1}>Titre niveau 1</Title>
             </DemoCard>
@@ -469,7 +495,7 @@ export default function ComponentsPage() {
         {/* SECTION 2 — Feedback & Status */}
         <section id="feedback" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Feedback & Status</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.message success">
               <Message type="success">Opération réussie.</Message>
             </DemoCard>
@@ -549,7 +575,7 @@ export default function ComponentsPage() {
         {/* SECTION 3 — Saisie */}
         <section id="forms" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Saisie</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.input">
               <Input
                 label="Nom"
@@ -665,7 +691,7 @@ export default function ComponentsPage() {
         {/* SECTION 4 — Layout & Conteneurs */}
         <section id="layout" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Layout & Conteneurs</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.panel" wide>
               <Panel title="Panneau standard">
                 <Text>Contenu du panneau.</Text>
@@ -976,7 +1002,7 @@ export default function ComponentsPage() {
         {/* SECTION 7 — Overlays & Interactions */}
         <section id="overlays" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Overlays & Interactions</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.button + bpm.modal" wide>
               <Button onClick={() => setModalOpen(true)}>Ouvrir modal</Button>
               {modalOpen && (
@@ -1065,7 +1091,7 @@ export default function ComponentsPage() {
         {/* SECTION 8 — Médias & Utilitaires */}
         <section id="media" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Médias & Utilitaires</Title2>
-          <Grid cols={2} gap={16}>
+          <Grid cols={3} gap={16}>
             <DemoCard label="bpm.avatar">
               <Avatar initials="JD" size="medium" editable onImageChange={(f) => console.log(f)} />
             </DemoCard>

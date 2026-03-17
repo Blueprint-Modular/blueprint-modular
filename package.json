@@ -23,6 +23,7 @@
     "seed": "node prisma/seed-wiki-procedures.cjs"
   },
   "dependencies": {
+    "@blueprint-modular/core": "file:packages/core",
     "@anthropic-ai/sdk": "^0.78.0",
     "leaflet": "^1.9.4",
     "react-leaflet": "^4.2.1",

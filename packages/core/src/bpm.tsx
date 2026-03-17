@@ -5,6 +5,7 @@
  */
 import React from "react";
 
+import { Button } from "./components/Button";
 import {
   Accordion,
   AltairChart,
@@ -16,7 +17,6 @@ import {
   BarChart,
   Barcode,
   Breadcrumb,
-  Button,
   Caption,
   Card,
   Checkbox,

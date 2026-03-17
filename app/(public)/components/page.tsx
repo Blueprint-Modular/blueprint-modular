@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Title,
   Title1,
@@ -131,6 +131,7 @@ function DemoCard({
 }
 
 const SECTIONS = [
+  { id: "button", label: "Button" },
   { id: "typography", label: "Typographie" },
   { id: "feedback", label: "Feedback & Status" },
   { id: "forms", label: "Saisie" },
@@ -175,6 +176,18 @@ export default function ComponentsPage() {
     { id: "2", role: "assistant", content: "Bonjour, comment puis-je vous aider ?", timestamp: new Date() },
   ]);
   const [modelSelectorId, setModelSelectorId] = useState("gpt-4o");
+  const [buttonLoading, setButtonLoading] = useState<Record<string, boolean>>({});
+  const [segValue, setSegValue] = useState<string>("week");
+  const [bpmCore, setBpmCore] = useState<{ button: (props: Record<string, unknown>) => React.ReactNode } | null>(null);
+  useEffect(() => {
+    import("@blueprint-modular/core").then((m) => setBpmCore(m.bpm));
+  }, []);
+  const triggerLoading = (key: string) => {
+    setButtonLoading((p) => ({ ...p, [key]: true }));
+    setTimeout(() => setButtonLoading((p) => ({ ...p, [key]: false })), 2000);
+  };
+  const coreButton = (props: Record<string, unknown>): React.ReactNode =>
+    bpmCore ? bpmCore.button(props) : <span style={{ display: "inline-block", minWidth: 40, height: 32, borderRadius: 4, background: "var(--bpm-bg-secondary)" }} />;
 
   return (
     <div style={{ background: "var(--bpm-bg)", minHeight: "100vh", paddingBottom: 80, paddingTop: 0 }}>
@@ -238,6 +251,193 @@ export default function ComponentsPage() {
           paddingTop: 16,
         }}
       >
+        {/* SECTION — Button (bpm from @blueprint-modular/core) */}
+        <section id="button" style={{ marginBottom: 48 }}>
+          <Title2 style={{ marginBottom: 16 }}>Button</Title2>
+          <Grid cols={2} gap={16}>
+            <DemoCard label="Variants">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {coreButton({ variant: "primary", children: "Primary" })}
+                {coreButton({ variant: "secondary", children: "Secondary" })}
+                {coreButton({ variant: "outline", children: "Outline" })}
+                {coreButton({ variant: "ghost", children: "Ghost" })}
+                {coreButton({ variant: "destructive", children: "Destructive" })}
+                {coreButton({ variant: "link", children: "Link" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Sizes">
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+                {coreButton({ variant: "primary", size: "sm", children: "Small" })}
+                {coreButton({ variant: "secondary", size: "sm", children: "Small" })}
+                {coreButton({ variant: "ghost", size: "sm", children: "Small" })}
+                {coreButton({ variant: "primary", size: "md", children: "Medium" })}
+                {coreButton({ variant: "secondary", size: "md", children: "Medium" })}
+                {coreButton({ variant: "ghost", size: "md", children: "Medium" })}
+                {coreButton({ variant: "primary", size: "lg", children: "Large" })}
+                {coreButton({ variant: "secondary", size: "lg", children: "Large" })}
+                {coreButton({ variant: "ghost", size: "lg", children: "Large" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Icons" wide>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                {coreButton({ variant: "primary", size: "md", icon: "add", children: "Nouveau" })}
+                {coreButton({ variant: "secondary", size: "md", icon: "download", children: "Exporter" })}
+                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer" })}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                {coreButton({ variant: "primary", size: "md", iconRight: "arrow_forward", children: "Continuer" })}
+                {coreButton({ variant: "outline", size: "md", iconRight: "open_in_new", children: "Voir plus" })}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {coreButton({ variant: "primary", size: "md", icon: "add", "aria-label": "Ajouter" })}
+                {coreButton({ variant: "secondary", size: "md", icon: "settings", "aria-label": "Paramètres" })}
+                {coreButton({ variant: "outline", size: "md", icon: "edit", "aria-label": "Modifier" })}
+                {coreButton({ variant: "ghost", size: "md", icon: "more_vert", "aria-label": "Options" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "filter_list", "aria-label": "Filtrer" })}
+                {coreButton({ variant: "destructive", size: "md", icon: "delete", "aria-label": "Supprimer" })}
+                {coreButton({ variant: "ghost", size: "lg", icon: "search", "aria-label": "Rechercher" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="States" wide>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                {coreButton({ variant: "primary", size: "sm", children: "Défaut" })}
+                {coreButton({ variant: "secondary", size: "sm", children: "Défaut" })}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                {coreButton({ variant: "primary", size: "sm", disabled: true, children: "Désactivé" })}
+                {coreButton({ variant: "secondary", size: "sm", disabled: true, children: "Désactivé" })}
+                {coreButton({ variant: "destructive", size: "sm", disabled: true, children: "Désactivé" })}
+                {coreButton({ variant: "ghost", size: "sm", disabled: true, children: "Désactivé" })}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                {(["primary", "secondary", "outline", "destructive"] as const).map((v) => (
+                  <React.Fragment key={v}>
+                    {coreButton({
+                      variant: v,
+                      size: "sm",
+                      loading: !!buttonLoading[v],
+                      onClick: () => triggerLoading(v),
+                      children: buttonLoading[v] ? "Enregistrement..." : v.charAt(0).toUpperCase() + v.slice(1),
+                    })}
+                  </React.Fragment>
+                ))}
+              </div>
+              <div style={{ width: "100%", maxWidth: 280 }}>
+                {coreButton({ variant: "primary", size: "md", fullWidth: true, children: "Pleine largeur" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — action cluster" wide>
+              <div style={{ display: "flex", gap: 8 }}>
+                {coreButton({ variant: "secondary", size: "sm", children: "Annuler" })}
+                {coreButton({ variant: "primary", size: "sm", children: "Enregistrer" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — danger confirm" wide>
+              <div style={{ display: "flex", gap: 8 }}>
+                {coreButton({ variant: "secondary", size: "sm", children: "Annuler" })}
+                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — segmented" wide>
+              <div style={{ display: "inline-flex", borderRadius: "var(--bpm-radius)", border: "1px solid var(--bpm-border)", overflow: "hidden" }}>
+                {(["day", "week", "month"] as const).map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setSegValue(val)}
+                    style={{
+                      height: 32,
+                      padding: "0 14px",
+                      fontSize: 13,
+                      fontFamily: "inherit",
+                      fontWeight: 500,
+                      border: "none",
+                      borderRight: val !== "month" ? "1px solid var(--bpm-border)" : "none",
+                      cursor: "pointer",
+                      outline: "none",
+                      background: segValue === val ? "var(--bpm-text-primary)" : "var(--bpm-surface)",
+                      color: segValue === val ? "var(--bpm-accent-contrast, #fff)" : "var(--bpm-text-secondary)",
+                      transition: "background 0.12s, color 0.12s",
+                    }}
+                  >
+                    {val === "day" ? "Jour" : val === "week" ? "Semaine" : "Mois"}
+                  </button>
+                ))}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — toolbar text" wide>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 2,
+                  padding: 4,
+                  borderRadius: "var(--bpm-radius-lg)",
+                  background: "var(--bpm-bg-secondary)",
+                  border: "1px solid var(--bpm-border)",
+                }}
+              >
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_bold", "aria-label": "Gras" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_italic", "aria-label": "Italique" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_underlined", "aria-label": "Souligné" })}
+                <span style={{ width: 1, height: 18, background: "var(--bpm-border)", margin: "0 3px" }} />
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_align_left", "aria-label": "Gauche" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_align_center", "aria-label": "Centre" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_align_right", "aria-label": "Droite" })}
+                <span style={{ width: 1, height: 18, background: "var(--bpm-border)", margin: "0 3px" }} />
+                {coreButton({ variant: "ghost", size: "sm", icon: "format_list_bulleted", "aria-label": "Liste" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "link", "aria-label": "Lien" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "image", "aria-label": "Image" })}
+                <span style={{ width: 1, height: 18, background: "var(--bpm-border)", margin: "0 3px" }} />
+                {coreButton({ variant: "destructive", size: "sm", icon: "delete", "aria-label": "Supprimer" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — toolbar data" wide>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 2,
+                  padding: 4,
+                  borderRadius: "var(--bpm-radius-lg)",
+                  background: "var(--bpm-bg-secondary)",
+                  border: "1px solid var(--bpm-border)",
+                }}
+              >
+                {coreButton({ variant: "ghost", size: "sm", icon: "filter_list", "aria-label": "Filtrer" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "sort", "aria-label": "Trier" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "search", "aria-label": "Rechercher" })}
+                <span style={{ width: 1, height: 18, background: "var(--bpm-border)", margin: "0 3px" }} />
+                {coreButton({ variant: "ghost", size: "sm", icon: "download", "aria-label": "Exporter" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "print", "aria-label": "Imprimer" })}
+                <span style={{ width: 1, height: 18, background: "var(--bpm-border)", margin: "0 3px" }} />
+                {coreButton({ variant: "ghost", size: "sm", icon: "view_column", "aria-label": "Colonnes" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "density_medium", "aria-label": "Densité" })}
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — strip nav" wide>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "inline-flex", gap: 4 }}>
+                  {coreButton({ variant: "secondary", size: "sm", icon: "chevron_left", "aria-label": "Précédent" })}
+                  {coreButton({ variant: "secondary", size: "sm", icon: "chevron_right", "aria-label": "Suivant" })}
+                </div>
+                <div style={{ display: "inline-flex", gap: 4 }}>
+                  {coreButton({ variant: "outline", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
+                  {coreButton({ variant: "ghost", size: "sm", icon: "more_horiz", "aria-label": "Options" })}
+                </div>
+              </div>
+            </DemoCard>
+            <DemoCard label="Compositions — strip social" wide>
+              <div style={{ display: "inline-flex", gap: 4 }}>
+                {coreButton({ variant: "ghost", size: "sm", icon: "thumb_up", "aria-label": "J'aime" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "share", "aria-label": "Partager" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "bookmark", "aria-label": "Sauvegarder" })}
+                {coreButton({ variant: "ghost", size: "sm", icon: "comment", "aria-label": "Commenter" })}
+              </div>
+            </DemoCard>
+          </Grid>
+        </section>
+
         {/* SECTION 1 — Typographie */}
         <section id="typography" style={{ marginBottom: 48 }}>
           <Title2 style={{ marginBottom: 16 }}>Typographie</Title2>

@@ -42,80 +42,82 @@ type VariantStyle = {
   active: React.CSSProperties;
 };
 
-/* Variants alignés bpm-button.jsx (référence) */
+/* Variants — styles inline hardcodés (aucune var() CSS) */
 const VARIANTS: Record<ButtonVariant, VariantStyle> = {
   primary: {
     base: {
-      background: "var(--bpm-accent)",
-      color: "var(--bpm-text-inverse, #fff)",
-      border: "1px solid var(--bpm-accent-hover)",
-      boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
+      background: "#2563eb",
+      color: "#ffffff",
+      border: "1px solid #1d4ed8",
+      boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
     },
-    hover: { background: "var(--bpm-accent-hover)" },
-    active: { background: "var(--bpm-accent-active, var(--bpm-accent-hover))" },
+    hover: { background: "#1d4ed8" },
+    active: { background: "#1e40af" },
   },
   secondary: {
     base: {
-      background: "var(--bpm-surface, #fff)",
-      color: "var(--bpm-text-primary)",
-      border: "1px solid var(--bpm-border-strong, var(--bpm-border))",
-      boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
+      background: "#ffffff",
+      color: "#111827",
+      border: "1px solid #c8cdd6",
+      boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
     },
-    hover: { background: "var(--bpm-surface-raised, var(--bpm-bg-secondary))" },
+    hover: { background: "#f4f5f7" },
     active: { background: "#e9ecef" },
   },
   outline: {
     base: {
       background: "transparent",
-      color: "var(--bpm-accent)",
-      border: "1px solid var(--bpm-accent-border, var(--bpm-accent-light))",
+      color: "#2563eb",
+      border: "1px solid #93c5fd",
     },
-    hover: { background: "var(--bpm-accent-light, var(--bpm-accent-soft))", borderColor: "var(--bpm-accent)" },
+    hover: { background: "#eff6ff", borderColor: "#2563eb" },
     active: { background: "#dbeafe" },
   },
   ghost: {
     base: {
       background: "transparent",
-      color: "var(--bpm-text-secondary)",
+      color: "#6b7280",
       border: "1px solid transparent",
     },
-    hover: { background: "var(--bpm-surface-raised, var(--bpm-bg-secondary))", color: "var(--bpm-text-primary)" },
+    hover: { background: "#f4f5f7", color: "#111827" },
     active: { background: "#e9ecef" },
   },
   destructive: {
     base: {
-      background: "var(--bpm-error)",
-      color: "var(--bpm-text-inverse, #fff)",
-      border: "1px solid var(--bpm-error-hover)",
-      boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
+      background: "#dc2626",
+      color: "#ffffff",
+      border: "1px solid #b91c1c",
+      boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
     },
-    hover: { background: "var(--bpm-error-hover)" },
+    hover: { background: "#b91c1c" },
     active: { background: "#991b1b" },
   },
   link: {
     base: {
       background: "transparent",
-      color: "var(--bpm-accent)",
-      border: "1px solid transparent",
-      textDecoration: "underline",
+      color: "#2563eb",
+      border: "none",
+      paddingLeft: 0,
+      paddingRight: 0,
+      textDecoration: "none",
       textUnderlineOffset: 3,
     },
-    hover: { color: "var(--bpm-accent-hover)" },
+    hover: { textDecoration: "underline" },
     active: {},
   },
 };
 
-/** ghost-raised (référence TB) : hover surface + shadow pour toolbar */
+/** ghost-raised (toolbar) : hover surface + shadow — valeurs hardcodées */
 const GHOST_RAISED: VariantStyle = {
   base: {
     background: "transparent",
-    color: "var(--bpm-text-secondary)",
+    color: "#6b7280",
     border: "1px solid transparent",
   },
   hover: {
-    background: "var(--bpm-surface)",
-    color: "var(--bpm-text-primary)",
-    boxShadow: "var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.08))",
+    background: "#ffffff",
+    color: "#111827",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
   },
   active: { background: "#f1f3f5" },
 };
@@ -175,6 +177,9 @@ const ICONS: Record<string, IconRenderer> = {
   share: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>,
   bookmark: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>,
   comment: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+  check: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  notifications: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+  person: (s) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>,
 };
 
 function ButtonIcon({ name, size }: { name: string; size: number }) {
@@ -217,6 +222,10 @@ export function Button({
   const iconSize = ICON_SIZE[size] ?? 16;
   const isIconOnly = children == null || (typeof children === "string" && children.trim() === "");
 
+  const disabledOverride: React.CSSProperties =
+    disabled ? { opacity: 0.42, pointerEvents: "none" } : {};
+  const loadingOverride: React.CSSProperties =
+    loading && !disabled ? { opacity: 0.7, pointerEvents: "none" } : {};
   const baseStyle: React.CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
@@ -224,23 +233,25 @@ export function Button({
     gap: sDef.gap,
     fontFamily: "inherit",
     fontWeight: 500,
-    cursor: disabled || loading ? (loading ? "wait" : "not-allowed") : "pointer",
+    cursor: disabled || loading ? "default" : "pointer",
     whiteSpace: "nowrap",
     outline: "none",
-    textDecoration: "none",
     userSelect: "none",
     transition: "background 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease",
-    opacity: disabled ? 0.42 : 1,
-    height: sDef.height,
-    padding: isIconOnly ? 0 : sDef.padding,
+    opacity: disabled ? 0.42 : loading ? 0.7 : 1,
+    pointerEvents: disabled || loading ? "none" : undefined,
+    height: variant === "link" ? "auto" : sDef.height,
+    minHeight: variant === "link" ? undefined : sDef.height,
+    padding: isIconOnly ? 0 : (variant === "link" ? 0 : sDef.padding),
     width: isIconOnly ? sDef.height : fullWidth ? "100%" : "auto",
     fontSize: sDef.fontSize,
     borderRadius: sDef.borderRadius,
     ...vDef.base,
     ...(hovered && !disabled && !loading ? vDef.hover : {}),
     ...(pressed && !disabled ? { ...vDef.active, transform: "scale(0.97)" } : {}),
-    ...(focused ? { boxShadow: "var(--bpm-focus-ring)" } : {}),
-    ...(variant === "link" ? { height: "auto", padding: 0 } : {}),
+    ...(focused ? { boxShadow: "0 0 0 3px rgba(37,99,235,0.4)" } : {}),
+    ...loadingOverride,
+    ...disabledOverride,
   };
 
   return (

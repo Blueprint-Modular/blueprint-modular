@@ -373,7 +373,7 @@ export default function ComponentsPage() {
           <Title2 style={{ marginBottom: 16 }}>Button</Title2>
           <Grid cols={3} gap={16}>
             <DemoCard label="Variants">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
                 {coreButton({ variant: "primary", children: "Primary" })}
                 {coreButton({ variant: "secondary", children: "Secondary" })}
                 {coreButton({ variant: "outline", children: "Outline" })}
@@ -406,14 +406,14 @@ export default function ComponentsPage() {
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
                 {coreButton({ variant: "primary", size: "md", iconRight: "arrow_forward", children: "Continuer" })}
-                {coreButton({ variant: "outline", size: "md", iconRight: "open_in_new", children: "Voir plus" })}
+                {coreButton({ variant: "ghost", size: "md", iconRight: "more_horiz", children: "Voir plus" })}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {coreButton({ variant: "primary", size: "md", icon: "add", "aria-label": "Ajouter" })}
                 {coreButton({ variant: "secondary", size: "md", icon: "settings", "aria-label": "Paramètres" })}
                 {coreButton({ variant: "outline", size: "md", icon: "edit", "aria-label": "Modifier" })}
-                {coreButton({ variant: "ghost", size: "md", icon: "more_vert", "aria-label": "Options" })}
-                {coreButton({ variant: "ghost", size: "sm", icon: "filter_list", "aria-label": "Filtrer" })}
+                {coreButton({ variant: "outline", size: "md", icon: "more_horiz", "aria-label": "Options" })}
+                {coreButton({ variant: "outline", size: "sm", icon: "filter_list", "aria-label": "Filtrer" })}
                 {coreButton({ variant: "destructive", size: "md", icon: "delete", "aria-label": "Supprimer" })}
                 {coreButton({ variant: "ghost", size: "lg", icon: "search", "aria-label": "Rechercher" })}
               </div>
@@ -445,9 +445,7 @@ export default function ComponentsPage() {
                   </React.Fragment>
                 ))}
               </div>
-              <div style={{ width: "100%", maxWidth: 280 }}>
-                {coreButton({ variant: "primary", size: "md", fullWidth: true, children: "Pleine largeur" })}
-              </div>
+              {coreButton({ variant: "primary", size: "md", fullWidth: true, children: "Pleine largeur" })}
             </DemoCard>
             <DemoCard label="Compositions — action cluster" wide>
               <div style={{ display: "flex", gap: 8 }}>
@@ -555,7 +553,7 @@ export default function ComponentsPage() {
                   {coreButton({ variant: "secondary", size: "sm", icon: "chevron_right", "aria-label": "Suivant" })}
                 </div>
                 <div style={{ display: "inline-flex", gap: 4 }}>
-                  {coreButton({ variant: "primary", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
+                  {coreButton({ variant: "outline", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
                   {coreButton({ variant: "ghost", size: "sm", icon: "more_horiz", "aria-label": "Options" })}
                 </div>
               </div>

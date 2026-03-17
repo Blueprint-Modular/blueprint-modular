@@ -396,6 +396,9 @@ export default function ComponentsPage() {
               </div>
             </DemoCard>
             <DemoCard label="Icons" wide>
+              <p style={{ margin: "0 0 8px 0", fontSize: 13, color: "var(--bpm-text-secondary)" }}>
+                Props icon · iconRight · SVG inline — noms identiques Material Symbols
+              </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
                 {coreButton({ variant: "primary", size: "md", icon: "add", children: "Nouveau" })}
                 {coreButton({ variant: "secondary", size: "md", icon: "download", children: "Exporter" })}
@@ -416,6 +419,9 @@ export default function ComponentsPage() {
               </div>
             </DemoCard>
             <DemoCard label="States" wide>
+              <p style={{ margin: "0 0 8px 0", fontSize: 13, color: "var(--bpm-text-secondary)" }}>
+                Cliquer les boutons loading — simulation async 2s
+              </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
                 {coreButton({ variant: "primary", size: "sm", children: "Défaut" })}
                 {coreButton({ variant: "secondary", size: "sm", children: "Défaut" })}
@@ -452,7 +458,7 @@ export default function ComponentsPage() {
             <DemoCard label="Compositions — danger confirm" wide>
               <div style={{ display: "flex", gap: 8 }}>
                 {coreButton({ variant: "secondary", size: "sm", children: "Annuler" })}
-                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer" })}
+                {coreButton({ variant: "destructive", size: "sm", icon: "delete", children: "Supprimer définitivement" })}
               </div>
             </DemoCard>
             <DemoCard label="Compositions — segmented" wide>
@@ -549,7 +555,7 @@ export default function ComponentsPage() {
                   {coreButton({ variant: "secondary", size: "sm", icon: "chevron_right", "aria-label": "Suivant" })}
                 </div>
                 <div style={{ display: "inline-flex", gap: 4 }}>
-                  {coreButton({ variant: "outline", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
+                  {coreButton({ variant: "primary", size: "sm", icon: "refresh", "aria-label": "Actualiser" })}
                   {coreButton({ variant: "ghost", size: "sm", icon: "more_horiz", "aria-label": "Options" })}
                 </div>
               </div>

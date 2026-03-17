@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
 # Version : 0.1.52
-# Date    : 2026-03-11
+# Date    : 2026-03-17
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -124,14 +124,19 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 
 ## bpm.button
 ```
-  children*: React.ReactNode  — Contenu du bouton — obligatoire.
-  onClick?: () => void  — Handler clic.
-  variant?: "primary" | "secondary" | "outline"  — Style visuel. Default: 'primary'.
-  size?: "small" | "medium" | "large"  — Taille. Default: 'medium'.
-  disabled?: boolean  — Désactive le bouton.
-  type?: "button" | "submit"
-  fullWidth?: boolean  — Bouton pleine largeur.
+  children?: React.ReactNode
+  onClick?: () => void
+  variant?: ButtonVariant
+  size?: ButtonSize
+  raised?: boolean  — Toolbar : ghost avec hover surface + shadow
+  icon?: string | null
+  iconRight?: string | null
+  loading?: boolean
+  disabled?: boolean
+  fullWidth?: boolean
+  type?: "button" | "submit" | "reset"
   className?: string
+  style?: React.CSSProperties
 ```
 
 ## bpm.caption

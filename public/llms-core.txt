@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File (CORE)
 # Version : 0.1.52
-# Date    : 2026-03-11
+# Date    : 2026-03-17
 # Format compact pour modèles locaux (Qwen, Mistral)
 # Composants essentiels uniquement — référence complète : blueprint-modular.com/llms.txt
 
@@ -26,11 +26,10 @@ bpm.badge({
 })
 
 bpm.button({
-  children*: React.ReactNode
+  children?: React.ReactNode
   onClick?: () => void
-  variant?: "primary" | "secondary" | "outline"
-  size?: "small" | "medium" | "large"
-  disabled?: boolean
+  variant?: ButtonVariant
+  size?: ButtonSize
 })
 
 bpm.card({

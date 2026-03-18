@@ -17,7 +17,8 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 - Modal — {isOpen && bpm.modal({ isOpen:true, onClose, title, children })} — TOUJOURS dans return()
 - Graphiques — bpm.plotlyChart UNIQUEMENT — jamais bpm.lineChart/barChart/areaChart
 - Métriques — bpm.metricRow({ children: <> {bpm.metric(...)} </> })
-- Table — renderCell dans columns — jamais JSX dans data[]
+- Table — render dans columns (pas renderCell) — jamais JSX dans data[]
+- INTERDIT : renderCell — utiliser render (alias invalide, ignoré silencieusement par Table)
 - Spinner — size 'small'|'medium'|'large' — jamais 'md'/'sm'
 - Toggle — prop value (booléen) — jamais checked
 - Text — style={{ fontWeight:600 }} — jamais prop weight
@@ -803,6 +804,10 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
 
 ## bpm.table
 ```
+TableColumn : { key: string; label: string; sortable?: boolean; align?: 'left'|'center'|'right';
+  render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode }
+INTERDIT : renderCell — utiliser render uniquement (renderCell est ignoré).
+
   columns*: TableColumn[]  — Définition des colonnes — obligatoire.
   data*: Record<string, unknown>[]  — Tableau de données — obligatoire. INTERDIT : JSX dans data[], utiliser render dans TableColumn.
   striped?: boolean

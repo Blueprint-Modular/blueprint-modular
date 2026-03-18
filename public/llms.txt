@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
 # Version : 0.1.52
-# Date    : 2026-03-17
+# Date    : 2026-03-18
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -17,8 +17,8 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 - Modal — {isOpen && bpm.modal({ isOpen:true, onClose, title, children })} — TOUJOURS dans return()
 - Graphiques — bpm.plotlyChart UNIQUEMENT — jamais bpm.lineChart/barChart/areaChart
 - Métriques — bpm.metricRow({ children: <> {bpm.metric(...)} </> })
-- Table — render dans columns (pas renderCell) — jamais JSX dans data[]
-- INTERDIT : renderCell — utiliser render (alias invalide, ignoré silencieusement par Table)
+- Table — prop render dans columns (pas renderCell) — jamais JSX dans data[]
+- INTERDIT : renderCell — alias non supporté par Table.tsx ; utiliser render
 - Spinner — size 'small'|'medium'|'large' — jamais 'md'/'sm'
 - Toggle — prop value (booléen) — jamais checked
 - Text — style={{ fontWeight:600 }} — jamais prop weight
@@ -158,6 +158,13 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   variant?: CardVariant
   inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style zone type Executive Summary).
   className?: string
+```
+
+## bpm.chat
+Chat Ollama local (démo).
+```
+  model?: string
+  placeholder?: string
 ```
 
 ## bpm.chatInterface
@@ -539,6 +546,12 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   trackContext?: boolean  — Si true, expose cette métrique au contexte IA.
 ```
 
+## bpm.metricRow
+```
+  children*: React.ReactNode
+  className?: string
+```
+
 ## bpm.modal
 Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, children })} — TOUJOURS dans return(), jamais après.
 ```
@@ -588,6 +601,12 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
   disabled?: boolean
   help?: string | null
   placeholder?: string
+```
+
+## bpm.page
+Conteneur page (core) — props : children.
+```
+  children*: React.ReactNode
 ```
 
 ## bpm.pageLayout
@@ -804,10 +823,6 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
 
 ## bpm.table
 ```
-TableColumn : { key: string; label: string; sortable?: boolean; align?: 'left'|'center'|'right';
-  render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode }
-INTERDIT : renderCell — utiliser render uniquement (renderCell est ignoré).
-
   columns*: TableColumn[]  — Définition des colonnes — obligatoire.
   data*: Record<string, unknown>[]  — Tableau de données — obligatoire. INTERDIT : JSX dans data[], utiliser render dans TableColumn.
   striped?: boolean
@@ -880,24 +895,74 @@ INTERDIT : Tableau de données — obligatoire. INTERDIT : JSX dans data[], util
   className?: string
 ```
 
-## bpm.title1
-Composant bpm.title1 — voir @blueprint-modular/core ou BPM_API.md.
+## bpm.title
+Titre h1 minimal (core) — children uniquement. Pour titres hiérarchiques : bpm.title1 … title4 ou titleBpm.
 ```
+  children*: React.ReactNode
+```
+
+## bpm.title1
+— bpm.title1 : niveau 1 implicite, ne pas passer level.
+```
+  children*: React.ReactNode
+  level?: 1 | 2 | 3 | 4
+  size?: string | null  — Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau.
+  bold?: boolean | number | null  — Gras : true = 700, false = 400, ou nombre (ex. 600). Surcharge le défaut du niveau.
+  color?: string | null  — Couleur du texte (ex. "var(--bpm-text-primary)", "#333"). Surcharge la couleur par défaut.
+  bar?: boolean  — Barre verticale sombre à gauche du titre (comme en-tête de section).
+  barColor?: string | null  — Couleur de la barre gauche (hex, rgb ou nom CSS). Ignoré si bar=false.
+  inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style badge / scénario).
+  invertedBackground?: string | null  — Couleur de fond quand inverted=true (hex, rgb ou nom CSS). Par défaut : #1d1d1f.
+  logoUrl?: string | null  — Optional logo URL (e.g. from localStorage). Shown only when level === 1.
+  onLogoClick?: () => void
 ```
 
 ## bpm.title2
-Composant bpm.title2 — voir @blueprint-modular/core ou BPM_API.md.
+— bpm.title2 : niveau 2 implicite, ne pas passer level.
 ```
+  children*: React.ReactNode
+  level?: 1 | 2 | 3 | 4
+  size?: string | null  — Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau.
+  bold?: boolean | number | null  — Gras : true = 700, false = 400, ou nombre (ex. 600). Surcharge le défaut du niveau.
+  color?: string | null  — Couleur du texte (ex. "var(--bpm-text-primary)", "#333"). Surcharge la couleur par défaut.
+  bar?: boolean  — Barre verticale sombre à gauche du titre (comme en-tête de section).
+  barColor?: string | null  — Couleur de la barre gauche (hex, rgb ou nom CSS). Ignoré si bar=false.
+  inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style badge / scénario).
+  invertedBackground?: string | null  — Couleur de fond quand inverted=true (hex, rgb ou nom CSS). Par défaut : #1d1d1f.
+  logoUrl?: string | null  — Optional logo URL (e.g. from localStorage). Shown only when level === 1.
+  onLogoClick?: () => void
 ```
 
 ## bpm.title3
-Composant bpm.title3 — voir @blueprint-modular/core ou BPM_API.md.
+— bpm.title3 : niveau 3 implicite, ne pas passer level.
 ```
+  children*: React.ReactNode
+  level?: 1 | 2 | 3 | 4
+  size?: string | null  — Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau.
+  bold?: boolean | number | null  — Gras : true = 700, false = 400, ou nombre (ex. 600). Surcharge le défaut du niveau.
+  color?: string | null  — Couleur du texte (ex. "var(--bpm-text-primary)", "#333"). Surcharge la couleur par défaut.
+  bar?: boolean  — Barre verticale sombre à gauche du titre (comme en-tête de section).
+  barColor?: string | null  — Couleur de la barre gauche (hex, rgb ou nom CSS). Ignoré si bar=false.
+  inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style badge / scénario).
+  invertedBackground?: string | null  — Couleur de fond quand inverted=true (hex, rgb ou nom CSS). Par défaut : #1d1d1f.
+  logoUrl?: string | null  — Optional logo URL (e.g. from localStorage). Shown only when level === 1.
+  onLogoClick?: () => void
 ```
 
 ## bpm.title4
-Composant bpm.title4 — voir @blueprint-modular/core ou BPM_API.md.
+— bpm.title4 : niveau 4 implicite, ne pas passer level.
 ```
+  children*: React.ReactNode
+  level?: 1 | 2 | 3 | 4
+  size?: string | null  — Taille de police (ex. "1.5rem", "24px"). Surcharge le défaut du niveau.
+  bold?: boolean | number | null  — Gras : true = 700, false = 400, ou nombre (ex. 600). Surcharge le défaut du niveau.
+  color?: string | null  — Couleur du texte (ex. "var(--bpm-text-primary)", "#333"). Surcharge la couleur par défaut.
+  bar?: boolean  — Barre verticale sombre à gauche du titre (comme en-tête de section).
+  barColor?: string | null  — Couleur de la barre gauche (hex, rgb ou nom CSS). Ignoré si bar=false.
+  inverted?: boolean  — Couleur inversée : fond sombre, texte blanc (style badge / scénario).
+  invertedBackground?: string | null  — Couleur de fond quand inverted=true (hex, rgb ou nom CSS). Par défaut : #1d1d1f.
+  logoUrl?: string | null  — Optional logo URL (e.g. from localStorage). Shown only when level === 1.
+  onLogoClick?: () => void
 ```
 
 ## bpm.titleBpm
@@ -916,8 +981,15 @@ Composant bpm.title4 — voir @blueprint-modular/core ou BPM_API.md.
 ```
 
 ## bpm.toast
-Composant bpm.toast — interface non parsée (voir BPM_API.md).
+Toast visuel ; en production préférer useToast().
 ```
+  message*: string  — Texte principal
+  type?: string  — success | error | warning | info
+  title?: string | null
+  pageName?: string | null
+  pageIcon?: string | null  — SVG HTML
+  id?: number  — Clé React
+  onClose*: () => void  — Fermeture — apps : ToastProvider + useToast()
 ```
 
 ## bpm.tooltip

@@ -68,6 +68,50 @@ def parse_jsdoc(block: str) -> str:
     return " ".join(lines)
 
 
+def parse_interface_non_export(source: str, interface_name: str) -> list[dict]:
+    """Interface sans mot-clé export (ex. ChatProps dans bpm.tsx)."""
+    pattern = re.compile(
+        r"interface\s+" + re.escape(interface_name) + r"\s*\{",
+        re.DOTALL,
+    )
+    m = pattern.search(source)
+    if not m:
+        return []
+    start = m.end()
+    depth = 1
+    i = start
+    while i < len(source) and depth > 0:
+        if source[i] == "{":
+            depth += 1
+        elif source[i] == "}":
+            depth -= 1
+        i += 1
+    body = source[start : i - 1]
+    props = []
+    pending_doc = ""
+    for line in body.splitlines():
+        jsdoc_m = re.match(r"\s*/\*\*(.+?)\*/", line)
+        if jsdoc_m:
+            pending_doc = jsdoc_m.group(1).strip().strip("*").strip()
+            continue
+        prop_m = re.match(r"\s*(\w+)(\??):\s*(.+?)(?:;|$)", line)
+        if prop_m:
+            name = prop_m.group(1)
+            optional = prop_m.group(2) == "?"
+            typ = prop_m.group(3).strip().rstrip(";").strip()
+            typ = re.sub(r"\s+", " ", typ)
+            props.append({
+                "name": name,
+                "type": typ,
+                "required": not optional,
+                "doc": pending_doc,
+            })
+            pending_doc = ""
+        else:
+            pending_doc = ""
+    return props
+
+
 def parse_props_interface(source: str, interface_name: str) -> list[dict]:
     """
     Extrait les props d'une interface TypeScript.
@@ -187,14 +231,16 @@ def extract_barrel_components(bpm_tsx_path: Path) -> list[str]:
     """
     source = bpm_tsx_path.read_text(encoding="utf-8", errors="ignore")
     names = []
-    # wrap(Component) → nom = clé de l'objet bpm
-    for m in re.finditer(r"^\s+(\w+):\s*wrap\s*\(", source, re.MULTILINE):
+    # wrap(Component) ou wrap<Props>(Component) → clé bpm
+    for m in re.finditer(r"^\s+(\w+):\s*wrap(?:<[^>]+>)?\s*\(", source, re.MULTILINE):
         names.append(m.group(1))
-    # Cas spéciaux non wrap() : spinner, tabs
+    # Cas spéciaux non wrap() : spinner, tabs, page
     if "spinner:" in source and "spinner" not in names:
         names.append("spinner")
     if "tabs:" in source and "tabs" not in names:
         names.append("tabs")
+    if re.search(r"^\s+page:\s*\(", source, re.MULTILINE) and "page" not in names:
+        names.append("page")
     return sorted(set(names))
 
 
@@ -248,7 +294,8 @@ INTERDIT : import {{ bpm.modal }} ou tout autre destructuring
 - Modal — {{isOpen && bpm.modal({{ isOpen:true, onClose, title, children }})}} — TOUJOURS dans return()
 - Graphiques — bpm.plotlyChart UNIQUEMENT — jamais bpm.lineChart/barChart/areaChart
 - Métriques — bpm.metricRow({{ children: <> {{bpm.metric(...)}} </> }})
-- Table — renderCell dans columns — jamais JSX dans data[]
+- Table — prop render dans columns (pas renderCell) — jamais JSX dans data[]
+- INTERDIT : renderCell — alias non supporté par Table.tsx ; utiliser render
 - Spinner — size 'small'|'medium'|'large' — jamais 'md'/'sm'
 - Toggle — prop value (booléen) — jamais checked
 - Text — style={{{{ fontWeight:600 }}}} — jamais prop weight
@@ -273,6 +320,7 @@ INTERDIT : import {{ bpm.modal }} ou tout destructuring
 - Modal : {{isOpen && bpm.modal({{ isOpen:true, onClose, title, children }})}} — TOUJOURS dans return()
 - Graphiques : bpm.plotlyChart UNIQUEMENT
 - Métriques : bpm.metricRow({{ children: <> {{bpm.metric(...)}} </> }})
+- Table : render dans columns — jamais renderCell
 - Spinner : size 'small'|'medium'|'large' — jamais 'md'/'sm'
 - Toggle : prop value (booléen) — jamais checked
 - Routes : App Router — NextResponse de 'next/server' — jamais NextApiRequest
@@ -379,17 +427,72 @@ def main():
     # --- Pour chaque nom barrel, résoudre le fichier et parser ---
     components = []
     skipped = []
-    seen_files = set()
+    bpm_source_text = BPM_TSX.read_text(encoding="utf-8", errors="ignore")
 
     for bpm_key in barrel_names:
         if bpm_key in EXCLUDE:
             skipped.append(bpm_key)
             continue
+
+        if bpm_key == "page":
+            components.append({
+                "name": "Page",
+                "bpm_name": "page",
+                "props": parse_props_interface(bpm_source_text, "PageProps"),
+                "doc": "Conteneur page (core) — props : children.",
+                "anti_patterns": [],
+            })
+            continue
+        if bpm_key == "title":
+            tp = parse_props_interface(bpm_source_text, "TitleProps")
+            # Title local core : seule interface TitleProps à props minimales (avant tout import ambigu)
+            components.append({
+                "name": "Title",
+                "bpm_name": "title",
+                "props": tp,
+                "doc": "Titre h1 minimal (core) — children uniquement. Pour titres hiérarchiques : bpm.title1 … title4 ou titleBpm.",
+                "anti_patterns": [],
+            })
+            continue
+        if bpm_key == "chat":
+            components.append({
+                "name": "Chat",
+                "bpm_name": "chat",
+                "props": parse_interface_non_export(bpm_source_text, "ChatProps"),
+                "doc": "Chat Ollama local (démo).",
+                "anti_patterns": [],
+            })
+            continue
+        if bpm_key == "toast":
+            components.append({
+                "name": "Toast",
+                "bpm_name": "toast",
+                "props": [
+                    {"name": "message", "type": "string", "required": True,
+                     "doc": "Texte principal"},
+                    {"name": "type", "type": "string", "required": False,
+                     "doc": "success | error | warning | info"},
+                    {"name": "title", "type": "string | null", "required": False, "doc": ""},
+                    {"name": "pageName", "type": "string | null", "required": False, "doc": ""},
+                    {"name": "pageIcon", "type": "string | null", "required": False, "doc": "SVG HTML"},
+                    {"name": "id", "type": "number", "required": False, "doc": "Clé React"},
+                    {"name": "onClose", "type": "() => void", "required": True,
+                     "doc": "Fermeture — apps : ToastProvider + useToast()"},
+                ],
+                "doc": "Toast visuel ; en production préférer useToast().",
+                "anti_patterns": [],
+            })
+            continue
+
         # Mapping barrel key → nom de fichier (PascalCase)
         file_stem = pascal_case(bpm_key)
         # Cas particuliers (alias ou nom différent)
         alias_map = {
             "titleBpm": "Title",
+            "title1": "Title",
+            "title2": "Title",
+            "title3": "Title",
+            "title4": "Title",
             "crud": "CrudPage",
             "selectbox": "Selectbox",
             "nfcBadge": "NfcBadge",
@@ -425,6 +528,12 @@ def main():
                 print(f"  [MIN] bpm.{bpm_key} — interface non parsée")
             continue
         comp["bpm_name"] = bpm_key
+        if bpm_key in ("title1", "title2", "title3", "title4"):
+            lv = bpm_key.replace("title", "")
+            comp["doc"] = (
+                (comp.get("doc") or "").rstrip()
+                + f" — bpm.{bpm_key} : niveau {lv} implicite, ne pas passer level."
+            ).strip()
         components.append(comp)
         if args.verbose:
             print(f"  [OK] bpm.{bpm_key} — {len(comp['props'])} props")

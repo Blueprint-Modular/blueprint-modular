@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File (CORE)
 # Version : 0.1.52
-# Date    : 2026-03-17
+# Date    : 2026-03-18
 # Format compact pour modèles locaux (Qwen, Mistral)
 # Composants essentiels uniquement — référence complète : blueprint-modular.com/llms.txt
 
@@ -12,6 +12,7 @@ INTERDIT : import { bpm.modal } ou tout destructuring
 - Modal : {isOpen && bpm.modal({ isOpen:true, onClose, title, children })} — TOUJOURS dans return()
 - Graphiques : bpm.plotlyChart UNIQUEMENT
 - Métriques : bpm.metricRow({ children: <> {bpm.metric(...)} </> })
+- Table : render dans columns — jamais renderCell
 - Spinner : size 'small'|'medium'|'large' — jamais 'md'/'sm'
 - Toggle : prop value (booléen) — jamais checked
 - Routes : App Router — NextResponse de 'next/server' — jamais NextApiRequest
@@ -59,6 +60,11 @@ bpm.metric({
   name?: string | null
   deltaType?: "aucun" | "normal" | "inverse"
   help?: string | null
+})
+
+bpm.metricRow({
+  children*: React.ReactNode
+  className?: string
 })
 
 bpm.modal({

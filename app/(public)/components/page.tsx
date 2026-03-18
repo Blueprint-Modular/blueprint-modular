@@ -734,8 +734,17 @@ export default function ComponentsPage() {
                 <Table
                   columns={[
                     { key: "nom", label: "Nom" },
-                    { key: "statut", label: "Statut" },
-                    { key: "valeur", label: "Valeur" },
+                    {
+                      key: "statut",
+                      label: "Statut",
+                      render: (v) =>
+                        String(v) === "Actif" ? (
+                          <Badge variant="success">{String(v)}</Badge>
+                        ) : (
+                          <Badge variant="default">{String(v)}</Badge>
+                        ),
+                    },
+                    { key: "valeur", label: "Valeur", align: "right" as const },
                   ]}
                   data={[
                     { nom: "Alice", statut: "Actif", valeur: "12 000 €" },

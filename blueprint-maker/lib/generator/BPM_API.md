@@ -110,7 +110,7 @@ Tableau triable pour drill-down (détail par ligne, site, période, etc.).
 | valueGrouping | boolean | Non | Séparateur de milliers. Défaut : true. |
 | emptyMessage | string | Non | Message si data vide. Défaut : "Aucune donnée disponible". |
 
-**TableColumn :** `{ key: string, label: string, align?: "left"|"center"|"right", render?: (value, row) => ReactNode }`. Pour une colonne statut, utiliser render qui retourne bpm.badge(...).
+**TableColumn :** `{ key: string, label: string, align?: "left"|"center"|"right", render?: (value, row) => ReactNode, decimals?, noWrap?, className? }`. Pour une colonne statut, utiliser **render** qui retourne bpm.badge(...). **INTERDIT :** `renderCell` (non supporté par Table.tsx — utiliser `render`).
 
 Exemple : `bpm.table(columns=[{"key": "ligne", "label": "Ligne"}, {"key": "trs", "label": "TRS"}], data=[{"ligne": "L1", "trs": "78.2 %"}, ...])`.
 

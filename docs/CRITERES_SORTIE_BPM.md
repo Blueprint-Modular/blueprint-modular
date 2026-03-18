@@ -9,7 +9,7 @@
 ## llms.txt (blueprint-modular)
 
 - **llms.txt** : nombre de sections **≥ nombre de composants dans le barrel** (packages/core/src/bpm.tsx).
-- Validation : `grep "^## bpm\." public/llms.txt | wc -l` doit être égal au nombre d’entrées du barrel (ex. 94).
+- Validation : `grep "^## bpm\." public/llms.txt | wc -l` doit être égal au nombre d’entrées du barrel (**98** : `page`, `title`, `chat`, `metricRow` + clés `wrap`/`wrap<>` + `spinner` + `tabs`).
 - Génération : `python scripts/generate-llms-txt.py` — source de vérité = barrel (plus d’exclusion globale).
 
 ## Build & déploiement

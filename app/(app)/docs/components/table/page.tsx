@@ -168,17 +168,20 @@ export default function DocTablePage() {
         <tbody>
           <tr>
             <td><code>columns</code></td>
-            <td><code>Column[]</code></td>
+            <td><code>TableColumn[]</code></td>
             <td>—</td>
             <td>Oui</td>
-            <td>Définition des colonnes (key, label, align, decimals optionnels). Par défaut : texte à gauche, chiffres à droite.</td>
+            <td>
+              <code>key</code>, <code>label</code> ; optionnel : <code>align</code>, <code>render</code> (pas <code>renderCell</code>),
+              <code>decimals</code>, <code>noWrap</code>, <code>className</code>. Cellule custom : <code>render: (value, row) =&gt; …</code>
+            </td>
           </tr>
           <tr>
             <td><code>data</code></td>
             <td><code>Record&lt;string, unknown&gt;[]</code></td>
-            <td><code>[]</code></td>
-            <td>Non</td>
-            <td>Données à afficher.</td>
+            <td>—</td>
+            <td>Oui</td>
+            <td>Lignes du tableau. Interdit : JSX dans <code>data[]</code> — utiliser <code>render</code> sur la colonne.</td>
           </tr>
           <tr>
             <td><code>striped</code></td>
@@ -235,6 +238,20 @@ export default function DocTablePage() {
             <td>true</td>
             <td>Non</td>
             <td>Séparateur de milliers (false = 1000,50 sans espace).</td>
+          </tr>
+          <tr>
+            <td><code>emptyMessage</code></td>
+            <td><code>string</code></td>
+            <td>« Aucune donnée disponible »</td>
+            <td>Non</td>
+            <td>Message si <code>data</code> vide.</td>
+          </tr>
+          <tr>
+            <td><code>name</code>, <code>keyColumn</code>, <code>minWidth</code>, <code>trackContext</code>, <code>className</code></td>
+            <td>voir <code>Table.tsx</code></td>
+            <td>—</td>
+            <td>Non</td>
+            <td>Contexte IA, largeur min., clé de ligne, etc.</td>
           </tr>
         </tbody>
       </table>

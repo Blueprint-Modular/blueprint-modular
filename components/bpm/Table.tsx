@@ -10,7 +10,7 @@ export interface TableColumn {
   label: React.ReactNode;
   align?: "left" | "center" | "right";
   className?: string;
-  /** Renderer personnalisé. Reçoit la valeur brute et la ligne complète. Alias llms.txt : renderCell */
+  /** Renderer personnalisé (valeur + ligne). Seule prop supportée — pas renderCell. */
   render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
   /** Décimales pour cette colonne (surcharge valueDecimals du tableau). */
   decimals?: number;

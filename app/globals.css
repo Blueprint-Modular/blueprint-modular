@@ -1088,15 +1088,841 @@ textarea.bpm-textarea:focus {
   .documents-filters input { width: 100%; }
 }
 
-/* Base contractuelle — même traitement que documents / IA */
-.contracts-page { max-width: 1200px; width: 100%; min-width: 0; box-sizing: border-box; }
-.contracts-page .bpm-selectbox { border: none !important; }
-.contracts-page .bpm-table-wrapper { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
-.contracts-page .bpm-table-container,
-.contracts-page .bpm-table { min-width: 0; }
-.contracts-page .doc-page-header + div { margin-top: 0.5rem; }
-.contracts-page .flex.flex-wrap { flex-wrap: wrap; gap: 8px; }
-.doc-import-analyze-button { border: none; }
+/* ============================================
+   BASE CONTRACTUELLE — REFONTE COMPLÈTE
+   ============================================ */
+
+.contracts-page {
+  max-width: 1100px;
+  padding: 0 0 48px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.contracts-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.contracts-header-left h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--bpm-text-primary);
+  margin: 4px 0 6px;
+  line-height: 1.2;
+}
+
+/* CORRECTION : la description était en bleu (#048dc3) — elle doit être en gris */
+.contracts-header-left .doc-description {
+  color: var(--bpm-text-muted) !important;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 560px;
+}
+
+.contracts-import-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bpm-accent);
+  color: white;
+  padding: 8px 18px;
+  border-radius: var(--bpm-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--bpm-transition-fast);
+  box-shadow: 0 1px 3px rgba(4, 141, 195, 0.3);
+}
+
+.contracts-import-btn:hover {
+  background: var(--bpm-accent-hover);
+  box-shadow: 0 2px 8px rgba(4, 141, 195, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   STATS BAR
+   ============================================ */
+
+.contracts-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bpm-surface);
+  border: 1px solid var(--bpm-border);
+  border-radius: var(--bpm-radius);
+  padding: 12px 20px;
+  min-width: 90px;
+  flex: 1;
+  max-width: 140px;
+  transition: var(--bpm-transition-fast);
+}
+
+.stat-card:hover {
+  border-color: var(--bpm-accent-border);
+  box-shadow: var(--bpm-shadow-sm);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--bpm-text-primary);
+  line-height: 1.1;
+}
+
+.stat-value.stat-success { color: var(--bpm-success); }
+.stat-value.stat-warning { color: var(--bpm-warning); }
+.stat-value.stat-error   { color: var(--bpm-error); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--bpm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+/* ============================================
+   TOOLBAR — Recherche + Filtres
+   ============================================ */
+
+.contracts-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  max-width: 340px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--bpm-text-muted);
+  pointer-events: none;
+}
+
+.contracts-search {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px 0 34px;
+  border: 1px solid var(--bpm-border);
+  border-radius: var(--bpm-radius-sm);
+  font-size: 14px;
+  color: var(--bpm-text-primary);
+  background: var(--bpm-surface);
+  outline: none;
+  transition: var(--bpm-transition-fast);
+}
+
+.contracts-search:focus {
+  border-color: var(--bpm-accent);
+  box-shadow: var(--bpm-focus-ring);
+}
+
+.contracts-search::placeholder {
+  color: var(--bpm-text-muted);
+}
+
+.contracts-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Selectbox uniformisés */
+.contracts-page .bpm-selectbox {
+  height: 36px !important;
+  border: 1px solid var(--bpm-border) !important;
+  border-radius: var(--bpm-radius-sm) !important;
+  background: var(--bpm-surface) !important;
+  padding: 0 10px 0 12px !important;
+  font-size: 13px !important;
+  color: var(--bpm-text-muted) !important;
+  white-space: nowrap;
+  min-width: 110px;
+  cursor: pointer;
+  transition: var(--bpm-transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contracts-page .bpm-selectbox:hover {
+  border-color: var(--bpm-accent-border) !important;
+  color: var(--bpm-text-primary) !important;
+}
+
+/* ============================================
+   TABLEAU DES CONTRATS
+   ============================================ */
+
+.contracts-table-wrapper {
+  border: 1px solid var(--bpm-border);
+  border-radius: var(--bpm-radius);
+  overflow: hidden;
+  box-shadow: var(--bpm-shadow-sm);
+  margin-bottom: 20px;
+}
+
+.contracts-page .bpm-table-wrapper {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.contracts-page .bpm-table thead tr {
+  background: var(--bpm-bg-secondary);
+  border-bottom: 1px solid var(--bpm-border);
+}
+
+.contracts-page .bpm-table thead th {
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bpm-text-muted);
+  white-space: nowrap;
+}
+
+.contracts-page .bpm-table thead th:last-child {
+  width: 48px;
+  text-align: center;
+}
+
+.contracts-page .bpm-table tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--bpm-border);
+  vertical-align: middle;
+  color: var(--bpm-text-primary);
+}
+
+.contracts-page .bpm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Lignes cliquables */
+.contracts-page .bpm-table tbody tr {
+  cursor: pointer;
+  transition: background var(--bpm-transition-fast);
+}
+
+.contracts-page .bpm-table tbody tr:hover {
+  background: #048dc308;
+}
+
+.contracts-page .bpm-table tbody tr:hover .row-action-btn {
+  opacity: 1;
+}
+
+.contracts-page .bpm-table tbody tr:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--bpm-accent);
+}
+
+/* Cellule Nom */
+.file-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.file-icon.pdf  { background: #fee2e2; color: #dc2626; }
+.file-icon.docx { background: #dbeafe; color: #2563eb; }
+.file-icon.txt  { background: #f3f4f6; color: #6b7280; }
+
+.file-name {
+  font-weight: 500;
+  color: var(--bpm-text-primary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Valeurs manquantes */
+.data-empty {
+  color: var(--bpm-text-muted);
+  opacity: 0.5;
+  font-size: 13px;
+}
+
+/* BADGES RISQUE — couleurs sémantiques */
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.risk-low    { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.risk-medium { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.risk-high   { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.risk-unknown{ background: var(--bpm-bg-secondary); color: var(--bpm-text-muted); border: 1px solid var(--bpm-border); }
+
+/* BADGES STATUT — couleur distincte du risque */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-analyzed { background: var(--bpm-accent-soft); color: var(--bpm-accent); border: 1px solid var(--bpm-accent-border); }
+.status-pending  { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.status-error    { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.status-importing{ background: var(--bpm-bg-secondary); color: var(--bpm-text-muted); border: 1px solid var(--bpm-border); }
+
+/* ============================================
+   ÉTAT VIDE DU TABLEAU
+   ============================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  gap: 8px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 40px;
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+  margin: 0;
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: var(--bpm-text-muted);
+  max-width: 340px;
+  line-height: 1.5;
+  margin: 4px 0 16px;
+}
+
+/* Navigation bas de page */
+.doc-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bpm-border);
+}
+
+.doc-pagination-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bpm-text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--bpm-radius-sm);
+  transition: var(--bpm-transition-fast);
+  border: 1px solid transparent;
+}
+
+.doc-pagination-link:hover {
+  color: var(--bpm-accent);
+  background: var(--bpm-accent-soft);
+  border-color: var(--bpm-accent-border);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+  .contracts-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contracts-import-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contracts-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contracts-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contracts-stats {
+    justify-content: space-around;
+  }
+
+  .import-modal-panel {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 32px);
+  }
+
+  .detail-panel-drawer {
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   OVERLAY DRAG-AND-DROP GLOBAL
+   ============================================ */
+
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(4, 141, 195, 0.08);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed var(--bpm-accent);
+  pointer-events: none;
+}
+
+.drop-overlay.active {
+  display: flex;
+}
+
+.drop-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: var(--bpm-radius-lg);
+  padding: 40px 60px;
+  box-shadow: var(--bpm-shadow-md);
+}
+
+.drop-overlay-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--bpm-accent);
+}
+
+.drop-overlay-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bpm-text-primary);
+}
+
+.drop-overlay-sub {
+  font-size: 14px;
+  color: var(--bpm-text-muted);
+}
+
+/* ============================================
+   MODAL D'IMPORT
+   ============================================ */
+
+.contracts-import-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.import-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bpm-overlay-bg);
+  backdrop-filter: blur(3px);
+}
+
+.import-modal-panel {
+  position: relative;
+  background: var(--bpm-surface);
+  border-radius: var(--bpm-radius-lg);
+  box-shadow: var(--bpm-shadow-md);
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-slide-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modal-slide-in {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.import-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bpm-border);
+}
+
+.import-modal-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+  margin: 0;
+}
+
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--bpm-radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bpm-text-muted);
+  transition: var(--bpm-transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: var(--bpm-bg-secondary);
+  color: var(--bpm-text-primary);
+}
+
+.import-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dropzone {
+  border: 2px dashed var(--bpm-accent-border);
+  border-radius: var(--bpm-radius-lg);
+  padding: 48px 32px;
+  text-align: center;
+  background: var(--bpm-accent-soft);
+  cursor: pointer;
+  transition: var(--bpm-transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropzone:hover {
+  border-color: var(--bpm-accent);
+  background: rgba(4, 141, 195, 0.15);
+  box-shadow: var(--bpm-shadow-sm);
+}
+
+.dropzone-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--bpm-accent);
+  opacity: 0.8;
+}
+
+.dropzone-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+}
+
+.dropzone-sub {
+  font-size: 13px;
+  color: var(--bpm-text-muted);
+}
+
+.dropzone-formats {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.format-tag {
+  background: var(--bpm-bg-secondary);
+  border: 1px solid var(--bpm-border);
+  border-radius: var(--bpm-radius-sm);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bpm-text-muted);
+  text-transform: uppercase;
+}
+
+.format-limit {
+  font-size: 11px;
+  color: var(--bpm-text-muted);
+  opacity: 0.7;
+}
+
+.import-file-list {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--bpm-border);
+}
+
+.import-file-list-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+  margin-bottom: 12px;
+}
+
+.import-file-list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.import-file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bpm-bg-secondary);
+  border-radius: var(--bpm-radius-sm);
+}
+
+.import-file-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--bpm-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.import-file-remove {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--bpm-radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bpm-text-muted);
+  transition: var(--bpm-transition-fast);
+}
+
+.import-file-remove:hover {
+  background: var(--bpm-error-soft);
+  color: var(--bpm-error);
+}
+
+.import-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--bpm-border);
+}
+
+.btn-file-count {
+  margin-left: 4px;
+  opacity: 0.8;
+}
+
+/* ============================================
+   PANNEAU DÉTAIL (slide-over)
+   ============================================ */
+
+.contract-detail-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.detail-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bpm-overlay-bg);
+  backdrop-filter: blur(3px);
+}
+
+.detail-panel-drawer {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  background: var(--bpm-surface);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slide-in-right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.detail-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bpm-border);
+  flex-shrink: 0;
+}
+
+.detail-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--bpm-radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bpm-text-muted);
+  transition: var(--bpm-transition-fast);
+}
+
+.detail-close-btn:hover {
+  background: var(--bpm-bg-secondary);
+  color: var(--bpm-text-primary);
+}
+
+.detail-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-header-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.detail-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.detail-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  min-height: 600px;
+}
+
+.detail-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 12px;
+  text-align: center;
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--bpm-error);
+  opacity: 0.8;
+}
+
+.error-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bpm-text-primary);
+  margin: 0;
+}
+
+.error-desc {
+  font-size: 14px;
+  color: var(--bpm-text-muted);
+  max-width: 320px;
+  margin: 0;
+}
 
 /* bpm.markdown — rendu Markdown (titres, listes, code, --- = hr) */
 .bpm-markdown { font-size: 15px; line-height: 1.6; }

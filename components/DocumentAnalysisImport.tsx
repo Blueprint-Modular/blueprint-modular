@@ -109,10 +109,6 @@ export function DocumentAnalysisImport({
 
   return (
     <>
-      <div className="doc-page-header">
-        <h1>{title}</h1>
-        <p className="doc-description">{description}</p>
-      </div>
       <div className="mt-4">
         <input
           ref={inputRef}
@@ -131,42 +127,63 @@ export function DocumentAnalysisImport({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleClick()}
-          className="rounded-xl border-2 border-dashed py-10 px-6 text-center cursor-pointer transition-colors min-w-0 max-w-full"
-          style={{
-            borderColor: isDragging ? "var(--bpm-accent-cyan)" : "var(--bpm-border)",
-            background: isDragging ? "var(--bpm-bg-secondary)" : "var(--bpm-bg-primary)",
-            color: "var(--bpm-text-secondary)",
-          }}
+          className={`contracts-dropzone ${isDragging ? "drag-over" : ""}`}
           aria-label={dropLabel}
         >
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 opacity-60" style={{ color: "var(--bpm-text-secondary)" }}><DocIcon className="w-full h-full" /></div>
-            <p className="text-sm max-w-md">{dropLabel}</p>
-            <button
-              type="button"
-              className="doc-import-pj-button"
-              onClick={(e) => { e.stopPropagation(); handleClick(); }}
-              style={{ color: "var(--bpm-accent-cyan)", background: "none", border: "none", cursor: "pointer", fontSize: "0.875rem", textDecoration: "underline" }}
-              aria-label="Parcourir les fichiers (PJ)"
-            >
-              Parcourir les fichiers (PJ)
-            </button>
-            {selectedFiles.length > 0 && (
-              <p className="text-xs" style={{ color: "var(--bpm-accent-cyan)" }}>
-                {selectedFiles.length} fichier{selectedFiles.length > 1 ? "s" : ""} sélectionné{selectedFiles.length > 1 ? "s" : ""}
-              </p>
-            )}
+          <svg className="drop-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <p className="drop-title">Glissez-déposez vos fichiers ici</p>
+          <p className="drop-subtitle">ou</p>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={(e) => { e.stopPropagation(); handleClick(); }}
+            aria-label="Parcourir les fichiers"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-2" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+            Parcourir les fichiers
+          </Button>
+          <div className="drop-formats">
+            {accept.split(",").map((ext, i) => (
+              <span key={i} className="format-badge">{ext.trim().replace(".", "").toUpperCase()}</span>
+            ))}
           </div>
+          <p className="drop-subtitle" style={{ fontSize: "12px", marginTop: "4px" }}>
+            Jusqu&apos;à {maxFiles} fichiers simultanément
+          </p>
+          {selectedFiles.length > 0 && (
+            <p className="text-xs mt-2" style={{ color: "var(--bpm-accent)" }}>
+              {selectedFiles.length} fichier{selectedFiles.length > 1 ? "s" : ""} sélectionné{selectedFiles.length > 1 ? "s" : ""}
+            </p>
+          )}
         </div>
         <div className="mt-4">
           <Button
             type="button"
-            variant="secondary"
+            variant="primary"
             onClick={handleSubmit}
             disabled={disabled || selectedFiles.length === 0}
             className="doc-import-analyze-button"
+            title={selectedFiles.length === 0 ? "Sélectionnez au moins un fichier pour continuer" : undefined}
           >
-            {disabled ? "Analyse en cours..." : buttonLabel}
+            {disabled ? (
+              <>
+                <span className="animate-spin inline-block mr-2">⟳</span>
+                Analyse en cours...
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-2" aria-hidden="true">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                {buttonLabel}
+              </>
+            )}
           </Button>
         </div>
       </div>

@@ -90,13 +90,20 @@ export default function ContractsPage() {
     if (contractType) params.set("contractType", contractType);
     if (status) params.set("status", status);
     fetch(`/api/contracts?${params}`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : []))
+      .then((r) => {
+        if (!r.ok) {
+          console.error("[contracts] API error:", r.status, r.statusText);
+          return [];
+        }
+        return r.json();
+      })
       .then((data) => {
         const list = Array.isArray(data) ? data : [];
         setContracts(list.map((c: ContractRow) => flattenContract(c)));
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("[contracts] Fetch error:", err);
         setContracts([]);
         setLoading(false);
       });

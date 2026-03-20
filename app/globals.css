@@ -1298,14 +1298,15 @@ textarea.bpm-textarea:focus {
   border: 1px solid var(--bpm-border);
   border-radius: var(--bpm-radius);
   overflow: hidden;
-  box-shadow: var(--bpm-shadow-sm);
+  box-shadow: none;
   margin-bottom: 20px;
 }
 
-.contracts-page .bpm-table-wrapper {
-  border: none;
-  box-shadow: none;
-  border-radius: 0;
+.contracts-page .contracts-table-wrapper .bpm-table-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
 }
 
 .contracts-page .bpm-table thead tr {

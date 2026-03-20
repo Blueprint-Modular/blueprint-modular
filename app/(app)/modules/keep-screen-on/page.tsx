@@ -124,9 +124,13 @@ export default function KeepScreenOnPage() {
     };
   }, [releaseWakeLock]);
 
-  // Check support on mount
+  // Check support on mount (only on client side)
   useEffect(() => {
-    setSupported("wakeLock" in navigator);
+    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+      setSupported("wakeLock" in navigator);
+    } else {
+      setSupported(false);
+    }
   }, []);
 
   return (

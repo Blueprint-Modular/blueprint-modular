@@ -1,6 +1,6 @@
 {
   "name": "blueprint-modular",
-  "version": "0.1.52",
+  "version": "0.1.53",
   "private": true,
   "scripts": {
     "clean": "node scripts/clear-cache.cjs",

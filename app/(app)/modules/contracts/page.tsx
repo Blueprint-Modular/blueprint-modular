@@ -9,10 +9,24 @@ import { getTypeLabel, getStatusLabel, getRiskLabel, getWorkspaceLabel } from "@
 // Icônes SVG inline
 function UploadIcon({ className }: { className?: string }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="17 8 12 3 7 8" />
-      <line x1="12" y1="3" x2="12" y2="15" />
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M460-336.92v-346l-93.23 93.23-28.31-28.77L480-760l141.54 141.54-28.31 28.77L500-682.92v346h-40ZM264.62-200q-27.62 0-46.12-18.5Q200-237 200-264.62v-96.92h40v96.92q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69h430.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-96.92h40v96.92q0 27.62-18.5 46.12Q723-200 695.38-200H264.62Z" />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M480-336.92 338.46-478.46l28.31-28.77L460-414v-346h40v346l93.23-93.23 28.31 28.77L480-336.92ZM264.62-200q-27.62 0-46.12-18.5Q200-237 200-264.62v-96.92h40v96.92q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69h430.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-96.92h40v96.92q0 27.62-18.5 46.12Q723-200 695.38-200H264.62Z" />
+    </svg>
+  );
+}
+
+function DeleteIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M304.62-160q-26.85 0-45.74-18.88Q240-197.77 240-224.62V-720h-40v-40h160v-30.77h240V-760h160v40h-40v495.38q0 27.62-18.5 46.12Q683-160 655.38-160H304.62ZM680-720H280v495.38q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92h350.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93V-720ZM392.31-280h40v-360h-40v360Zm135.38 0h40v-360h-40v360ZM280-720v520-520Z" />
     </svg>
   );
 }
@@ -177,6 +191,18 @@ export default function ContractsPage() {
     const interval = setInterval(fetchContracts, 3000);
     return () => clearInterval(interval);
   }, [contracts, fetchContracts]);
+
+  // Masquer la barre de navigation mobile quand le panneau de détail est ouvert
+  useEffect(() => {
+    if (detailPanelOpen) {
+      document.body.classList.add("contract-detail-panel-open");
+    } else {
+      document.body.classList.remove("contract-detail-panel-open");
+    }
+    return () => {
+      document.body.classList.remove("contract-detail-panel-open");
+    };
+  }, [detailPanelOpen]);
 
   // Drag and drop global
   useEffect(() => {
@@ -705,8 +731,6 @@ export default function ContractsPage() {
               aria-label="Glisser des fichiers ici pour les importer"
             >
               <UploadIcon className="w-4 h-4" />
-              <span>Glissez des fichiers ici pour les importer directement</span>
-              <span className="drop-formats">PDF · DOCX · TXT</span>
             </div>
           </>
         )}
@@ -834,11 +858,7 @@ export default function ContractsPage() {
               </h2>
               <div className="detail-header-actions">
                 <Button variant="secondary" size="small">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-2" aria-hidden="true">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="17 8 12 3 7 8" />
-                    <line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
+                  <DownloadIcon className="w-4 h-4 mr-2" />
                   Télécharger
                 </Button>
                 {selectedContractId && (
@@ -852,10 +872,7 @@ export default function ContractsPage() {
                     }}
                     aria-label="Supprimer ce contrat"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden="true">
-                      <polyline points="3 6 5 6 21 6" />
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg>
+                    <DeleteIcon className="w-4 h-4" />
                   </Button>
                 )}
               </div>

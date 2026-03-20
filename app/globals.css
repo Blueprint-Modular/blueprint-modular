@@ -1138,7 +1138,7 @@ textarea.bpm-textarea:focus {
   background: var(--bpm-accent);
   color: white;
   padding: 8px 18px;
-  border-radius: var(--bpm-radius-sm);
+  border-radius: var(--bpm-radius);
   font-size: 14px;
   font-weight: 600;
   border: none;
@@ -1370,7 +1370,7 @@ textarea.bpm-textarea:focus {
 .file-icon {
   width: 28px;
   height: 28px;
-  border-radius: 4px;
+  border-radius: var(--bpm-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1405,7 +1405,7 @@ textarea.bpm-textarea:focus {
   align-items: center;
   gap: 5px;
   padding: 3px 9px;
-  border-radius: 20px;
+  border-radius: var(--bpm-radius-sm);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -1422,7 +1422,7 @@ textarea.bpm-textarea:focus {
   align-items: center;
   gap: 5px;
   padding: 3px 9px;
-  border-radius: 20px;
+  border-radius: var(--bpm-radius-sm);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -1814,10 +1814,19 @@ textarea.bpm-textarea:focus {
 .contract-detail-panel {
   position: fixed;
   inset: 0;
-  z-index: 1001;
+  z-index: 10000;
   display: flex;
   align-items: stretch;
   justify-content: flex-end;
+}
+
+/* Masquer la barre de navigation mobile et le header (cloche de notification) quand le panneau de détail est ouvert */
+body.contract-detail-panel-open .bpm-mobile-nav-bar {
+  display: none !important;
+}
+
+body.contract-detail-panel-open .pwa-title-bar {
+  display: none !important;
 }
 
 .detail-panel-overlay {
@@ -1887,6 +1896,26 @@ textarea.bpm-textarea:focus {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+}
+
+.detail-header-actions button {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+.detail-header-actions button > span {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.detail-header-actions button svg {
+  flex-shrink: 0;
+  display: inline-block;
 }
 
 .detail-panel-body {

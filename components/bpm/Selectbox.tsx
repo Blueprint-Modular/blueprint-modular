@@ -70,14 +70,29 @@ export function Selectbox({
       return;
     }
     const update = () => {
-      if (!selectboxRef.current) return;
+      if (!selectboxRef.current || !dropdownRef.current) return;
       const rect = selectboxRef.current.getBoundingClientRect();
+      const dropdownEl = dropdownRef.current;
       const minDropdownWidth = 220;
+      const viewW = window.innerWidth;
+      const dropW = Math.max(rect.width, minDropdownWidth);
+      
+      // Positionner à droite du trigger par défaut
+      let left = rect.left;
+      
+      // Si ça sort à droite → aligner sur le bord droit du trigger
+      if (left + dropW > viewW - 12) {
+        left = rect.right - dropW;
+      }
+      
+      // S'assurer que le dropdown ne sorte pas à gauche
+      left = Math.max(8, left);
+      
       setDropdownStyle({
         position: "fixed",
         top: rect.bottom + 4,
-        left: rect.left,
-        width: Math.max(rect.width, minDropdownWidth),
+        left: left,
+        width: dropW,
         minWidth: minDropdownWidth,
         maxHeight: 280,
         zIndex: 10002,
@@ -148,8 +163,10 @@ export function Selectbox({
               role="option"
               aria-selected={isSelected}
               className="bpm-selectbox-option cursor-pointer"
+              data-value={optValue}
               style={{
                 padding: "8px 12px",
+                paddingLeft: optValue && ["pending", "analyzing", "done", "error"].includes(optValue) ? "28px" : "12px",
                 fontSize: "var(--bpm-font-size-base)",
                 background: isSelected ? "var(--bpm-accent)" : "transparent",
                 color: isSelected ? "var(--bpm-accent-contrast)" : "var(--bpm-text)",
@@ -157,6 +174,7 @@ export function Selectbox({
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                position: "relative",
               }}
               onClick={() => handleSelect(optValue)}
               onMouseEnter={(e) => {

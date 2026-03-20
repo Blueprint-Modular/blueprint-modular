@@ -1297,23 +1297,100 @@ textarea.bpm-textarea:focus {
   color: var(--bpm-text-primary) !important;
 }
 
+/* Indicateurs couleur dans le dropdown de statut */
+.bpm-selectbox-option[data-value="pending"]::before,
+.bpm-selectbox-option[data-value="analyzing"]::before,
+.bpm-selectbox-option[data-value="done"]::before,
+.bpm-selectbox-option[data-value="error"]::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.bpm-selectbox-option[data-value="pending"]::before {
+  background: var(--bpm-warning);
+}
+
+.bpm-selectbox-option[data-value="analyzing"]::before {
+  background: var(--bpm-accent);
+}
+
+.bpm-selectbox-option[data-value="done"]::before {
+  background: var(--bpm-success);
+}
+
+.bpm-selectbox-option[data-value="error"]::before {
+  background: var(--bpm-error);
+}
+
 /* ============================================
    TABLEAU DES CONTRATS
    ============================================ */
 
+/* Étape 1 : Supprimer le double wrapper conflictuel */
 .contracts-table-wrapper {
   border: 1px solid var(--bpm-border);
   border-radius: var(--bpm-radius);
   overflow: hidden;
-  box-shadow: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   margin-bottom: 20px;
 }
 
+/* Forcer le wrapper interne à ne pas scroll */
 .contracts-page .contracts-table-wrapper .bpm-table-wrapper {
+  overflow: visible !important;
+  max-height: none !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
   outline: none !important;
+}
+
+/* Étape 2 : Contraindre le tableau à la largeur disponible */
+.contracts-page .contracts-table.bpm-table,
+.contracts-page .bpm-table.contracts-table {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* Étape 3 : Largeurs des colonnes (total = 100%) */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(1),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(1) { width: 28%; } /* Nom */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(2),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(2) { width: 13%; } /* Fournisseur */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(3),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(3) { width: 9%;  } /* Type */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(4),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(4) { width: 12%; } /* Date contrat */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(5),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(5) { width: 11%; } /* Date fin */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(6),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(6) { width: 10%; } /* Risque */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(7),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(7) { width: 12%; } /* Statut */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(8),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(8) { width: 5%;  } /* Actions */
+
+/* Étape 4 : Tronquer le texte long dans les cellules */
+.contracts-page .contracts-table.bpm-table td,
+.contracts-page .contracts-table.bpm-table th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Exception : les cellules avec badges */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(6),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(7),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(8) {
+  overflow: visible;
+  white-space: normal;
 }
 
 .contracts-page .bpm-table thead tr {
@@ -1330,6 +1407,22 @@ textarea.bpm-textarea:focus {
   letter-spacing: 0.06em;
   color: var(--bpm-text-muted);
   white-space: nowrap;
+  user-select: none;
+  transition: background var(--bpm-transition-fast), color var(--bpm-transition-fast);
+}
+
+.contracts-page .bpm-table thead th:hover {
+  background: var(--bpm-border) !important;
+  color: var(--bpm-text-primary);
+}
+
+.contracts-page .bpm-table thead th.bpm-table-sorted {
+  color: var(--bpm-accent);
+}
+
+.contracts-page .bpm-table thead th.bpm-table-sorted .bpm-table-sort-indicator {
+  opacity: 1;
+  font-weight: 700;
 }
 
 .contracts-page .bpm-table thead th:last-child {
@@ -1402,8 +1495,9 @@ textarea.bpm-textarea:focus {
 /* Valeurs manquantes */
 .data-empty {
   color: var(--bpm-text-muted);
-  opacity: 0.5;
+  opacity: 0.45;
   font-size: 13px;
+  font-style: italic;
 }
 
 /* BADGES RISQUE — couleurs sémantiques */
@@ -1435,7 +1529,7 @@ textarea.bpm-textarea:focus {
   white-space: nowrap;
 }
 
-.status-analyzed { background: var(--bpm-accent-soft); color: var(--bpm-accent); border: 1px solid var(--bpm-accent-border); }
+.status-analyzed { background: var(--bpm-accent-soft); color: var(--bpm-accent-active); border: 1px solid var(--bpm-accent-border); }
 .status-pending  { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
 .status-error    { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 .status-importing{ background: var(--bpm-bg-secondary); color: var(--bpm-text-muted); border: 1px solid var(--bpm-border); }
@@ -1512,6 +1606,7 @@ textarea.bpm-textarea:focus {
 @media (max-width: 767px) {
   .contracts-header {
     flex-direction: column;
+    align-items: stretch;
     gap: 12px;
   }
 
@@ -1530,13 +1625,69 @@ textarea.bpm-textarea:focus {
     max-width: 100%;
   }
 
+  /* Masquer le tableau sur mobile, afficher des cards */
   .contracts-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    display: none;
+  }
+
+  /* Cards mobiles */
+  .contracts-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contract-card {
+    background: var(--bpm-surface);
+    border: 1px solid var(--bpm-border);
+    border-radius: var(--bpm-radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: var(--bpm-transition-fast);
+  }
+
+  .contract-card:hover {
+    border-color: var(--bpm-accent-border);
+    box-shadow: var(--bpm-shadow-sm);
+  }
+
+  .contract-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .contract-card-title {
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--bpm-text-primary);
+  }
+
+  .contract-card-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--bpm-text-muted);
+  }
+
+  .contracts-filters {
+    flex-wrap: wrap;
+  }
+
+  .bpm-selectbox-container {
+    flex: 1;
+    min-width: 130px;
   }
 
   .contracts-stats {
-    justify-content: space-around;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: stretch;
   }
 
   .import-modal-panel {
@@ -1557,12 +1708,14 @@ textarea.bpm-textarea:focus {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(4, 141, 195, 0.08);
-  backdrop-filter: blur(2px);
   display: none;
   align-items: center;
   justify-content: center;
-  border: 3px dashed var(--bpm-accent);
+  background: rgba(4, 141, 195, 0.06);
+  backdrop-filter: blur(1px);
+  outline: 3px dashed var(--bpm-accent);
+  outline-offset: -12px;
+  animation: pulse-border 1s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
@@ -1570,8 +1723,70 @@ textarea.bpm-textarea:focus {
   display: flex;
 }
 
+@keyframes pulse-border {
+  from {
+    outline-color: var(--bpm-accent);
+    outline-offset: -12px;
+  }
+  to {
+    outline-color: var(--bpm-accent-hover);
+    outline-offset: -8px;
+  }
+}
+
 .drop-overlay-content {
+  background: white;
+  border-radius: var(--bpm-radius-lg);
+  padding: 40px 64px;
+  box-shadow: var(--bpm-shadow-md);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  pointer-events: none;
+  animation: scale-in 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.drop-overlay-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--bpm-accent);
+  animation: bounce-up 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes bounce-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+.drop-overlay-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bpm-text-primary);
+  margin: 0;
+}
+
+.drop-overlay-sub {
+  font-size: 14px;
+  color: var(--bpm-text-muted);
+  margin: 0;
+}
   flex-direction: column;
   align-items: center;
   gap: 12px;
@@ -1845,19 +2060,25 @@ body.contract-detail-panel-open .pwa-title-bar {
 
 .detail-panel-drawer {
   position: relative;
-  width: 100%;
+  width: clamp(500px, 60vw, 720px);
   max-width: 720px;
   background: var(--bpm-surface);
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  border-radius: 12px 0 0 12px;
+  border-left: 1px solid var(--bpm-border);
   display: flex;
   flex-direction: column;
-  animation: slide-in-right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: slide-in-right 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
 }
 
 @keyframes slide-in-right {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .detail-panel-header {
@@ -1942,6 +2163,39 @@ body.contract-detail-panel-open .pwa-title-bar {
 
 .detail-sections section:last-child {
   border-bottom: none;
+}
+
+/* Mode édition */
+.detail-panel-drawer.edit-mode .detail-field-input {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--bpm-border);
+  border-radius: var(--bpm-radius-sm);
+  padding: 6px 10px;
+  font-size: 14px;
+  background: var(--bpm-surface);
+  color: var(--bpm-text-primary);
+  transition: var(--bpm-transition-fast);
+  box-sizing: border-box;
+}
+
+.detail-panel-drawer.edit-mode .detail-field-input:focus {
+  border-color: var(--bpm-accent);
+  box-shadow: var(--bpm-focus-ring);
+  outline: none;
+}
+
+.detail-panel-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--bpm-border);
+  flex-shrink: 0;
+  background: var(--bpm-bg-secondary);
+}
+
+.detail-footer-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .detail-error-state {

@@ -262,7 +262,6 @@ export default function ContractsPage() {
     contractType: c.contractType,
     contract_date: c.contract_date ?? "-",
     end_date: c.end_date ?? "-",
-    statusKey: c.status,
     overall_risk_level: c.overall_risk_level ?? "-",
     statusKey: c.status,
     status: c.status === "analyzing" ? `${getStatusLabel("analyzing")} (${c.analysisProgress}%)` : getStatusLabel(c.status),

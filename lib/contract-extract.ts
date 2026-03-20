@@ -11,7 +11,7 @@ export async function extractTextFromBuffer(
   if (mimeType === "application/pdf" || filename.toLowerCase().endsWith(".pdf")) {
     let extractedText = "";
     try {
-      const pdfParse = (await import("pdf-parse")).default;
+      const pdfParse = (await import("pdf-parse")).default as (buf: Buffer) => Promise<{ text?: string }>;
       const data = await pdfParse(buffer);
       extractedText = data?.text ?? "";
       if (extractedText.length > 0) {

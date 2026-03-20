@@ -104,7 +104,7 @@ export async function analyzeContract(
 
   try {
     const { content } = await vllmClient.chat([{ role: "user", content: prompt }], { max_tokens: 4096 });
-    console.log("[contract-analyzer] Réponse brute Mistral (500 premiers chars):", content.slice(0, 500));
+    console.log("[contract-analyzer] Réponse brute complète:", content);
     console.log("[contract-analyzer] Longueur réponse:", content.length);
     return parseAndValidate(content);
   } catch (err) {

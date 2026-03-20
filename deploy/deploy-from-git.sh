@@ -120,14 +120,26 @@ if [ -f "$REPO_DIR/package.json" ] && [ -f "$REPO_DIR/next.config.mjs" ]; then
     node prisma/seed-wiki-procedures.cjs || true
     rm -rf .next
     npm run build
-    mkdir -p .next/standalone/.next
-    # Obligatoire en mode standalone : CSS et assets (sans ça, le CSS n'est pas servi)
-    cp -r .next/static .next/standalone/.next/static
-    cp -r .next/server .next/standalone/.next/
-    cp -r public .next/standalone/public
-    # Config domaines Gestion de parc (getDomainConfig lit depuis process.cwd()/lib/asset-manager/config)
-    mkdir -p .next/standalone/lib
-    cp -r lib/asset-manager .next/standalone/lib/
+    # En mode standalone, Next.js génère dans .next/standalone/blueprint-modular/
+    # Il faut copier static et public dans le bon endroit
+    if [ -d ".next/standalone/blueprint-modular" ]; then
+      mkdir -p .next/standalone/blueprint-modular/.next
+      # Obligatoire en mode standalone : CSS et assets (sans ça, le CSS n'est pas servi)
+      cp -r .next/static .next/standalone/blueprint-modular/.next/static
+      cp -r .next/server .next/standalone/blueprint-modular/.next/
+      cp -r public .next/standalone/blueprint-modular/public
+      # Config domaines Gestion de parc (getDomainConfig lit depuis process.cwd()/lib/asset-manager/config)
+      mkdir -p .next/standalone/blueprint-modular/lib
+      cp -r lib/asset-manager .next/standalone/blueprint-modular/lib/
+    else
+      # Fallback pour ancienne structure (si standalone n'est pas activé)
+      mkdir -p .next/standalone/.next
+      cp -r .next/static .next/standalone/.next/static
+      cp -r .next/server .next/standalone/.next/
+      cp -r public .next/standalone/public
+      mkdir -p .next/standalone/lib
+      cp -r lib/asset-manager .next/standalone/lib/
+    fi
     chmod +x deploy/run-app.sh
     if command -v pm2 >/dev/null 2>&1; then
       if pm2 describe "$APP_PM2_NAME" >/dev/null 2>&1; then

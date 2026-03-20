@@ -866,11 +866,111 @@ export default function ContractsPage() {
                   <Spinner size="medium" />
                 </div>
               ) : detailContract ? (
-                <iframe
-                  src={`/modules/contracts/${selectedContractId}`}
-                  className="detail-iframe"
-                  title="Détail du contrat"
-                />
+                <div className="detail-panel-content" style={{ padding: "20px" }}>
+                  <div className="detail-meta mb-4" style={{ paddingBottom: "16px", borderBottom: "1px solid var(--bpm-border)" }}>
+                    <p className="text-sm" style={{ color: "var(--bpm-text-muted)" }}>
+                      {getWorkspaceLabel(detailContract.workspace)} · {getTypeLabel(detailContract.contractType)} · Statut : {getStatusLabel(detailContract.status)}
+                      {detailContract.extractedData?.overall_risk_level && (
+                        <span className="ml-2 rounded px-2 py-0.5 text-xs font-medium" style={{ 
+                          backgroundColor: detailContract.extractedData.overall_risk_level === "low" ? "var(--bpm-success-soft)" : detailContract.extractedData.overall_risk_level === "high" ? "var(--bpm-error-soft)" : "var(--bpm-warning-soft)",
+                          color: detailContract.extractedData.overall_risk_level === "low" ? "var(--bpm-success-text)" : detailContract.extractedData.overall_risk_level === "high" ? "var(--bpm-error-text)" : "var(--bpm-warning-text)"
+                        }}>
+                          Risque {getRiskLabel(detailContract.extractedData.overall_risk_level)}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  {detailContract.extractedData ? (
+                    <div className="detail-sections space-y-6">
+                      {detailContract.extractedData.executive_summary && (
+                        <section>
+                          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Synthèse</h3>
+                          <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-secondary)" }}>
+                            {detailContract.extractedData.executive_summary}
+                          </p>
+                        </section>
+                      )}
+                      {(detailContract.extractedData.supplier_name || detailContract.extractedData.buyer_name) && (
+                        <section>
+                          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Parties</h3>
+                          <div className="space-y-1 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+                            {detailContract.extractedData.supplier_name && (
+                              <div><strong>Fournisseur :</strong> {detailContract.extractedData.supplier_name}</div>
+                            )}
+                            {detailContract.extractedData.buyer_name && (
+                              <div><strong>Acheteur :</strong> {detailContract.extractedData.buyer_name}</div>
+                            )}
+                          </div>
+                        </section>
+                      )}
+                      {(detailContract.extractedData.contract_date || detailContract.extractedData.end_date) && (
+                        <section>
+                          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Dates</h3>
+                          <div className="space-y-1 text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+                            {detailContract.extractedData.contract_date && (
+                              <div><strong>Contrat :</strong> {detailContract.extractedData.contract_date}</div>
+                            )}
+                            {detailContract.extractedData.end_date && (
+                              <div><strong>Fin :</strong> {detailContract.extractedData.end_date}</div>
+                            )}
+                          </div>
+                        </section>
+                      )}
+                      {detailContract.extractedData.key_risks && detailContract.extractedData.key_risks.length > 0 && (
+                        <section>
+                          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Risques</h3>
+                          <ul className="list-disc pl-5 text-sm space-y-1" style={{ color: "var(--bpm-text-secondary)" }}>
+                            {detailContract.extractedData.key_risks.map((r, i) => <li key={i}>{r}</li>)}
+                          </ul>
+                        </section>
+                      )}
+                      {detailContract.extractedData.action_items && detailContract.extractedData.action_items.length > 0 && (
+                        <section>
+                          <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Actions recommandées</h3>
+                          <ul className="list-disc pl-5 text-sm space-y-1" style={{ color: "var(--bpm-text-secondary)" }}>
+                            {detailContract.extractedData.action_items.map((a, i) => (
+                              <li key={i}>
+                                {a.action}
+                                {a.deadline && ` (Échéance: ${a.deadline})`}
+                                {a.owner && ` - Responsable: ${a.owner}`}
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-sm" style={{ color: "var(--bpm-text-muted)" }}>
+                        {detailContract.status === "analyzing" || detailContract.status === "pending" 
+                          ? "Analyse en cours..." 
+                          : "Aucune donnée extraite. Lancez une ré-analyse si le contrat est déjà analysé."}
+                      </p>
+                      {(detailContract.status === "error" || detailContract.status === "done") && (
+                        <Button
+                          variant="secondary"
+                          size="small"
+                          className="mt-4"
+                          onClick={async () => {
+                            if (selectedContractId) {
+                              setDetailLoading(true);
+                              try {
+                                const res = await fetch(`/api/contracts/${selectedContractId}/reanalyze`, { method: "POST", credentials: "include" });
+                                if (res.ok) {
+                                  openContractDetail(selectedContractId);
+                                }
+                              } finally {
+                                setDetailLoading(false);
+                              }
+                            }
+                          }}
+                        >
+                          Relancer l&apos;analyse
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="detail-error-state">
                   <svg className="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

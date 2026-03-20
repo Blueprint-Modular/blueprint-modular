@@ -27,9 +27,11 @@ export async function extractTextFromBuffer(
       console.error("[contract-extract] PDF extraction failed:", err instanceof Error ? err.message : String(err));
     }
 
-    // Si le texte extrait est trop court (< 200 chars), c'est probablement un PDF scanné
+    // Si le texte extrait est trop court (< 50 chars après retrait du padding pdf-parse), c'est probablement un PDF scanné
     // On tente une extraction via Qwen3-VL sur plusieurs pages
-    if (extractedText.length < 200 && mimeType === "application/pdf") {
+    const cleanedText = extractedText.replace(/\s*--\s*\d+\s*of\s*\d+\s*--\s*/g, "").trim();
+    if (cleanedText.length < 50 && mimeType === "application/pdf") {
+      console.warn("[contract-extract] Texte natif insuffisant, tentative extraction vision...");
       try {
         const { extractTextFromImage } = await import("@/lib/ai/vision-client");
         const { fromBuffer } = await import("pdf2pic");
@@ -66,7 +68,13 @@ export async function extractTextFromBuffer(
             const pageImage = await converter(pageNum, { responseType: "base64" });
             const base64 = typeof pageImage === "string" ? pageImage : (pageImage as { base64?: string })?.base64;
             if (base64) {
-              const visionText = await extractTextFromImage(base64, "image/jpeg");
+              let visionText = "";
+              try {
+                visionText = await extractTextFromImage(base64, "image/jpeg");
+              } catch (visionModelErr) {
+                console.warn("[contract-extract] Vision model unavailable:", visionModelErr instanceof Error ? visionModelErr.message : String(visionModelErr));
+                break;
+              }
               if (visionText.length > 0) {
                 // Ajouter un séparateur entre les pages
                 extractedText += (extractedText.length > 0 ? "\n\n--- Page " + pageNum + " ---\n\n" : "") + visionText;
@@ -85,6 +93,12 @@ export async function extractTextFromBuffer(
           visionErr instanceof Error ? visionErr.message : String(visionErr)
         );
       }
+    }
+
+    if (extractedText.length > 0) {
+      console.log(`[contract-extract] Texte natif extrait: ${extractedText.length} caractères`);
+    } else {
+      console.warn("[contract-extract] Aucun texte extrait du PDF");
     }
 
     return extractedText;

@@ -192,6 +192,7 @@ export function Table({
               {columns.map((col, idx) => (
                 <th
                   key={col.key || idx}
+                  scope="col"
                   className={`bpm-table-th px-3 py-2 text-sm font-medium border ${col.noWrap ? "bpm-table-th--nowrap" : ""} ${
                     sortColumn === col.key
                       ? `bpm-table-sorted bpm-table-sorted-${sortDirection}`

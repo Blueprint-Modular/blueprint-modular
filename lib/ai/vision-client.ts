@@ -26,7 +26,10 @@ export async function extractTextFromImage(
         {
           role: "user",
           content:
-            "Extrais tout le texte visible dans cette image. Retourne uniquement le texte extrait, sans commentaire ni mise en forme.",
+            "Extrais tout le texte visible dans cette image de document (contrat, facture, ou autre document professionnel). " +
+            "Conserve la structure du texte (paragraphes, listes, tableaux). " +
+            "Retourne uniquement le texte extrait, sans commentaire ni mise en forme Markdown. " +
+            "Si le document contient des tableaux, reproduis-les ligne par ligne avec des séparateurs clairs.",
           images: [imageBase64],
         },
       ],

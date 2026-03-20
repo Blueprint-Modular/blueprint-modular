@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Table, Spinner, Selectbox, Panel, Button, Tabs } from "@/components/bpm";
 import { DocumentAnalysisImport } from "@/components/DocumentAnalysisImport";
+import { getTypeLabel, getStatusLabel, getRiskLabel, getWorkspaceLabel } from "@/lib/contracts/labels";
 
 type Extracted = { supplier_name?: string; contract_date?: string; end_date?: string; overall_risk_level?: string };
 
@@ -37,21 +38,21 @@ function flattenContract(c: ContractRow): ContractRow {
 
 const WORKSPACES = [
   { value: "", label: "Tous les workspaces" },
-  { value: "service1", label: "Service 1" },
-  { value: "service2", label: "Service 2" },
+  { value: "service1", label: getWorkspaceLabel("service1") },
+  { value: "service2", label: getWorkspaceLabel("service2") },
 ];
 const TYPES = [
   { value: "", label: "Tous les types" },
-  { value: "supplier", label: "Fournisseur" },
-  { value: "cgv", label: "CGV" },
-  { value: "other", label: "Autre" },
+  { value: "supplier", label: getTypeLabel("supplier") },
+  { value: "cgv", label: getTypeLabel("cgv") },
+  { value: "other", label: getTypeLabel("other") },
 ];
 const STATUSES = [
   { value: "", label: "Tous les statuts" },
-  { value: "pending", label: "En attente" },
-  { value: "analyzing", label: "En cours" },
-  { value: "done", label: "Analysé" },
-  { value: "error", label: "Erreur" },
+  { value: "pending", label: getStatusLabel("pending") },
+  { value: "analyzing", label: getStatusLabel("analyzing") },
+  { value: "done", label: getStatusLabel("done") },
+  { value: "error", label: getStatusLabel("error") },
 ];
 
 function riskColor(level: string | null): string {
@@ -63,11 +64,11 @@ function riskColor(level: string | null): string {
 
 function statusBadgeStyle(s: string): { bg: string; label: string } {
   switch (s) {
-    case "pending": return { bg: "var(--bpm-accent-amber, #f59e0b)", label: "En attente" };
-    case "analyzing": return { bg: "var(--bpm-accent-cyan)", label: "En cours" };
-    case "done": return { bg: "var(--bpm-accent-mint)", label: "Analysé" };
-    case "error": return { bg: "var(--bpm-accent)", label: "Erreur" };
-    default: return { bg: "var(--bpm-text-secondary)", label: s };
+    case "pending": return { bg: "var(--bpm-accent-amber, #f59e0b)", label: getStatusLabel("pending") };
+    case "analyzing": return { bg: "var(--bpm-accent-cyan)", label: getStatusLabel("analyzing") };
+    case "done": return { bg: "var(--bpm-accent-mint)", label: getStatusLabel("done") };
+    case "error": return { bg: "var(--bpm-accent)", label: getStatusLabel("error") };
+    default: return { bg: "var(--bpm-text-secondary)", label: getStatusLabel(s) };
   }
 }
 
@@ -177,7 +178,14 @@ export default function ContractsPage() {
   const columns = [
     { key: "originalFilename", label: "Nom" },
     { key: "supplier_name", label: "Fournisseur" },
-    { key: "contractType", label: "Type" },
+    {
+      key: "contractType",
+      label: "Type",
+      render: (val: unknown) => {
+        const v = String(val ?? "");
+        return v === "-" ? v : getTypeLabel(v);
+      },
+    },
     { key: "contract_date", label: "Date contrat" },
     { key: "end_date", label: "Date fin" },
     {
@@ -186,7 +194,7 @@ export default function ContractsPage() {
       render: (val: unknown) => {
         const v = String(val ?? "");
         if (v === "-" || !v) return v;
-        const label = v === "low" ? "Faible" : v === "high" ? "Élevé" : "Moyen";
+        const label = getRiskLabel(v);
         return (
           <span
             className="rounded px-2 py-0.5 text-xs font-medium"
@@ -205,16 +213,22 @@ export default function ContractsPage() {
         const s = String(val ?? "");
         const id = row.id as string | undefined;
         const isError = statusKey === "error";
+        const isAnalyzing = statusKey === "analyzing";
         const isReanalyzing = id && reanalyzingId === id;
         const { bg, label } = statusBadgeStyle(statusKey);
         const displayLabel = s.startsWith("En cours (") ? s : label;
         return (
           <span className="flex items-center gap-2 flex-wrap">
             <span
-              className="rounded px-2 py-0.5 text-xs font-medium"
+              className="rounded px-2 py-0.5 text-xs font-medium flex items-center gap-1.5"
               style={{ backgroundColor: bg, color: "var(--bpm-bg)" }}
             >
-              {displayLabel}
+              {isAnalyzing && (
+                <span className="animate-spin text-xs" aria-hidden="true">
+                  ⟳
+                </span>
+              )}
+              <span>{displayLabel}</span>
             </span>
             {isError && id && (
               <span onClick={(e) => e.stopPropagation()}>
@@ -223,6 +237,7 @@ export default function ContractsPage() {
                   variant="secondary"
                   disabled={!!reanalyzingId}
                   onClick={() => handleReanalyze(id)}
+                  aria-label={`Relancer l'analyse du contrat ${row.originalFilename as string}`}
                 >
                   {isReanalyzing ? "…" : "Relancer l'analyse"}
                 </Button>
@@ -247,9 +262,10 @@ export default function ContractsPage() {
     contractType: c.contractType,
     contract_date: c.contract_date ?? "-",
     end_date: c.end_date ?? "-",
+    statusKey: c.status,
     overall_risk_level: c.overall_risk_level ?? "-",
     statusKey: c.status,
-    status: c.status === "analyzing" ? `En cours (${c.analysisProgress}%)` : c.status === "done" ? "Analysé" : c.status === "pending" ? "En attente" : c.status === "error" ? "error" : c.status,
+    status: c.status === "analyzing" ? `${getStatusLabel("analyzing")} (${c.analysisProgress}%)` : getStatusLabel(c.status),
   }));
 
   const listTabContent = (

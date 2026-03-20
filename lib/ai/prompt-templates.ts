@@ -66,6 +66,8 @@ export const TEMPLATE_ANALYSE_CONTRAT = ({
 Tu analyses un ${contractType === "supplier" ? "contrat fournisseur" : contractType === "cgv" ? "contrat CGV" : "contrat"} 
 dans une optique acheteur. Extrais les informations suivantes au format JSON strict.
 
+IMPORTANT : Si le texte contient des séparateurs de pages (ex. "--- Page X ---"), ignore-les et traite le document comme un texte continu.
+
 Contrat à analyser :
 ${contractText}
 

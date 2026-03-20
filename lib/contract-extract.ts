@@ -28,29 +28,57 @@ export async function extractTextFromBuffer(
     }
 
     // Si le texte extrait est trop court (< 200 chars), c'est probablement un PDF scanné
-    // On tente une extraction via Qwen3-VL sur la première page
+    // On tente une extraction via Qwen3-VL sur plusieurs pages
     if (extractedText.length < 200 && mimeType === "application/pdf") {
       try {
         const { extractTextFromImage } = await import("@/lib/ai/vision-client");
         const { fromBuffer } = await import("pdf2pic");
+        const pdfParse = (await import("pdf-parse")) as {
+          default?: (buf: Buffer) => Promise<{ numPages?: number; text?: string }>;
+        };
+
+        // Obtenir le nombre de pages
+        let numPages = 1;
+        try {
+          if (typeof pdfParse?.default === "function") {
+            const pdfInfo = await pdfParse.default(buffer);
+            numPages = pdfInfo?.numPages ?? 1;
+          }
+        } catch {
+          // Si on ne peut pas obtenir le nombre de pages, on traite au moins la première
+        }
 
         const converter = fromBuffer(buffer, {
-          density: 150,
+          density: 200, // Augmenté pour meilleure qualité OCR
           saveFilename: "page",
           savePath: "/tmp",
           format: "jpeg",
-          width: 1200,
-          height: 1600,
+          width: 1600, // Augmenté pour meilleure résolution
+          height: 2200,
         });
 
-        const pageImage = await converter(1, { responseType: "base64" });
-        const base64 = typeof pageImage === "string" ? pageImage : (pageImage as { base64?: string })?.base64;
-        if (base64) {
-          const visionText = await extractTextFromImage(base64, "image/jpeg");
-          if (visionText.length > extractedText.length) {
-            extractedText = visionText;
+        // Traiter jusqu'à 5 pages ou jusqu'à avoir assez de texte (min 1000 chars)
+        const maxPages = Math.min(numPages, 5);
+        const minChars = 1000;
+
+        for (let pageNum = 1; pageNum <= maxPages && extractedText.length < minChars; pageNum++) {
+          try {
+            const pageImage = await converter(pageNum, { responseType: "base64" });
+            const base64 = typeof pageImage === "string" ? pageImage : (pageImage as { base64?: string })?.base64;
+            if (base64) {
+              const visionText = await extractTextFromImage(base64, "image/jpeg");
+              if (visionText.length > 0) {
+                // Ajouter un séparateur entre les pages
+                extractedText += (extractedText.length > 0 ? "\n\n--- Page " + pageNum + " ---\n\n" : "") + visionText;
+              }
+            }
+          } catch (pageErr) {
+            console.warn(`[contract-extract] Erreur page ${pageNum}:`, pageErr instanceof Error ? pageErr.message : String(pageErr));
+            // Continue avec les pages suivantes même si une page échoue
           }
         }
+
+        console.log(`[contract-extract] Extraction vision: ${extractedText.length} caractères depuis ${Math.min(maxPages, numPages)} page(s)`);
       } catch (visionErr) {
         console.warn(
           "[contract-extract] Vision fallback échoué:",

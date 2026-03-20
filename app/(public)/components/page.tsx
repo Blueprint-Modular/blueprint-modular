@@ -100,6 +100,7 @@ import {
   StreamingText,
   Toast,
 } from "@/components/bpm";
+import { APP_VERSION } from "@/lib/version";
 
 /** Valeur hex pour props qui n'acceptent pas var() (ex. ColorPicker, Plotly), alignée avec --bpm-accent. */
 const BPM_ACCENT_HEX = "#048dc3";
@@ -785,7 +786,7 @@ export default function ComponentsPage() {
                 data={{
                   id: 1,
                   name: "Blueprint",
-                  version: "0.1.52",
+                  version: APP_VERSION,
                   active: true,
                 }}
               />

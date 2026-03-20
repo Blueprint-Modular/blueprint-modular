@@ -148,6 +148,7 @@ function flattenContract(c: ContractRow): ContractRow {
     end_date: c.end_date ?? ex?.end_date ?? null,
     termination_date: c.termination_date ?? ex?.termination_date ?? null,
     overall_risk_level: c.overall_risk_level ?? ex?.overall_risk_level ?? null,
+    executive_summary: c.executive_summary ?? ex?.executive_summary ?? null,
   };
 }
 

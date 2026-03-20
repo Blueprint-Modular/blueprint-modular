@@ -1105,12 +1105,36 @@ export default function ContractsPage() {
                   </div>
                   {detailContract.extractedData ? (
                     <div className="detail-sections space-y-6">
-                      {detailContract.extractedData.executive_summary && (
+                      {(detailContract.extractedData.executive_summary || (detailContract.extractedData.signatories && detailContract.extractedData.signatories.length > 0)) && (
                         <section>
                           <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--bpm-text-primary)" }}>Synthèse</h3>
-                          <p className="text-sm whitespace-pre-wrap" style={{ color: "var(--bpm-text-secondary)" }}>
-                            {detailContract.extractedData.executive_summary}
-                          </p>
+                          {detailContract.extractedData.executive_summary && (
+                            <p className="text-sm whitespace-pre-wrap mb-3" style={{ color: "var(--bpm-text-secondary)" }}>
+                              {detailContract.extractedData.executive_summary}
+                            </p>
+                          )}
+                          {detailContract.extractedData.signatories && detailContract.extractedData.signatories.length > 0 && (
+                            <div className="mt-3">
+                              <label className="block mb-2 text-sm font-medium" style={{ color: "var(--bpm-text-primary)" }}>
+                                Signataire(s) :
+                              </label>
+                              <div className="space-y-2">
+                                {detailContract.extractedData.signatories.map((sig: { name?: string; role?: string; date?: string }, idx: number) => (
+                                  <div key={idx} className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>
+                                    {sig.name && (
+                                      <span className="font-medium" style={{ color: "var(--bpm-text-primary)" }}>{sig.name}</span>
+                                    )}
+                                    {sig.role && (
+                                      <span className="ml-2" style={{ color: "var(--bpm-text-muted)" }}>({sig.role})</span>
+                                    )}
+                                    {sig.date && (
+                                      <span className="ml-2" style={{ color: "var(--bpm-text-muted)" }}>— {sig.date}</span>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </section>
                       )}
                       <section>

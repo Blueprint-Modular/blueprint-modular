@@ -1365,21 +1365,23 @@ textarea.bpm-textarea:focus {
 
 /* Étape 3 : Largeurs des colonnes (total = 100%) */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(1),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(1) { width: 28%; } /* Nom */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(1) { width: 20%; } /* Nom */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(2),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(2) { width: 13%; } /* Fournisseur */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(2) { width: 12%; } /* Fournisseur */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(3),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(3) { width: 9%;  } /* Type */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(3) { width: 18%; } /* Objet du contrat */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(4),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(4) { width: 12%; } /* Date contrat */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(4) { width: 8%;  } /* Type */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(5),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(5) { width: 11%; } /* Date fin */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(5) { width: 10%; } /* Date contrat */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(6),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(6) { width: 10%; } /* Risque */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(6) { width: 10%; } /* Date fin */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(7),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(7) { width: 12%; } /* Statut */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(7) { width: 9%; } /* Risque */
 .contracts-page .contracts-table.bpm-table thead th:nth-child(8),
-.contracts-page .contracts-table.bpm-table tbody td:nth-child(8) { width: 5%;  } /* Actions */
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(8) { width: 10%; } /* Statut */
+.contracts-page .contracts-table.bpm-table thead th:nth-child(9),
+.contracts-page .contracts-table.bpm-table tbody td:nth-child(9) { width: 3%;  } /* Actions */
 
 /* Étape 4 : Tronquer le texte long dans les cellules */
 .contracts-page .contracts-table.bpm-table td,

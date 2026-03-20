@@ -533,6 +533,19 @@ export default function ContractsPage() {
         },
       },
       {
+        key: "executive_summary",
+        label: "Objet du contrat",
+        render: (val: unknown) => {
+          const v = String(val ?? "");
+          if (v === "-" || !v || v === "null" || v === "undefined" || v === "Résumé non extrait.") {
+            return <span className="data-empty" aria-label="Non renseigné">—</span>;
+          }
+          // Tronquer à 100 caractères avec ellipsis
+          const truncated = v.length > 100 ? v.substring(0, 100) + "…" : v;
+          return <span title={v}>{truncated}</span>;
+        },
+      },
+      {
         key: "contractType",
         label: "Type",
         render: (val: unknown) => {

@@ -1,6 +1,6 @@
 /**
  * Extraction de texte depuis PDF et DOCX (côté serveur).
- * pdf-parse v2 : PDFParse({ data }) + getText() → TextResult.text
+ * pdf-parse v1.1.1 : API simple sans worker ESM
  */
 
 export async function extractTextFromBuffer(
@@ -11,94 +11,16 @@ export async function extractTextFromBuffer(
   if (mimeType === "application/pdf" || filename.toLowerCase().endsWith(".pdf")) {
     let extractedText = "";
     try {
-      const pdf = (await import("pdf-parse")) as {
-        PDFParse?: new (opts: { data: Buffer | Uint8Array }) => { getText: () => Promise<{ text: string }> };
-        default?: (buf: Buffer) => Promise<{ text?: string }>;
-      };
-      if (pdf?.PDFParse) {
-        const parser = new pdf.PDFParse({ data: buffer });
-        const result = await parser.getText();
-        extractedText = (result as { text?: string })?.text ?? "";
-      } else if (typeof pdf?.default === "function") {
-        const data = await pdf.default(buffer);
-        extractedText = data?.text ?? "";
+      const pdfParse = (await import("pdf-parse")).default;
+      const data = await pdfParse(buffer);
+      extractedText = data?.text ?? "";
+      if (extractedText.length > 0) {
+        console.log(`[contract-extract] Texte natif extrait: ${extractedText.length} caractères`);
+      } else {
+        console.warn("[contract-extract] Aucun texte extrait du PDF (PDF scanné ?)");
       }
     } catch (err) {
       console.error("[contract-extract] PDF extraction failed:", err instanceof Error ? err.message : String(err));
-    }
-
-    // Si le texte extrait est trop court (< 50 chars après retrait du padding pdf-parse), c'est probablement un PDF scanné
-    // On tente une extraction via Qwen3-VL sur plusieurs pages
-    const cleanedText = extractedText.replace(/\s*--\s*\d+\s*of\s*\d+\s*--\s*/g, "").trim();
-    if (cleanedText.length < 50 && mimeType === "application/pdf") {
-      console.warn("[contract-extract] Texte natif insuffisant, tentative extraction vision...");
-      try {
-        const { extractTextFromImage } = await import("@/lib/ai/vision-client");
-        const { fromBuffer } = await import("pdf2pic");
-        const pdfParse = (await import("pdf-parse")) as {
-          default?: (buf: Buffer) => Promise<{ numPages?: number; text?: string }>;
-        };
-
-        // Obtenir le nombre de pages
-        let numPages = 1;
-        try {
-          if (typeof pdfParse?.default === "function") {
-            const pdfInfo = await pdfParse.default(buffer);
-            numPages = pdfInfo?.numPages ?? 1;
-          }
-        } catch {
-          // Si on ne peut pas obtenir le nombre de pages, on traite au moins la première
-        }
-
-        const converter = fromBuffer(buffer, {
-          density: 200, // Augmenté pour meilleure qualité OCR
-          saveFilename: "page",
-          savePath: "/tmp",
-          format: "jpeg",
-          width: 1600, // Augmenté pour meilleure résolution
-          height: 2200,
-        });
-
-        // Traiter jusqu'à 5 pages ou jusqu'à avoir assez de texte (min 1000 chars)
-        const maxPages = Math.min(numPages, 5);
-        const minChars = 1000;
-
-        for (let pageNum = 1; pageNum <= maxPages && extractedText.length < minChars; pageNum++) {
-          try {
-            const pageImage = await converter(pageNum, { responseType: "base64" });
-            const base64 = typeof pageImage === "string" ? pageImage : (pageImage as { base64?: string })?.base64;
-            if (base64) {
-              let visionText = "";
-              try {
-                visionText = await extractTextFromImage(base64, "image/jpeg");
-              } catch (visionModelErr) {
-                console.warn("[contract-extract] Vision model unavailable:", visionModelErr instanceof Error ? visionModelErr.message : String(visionModelErr));
-                break;
-              }
-              if (visionText.length > 0) {
-                // Ajouter un séparateur entre les pages
-                extractedText += (extractedText.length > 0 ? "\n\n--- Page " + pageNum + " ---\n\n" : "") + visionText;
-              }
-            }
-          } catch (pageErr) {
-            console.warn(`[contract-extract] Erreur page ${pageNum}:`, pageErr instanceof Error ? pageErr.message : String(pageErr));
-            // Continue avec les pages suivantes même si une page échoue
-          }
-        }
-
-        console.log(`[contract-extract] Extraction vision: ${extractedText.length} caractères depuis ${Math.min(maxPages, numPages)} page(s)`);
-      } catch (visionErr) {
-        console.warn(
-          "[contract-extract] Vision fallback échoué:",
-          visionErr instanceof Error ? visionErr.message : String(visionErr)
-        );
-      }
-    }
-
-    if (extractedText.length > 0) {
-      console.log(`[contract-extract] Texte natif extrait: ${extractedText.length} caractères`);
-    } else {
-      console.warn("[contract-extract] Aucun texte extrait du PDF");
     }
 
     return extractedText;

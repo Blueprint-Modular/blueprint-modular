@@ -140,7 +140,7 @@ export function DocumentAnalysisImport({
           <Button
             type="button"
             variant="primary"
-            onClick={(e) => { e.stopPropagation(); handleClick(); }}
+            onClick={() => handleClick()}
             aria-label="Parcourir les fichiers"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-2" aria-hidden="true">

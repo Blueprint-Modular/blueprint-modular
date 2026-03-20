@@ -1135,13 +1135,13 @@ textarea.bpm-textarea:focus {
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  background: var(--bpm-accent);
+  background: var(--bpm-accent) !important;
   color: white;
   padding: 8px 18px;
   border-radius: var(--bpm-radius);
   font-size: 14px;
   font-weight: 600;
-  border: none;
+  border: 1px solid var(--bpm-accent-hover) !important;
   cursor: pointer;
   transition: var(--bpm-transition-fast);
   box-shadow: 0 1px 3px rgba(4, 141, 195, 0.3);
@@ -1171,10 +1171,10 @@ textarea.bpm-textarea:focus {
    ============================================ */
 
 .contracts-stats {
-  display: flex;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: 12px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
 .stat-card {
@@ -1343,7 +1343,7 @@ textarea.bpm-textarea:focus {
 
 /* Forcer le wrapper interne à ne pas scroll */
 .contracts-page .contracts-table-wrapper .bpm-table-wrapper {
-  overflow: visible !important;
+  overflow: hidden !important;
   max-height: none !important;
   border: none !important;
   box-shadow: none !important;
@@ -1393,6 +1393,12 @@ textarea.bpm-textarea:focus {
   white-space: normal;
 }
 
+/* Bordures cohérentes : lignes horizontales uniquement */
+.contracts-page .bpm-table tbody td {
+  border-right: none !important;
+  border-bottom: 1px solid var(--bpm-border) !important;
+}
+
 .contracts-page .bpm-table thead tr {
   background: var(--bpm-bg-secondary);
   border-bottom: 1px solid var(--bpm-border);
@@ -1409,6 +1415,8 @@ textarea.bpm-textarea:focus {
   white-space: nowrap;
   user-select: none;
   transition: background var(--bpm-transition-fast), color var(--bpm-transition-fast);
+  border-right: none !important;
+  border-bottom: 2px solid var(--bpm-border) !important;
 }
 
 .contracts-page .bpm-table thead th:hover {
@@ -2025,12 +2033,20 @@ textarea.bpm-textarea:focus {
   margin-right: 6px !important;
 }
 
+/* Corriger couleur bouton "Analyser les documents" et "Enregistrer" */
+.import-modal-footer button.bpm-btn-primary,
+.detail-panel-footer button.bpm-btn-primary,
+.empty-state button.bpm-btn-primary {
+  background: var(--bpm-accent) !important;
+  border-color: var(--bpm-accent-hover) !important;
+}
+
 .btn-file-count {
   margin-left: 4px;
   opacity: 0.8;
 }
 
-/* Bouton "Choisir des fichiers" dans la dropzone */
+/* Bouton "Choisir des fichiers" dans la dropzone - style primary */
 .dropzone .bpm-btn,
 .dropzone button {
   display: inline-flex !important;
@@ -2041,6 +2057,9 @@ textarea.bpm-textarea:focus {
   min-width: auto !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
+  background: var(--bpm-accent) !important;
+  color: white !important;
+  border: 1px solid var(--bpm-accent-hover) !important;
 }
 
 .dropzone .bpm-btn > *,

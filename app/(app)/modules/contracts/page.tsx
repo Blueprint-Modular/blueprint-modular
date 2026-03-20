@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Table, Spinner, Selectbox, Panel, Button } from "@/components/bpm";
+import { Table, Spinner, Selectbox, Panel, Button, ConfirmModal } from "@/components/bpm";
 import { getTypeLabel, getStatusLabel, getRiskLabel, getWorkspaceLabel } from "@/lib/contracts/labels";
 
 // Fonction helper pour afficher des toasts
@@ -203,6 +203,7 @@ export default function ContractsPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; filename: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropOverlayRef = useRef<HTMLDivElement>(null);
 
@@ -345,10 +346,15 @@ export default function ContractsPage() {
     }
   };
 
-  const handleDelete = useCallback(async (id: string, filename: string) => {
-    if (deletingId) return;
-    if (!confirm(`Supprimer le contrat « ${filename} » ? Cette action est irréversible.`)) return;
+  const handleDeleteClick = useCallback((id: string, filename: string) => {
+    setDeleteConfirm({ id, filename });
+  }, []);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!deleteConfirm || deletingId) return;
+    const { id, filename } = deleteConfirm;
     setDeletingId(id);
+    setDeleteConfirm(null);
     try {
       const res = await fetch(`/api/contracts/${id}`, { method: "DELETE", credentials: "include" });
       if (res.ok) {
@@ -366,7 +372,7 @@ export default function ContractsPage() {
     } finally {
       setDeletingId(null);
     }
-  }, [deletingId, selectedContractId]);
+  }, [deleteConfirm, deletingId, selectedContractId]);
 
   const handleAnalyze = async (files: File[]) => {
     if (files.length === 0) return;
@@ -416,11 +422,11 @@ export default function ContractsPage() {
         const data = await res.json();
         setDetailContract(data);
         setEditFormData({
-          supplier_name: data.extractedData?.supplier_name || "",
-          buyer_name: data.extractedData?.buyer_name || "",
-          contract_date: data.extractedData?.contract_date || "",
-          end_date: data.extractedData?.end_date || "",
-          termination_date: data.extractedData?.termination_date || "",
+          supplier_name: (data.extractedData?.supplier_name && data.extractedData.supplier_name !== "null" && data.extractedData.supplier_name !== "undefined") ? data.extractedData.supplier_name : "",
+          buyer_name: (data.extractedData?.buyer_name && data.extractedData.buyer_name !== "null" && data.extractedData.buyer_name !== "undefined") ? data.extractedData.buyer_name : "",
+          contract_date: (data.extractedData?.contract_date && data.extractedData.contract_date !== "null" && data.extractedData.contract_date !== "undefined") ? data.extractedData.contract_date : "",
+          end_date: (data.extractedData?.end_date && data.extractedData.end_date !== "null" && data.extractedData.end_date !== "undefined") ? data.extractedData.end_date : "",
+          termination_date: (data.extractedData?.termination_date && data.extractedData.termination_date !== "null" && data.extractedData.termination_date !== "undefined") ? data.extractedData.termination_date : "",
           contractType: data.contractType || "",
         });
       } else {
@@ -475,11 +481,11 @@ export default function ContractsPage() {
     setIsEditMode(false);
     if (detailContract) {
       setEditFormData({
-        supplier_name: detailContract.extractedData?.supplier_name || "",
-        buyer_name: detailContract.extractedData?.buyer_name || "",
-        contract_date: detailContract.extractedData?.contract_date || "",
-        end_date: detailContract.extractedData?.end_date || "",
-        termination_date: detailContract.extractedData?.termination_date || "",
+        supplier_name: (detailContract.extractedData?.supplier_name && detailContract.extractedData.supplier_name !== "null" && detailContract.extractedData.supplier_name !== "undefined") ? detailContract.extractedData.supplier_name : "",
+        buyer_name: (detailContract.extractedData?.buyer_name && detailContract.extractedData.buyer_name !== "null" && detailContract.extractedData.buyer_name !== "undefined") ? detailContract.extractedData.buyer_name : "",
+        contract_date: (detailContract.extractedData?.contract_date && detailContract.extractedData.contract_date !== "null" && detailContract.extractedData.contract_date !== "undefined") ? detailContract.extractedData.contract_date : "",
+        end_date: (detailContract.extractedData?.end_date && detailContract.extractedData.end_date !== "null" && detailContract.extractedData.end_date !== "undefined") ? detailContract.extractedData.end_date : "",
+        termination_date: (detailContract.extractedData?.termination_date && detailContract.extractedData.termination_date !== "null" && detailContract.extractedData.termination_date !== "undefined") ? detailContract.extractedData.termination_date : "",
         contractType: detailContract.contractType || "",
       });
     }
@@ -961,6 +967,7 @@ export default function ContractsPage() {
                 onClick={() => handleAnalyze(selectedFiles)}
                 disabled={uploading || selectedFiles.length === 0}
                 aria-label={selectedFiles.length === 0 ? "Sélectionnez au moins un fichier pour continuer" : "Analyser les documents"}
+                title={selectedFiles.length === 0 ? "Sélectionnez au moins un fichier pour continuer" : undefined}
               >
                 {uploading ? (
                   <>
@@ -1039,9 +1046,10 @@ export default function ContractsPage() {
                     <Button
                       variant="secondary"
                       size="small"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         if (selectedContractId && detailContract) {
-                          handleDelete(selectedContractId, detailContract.originalFilename);
+                          handleDeleteClick(selectedContractId, detailContract.originalFilename);
                         }
                       }}
                       aria-label="Supprimer ce contrat"
@@ -1337,6 +1345,19 @@ export default function ContractsPage() {
           </div>
         </div>
       )}
+
+      {/* Modal de confirmation de suppression */}
+      <ConfirmModal
+        isOpen={!!deleteConfirm}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteConfirm(null)}
+        title="Supprimer ce contrat ?"
+        message={deleteConfirm ? `"${deleteConfirm.filename}" sera définitivement supprimé. Cette action est irréversible.` : ""}
+        confirmLabel="Supprimer"
+        cancelLabel="Annuler"
+        variant="danger"
+        isLoading={!!deletingId}
+      />
     </>
   );
 }

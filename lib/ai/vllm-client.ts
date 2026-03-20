@@ -135,6 +135,9 @@ export class VLLMClient {
 
         if (!res.ok) {
           const text = await res.text();
+          if (res.status === 404) {
+            console.warn(`[vllm-client] Modèle introuvable dans Ollama (404): ${text.slice(0, 200)}`);
+          }
           throw new Error(`Ollama ${res.status}: ${text.slice(0, 200)}`);
         }
 

@@ -10,5 +10,5 @@ if [ -f .env ]; then
 fi
 export NODE_ENV=production
 export PORT="${PORT:-3000}"
-cd .next/standalone || exit 1
+cd .next/standalone/blueprint-modular || exit 1
 exec node server.js

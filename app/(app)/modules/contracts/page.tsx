@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Table, Spinner, Selectbox, Panel, Button, Tabs } from "@/components/bpm";
@@ -182,79 +182,82 @@ export default function ContractsPage() {
     }
   };
 
-  const columns = [
-    { key: "originalFilename", label: "Nom" },
-    { key: "supplier_name", label: "Fournisseur" },
-    {
-      key: "contractType",
-      label: "Type",
-      render: (val: unknown) => {
-        const v = String(val ?? "");
-        return v === "-" ? v : getTypeLabel(v);
+  const columns = useMemo(
+    () => [
+      { key: "originalFilename", label: "Nom" },
+      { key: "supplier_name", label: "Fournisseur" },
+      {
+        key: "contractType",
+        label: "Type",
+        render: (val: unknown) => {
+          const v = String(val ?? "");
+          return v === "-" ? v : getTypeLabel(v);
+        },
       },
-    },
-    { key: "contract_date", label: "Date contrat" },
-    { key: "end_date", label: "Date fin" },
-    {
-      key: "overall_risk_level",
-      label: "Risque",
-      render: (val: unknown) => {
-        const v = String(val ?? "");
-        if (v === "-" || !v) return v;
-        const label = getRiskLabel(v);
-        return (
-          <span
-            className="rounded px-2 py-0.5 text-xs font-medium"
-            style={{ backgroundColor: riskColor(v), color: "var(--bpm-bg)" }}
-          >
-            {label}
-          </span>
-        );
-      },
-    },
-    {
-      key: "status",
-      label: "Statut",
-      render: (val: unknown, row: Record<string, unknown>) => {
-        const statusKey = (row.statusKey as string) ?? String(val ?? "");
-        const s = String(val ?? "");
-        const id = row.id as string | undefined;
-        const isError = statusKey === "error";
-        const isAnalyzing = statusKey === "analyzing";
-        const isReanalyzing = id && reanalyzingId === id;
-        const { bg, label } = statusBadgeStyle(statusKey);
-        const displayLabel = s.startsWith("En cours (") ? s : label;
-        return (
-          <span className="flex items-center gap-2 flex-wrap">
+      { key: "contract_date", label: "Date contrat" },
+      { key: "end_date", label: "Date fin" },
+      {
+        key: "overall_risk_level",
+        label: "Risque",
+        render: (val: unknown) => {
+          const v = String(val ?? "");
+          if (v === "-" || !v) return v;
+          const label = getRiskLabel(v);
+          return (
             <span
-              className="rounded px-2 py-0.5 text-xs font-medium flex items-center gap-1.5"
-              style={{ backgroundColor: bg, color: "var(--bpm-bg)" }}
+              className="rounded px-2 py-0.5 text-xs font-medium"
+              style={{ backgroundColor: riskColor(v), color: "var(--bpm-bg)" }}
             >
-              {isAnalyzing && (
-                <span className="animate-spin text-xs" aria-hidden="true">
-                  ⟳
+              {label}
+            </span>
+          );
+        },
+      },
+      {
+        key: "status",
+        label: "Statut",
+        render: (val: unknown, row: Record<string, unknown>) => {
+          const statusKey = (row.statusKey as string) ?? String(val ?? "");
+          const s = String(val ?? "");
+          const id = row.id as string | undefined;
+          const isError = statusKey === "error";
+          const isAnalyzing = statusKey === "analyzing";
+          const isReanalyzing = id && reanalyzingId === id;
+          const { bg, label } = statusBadgeStyle(statusKey);
+          const displayLabel = s.startsWith("En cours (") ? s : label;
+          return (
+            <span className="flex items-center gap-2 flex-wrap">
+              <span
+                className="rounded px-2 py-0.5 text-xs font-medium flex items-center gap-1.5"
+                style={{ backgroundColor: bg, color: "var(--bpm-bg)" }}
+              >
+                {isAnalyzing && (
+                  <span className="animate-spin text-xs" aria-hidden="true">
+                    ⟳
+                  </span>
+                )}
+                <span>{displayLabel}</span>
+              </span>
+              {isError && id && (
+                <span onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    size="small"
+                    variant="secondary"
+                    disabled={!!reanalyzingId}
+                    onClick={() => handleReanalyze(id)}
+                    aria-label={`Relancer l'analyse du contrat ${row.originalFilename as string}`}
+                  >
+                    {isReanalyzing ? "…" : "Relancer l'analyse"}
+                  </Button>
                 </span>
               )}
-              <span>{displayLabel}</span>
             </span>
-            {isError && id && (
-              <span onClick={(e) => e.stopPropagation()}>
-                <Button
-                  size="small"
-                  variant="secondary"
-                  disabled={!!reanalyzingId}
-                  onClick={() => handleReanalyze(id)}
-                  aria-label={`Relancer l'analyse du contrat ${row.originalFilename as string}`}
-                >
-                  {isReanalyzing ? "…" : "Relancer l'analyse"}
-                </Button>
-              </span>
-            )}
-          </span>
-        );
+          );
+        },
       },
-    },
-  ];
+    ],
+    [reanalyzingId, handleReanalyze]
+  );
 
   const filteredContracts = searchText.trim()
     ? contracts.filter((c) =>

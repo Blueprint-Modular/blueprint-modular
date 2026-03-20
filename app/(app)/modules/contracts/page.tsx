@@ -701,7 +701,6 @@ export default function ContractsPage() {
             className="contracts-import-btn"
             aria-label="Importer un contrat"
           >
-            <UploadIcon className="w-4 h-4" />
             Importer
           </Button>
         </div>

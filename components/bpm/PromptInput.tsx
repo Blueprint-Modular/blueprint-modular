@@ -9,6 +9,8 @@ export interface PromptInputProps {
   onSubmit: (value: string) => void;
   placeholder?: string;
   isLoading?: boolean;
+  /** Désactive la zone de saisie et l’envoi (ex. chat désactivé). */
+  disabled?: boolean;
   maxLength?: number;
   showTokenCount?: boolean;
   minRows?: number;
@@ -26,6 +28,7 @@ export function PromptInput({
   onSubmit,
   placeholder = "Écrivez votre message...",
   isLoading = false,
+  disabled: formDisabled = false,
   maxLength,
   showTokenCount = false,
   minRows = DEFAULT_MIN_ROWS,
@@ -53,7 +56,7 @@ export function PromptInput({
     (e: React.KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
-        if (!value.trim() || isLoading) return;
+        if (!value.trim() || isLoading || formDisabled) return;
         onSubmit(value);
       }
       if (e.key === "Escape") {
@@ -61,16 +64,16 @@ export function PromptInput({
         else onChange("");
       }
     },
-    [value, isLoading, onSubmit, onChange]
+    [value, isLoading, formDisabled, onSubmit, onChange]
   );
 
   const handleSubmitClick = () => {
-    if (!value.trim() || isLoading) return;
+    if (!value.trim() || isLoading || formDisabled) return;
     onSubmit(value);
   };
 
   const tokenCount = showTokenCount ? Math.ceil(value.length / 4) : null;
-  const disabled = isLoading || !value.trim();
+  const submitDisabled = isLoading || formDisabled || !value.trim();
 
   return (
     <div
@@ -90,7 +93,7 @@ export function PromptInput({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        disabled={isLoading}
+        disabled={isLoading || formDisabled}
         rows={rows}
         maxLength={maxLength}
         style={{
@@ -129,7 +132,7 @@ export function PromptInput({
           variant="primary"
           size="small"
           onClick={handleSubmitClick}
-          disabled={disabled}
+          disabled={submitDisabled}
         >
           {isLoading ? "..." : "Envoyer"}
         </Button>

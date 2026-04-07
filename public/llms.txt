@@ -47,12 +47,61 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   className?: string
 ```
 
+## bpm.addressInput
+```
+  mode?: AddressInputMode
+  value?: {
+  line1?: string
+  line2?: string
+  city?: string
+  postal?: string
+  onChange?: (v: { line1: string
+  className?: string
+```
+
+## bpm.aiQueryBar
+```
+  onQuery*: (question: string) => Promise<string>
+  placeholder?: string
+  suggestions?: string[]
+  loading?: boolean
+  className?: string
+```
+
+## bpm.alarmPanel
+```
+  alarms*: Alarm[]
+  onAcknowledge?: (id: string) => void
+  onDismiss?: (id: string) => void
+  className?: string
+```
+
 ## bpm.altairChart
 ```
   spec?: Record<string, unknown>  — Spécification Vega-Lite / Altair (JSON). À fournir côté app.
   iframeSrc?: string  — Ou URL d'un fichier JSON ou d'une vue compilée.
   width?: number | string
   height?: number | string
+  className?: string
+```
+
+## bpm.anomalyAlert
+```
+  title?: string
+  expected*: string | number
+  actual*: string | number
+  severity?: AnomalySeverity
+  className?: string
+  onDismiss?: () => void
+```
+
+## bpm.approvalFlow
+```
+  steps*: ApprovalStep[]
+  onApprove?: (stepId: string, comment?: string) => void
+  onReject?: (stepId: string, comment?: string) => void
+  direction?: "horizontal" | "vertical"
+  showCommentInput?: boolean
   className?: string
 ```
 
@@ -133,6 +182,14 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   className?: string
 ```
 
+## bpm.breadcrumbs
+```
+  items*: BreadcrumbsItem[]
+  separator?: React.ReactNode
+  maxItems?: number
+  className?: string
+```
+
 ## bpm.button
 ```
   children?: React.ReactNode
@@ -170,6 +227,14 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   className?: string
 ```
 
+## bpm.changelog
+```
+  changes*: ChangelogEntry[]
+  groupByDate?: boolean
+  maxItems?: number
+  className?: string
+```
+
 ## bpm.chat
 Chat Ollama local (démo).
 ```
@@ -181,9 +246,12 @@ Chat Ollama local (démo).
 ```
   messages*: ChatMessage[]
   onSend*: (content: string) => void
-  isLoading?: boolean
+  isLoading?: boolean  — @deprecated Préférez `typing`.
+  typing?: boolean  — Indicateur « en cours de frappe » côté assistant.
   placeholder?: string
   systemContext?: string  — Contexte système affiché en haut si défini.
+  title?: string  — Titre dans l’en-tête du panneau.
+  disabled?: boolean
   height?: string
   className?: string
 ```
@@ -252,6 +320,24 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.commentThread
+```
+  comments*: Comment[]
+  onPost*: (content: string, parentId?: string) => void | Promise<void>
+  currentUser*: { id: string
+  maxDepth?: number
+  className?: string
+```
+
+## bpm.comparison
+```
+  items*: Record<string, unknown>[]
+  dimensions*: string[]
+  labels?: Record<string, string>
+  highlightBest?: boolean
+  className?: string
+```
+
 ## bpm.confirmModal
 ```
   isOpen*: boolean
@@ -272,6 +358,14 @@ Chat Ollama local (démo).
   style?: React.CSSProperties
 ```
 
+## bpm.contextMenu
+```
+  items*: ContextMenuItem[]
+  trigger*: React.ReactNode
+  triggerOn?: "contextmenu" | "click"
+  className?: string
+```
+
 ## bpm.crud
 ```
   title*: string
@@ -284,14 +378,8 @@ Chat Ollama local (démo).
 ```
 
 ## bpm.dataExplorer
+Composant bpm.dataExplorer — interface non parsée (voir BPM_API.md).
 ```
-  data*: Record<string, unknown>[]
-  columns?: ColumnDef[]
-  title?: string
-  searchable?: boolean
-  exportable?: boolean
-  pageSize?: number
-  className?: string
 ```
 
 ## bpm.dateInput
@@ -314,6 +402,11 @@ Chat Ollama local (démo).
   disabled?: boolean
   min?: Date | string | null
   max?: Date | string | null
+```
+
+## bpm.decisionTree
+Composant bpm.decisionTree — interface non parsée (voir BPM_API.md).
+```
 ```
 
 ## bpm.diffViewer
@@ -346,6 +439,23 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.drillDown
+Composant bpm.drillDown — interface non parsée (voir BPM_API.md).
+```
+```
+
+## bpm.emailComposer
+```
+  to?: string
+  subject?: string
+  body?: string
+  templates?: EmailTemplate[]
+  useRichText?: boolean
+  onSend?: (payload: { to: string
+  onCancel?: () => void
+  className?: string
+```
+
 ## bpm.empty
 ```
   children?: React.ReactNode
@@ -368,6 +478,10 @@ Chat Ollama local (démo).
   children*: React.ReactNode
   defaultExpanded?: boolean
   className?: string
+```
+
+## bpm.exportButton
+```
 ```
 
 ## bpm.fab
@@ -424,6 +538,29 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.funnelChart
+```
+  stages*: FunnelStage[]
+  showPercentage?: boolean
+  horizontal?: boolean
+  className?: string
+```
+
+## bpm.gantt
+Composant bpm.gantt — interface non parsée (voir BPM_API.md).
+```
+```
+
+## bpm.geofence
+```
+  zones*: GeofenceZone[]
+  onZonesChange?: (next: GeofenceZone[]) => void
+  center*: [number, number]
+  zoom?: number
+  height?: number | string
+  className?: string
+```
+
 ## bpm.gps
 ```
   label?: string  — Titre affiché au-dessus du bloc.
@@ -442,6 +579,24 @@ Chat Ollama local (démo).
   gap?: number | string
   className?: string
   children?: React.ReactNode
+```
+
+## bpm.groupedList
+Composant bpm.groupedList — interface non parsée (voir BPM_API.md).
+```
+```
+
+## bpm.heatmap
+```
+  data*: number[][]
+  xLabels*: string[]
+  yLabels*: string[]
+  colorScale*: { min: string
+  valueMin?: number
+  valueMax?: number
+  showValues?: boolean
+  onCellClick?: (row: number, col: number, value: number) => void
+  className?: string
 ```
 
 ## bpm.highlightBox
@@ -474,6 +629,17 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.inlineEdit
+```
+  value*: string | number
+  onSave*: (next: string | number) => void | Promise<void>
+  type?: InlineEditType
+  options?: { value: string
+  placeholder?: string
+  disabled?: boolean
+  className?: string
+```
+
 ## bpm.input
 ```
   label?: string  — Label affiché au-dessus du champ.
@@ -482,6 +648,18 @@ Chat Ollama local (démo).
   placeholder?: string
   type?: "text" | "email" | "password" | "number" | "search" | "date"  — Type HTML. Default: 'text'.
   disabled?: boolean  — Désactive le champ.
+  className?: string
+```
+
+## bpm.invoiceTemplate
+```
+  title?: string
+  issuer*: string
+  client*: string
+  lines*: InvoiceLine[]
+  taxRate?: number
+  invoiceNo?: string
+  date?: string
   className?: string
 ```
 
@@ -523,12 +701,43 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.liveChart
+```
+  data*: LiveChartDatum[]
+  bufferDuration?: number
+  thresholds?: { value: number
+  refreshInterval?: number
+  width?: number
+  height?: number
+  className?: string
+```
+
+## bpm.liveGauge
+```
+  value*: number
+  min?: number
+  max?: number
+  warningAbove?: number
+  criticalAbove?: number
+  size?: LiveGaugeSize
+  label?: string
+  className?: string
+```
+
 ## bpm.loadingBar
 ```
   variant?: LoadingBarVariant  — Variant visuel (sweep, blocks, iso, stacked, arc, dots).
   value?: number  — Pour les barres déterminées (ex. iso) : 0–100. Non fourni = indéterminé.
   size?: "thin" | "default" | "thick"  — Hauteur : thin (6px), default (8px), thick (12px).
   animated?: boolean  — Désactive l'animation (utile pour screenshots ou prefers-reduced-motion).
+  className?: string
+```
+
+## bpm.machineStatus
+```
+  title*: string
+  state*: MachineStatusState
+  detail?: string
   className?: string
 ```
 
@@ -539,6 +748,22 @@ Chat Ollama local (démo).
   lng?: number
   width?: number | string
   height?: number | string
+  className?: string
+```
+
+## bpm.mapView
+```
+  center*: [number, number]
+  zoom?: number
+  height?: number | string
+  markers?: MapMarker[]
+  onMarkerClick?: (index: number, marker: MapMarker) => void
+  tileUrl?: string
+  tileAttribution?: string
+  polylines?: [number, number][][]
+  polylineColor?: string
+  polygons?: MapPolygonSpec[]
+  onMapClick?: (latlng: [number, number]) => void
   className?: string
 ```
 
@@ -695,6 +920,21 @@ Conteneur page (core) — props : children.
   className?: string
 ```
 
+## bpm.pivotTable
+```
+  data*: Record<string, unknown>[]
+  rowKey*: string
+  colKey*: string
+  valueKey*: string
+  agg?: PivotAgg
+  className?: string
+```
+
+## bpm.plcConnector
+```
+  className?: string
+```
+
 ## bpm.plotlyChart
 ```
   data?: object[]  — Tableau de traces Plotly (ex. [{type:'bar', x:[], y:[]}]). Obligatoire.
@@ -714,12 +954,43 @@ Conteneur page (core) — props : children.
   className?: string
 ```
 
+## bpm.predictiveChart
+```
+  historical*: { x: number
+  predicted*: { x: number
+  confidenceUpper?: { x: number
+  confidenceLower?: { x: number
+  todayX?: number
+  width?: number
+  height?: number
+  className?: string
+```
+
+## bpm.printLayout
+```
+  children*: React.ReactNode
+  orientation?: "portrait" | "landscape"
+  header?: React.ReactNode
+  footer?: React.ReactNode
+  marginsMm?: PrintLayoutMarginsMm
+  className?: string
+```
+
 ## bpm.progress
 ```
   value?: number
   max?: number
   label?: string
   showValue?: boolean
+  className?: string
+```
+
+## bpm.progressRing
+```
+  value*: number
+  max?: number
+  size?: number
+  strokeWidth?: number
   className?: string
 ```
 
@@ -730,6 +1001,7 @@ Conteneur page (core) — props : children.
   onSubmit*: (value: string) => void
   placeholder?: string
   isLoading?: boolean
+  disabled?: boolean  — Désactive la zone de saisie et l’envoi (ex. chat désactivé).
   maxLength?: number
   showTokenCount?: boolean
   minRows?: number
@@ -743,6 +1015,16 @@ Conteneur page (core) — props : children.
   size?: number
   fgColor?: string
   bgColor?: string
+  className?: string
+```
+
+## bpm.radarChart
+```
+  axes*: string[]
+  values*: number[]
+  max?: number
+  width?: number
+  height?: number
   className?: string
 ```
 
@@ -767,6 +1049,49 @@ Conteneur page (core) — props : children.
   size?: "small" | "medium" | "large"
 ```
 
+## bpm.relationGraph
+```
+  nodes*: GraphNode[]
+  edges*: GraphEdge[]
+  layout?: RelationGraphLayout
+  width?: number
+  height?: number
+  className?: string
+```
+
+## bpm.reportPage
+```
+  title*: string
+  subtitle?: string
+  date?: string
+  logo?: React.ReactNode
+  sections*: ReportSection[]
+  exportable?: boolean
+  className?: string
+```
+
+## bpm.richTextEditor
+```
+  defaultHtml?: string
+  value?: string
+  onChange?: (payload: { html: string
+  format?: RichTextExportFormat
+  minHeight?: number
+  maxHeight?: number
+  readOnly?: boolean
+  placeholder?: string
+  className?: string
+```
+
+## bpm.routePlanner
+```
+  stops*: RouteStop[]
+  onReorder?: (next: RouteStop[]) => void
+  showDistance?: boolean
+  mapHeight?: number | string
+  className?: string
+```
+
 ## bpm.scatterChart
 ```
   data*: ScatterChartDatum[]
@@ -775,6 +1100,11 @@ Conteneur page (core) — props : children.
   color?: string
   radius?: number
   className?: string
+```
+
+## bpm.scheduler
+Composant bpm.scheduler — interface non parsée (voir BPM_API.md).
+```
 ```
 
 ## bpm.scrollContainer
@@ -798,6 +1128,22 @@ Conteneur page (core) — props : children.
   placeholder?: string
   required?: boolean
   triggerHeight?: number  — Hauteur du trigger (px) pour alignement avec d'autres champs (ex. FilterPanel).
+```
+
+## bpm.sensorGrid
+```
+  sensors*: SensorReading[]
+  columns?: number
+  className?: string
+```
+
+## bpm.signaturePad
+```
+  width?: number
+  height?: number
+  lineColor?: string
+  className?: string
+  onChangeDataUrl?: (dataUrl: string | null) => void
 ```
 
 ## bpm.skeleton
@@ -824,6 +1170,15 @@ Conteneur page (core) — props : children.
   className?: string
 ```
 
+## bpm.sparkline
+```
+  values*: number[]
+  width?: number
+  height?: number
+  trend?: SparklineTrend
+  className?: string
+```
+
 ## bpm.spinner
 ```
   text?: string
@@ -837,6 +1192,29 @@ Conteneur page (core) — props : children.
 ```
   className?: string
   size?: "small" | "medium" | "large"  — Taille : small (16px), medium (24px), large (32px).
+```
+
+## bpm.splitView
+```
+  left*: React.ReactNode
+  right*: React.ReactNode
+  defaultSplit?: number
+  minLeft?: number
+  minRight?: number
+  direction?: "horizontal" | "vertical"
+  className?: string
+```
+
+## bpm.stateMachine
+```
+  states*: string[]
+  transitions*: StateTransition[]
+  currentState*: string
+  history?: string[]
+  onTransition?: (from: string, to: string) => void
+  width?: number
+  height?: number
+  className?: string
 ```
 
 ## bpm.statusBox
@@ -872,6 +1250,18 @@ Conteneur page (core) — props : children.
   content*: string  — Texte courant (s'allonge au fil du stream).
   isStreaming?: boolean  — Affiche le curseur clignotant quand true.
   renderMarkdown?: boolean  — Passe le contenu dans bpm.markdown (défaut true).
+  className?: string
+```
+
+## bpm.suggestionCard
+```
+  title*: string
+  description*: string
+  confidence?: number
+  icon?: string
+  actions*: { label: string
+  dismissable?: boolean
+  onDismiss?: () => void
   className?: string
 ```
 
@@ -1067,6 +1457,22 @@ Toast visuel ; en production préférer useToast().
   className?: string
 ```
 
+## bpm.tour
+```
+  steps*: TourStep[]
+  isActive*: boolean
+  onClose?: () => void
+  className?: string
+```
+
+## bpm.treemap
+```
+  data*: TreemapItem[]
+  width?: number
+  height?: number
+  className?: string
+```
+
 ## bpm.treeview
 ```
   nodes?: TreeviewNode[]
@@ -1081,6 +1487,14 @@ Toast visuel ; en production préférer useToast().
   controls?: boolean
   loop?: boolean
   muted?: boolean
+  width?: number
+  height?: number
+  className?: string
+```
+
+## bpm.waterfall
+```
+  data*: WaterfallDatum[]
   width?: number
   height?: number
   className?: string

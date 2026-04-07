@@ -200,3 +200,107 @@ export { WizardForm } from "./WizardForm";
 export type { WizardFormProps, WizardStep } from "./WizardForm";
 export { CommandPalette } from "./CommandPalette";
 export type { CommandPaletteProps, Command } from "./CommandPalette";
+export { AIQueryBar } from "./AIQueryBar";
+export type { AIQueryBarProps } from "./AIQueryBar";
+export { ApprovalFlow } from "./ApprovalFlow";
+export type { ApprovalFlowProps, ApprovalStep } from "./ApprovalFlow";
+export { Changelog } from "./Changelog";
+export type { ChangelogProps, ChangelogEntry } from "./Changelog";
+export { DecisionTree } from "./DecisionTree";
+export type { DecisionTreeProps, DecisionNode } from "./DecisionTree";
+export { DrillDown } from "./DrillDown";
+export type { DrillDownLevel, DrillDownProps } from "./DrillDown";
+export { Gantt } from "./Gantt";
+export type { GanttProps, GanttTask } from "./Gantt";
+export { GroupedList } from "./GroupedList";
+export type { GroupedListProps } from "./GroupedList";
+export { Scheduler } from "./Scheduler";
+export type { SchedulerProps, SchedulerEvent, SchedulerResource } from "./Scheduler";
+export { SuggestionCard } from "./SuggestionCard";
+export type { SuggestionCardProps } from "./SuggestionCard";
+export { RelationGraph } from "./RelationGraph";
+export type { RelationGraphProps, RelationGraphLayout, GraphNode, GraphEdge } from "./RelationGraph";
+export { InlineEdit } from "./InlineEdit";
+export type { InlineEditProps, InlineEditType } from "./InlineEdit";
+export { RichTextEditor } from "./RichTextEditor";
+export type { RichTextEditorProps, RichTextExportFormat } from "./RichTextEditor";
+export { CommentThread } from "./CommentThread";
+export type { CommentThreadProps, Comment } from "./CommentThread";
+export { Heatmap } from "./Heatmap";
+export type { HeatmapProps } from "./Heatmap";
+export { Sparkline } from "./Sparkline";
+export type { SparklineProps, SparklineTrend } from "./Sparkline";
+export { ProgressRing } from "./ProgressRing";
+export type { ProgressRingProps } from "./ProgressRing";
+export { FunnelChart } from "./FunnelChart";
+export type { FunnelChartProps, FunnelStage } from "./FunnelChart";
+export { LiveGauge } from "./LiveGauge";
+export type { LiveGaugeProps, LiveGaugeSize } from "./LiveGauge";
+export { LiveChart } from "./LiveChart";
+export type { LiveChartProps, LiveChartDatum } from "./LiveChart";
+export { SensorGrid } from "./SensorGrid";
+export type { SensorGridProps, SensorReading, SensorStatus } from "./SensorGrid";
+export { AlarmPanel } from "./AlarmPanel";
+export type { AlarmPanelProps, Alarm, AlarmSeverity } from "./AlarmPanel";
+export { Breadcrumbs } from "./Breadcrumbs";
+export type { BreadcrumbsProps, BreadcrumbsItem } from "./Breadcrumbs";
+export { SplitView } from "./SplitView";
+export type { SplitViewProps } from "./SplitView";
+export { ReportPage } from "./ReportPage";
+export type { ReportPageProps, ReportSection } from "./ReportPage";
+export { PrintLayout } from "./PrintLayout";
+export type { PrintLayoutProps, PrintLayoutMarginsMm } from "./PrintLayout";
+export { ExportButton } from "./ExportButton";
+export type { ExportButtonProps, ExportColumn } from "./ExportButton";
+
+// —— A ——
+export { AddressInput } from "./AddressInput";
+export type { AddressInputMode, AddressInputProps } from "./AddressInput";
+export { AnomalyAlert } from "./AnomalyAlert";
+export type { AnomalyAlertProps, AnomalySeverity } from "./AnomalyAlert";
+// —— C ——
+export { Comparison } from "./Comparison";
+export type { ComparisonProps } from "./Comparison";
+export { ContextMenu } from "./ContextMenu";
+export type { ContextMenuItem, ContextMenuProps } from "./ContextMenu";
+// —— E ——
+export { EmailComposer } from "./EmailComposer";
+export type { EmailComposerProps, EmailTemplate } from "./EmailComposer";
+// —— G ——
+export { Geofence } from "./Geofence";
+export type { GeofenceProps, GeofenceZone } from "./Geofence";
+// —— I ——
+export { InvoiceTemplate } from "./InvoiceTemplate";
+export type { InvoiceLine, InvoiceTemplateProps } from "./InvoiceTemplate";
+// —— M ——
+export { MachineStatus } from "./MachineStatus";
+export type { MachineStatusProps, MachineStatusState } from "./MachineStatus";
+export { MapView } from "./MapView";
+export type { MapMarker, MapPolygonSpec, MapViewProps } from "./MapView";
+export { MapViewLeafletInner } from "./MapViewLeaflet";
+export type { MapViewLeafletInnerProps } from "./MapViewLeaflet";
+// —— P ——
+export { PLCConnector } from "./PLCConnector";
+export type { PLCConnectorProps, PLCProtocol } from "./PLCConnector";
+export { PivotTable } from "./PivotTable";
+export type { PivotAgg, PivotTableProps } from "./PivotTable";
+export { PredictiveChart } from "./PredictiveChart";
+export type { PredictiveChartProps } from "./PredictiveChart";
+// —— R ——
+export { RadarChart } from "./RadarChart";
+export type { RadarChartProps } from "./RadarChart";
+export { RoutePlanner } from "./RoutePlanner";
+export type { RoutePlannerProps, RouteStop } from "./RoutePlanner";
+// —— S ——
+export { SignaturePad } from "./SignaturePad";
+export type { SignaturePadProps } from "./SignaturePad";
+export { StateMachine } from "./StateMachine";
+export type { StateMachineProps, StateTransition } from "./StateMachine";
+// —— T ——
+export { Tour } from "./Tour";
+export type { TourProps, TourStep } from "./Tour";
+export { Treemap } from "./Treemap";
+export type { TreemapItem, TreemapProps } from "./Treemap";
+// —— W ——
+export { Waterfall } from "./Waterfall";
+export type { WaterfallDatum, WaterfallProps } from "./Waterfall";

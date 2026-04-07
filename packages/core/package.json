@@ -1,6 +1,6 @@
 {
   "name": "@blueprint-modular/core",
-  "version": "0.1.70",
+  "version": "0.2.0",
   "description": "Blueprint Modular — composants React pour apps de données",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -29,7 +29,13 @@
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "leaflet": ">=1.9.0",
+    "react-leaflet": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "leaflet": { "optional": true },
+    "react-leaflet": { "optional": true }
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

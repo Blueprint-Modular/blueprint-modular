@@ -38,7 +38,8 @@ export default function DocTimelinePage() {
       <table className="props-table">
         <thead><tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Requis</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td><code>items</code></td><td><code>TimelineItem[]</code></td><td>[]</td><td>Non</td><td>Liste des étapes (title, description?, date?, status?).</td></tr>
+          <tr><td><code>events</code></td><td><code>TimelineEvent[]</code></td><td>—</td><td>Non</td><td>Fil chronologique (date ISO, title, actor?, metadata?, groupByDate, maxItems, sortOrder).</td></tr>
+          <tr><td><code>items</code></td><td><code>TimelineItem[]</code></td><td>[]</td><td>Non</td><td>Ancienne API (title, description?, date?, status?).</td></tr>
           <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Classes CSS additionnelles.</td></tr>
         </tbody>
       </table>

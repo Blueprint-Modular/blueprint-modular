@@ -68,7 +68,7 @@ COMPONENT_DOC: list[ComponentDoc] = [
     {"slug": "statusbox", "name": "bpm.statusbox", "description": "Boîte de statut (success, warning, error, info).", "category": "Feedback"},
     # Navigation & structure
     {"slug": "breadcrumb", "name": "bpm.breadcrumb", "description": "Fil d'Ariane.", "category": "Navigation"},
-    {"slug": "stepper", "name": "bpm.stepper", "description": "Étapes (stepper).", "category": "Navigation"},
+    {"slug": "stepper", "name": "bpm.stepper", "description": "Progression multi-étapes (horizontal/vertical, tailles sm/md/lg).", "category": "Navigation"},
     # Média
     {"slug": "audio", "name": "bpm.audio", "description": "Lecteur audio.", "category": "Média"},
     {"slug": "video", "name": "bpm.video", "description": "Lecteur vidéo.", "category": "Média"},
@@ -85,7 +85,14 @@ COMPONENT_DOC: list[ComponentDoc] = [
     {"slug": "topnav", "name": "bpm.topnav", "description": "Barre de navigation supérieure (titre + liens).", "category": "Navigation"},
     {"slug": "fab", "name": "bpm.fab", "description": "Bouton d'action flottant (FAB).", "category": "Interaction"},
     {"slug": "treeview", "name": "bpm.treeview", "description": "Arbre de nœuds repliables et sélectionnables.", "category": "Affichage de données"},
-    {"slug": "timeline", "name": "bpm.timeline", "description": "Frise chronologique (étapes, statuts).", "category": "Affichage de données"},
+    {"slug": "timeline", "name": "bpm.timeline", "description": "Frise chronologique (événements ISO, groupement par date, fil vertical).", "category": "Affichage de données"},
+    {"slug": "flowdiagram", "name": "bpm.flowDiagram", "description": "Diagramme d'états et transitions interactif (SVG).", "category": "Affichage de données"},
+    {"slug": "statustracker", "name": "bpm.statusTracker", "description": "Suivi de statut réel (barre, étapes completed/current/pending/error).", "category": "Affichage de données"},
+    {"slug": "activityfeed", "name": "bpm.activityFeed", "description": "Fil d'activité avec avatars et dates relatives.", "category": "Affichage de données"},
+    {"slug": "orgchart", "name": "bpm.orgChart", "description": "Organigramme hiérarchique HTML/CSS (repliable).", "category": "Mise en page"},
+    {"slug": "masterdetail", "name": "bpm.masterDetail", "description": "Vue liste + détail responsive (recherche, mobile).", "category": "Mise en page"},
+    {"slug": "wizardform", "name": "bpm.wizardForm", "description": "Formulaire multi-étapes avec stepper et validation.", "category": "Interaction"},
+    {"slug": "commandpalette", "name": "bpm.commandPalette", "description": "Palette de commandes modale (fuzzy, clavier, Cmd+K).", "category": "Navigation"},
     {"slug": "image", "name": "bpm.image", "description": "Image avec alt, dimensions et object-fit.", "category": "Média"},
     {"slug": "pdfviewer", "name": "bpm.pdfviewer", "description": "Visualiseur PDF (iframe).", "category": "Média"},
     {"slug": "autocomplete", "name": "bpm.autocomplete", "description": "Champ de saisie avec suggestions.", "category": "Interaction"},
@@ -113,7 +120,7 @@ COMPONENT_DOC: list[ComponentDoc] = [
     {"slug": "crud", "name": "bpm.crud", "description": "Page CRUD (liste, formulaire, colonnes, champs, endpoint).", "category": "Utilitaires"},
     {"slug": "gps", "name": "bpm.gps", "description": "Affichage ou sélection de position GPS (carte, picker).", "category": "Média"},
     {"slug": "jsoneditor", "name": "bpm.jsonEditor", "description": "Éditeur JSON avec validation et formatage.", "category": "Utilitaires"},
-    {"slug": "notificationcenter", "name": "bpm.notificationCenter", "description": "Centre de notifications (historique, lu/non lu, popover).", "category": "Feedback"},
+    {"slug": "notificationcenter", "name": "bpm.notificationCenter", "description": "Liste de notifications (lu/non lu, marquage, suppression).", "category": "Feedback"},
     {"slug": "filepreview", "name": "bpm.filePreview", "description": "Aperçu de fichier (image, PDF, texte/code).", "category": "Média"},
     # IA & Spécialisés
     {"slug": "dataexplorer", "name": "bpm.dataExplorer", "description": "Explorateur de données (table, recherche, tri, pagination, export CSV).", "category": "IA & Spécialisés"},

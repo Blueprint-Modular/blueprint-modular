@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
-# Version : 0.1.52
-# Date    : 2026-03-18
+# Version : 0.1.60
+# Date    : 2026-04-07
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -34,6 +34,16 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   sections?: AccordionSection[]
   allowMultiple?: boolean
   defaultOpenIds?: string[]
+  className?: string
+```
+
+## bpm.activityFeed
+```
+  activities*: ActivityItem[]
+  maxItems?: number
+  onLoadMore?: () => void
+  emptyMessage?: string
+  compact?: boolean
   className?: string
 ```
 
@@ -232,6 +242,16 @@ Chat Ollama local (démo).
   children?: React.ReactNode
 ```
 
+## bpm.commandPalette
+```
+  commands*: Command[]
+  isOpen?: boolean  — Mode contrôlé : si défini, l’ouverture au clavier doit être gérée via `onRequestOpen`.
+  onClose*: () => void
+  onRequestOpen?: () => void  — Appelé sur Cmd/Ctrl+K lorsque `isOpen` est fourni (mode contrôlé).
+  placeholder?: string
+  className?: string
+```
+
 ## bpm.confirmModal
 ```
   isOpen*: boolean
@@ -394,6 +414,16 @@ Chat Ollama local (démo).
   collapsible?: boolean  — Afficher un bouton pour replier le panneau (avec badge si filtres actifs).
 ```
 
+## bpm.flowDiagram
+```
+  states*: FlowDiagramState[]
+  transitions*: FlowDiagramTransition[]
+  currentState?: string
+  onTransition?: (from: string, to: string) => void
+  direction?: "horizontal" | "vertical"
+  className?: string
+```
+
 ## bpm.gps
 ```
   label?: string  — Titre affiché au-dessus du bloc.
@@ -518,6 +548,10 @@ Chat Ollama local (démo).
   className?: string
 ```
 
+## bpm.masterDetail
+```
+```
+
 ## bpm.message
 ```
   type?: MessageType
@@ -582,11 +616,11 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
 ## bpm.notificationCenter
 ```
   notifications*: NotificationItem[]
-  onRead*: (id: string) => void
-  onReadAll*: () => void
-  onDelete?: (id: string) => void
+  onMarkRead*: (id: string) => void
+  onMarkAllRead?: () => void
+  onDismiss?: (id: string) => void
   maxVisible?: number
-  trigger?: React.ReactNode  — Élément déclencheur (bouton cloche par défaut).
+  emptyMessage?: string
   className?: string
 ```
 
@@ -601,6 +635,16 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
   disabled?: boolean
   help?: string | null
   placeholder?: string
+```
+
+## bpm.orgChart
+```
+  nodes*: OrgChartNode[]
+  direction?: "vertical" | "horizontal"
+  onNodeClick?: (node: OrgChartNode) => void
+  expandable?: boolean
+  rootId?: string
+  className?: string
 ```
 
 ## bpm.page
@@ -805,11 +849,21 @@ Conteneur page (core) — props : children.
   className?: string
 ```
 
+## bpm.statusTracker
+```
+  stages*: StatusTrackerStage[]
+  direction?: "horizontal" | "vertical"
+  compact?: boolean
+  className?: string
+```
+
 ## bpm.stepper
 ```
   steps?: StepperStep[]
   currentStep?: number
-  onStepClick?: (index: number) => void
+  direction?: "horizontal" | "vertical"
+  onStepClick?: (stepIndex: number) => void
+  size?: "sm" | "md" | "lg"
   className?: string
 ```
 
@@ -891,7 +945,11 @@ INTERDIT : Tableau de données — obligatoire. INTERDIT : JSX dans data[], util
 
 ## bpm.timeline
 ```
-  items?: TimelineItem[]
+  events?: TimelineEvent[]  — Nouvelle API — fil chronologique riche.
+  items?: TimelineItem[]  — Ancienne API — conservée pour compatibilité.
+  maxItems?: number
+  sortOrder?: "asc" | "desc"
+  groupByDate?: boolean
   className?: string
 ```
 
@@ -1025,6 +1083,16 @@ Toast visuel ; en production préférer useToast().
   muted?: boolean
   width?: number
   height?: number
+  className?: string
+```
+
+## bpm.wizardForm
+```
+  steps*: WizardStep[]
+  onComplete*: () => void
+  onCancel?: () => void
+  submitLabel?: string
+  showSummary?: boolean
   className?: string
 ```
 

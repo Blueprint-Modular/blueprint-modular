@@ -134,4 +134,157 @@ Titres de section. bpm.title2 pour sous-titres (niveau 2). Props : children (tex
 
 ---
 
+## bpm.flowDiagram
+
+Diagramme d’états et transitions (SVG). États = nœuds arrondis ; transitions = courbes avec libellé ; état courant surligné ; arcs depuis l’état courant cliquables si `onTransition` est fourni.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| states | FlowDiagramState[] | Oui | value, label, color?, terminal? |
+| transitions | FlowDiagramTransition[] | Oui | from (string \| string[]), to, label |
+| currentState | string | Non | Valeur d’état active |
+| onTransition | (from, to) => void | Non | Clic sur arc sortant de l’état courant |
+| direction | "horizontal" \| "vertical" | Non | Défaut : horizontal |
+| className | string | Non | Classes CSS |
+
+---
+
+## bpm.stepper
+
+Progression d’étapes (cercles, connecteurs, horizontal ou vertical). Étapes complétées cliquables si `onStepClick` est défini.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| steps | StepperStep[] | Non | label, description?, icon?, id?, optional?, content? |
+| currentStep | number | Non | Index 0-based |
+| direction | "horizontal" \| "vertical" | Non | Défaut : horizontal |
+| onStepClick | (index) => void | Non | Retour aux étapes complétées |
+| size | "sm" \| "md" \| "lg" | Non | Défaut : md (32 / 40 / 48 px) |
+| className | string | Non | |
+
+---
+
+## bpm.statusTracker
+
+Historique réel d’un objet (étapes completed / current / pending / error) avec barre de progression.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| stages | StatusTrackerStage[] | Oui | label, status, date?, actor?, description? |
+| direction | "horizontal" \| "vertical" | Non | horizontal + compact = barre + marqueurs |
+| compact | boolean | Non | Mode barre compacte si horizontal |
+| className | string | Non | |
+
+---
+
+## bpm.timeline
+
+Fil chronologique vertical (événements ISO). Rétrocompat : prop `items` (TimelineItem) encore acceptée.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| events | TimelineEvent[] | Non* | date, title, description?, actor?, icon?, color?, metadata? |
+| items | TimelineItem[] | Non* | Ancienne API |
+| maxItems | number | Non | Limite + bouton « Voir plus » |
+| sortOrder | "asc" \| "desc" | Non | Défaut : desc |
+| groupByDate | boolean | Non | En-têtes Aujourd’hui / Hier / date |
+| className | string | Non | |
+
+---
+
+## bpm.activityFeed
+
+Liste d’activités (acteur, action, cible, horodatage relatif).
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| activities | ActivityItem[] | Oui | id, actor, action, target, timestamp (ISO), icon?, color? |
+| maxItems | number | Non | |
+| onLoadMore | () => void | Non | Bouton « Charger plus » |
+| emptyMessage | string | Non | |
+| compact | boolean | Non | |
+| className | string | Non | |
+
+---
+
+## bpm.orgChart
+
+Organigramme (nœuds carte, enfants, option repliable).
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| nodes | OrgChartNode[] | Oui | id, name, role?, avatar?, parentId?, children?, metadata? |
+| direction | "vertical" \| "horizontal" | Non | Défaut : vertical |
+| onNodeClick | (node) => void | Non | |
+| expandable | boolean | Non | Chevron replier/déplier |
+| rootId | string | Non | Racine explicite |
+| className | string | Non | |
+
+---
+
+## bpm.masterDetail
+
+Liste + panneau détail ; recherche optionnelle ; sur mobile le détail s’ouvre en plein cadre avec retour.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| items | T[] | Oui | Objets avec clé id (voir idKey) |
+| columns | MasterDetailColumn[] | Oui | key, label, render? |
+| renderDetail | (item) => ReactElement | Oui | |
+| selectedId | string | Non | |
+| onSelect | (item) => void | Oui | |
+| idKey | string | Non | Défaut : "id" |
+| searchable | boolean | Non | |
+| emptyDetailMessage | string | Non | |
+| splitRatio | number | Non | % gauche, défaut 40 |
+| className | string | Non | |
+
+---
+
+## bpm.wizardForm
+
+Assistant multi-étapes (stepper sm intégré), validation par étape, récapitulatif optionnel sur la dernière étape.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| steps | WizardStep[] | Oui | title, description?, content, validate? |
+| onComplete | () => void | Oui | |
+| onCancel | () => void | Non | |
+| submitLabel | string | Non | Défaut : « Terminer » |
+| showSummary | boolean | Non | Dernière étape = récap des titres précédents |
+| className | string | Non | |
+
+---
+
+## bpm.notificationCenter
+
+Panneau liste (non lues puis lues), sans popover cloche intégré.
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| notifications | NotificationItem[] | Oui | id, title, message, type, timestamp (ISO), read, actionLabel?, onAction? |
+| onMarkRead | (id) => void | Oui | |
+| onMarkAllRead | () => void | Non | |
+| onDismiss | (id) => void | Non | |
+| maxVisible | number | Non | + « Voir les anciennes » |
+| emptyMessage | string | Non | |
+| className | string | Non | |
+
+---
+
+## bpm.commandPalette
+
+Modale recherche floue (label + description), navigation ↑↓, Entrée, Échap ; Cmd/Ctrl+K ouvre (mode non contrôlé ou via `onRequestOpen` si `isOpen` est contrôlé).
+
+| Prop | Type | Requis | Description |
+|------|------|--------|-------------|
+| commands | Command[] | Oui | id, label, description?, icon?, shortcut?, category?, action |
+| isOpen | boolean | Non | Mode contrôlé |
+| onClose | () => void | Oui | Fermeture (interne + parent) |
+| onRequestOpen | () => void | Non | Si isOpen contrôlé : raccourci clavier |
+| placeholder | string | Non | |
+| className | string | Non | |
+
+---
+
 *Ce fichier couvre les composants nécessaires au pattern KPI Dashboard. Pour la liste complète des composants BPM, voir la référence générée (ex. llms.txt / registry).*

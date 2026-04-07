@@ -94,6 +94,13 @@ import {
   LabelValue,
   ModelSelector,
   NotificationCenter,
+  FlowDiagram,
+  StatusTracker,
+  ActivityFeed,
+  OrgChart,
+  MasterDetail,
+  WizardForm,
+  CommandPalette,
   PageLayout,
   PromptInput,
   ScrollContainer,
@@ -101,6 +108,7 @@ import {
   Toast,
 } from "@/components/bpm";
 import { APP_VERSION } from "@/lib/version";
+import type { NotificationItem } from "@/components/bpm";
 
 /** Valeur hex pour props qui n'acceptent pas var() (ex. ColorPicker, Plotly), alignée avec --bpm-accent. */
 const BPM_ACCENT_HEX = "#048dc3";
@@ -170,10 +178,11 @@ const SECTIONS = [
   { id: "navigation", label: "Navigation" },
   { id: "overlays", label: "Overlays & Interactions" },
   { id: "media", label: "Médias & Utilitaires" },
+  { id: "business", label: "Systèmes métier" },
   { id: "specialized", label: "Spécialisés" },
 ];
 
-const COMPONENT_COUNT = 94;
+const COMPONENT_COUNT = 104;
 
 export default function ComponentsPage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -189,7 +198,18 @@ export default function ComponentsPage() {
   const [checkboxVal, setCheckboxVal] = useState(false);
   const [dateVal, setDateVal] = useState<Date | string | null>(null);
   const [autocompleteVal, setAutocompleteVal] = useState("");
-  const [stepperStep, setStepperStep] = useState(0);
+  const [stepperStep, setStepperStep] = useState(2);
+  const [flowState, setFlowState] = useState("draft");
+  const [notifDemo, setNotifDemo] = useState<NotificationItem[]>([
+    { id: "n1", title: "Mise à jour", message: "Nouvelle version disponible.", type: "info", timestamp: new Date().toISOString(), read: false },
+    { id: "n2", title: "Export prêt", message: "Votre fichier est prêt.", type: "success", timestamp: new Date(Date.now() - 3600000).toISOString(), read: false },
+    { id: "n3", title: "Attention", message: "Quota bientôt atteint.", type: "warning", timestamp: new Date(Date.now() - 86400000).toISOString(), read: true },
+    { id: "n4", title: "Échec sync", message: "Réessayez plus tard.", type: "error", timestamp: new Date(Date.now() - 172800000).toISOString(), read: true },
+    { id: "n5", title: "Rappel", message: "Réunion demain.", type: "info", timestamp: new Date(Date.now() - 200000).toISOString(), read: true },
+  ]);
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const [masterSel, setMasterSel] = useState<string | undefined>("1");
+  const [wizardField, setWizardField] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [ratingVal, setRatingVal] = useState(4);
   const [gpsPickerVal, setGpsPickerVal] = useState<{ lat: number; lng: number } | null>(null);
@@ -771,10 +791,18 @@ export default function ComponentsPage() {
             </DemoCard>
             <DemoCard label="bpm.timeline" wide>
               <Timeline
-                items={[
-                  { date: "2024-01", title: "Lancement" },
-                  { date: "2024-06", title: "V1.0" },
-                  { date: "2025-01", title: "V2.0" },
+                sortOrder="desc"
+                groupByDate
+                maxItems={5}
+                events={[
+                  { date: new Date().toISOString(), title: "Déploiement", description: "Mise en production", actor: "Alice", color: "success", icon: "rocket_launch" },
+                  { date: new Date(Date.now() - 3600000).toISOString(), title: "Revue code", actor: "Bob", color: "info" },
+                  { date: new Date(Date.now() - 86400000 * 2).toISOString(), title: "Merge feature", color: "default", metadata: { branche: "feat/timeline" } },
+                  { date: new Date(Date.now() - 86400000 * 3).toISOString(), title: "Ticket ouvert", color: "warning" },
+                  { date: new Date(Date.now() - 86400000 * 5).toISOString(), title: "Spec validée", color: "success" },
+                  { date: new Date(Date.now() - 86400000 * 8).toISOString(), title: "Kickoff", color: "default" },
+                  { date: new Date(Date.now() - 86400000 * 10).toISOString(), title: "Atelier", color: "default" },
+                  { date: new Date(Date.now() - 86400000 * 12).toISOString(), title: "Idée", color: "default" },
                 ]}
               />
             </DemoCard>
@@ -800,12 +828,16 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.stepper" wide>
               <Stepper
                 steps={[
-                  { label: "Étape 1" },
-                  { label: "Étape 2" },
-                  { label: "Étape 3" },
+                  { label: "Brief", description: "Cadrage" },
+                  { label: "Conception" },
+                  { label: "Réalisation", description: "En cours" },
+                  { label: "Recette" },
+                  { label: "Mise en prod" },
                 ]}
                 currentStep={stepperStep}
                 onStepClick={setStepperStep}
+                direction="horizontal"
+                size="md"
               />
             </DemoCard>
             <DemoCard label="bpm.pagination" wide>
@@ -1022,12 +1054,11 @@ export default function ComponentsPage() {
             <DemoCard label="bpm.notificationCenter" wide>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <NotificationCenter
-                  notifications={[
-                    { id: "1", title: "Info", message: "Notification exemple", timestamp: new Date(), read: false, type: "info" },
-                    { id: "2", title: "Succès", timestamp: new Date(Date.now() - 3600000), read: true, type: "success" },
-                  ]}
-                  onRead={(id) => console.log("Read", id)}
-                  onReadAll={() => {}}
+                  notifications={notifDemo}
+                  maxVisible={4}
+                  onMarkRead={(id) => setNotifDemo((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))}
+                  onMarkAllRead={() => setNotifDemo((prev) => prev.map((n) => ({ ...n, read: true })))}
+                  onDismiss={(id) => setNotifDemo((prev) => prev.filter((n) => n.id !== id))}
                 />
               </div>
             </DemoCard>
@@ -1132,6 +1163,143 @@ export default function ComponentsPage() {
                 value={gpsPickerVal}
                 onChange={setGpsPickerVal}
                 height={250}
+              />
+            </DemoCard>
+          </Grid>
+        </section>
+
+        {/* SECTION — Systèmes métier (P0) */}
+        <section id="business" style={{ marginBottom: 48 }}>
+          <Title2 style={{ marginBottom: 16 }}>Systèmes métier</Title2>
+          <Grid cols={1} gap={16}>
+            <DemoCard label="bpm.flowDiagram" wide>
+              <FlowDiagram
+                states={[
+                  { value: "draft", label: "Brouillon", color: "default" },
+                  { value: "review", label: "Revue", color: "info" },
+                  { value: "approved", label: "Validé", color: "success" },
+                  { value: "rejected", label: "Refus", color: "error", terminal: true },
+                ]}
+                transitions={[
+                  { from: "draft", to: "review", label: "Soumettre" },
+                  { from: "review", to: "approved", label: "OK" },
+                  { from: "review", to: "rejected", label: "NOK" },
+                ]}
+                currentState={flowState}
+                onTransition={(_from, to) => setFlowState(to)}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.statusTracker" wide>
+              <StatusTracker
+                compact
+                direction="horizontal"
+                stages={[
+                  { label: "Créé", status: "completed", date: new Date(Date.now() - 86400000 * 4).toISOString() },
+                  { label: "En analyse", status: "completed", date: new Date(Date.now() - 86400000 * 2).toISOString() },
+                  { label: "Validation", status: "current", date: new Date().toISOString(), actor: "Marie" },
+                  { label: "Clôturé", status: "pending" },
+                ]}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.statusTracker (vertical)" wide>
+              <StatusTracker
+                direction="vertical"
+                stages={[
+                  { label: "Ouvert", status: "completed", date: new Date(Date.now() - 3600000).toISOString() },
+                  { label: "Traitement", status: "current", description: "Niveau 2" },
+                  { label: "Résolu", status: "pending" },
+                ]}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.activityFeed" wide>
+              <ActivityFeed
+                compact
+                activities={Array.from({ length: 10 }, (_, i) => ({
+                  id: `a${i}`,
+                  actor: ["Alice", "Bob", "Carol"][i % 3]!,
+                  action: ["a créé", "a modifié", "a validé"][i % 3]!,
+                  target: `le devis DV-2024-${String(i + 1).padStart(3, "0")}`,
+                  timestamp: new Date(Date.now() - i * 120000).toISOString(),
+                  color: (["default", "success", "info"] as const)[i % 3],
+                }))}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.orgChart" wide>
+              <OrgChart
+                expandable
+                onNodeClick={(n) => console.log("org", n.id)}
+                nodes={[
+                  { id: "1", name: "Direction", role: "CEO" },
+                  { id: "2", name: "Ops", role: "COO", parentId: "1" },
+                  { id: "3", name: "Tech", role: "CTO", parentId: "1" },
+                  { id: "4", name: "Prod A", parentId: "2" },
+                  { id: "5", name: "Prod B", parentId: "2" },
+                  { id: "6", name: "Backend", parentId: "3" },
+                  { id: "7", name: "Frontend", parentId: "3" },
+                  { id: "8", name: "SRE", parentId: "3" },
+                ]}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.masterDetail" wide>
+              <MasterDetail
+                items={Array.from({ length: 10 }, (_, i) => ({
+                  id: String(i + 1),
+                  nom: `Item ${i + 1}`,
+                  statut: i % 2 === 0 ? "Actif" : "Archivé",
+                }))}
+                idKey="id"
+                selectedId={masterSel}
+                onSelect={(row) => setMasterSel(String(row.id))}
+                searchable
+                columns={[
+                  { key: "nom", label: "Nom" },
+                  { key: "statut", label: "Statut" },
+                ]}
+                renderDetail={(row) => (
+                  <div>
+                    <Title3>Détail — {String(row.nom)}</Title3>
+                    <Text>Statut : {String(row.statut)}</Text>
+                  </div>
+                )}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.wizardForm" wide>
+              <WizardForm
+                showSummary
+                onComplete={() => {}}
+                steps={[
+                  { title: "Identité", content: <Input label="Nom" value={wizardField} onChange={setWizardField} /> },
+                  { title: "Coordonnées", content: <Text>Étape 2 (démo)</Text> },
+                  { title: "Options", content: <Text>Étape 3 (démo)</Text>, validate: () => (wizardField.trim() ? true : "Renseignez le nom à l’étape 1.") },
+                  { title: "Confirmation", content: <Text>Dernière étape</Text> },
+                ]}
+              />
+            </DemoCard>
+            <DemoCard label="bpm.commandPalette" wide>
+              <Button type="button" onClick={() => setCmdOpen(true)}>
+                Ouvrir la palette (ou Ctrl+K)
+              </Button>
+              <CommandPalette
+                isOpen={cmdOpen}
+                onClose={() => setCmdOpen(false)}
+                onRequestOpen={() => setCmdOpen(true)}
+                commands={[
+                  { id: "c1", label: "Nouveau projet", category: "Fichier", icon: "add", shortcut: "⌘N", action: () => {} },
+                  { id: "c2", label: "Rechercher", category: "Fichier", icon: "search", action: () => {} },
+                  { id: "c3", label: "Paramètres", category: "Fichier", icon: "settings", action: () => {} },
+                  { id: "c4", label: "Aller au tableau", category: "Navigation", icon: "dashboard", action: () => {} },
+                  { id: "c5", label: "Liste des tâches", category: "Navigation", icon: "checklist", action: () => {} },
+                  { id: "c6", label: "Calendrier", category: "Navigation", icon: "calendar_month", action: () => {} },
+                  { id: "c7", label: "Profil", category: "Navigation", icon: "person", action: () => {} },
+                  { id: "c8", label: "Thème clair", category: "Apparence", icon: "light_mode", action: () => {} },
+                  { id: "c9", label: "Thème sombre", category: "Apparence", icon: "dark_mode", action: () => {} },
+                  { id: "c10", label: "Zoom +", category: "Vue", icon: "zoom_in", action: () => {} },
+                  { id: "c11", label: "Zoom −", category: "Vue", icon: "zoom_out", action: () => {} },
+                  { id: "c12", label: "Plein écran", category: "Vue", icon: "fullscreen", action: () => {} },
+                  { id: "c13", label: "Aide", category: "Aide", icon: "help", shortcut: "?", action: () => {} },
+                  { id: "c14", label: "Raccourcis", category: "Aide", icon: "keyboard", action: () => {} },
+                  { id: "c15", label: "À propos", category: "Aide", icon: "info", action: () => {} },
+                ]}
               />
             </DemoCard>
           </Grid>

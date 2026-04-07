@@ -177,7 +177,7 @@ const PREVIEW_BY_SLUG: Record<string, React.ReactNode> = {
   crud: <PreviewBox><span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>bpm.crud</span></PreviewBox>,
   gps: <PreviewBox><span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>bpm.gps</span></PreviewBox>,
   jsoneditor: <PreviewBox><JsonEditor value='{"a":1}' onChange={() => {}} height={80} /></PreviewBox>,
-  notificationcenter: <PreviewBox><NotificationCenter notifications={[]} onRead={() => {}} onReadAll={() => {}} /></PreviewBox>,
+  notificationcenter: <PreviewBox><NotificationCenter notifications={[]} onMarkRead={() => {}} /></PreviewBox>,
   filepreview: <PreviewBox><span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>bpm.filePreview</span></PreviewBox>,
   dataexplorer: <PreviewBox><DataExplorer data={[{ a: "1", b: "2" }]} pageSize={5} /></PreviewBox>,
   chatinterface: <PreviewBox><span className="text-sm" style={{ color: "var(--bpm-text-secondary)" }}>bpm.chatInterface</span></PreviewBox>,

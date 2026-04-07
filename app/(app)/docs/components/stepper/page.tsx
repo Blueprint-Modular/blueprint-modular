@@ -87,9 +87,11 @@ export default function DocStepperPage() {
           <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Requis</th><th>Description</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>steps</code></td><td><code>&#123; id?, label, optional?, content? &#125;[]</code></td><td>[]</td><td>Non</td><td>Liste des étapes (<code>label</code> requis).</td></tr>
+          <tr><td><code>steps</code></td><td><code>&#123; id?, label, description?, icon?, optional?, content? &#125;[]</code></td><td>[]</td><td>Non</td><td>Liste des étapes (<code>label</code> requis).</td></tr>
           <tr><td><code>currentStep</code></td><td><code>number</code></td><td>0</td><td>Non</td><td>Index de l&apos;étape courante (0-based).</td></tr>
-          <tr><td><code>onStepClick</code></td><td><code>(index: number) =&gt; void</code></td><td>—</td><td>Non</td><td>Callback au clic sur une étape (optionnel).</td></tr>
+          <tr><td><code>direction</code></td><td><code>&quot;horizontal&quot; | &quot;vertical&quot;</code></td><td>horizontal</td><td>Non</td><td>Disposition des étapes.</td></tr>
+          <tr><td><code>size</code></td><td><code>&quot;sm&quot; | &quot;md&quot; | &quot;lg&quot;</code></td><td>md</td><td>Non</td><td>Taille des cercles (32 / 40 / 48 px).</td></tr>
+          <tr><td><code>onStepClick</code></td><td><code>(index: number) =&gt; void</code></td><td>—</td><td>Non</td><td>Callback : étapes déjà complétées cliquables pour revenir en arrière.</td></tr>
           <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>Non</td><td>Classes CSS additionnelles.</td></tr>
         </tbody>
       </table>

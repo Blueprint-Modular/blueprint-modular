@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
-# Version : 0.1.60
-# Date    : 2026-04-07
+# Version : 0.1.61
+# Date    : 2026-05-07
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -378,8 +378,16 @@ Chat Ollama local (démo).
 ```
 
 ## bpm.dataExplorer
-Composant bpm.dataExplorer — interface non parsée (voir BPM_API.md).
+Explorateur de données tabulaires avec recherche, tri et pagination.
 ```
+  data*: Record<string, unknown>[]  — Données à afficher.
+  columns?: ColumnDef[]  — Définition des colonnes. Si omis, inféré depuis data.
+  title?: string  — Titre affiché au-dessus du tableau.
+  searchable?: boolean  — Activer la recherche. Default: true.
+  exportable?: boolean  — Afficher bouton export. Default: false.
+  pageSize?: number  — Nombre de lignes par page. Default: 20.
+  mode?: "classic" | "analytics"  — Mode d'affichage : classic (tableau) ou analytics (graphiques).
+  className?: string
 ```
 
 ## bpm.dateInput
@@ -405,8 +413,12 @@ Composant bpm.dataExplorer — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.decisionTree
-Composant bpm.decisionTree — interface non parsée (voir BPM_API.md).
+Arbre de décision interactif avec questions, actions et résultats.
 ```
+  rootId*: string  — ID du nœud racine.
+  nodes*: DecisionNode[]  — Liste des nœuds : { id, kind: 'question'|'action'|'result', label, branches?: [{label, targetId}] }.
+  currentNodeId?: string  — ID du nœud actuellement sélectionné (surbrillance).
+  onNodeClick*: (nodeId: string, branch?: { label: string; targetId: string }) => void  — Callback au clic sur un nœud ou une branche.
 ```
 
 ## bpm.diffViewer
@@ -440,8 +452,13 @@ Composant bpm.decisionTree — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.drillDown
-Composant bpm.drillDown — interface non parsée (voir BPM_API.md).
+Navigation descendante dans des niveaux de données (drill-down hiérarchique).
 ```
+  levels*: DrillDownLevel<T>[]  — Niveaux de données : { key, label, columns: [{key, label}], items: T[] }.
+  currentLevel*: number  — Index du niveau actuel (0-based).
+  onDrill*: (item: T, nextLevel: number) => void  — Callback pour descendre d'un niveau.
+  onBack*: () => void  — Callback pour remonter d'un niveau.
+  breadcrumbs?: boolean  — Afficher le fil d'Ariane. Default: true.
 ```
 
 ## bpm.emailComposer
@@ -481,7 +498,15 @@ Composant bpm.drillDown — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.exportButton
+Bouton d'export CSV/JSON avec menu déroulant et BOM configurable.
 ```
+  data*: T[] | (() => T[])  — Données à exporter ou fonction retournant les données.
+  filename*: string  — Nom du fichier sans extension.
+  formats?: ("csv" | "json")[]  — Formats disponibles. Default: ["csv", "json"].
+  columns?: ExportColumn<T>[]  — Colonnes à exporter : { key, header }. Si omis, inféré depuis data.
+  csvDelimiter?: ";" | ","  — Séparateur CSV. Default: ";".
+  csvBOM?: boolean  — Ajouter BOM UTF-8 pour Excel. Default: true.
+  className?: string
 ```
 
 ## bpm.fab
@@ -547,8 +572,13 @@ Composant bpm.drillDown — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.gantt
-Composant bpm.gantt — interface non parsée (voir BPM_API.md).
+Diagramme de Gantt pour visualiser des tâches sur une timeline.
 ```
+  tasks*: GanttTask[]  — Tâches : { id, label, start, end, progress?, color?, dependencies?: string[], group? }.
+  viewMode*: "day" | "week" | "month"  — Granularité de la timeline.
+  onTaskClick*: (task: GanttTask) => void  — Callback au clic sur une tâche.
+  showDependencies?: boolean  — Afficher les flèches de dépendance. Default: true.
+  todayLine?: boolean  — Afficher la ligne verticale "aujourd'hui". Default: true.
 ```
 
 ## bpm.geofence
@@ -582,8 +612,15 @@ Composant bpm.gantt — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.groupedList
-Composant bpm.groupedList — interface non parsée (voir BPM_API.md).
+Liste groupée par clé avec en-têtes repliables.
 ```
+  items*: T[]  — Éléments à grouper.
+  groupBy*: keyof T  — Clé de regroupement.
+  renderItem*: (item: T, index: number) => React.ReactNode  — Rendu d'un élément.
+  renderGroupHeader?: (key: string, count: number) => React.ReactNode  — Rendu personnalisé de l'en-tête de groupe.
+  sortGroups?: "asc" | "desc"  — Ordre de tri des groupes. Default: "asc".
+  collapsible?: boolean  — Groupes repliables. Default: false.
+  defaultCollapsed?: boolean  — Groupes repliés par défaut. Default: false.
 ```
 
 ## bpm.heatmap
@@ -774,7 +811,18 @@ Composant bpm.groupedList — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.masterDetail
+Vue master-detail : liste à gauche, détail à droite. Mobile : vue plein écran.
 ```
+  items*: T[]  — Éléments à afficher dans la liste.
+  columns*: MasterDetailColumn<T>[]  — Colonnes de la liste : { key, label, render? }.
+  renderDetail*: (item: T) => React.ReactElement  — Rendu du panneau détail.
+  selectedId?: string  — ID de l'élément sélectionné.
+  onSelect*: (item: T) => void  — Callback à la sélection d'un élément.
+  idKey?: string  — Clé identifiant unique. Default: "id".
+  searchable?: boolean  — Activer la recherche dans la liste. Default: false.
+  emptyDetailMessage?: string  — Message quand aucun élément sélectionné. Default: "Sélectionnez un élément dans la liste.".
+  splitRatio?: number  — Largeur de la liste en %. Default: 40.
+  className?: string
 ```
 
 ## bpm.message
@@ -860,6 +908,12 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
   disabled?: boolean
   help?: string | null
   placeholder?: string
+```
+
+## bpm.offlineIndicator
+Indicateur de statut offline avec file d'attente de synchronisation.
+```
+  demo?: boolean  — Mode démo : affiche le composant même sans file d'attente. Default: false.
 ```
 
 ## bpm.orgChart
@@ -1103,8 +1157,15 @@ Conteneur page (core) — props : children.
 ```
 
 ## bpm.scheduler
-Composant bpm.scheduler — interface non parsée (voir BPM_API.md).
+Calendrier/agenda avec vues jour, semaine, mois pour planification d'événements.
 ```
+  view*: "day" | "week" | "month"  — Vue active.
+  events*: SchedulerEvent[]  — Événements : { id, title, start, end, resourceId?, color? }.
+  resources?: SchedulerResource[]  — Ressources optionnelles : { id, label }.
+  onEventClick*: (ev: SchedulerEvent) => void  — Callback au clic sur un événement.
+  onSlotClick*: (dayStart: Date, hour: number) => void  — Callback au clic sur un créneau vide.
+  startHour?: number  — Heure de début de la journée. Default: 8.
+  endHour?: number  — Heure de fin de la journée. Default: 20.
 ```
 
 ## bpm.scrollContainer
@@ -1440,6 +1501,16 @@ Toast visuel ; en production préférer useToast().
   onClose*: () => void  — Fermeture — apps : ToastProvider + useToast()
 ```
 
+## bpm.toggle
+Interrupteur on/off pour activer ou désactiver une option.
+```
+  label?: React.ReactNode  — Libellé affiché à côté du toggle.
+  value?: boolean  — État coché. Default: false.
+  onChange?: (checked: boolean) => void  — Callback au changement.
+  disabled?: boolean  — Désactive le toggle. Default: false.
+  className?: string
+```
+
 ## bpm.tooltip
 ```
   text*: string
@@ -1470,6 +1541,17 @@ Toast visuel ; en production préférer useToast().
   data*: TreemapItem[]
   width?: number
   height?: number
+  className?: string
+```
+
+## bpm.transition
+Conteneur de vues avec transition animée (fade, shimmer, border, grid) pour wizard ou carrousel.
+```
+  activeIndex*: number  — Index de la vue affichée (0-based).
+  variant?: TransitionVariant  — Type de transition : 'fade' | 'shimmer' | 'border' | 'grid'. Default: 'fade'.
+  children*: ReactNode[]  — Une entrée par vue.
+  duration?: number  — Durée de la transition en ms. Default: 380.
+  onTransitionEnd?: () => void  — Callback à la fin de la transition.
   className?: string
 ```
 

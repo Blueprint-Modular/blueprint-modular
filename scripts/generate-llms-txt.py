@@ -45,6 +45,22 @@ CORE_COMPONENTS = {
 # Tous les composants exportés dans bpm.tsx sont inclus dans llms.txt.
 EXCLUDE = set()
 
+# Composants présents dans components/bpm/ mais non exportés dans le barrel.
+# Documentés quand même dans llms.txt (référence machine complète).
+# Mapping : bpm_name (camelCase) → fichier source (PascalCase, sans extension).
+EXTRA_COMPONENTS: dict[str, str] = {
+    "assistantPanel":         "AssistantPanel",
+    "dataExplorerAnalytics":  "DataExplorerAnalytics",
+    "dataExplorerClassic":    "DataExplorerClassic",
+    "datePickerPopover":      "DatePickerPopover",
+    "gpsMap":                 "GpsMap",
+    "mapViewLeaflet":         "MapViewLeaflet",
+    "offlineIndicator":       "OfflineIndicator",
+    "timePickerPopover":      "TimePickerPopover",
+    "toggle":                 "Toggle",
+    "transition":             "Transition",
+}
+
 # ---------------------------------------------------------------------------
 # Parser
 # ---------------------------------------------------------------------------
@@ -538,7 +554,33 @@ def main():
         if args.verbose:
             print(f"  [OK] bpm.{bpm_key} — {len(comp['props'])} props")
 
-    print(f"Générés : {len(components)} composants ({len(skipped)} exclus)")
+    # --- Composants extras (présents dans components/bpm/ mais hors barrel) ---
+    extras_added = 0
+    for bpm_key, file_stem in EXTRA_COMPONENTS.items():
+        if any((c.get("bpm_name") or bpm_name(c["name"])) == bpm_key for c in components):
+            continue  # déjà couvert par le barrel
+        tsx_file = COMP_DIR / f"{file_stem}.tsx"
+        if not tsx_file.exists():
+            if args.verbose:
+                print(f"  [SKIP] extra bpm.{bpm_key} — fichier {tsx_file.name} absent")
+            continue
+        comp = parse_component_file(tsx_file)
+        if comp is None:
+            components.append({
+                "name": file_stem,
+                "bpm_name": bpm_key,
+                "props": [],
+                "doc": f"Composant {file_stem} — interface non parsée.",
+                "anti_patterns": [],
+            })
+        else:
+            comp["bpm_name"] = bpm_key
+            components.append(comp)
+        extras_added += 1
+        if args.verbose:
+            print(f"  [EXTRA] bpm.{bpm_key} — {file_stem}.tsx")
+
+    print(f"Générés : {len(components)} composants ({len(skipped)} exclus, {extras_added} extras)")
 
     # --- Générer llms.txt complet ---
     full_lines = [HEADER_FULL.format(version=version, date=today)]

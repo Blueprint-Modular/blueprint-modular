@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
 # Version : 0.1.60
-# Date    : 2026-04-07
+# Date    : 2026-05-07
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -60,12 +60,8 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 ```
 
 ## bpm.aiQueryBar
+Composant bpm.aiQueryBar — voir @blueprint-modular/core ou BPM_API.md.
 ```
-  onQuery*: (question: string) => Promise<string>
-  placeholder?: string
-  suggestions?: string[]
-  loading?: boolean
-  className?: string
 ```
 
 ## bpm.alarmPanel
@@ -367,6 +363,7 @@ Chat Ollama local (démo).
 ```
 
 ## bpm.crud
+Page CRUD générique : table + filtres + modal de création/édition/détail câblés sur un endpoint REST (GET/POST/PUT/DELETE). Utilise idKey pour les routes par identifiant.
 ```
   title*: string
   endpoint*: string
@@ -931,8 +928,8 @@ Conteneur page (core) — props : children.
 ```
 
 ## bpm.plcConnector
+Composant bpm.plcConnector — voir @blueprint-modular/core ou BPM_API.md.
 ```
-  className?: string
 ```
 
 ## bpm.plotlyChart
@@ -1507,6 +1504,105 @@ Toast visuel ; en production préférer useToast().
   onCancel?: () => void
   submitLabel?: string
   showSummary?: boolean
+  className?: string
+```
+
+## bpm.assistantPanel
+```
+  demoAnswers?: Record<string, string>  — Si fourni, les chips affichent les réponses statiques (démo publique, pas d'appel API).
+  title?: string  — Titre du panneau
+  demo?: boolean  — Utilise demoAnswers si fourni ; le panneau s'ouvre toujours en volet droit (drawer).
+  className?: string
+```
+
+## bpm.dataExplorerAnalytics
+```
+  mode*: "analytics"
+  data*: Record<string, unknown>[]
+  columns*: ExplorerAnalyticsColumn[]
+  chartConfig?: { type: "bar" | "line" | "pie"
+  onFilter?: (filtered: Record<string, unknown>[]) => void
+  className?: string
+```
+
+## bpm.dataExplorerClassic
+```
+  data*: Record<string, unknown>[]
+  columns?: ColumnDef[]
+  title?: string
+  searchable?: boolean
+  exportable?: boolean
+  pageSize?: number
+  className?: string
+```
+
+## bpm.datePickerPopover
+```
+  anchorRef*: React.RefObject<HTMLElement | null>
+  value*: Date | null
+  min?: Date | null
+  max?: Date | null
+  onSelect*: (date: Date) => void
+  onClose*: () => void
+```
+
+## bpm.gpsMap
+```
+  mode*: "display" | "picker"
+  center*: { lat: number
+  markerPosition*: { lat: number
+  onMarkerChange?: (lat: number, lng: number) => void
+  onMapClick?: (lat: number, lng: number) => void
+  height*: number
+```
+
+## bpm.mapViewLeaflet
+```
+  rl*: typeof import("react-leaflet")
+  L*: typeof import("leaflet")
+  center*: [number, number]
+  zoom*: number
+  height*: number | string
+  markers*: MapMarker[]
+  onMarkerClick?: (index: number, marker: MapMarker) => void
+  tileUrl*: string
+  tileAttribution?: string
+  polylines?: [number, number][][]
+  polylineColor?: string
+  polygons?: MapPolygonSpec[]
+  onMapClick?: (latlng: [number, number]) => void
+  className?: string
+```
+
+## bpm.offlineIndicator
+```
+  demo?: boolean  — Affiche le composant même sans file (pour démo / page composants).
+```
+
+## bpm.timePickerPopover
+```
+  anchorRef*: React.RefObject<HTMLElement | null>
+  value*: Date | null
+  onSelect*: (hours: number, minutes: number) => void
+  onClose*: () => void
+```
+
+## bpm.toggle
+```
+  label?: React.ReactNode
+  value?: boolean
+  onChange?: (checked: boolean) => void
+  disabled?: boolean
+  className?: string
+```
+
+## bpm.transition
+```
+  activeIndex*: number  — Index de la page / vue active (0-based).
+  variant?: TransitionVariant  — Variant de transition : fade (slide), shimmer, border, grid.
+  children*: ReactNode[]  — Enfants : tableau de nœuds (une « page » par entrée).
+  duration?: number  — Durée de la transition fade (ms). Défaut 380.
+  onTransitionEnd?: () => void  — Callback à la fin de la transition.
   className?: string
 ```
 

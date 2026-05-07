@@ -32,6 +32,11 @@ export interface CrudField {
   options?: { value: string; label: string }[];
 }
 
+/**
+ * Page CRUD générique : table + filtres + modal de création/édition/détail
+ * câblés sur un endpoint REST (GET/POST/PUT/DELETE). Utilise idKey pour les
+ * routes par identifiant.
+ */
 export interface CrudPageProps {
   title: string;
   endpoint: string;

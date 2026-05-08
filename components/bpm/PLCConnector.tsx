@@ -4,6 +4,17 @@ import React, { useState } from "react";
 
 export type PLCProtocol = "modbus-tcp" | "opc-ua" | "mqtt" | "ethernet-ip";
 
+/**
+ * @component bpm.plcConnector
+ * @description Formulaire de configuration de connexion automate industriel (Modbus, OPC UA, MQTT, EtherNet/IP).
+ * @example
+ * bpm.plcConnector({ className: "my-class" })
+ *
+ * @param {object} props
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.machineStatus, bpm.sensorGrid, bpm.liveChart
+ */
 export interface PLCConnectorProps {
   className?: string;
 }

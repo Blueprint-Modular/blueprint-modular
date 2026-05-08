@@ -3,6 +3,21 @@
 import React, { useEffect, useRef } from "react";
 import { Markdown } from "./Markdown";
 
+/**
+ * @component bpm.streamingText
+ * @description Affichage de texte en streaming avec curseur clignotant et rendu Markdown optionnel.
+ * @example
+ * bpm.streamingText({ content: partialText, isStreaming: true, renderMarkdown: true })
+ *
+ * @param {object} props
+ * @param {string} props.content - Texte courant (s'allonge au fil du stream). Obligatoire.
+ * @param {boolean} [props.isStreaming=false] - Affiche le curseur clignotant. Optionnel.
+ * @param {boolean} [props.renderMarkdown=true] - Interprète le contenu comme Markdown. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.chatInterface
+ * @associated bpm.markdown, bpm.promptInput
+ */
 export interface StreamingTextProps {
   /** Texte courant (s'allonge au fil du stream). */
   content: string;

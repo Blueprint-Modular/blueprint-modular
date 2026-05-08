@@ -4,6 +4,21 @@ import React, { useMemo } from "react";
 
 export type SparklineTrend = "up" | "down" | "flat";
 
+/**
+ * @component bpm.sparkline
+ * @description Courbe SVG compacte pour afficher une tendance avec couleur selon la direction (up/down/flat).
+ * @example
+ * bpm.sparkline({ values: [10, 15, 12, 18, 22], width: 120, height: 36, trend: "up" })
+ *
+ * @param {object} props
+ * @param {number[]} props.values - Valeurs de la série. Obligatoire.
+ * @param {number} [props.width=120] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=36] - Hauteur du SVG. Optionnel.
+ * @param {"up"|"down"|"flat"} [props.trend="flat"] - Tendance pour la couleur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.metric, bpm.lineChart, bpm.liveChart
+ */
 export interface SparklineProps {
   values: number[];
   width?: number;

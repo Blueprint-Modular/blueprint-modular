@@ -3,6 +3,23 @@
 import React from "react";
 import { LineChart } from "./LineChart";
 
+/**
+ * @component bpm.reportPage
+ * @description Page de rapport structurée avec sections (titre, texte, tableau, graphique, KPI), impression PDF via window.print.
+ * @example
+ * bpm.reportPage({ title: "Rapport mensuel", sections: [{ type: "heading", text: "Résumé" }, { type: "kpi", label: "CA", value: "150k€" }] })
+ *
+ * @param {object} props
+ * @param {string} props.title - Titre principal du rapport. Obligatoire.
+ * @param {string} [props.subtitle] - Sous-titre. Optionnel.
+ * @param {string} [props.date] - Date du rapport. Optionnel.
+ * @param {React.ReactNode} [props.logo] - Logo affiché en haut à droite. Optionnel.
+ * @param {ReportSection[]} props.sections - Sections du rapport (heading, text, table, chart, kpi, divider). Obligatoire.
+ * @param {boolean} [props.exportable=true] - Affiche le bouton Imprimer/PDF. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.printLayout, bpm.invoiceTemplate, bpm.lineChart
+ */
 export type ReportSection =
   | { type: "heading"; text: string; level?: 1 | 2 | 3 }
   | { type: "text"; content: string }

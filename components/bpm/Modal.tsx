@@ -7,6 +7,23 @@ const MODAL_PORTAL_ZINDEX = 100000;
 
 export type ModalSize = "small" | "medium" | "large";
 
+/**
+ * @component bpm.modal
+ * @description Fenêtre modale avec backdrop, fermeture Échap/clic extérieur. Pattern: {isOpen && bpm.modal({...})}
+ * @example
+ * bpm.modal({ isOpen: true, onClose: () => setOpen(false), title: "Confirmation", children: <p>Contenu</p> })
+ *
+ * @param {object} props
+ * @param {boolean} props.isOpen - Contrôle l'affichage. Obligatoire.
+ * @param {function} props.onClose - Callback de fermeture. Obligatoire.
+ * @param {React.ReactNode} [props.title] - Titre de la modale. Optionnel.
+ * @param {React.ReactNode} props.children - Contenu. Obligatoire.
+ * @param {"small"|"medium"|"large"} [props.size="medium"] - Taille (400/600/800px). Optionnel.
+ * @param {boolean} [props.showCloseButton=true] - Affiche le bouton fermer. Optionnel.
+ *
+ * @associated bpm.button, bpm.input, bpm.selectbox, bpm.confirmModal
+ * @forbidden bpm.modal (pas d'imbrication)
+ */
 /** Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, children })} — TOUJOURS dans return(), jamais après. */
 export interface ModalProps {
   /** PARENT: dans le return() de la page — jamais dans un sous-composant. INTERDIT: bpm.modal imbriqué dans un autre bpm.modal. ASSOCIÉ: bpm.button (déclencheur), bpm.input (formulaire), bpm.selectbox. */

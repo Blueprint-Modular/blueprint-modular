@@ -2,6 +2,24 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.predictiveChart
+ * @description Graphique de prévision avec données historiques, prédictions et intervalle de confiance.
+ * @example
+ * bpm.predictiveChart({ historical: [{x:1,y:10}], predicted: [{x:2,y:15}], confidenceUpper: [{x:2,y:18}], confidenceLower: [{x:2,y:12}], todayX: 1.5 })
+ *
+ * @param {object} props
+ * @param {{ x: number; y: number }[]} props.historical - Points historiques. Obligatoire.
+ * @param {{ x: number; y: number }[]} props.predicted - Points prédits (ligne pointillée). Obligatoire.
+ * @param {{ x: number; y: number }[]} [props.confidenceUpper] - Borne supérieure de confiance. Optionnel.
+ * @param {{ x: number; y: number }[]} [props.confidenceLower] - Borne inférieure de confiance. Optionnel.
+ * @param {number} [props.todayX] - Position X de la ligne "aujourd'hui". Optionnel.
+ * @param {number} [props.width=520] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=220] - Hauteur du SVG. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.lineChart, bpm.liveChart, bpm.metric
+ */
 export interface PredictiveChartProps {
   historical: { x: number; y: number }[];
   predicted: { x: number; y: number }[];

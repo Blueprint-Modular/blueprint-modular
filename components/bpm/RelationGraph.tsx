@@ -2,6 +2,22 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
+/**
+ * @component bpm.relationGraph
+ * @description Graphe relationnel SVG interactif avec layouts force/grille/circulaire, zoom, panoramique et drag-and-drop des nœuds.
+ * @example
+ * bpm.relationGraph({ nodes: [{ id: "1", label: "A" }], edges: [{ from: "1", to: "2" }], layout: "force" })
+ *
+ * @param {object} props
+ * @param {GraphNode[]} props.nodes - Liste des nœuds (id, label, width?, height?). Obligatoire.
+ * @param {GraphEdge[]} props.edges - Liste des arêtes (from, to). Obligatoire.
+ * @param {"force"|"grid"|"circular"} [props.layout="force"] - Algorithme de placement. Optionnel.
+ * @param {number} [props.width=640] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=420] - Hauteur du SVG. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.orgChart, bpm.treeview
+ */
 export interface GraphNode {
   id: string;
   label: string;

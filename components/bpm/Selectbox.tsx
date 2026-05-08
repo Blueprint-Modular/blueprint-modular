@@ -5,6 +5,26 @@ import { createPortal } from "react-dom";
 
 export type SelectboxOption = string | { value: string; label: string };
 
+/**
+ * @component bpm.selectbox
+ * @description Liste déroulante avec dropdown portalé, support clavier et placeholder.
+ * @example
+ * bpm.selectbox({ label: "Pays", options: ["France", "Belgique", "Suisse"], value: selected, onChange: setSelected })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Label affiché au-dessus. Optionnel.
+ * @param {SelectboxOption[]} [props.options=[]] - Options (string ou { value, label }). Optionnel.
+ * @param {string|null} [props.value] - Valeur sélectionnée. Optionnel.
+ * @param {function} [props.onChange] - Callback au changement. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le composant. Optionnel.
+ * @param {string} [props.help] - Texte d'aide au survol. Optionnel.
+ * @param {string} [props.placeholder="Sélectionner..."] - Placeholder. Optionnel.
+ * @param {boolean} [props.required=false] - Champ obligatoire. Optionnel.
+ * @param {number} [props.triggerHeight] - Hauteur du trigger en pixels. Optionnel.
+ *
+ * @parent bpm.panel, bpm.modal, bpm.card
+ * @associated bpm.input, bpm.radioGroup, bpm.autocomplete
+ */
 export interface SelectboxProps {
   /** PARENT: bpm.panel | bpm.modal (formulaire) | bpm.card. INTERDIT: options=[] sans placeholder — UI bloquée. ASSOCIÉ: bpm.input (filtres combinés), bpm.table (filtre colonne), bpm.button. */
   /** Label affiché au-dessus. */

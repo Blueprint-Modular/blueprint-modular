@@ -3,6 +3,20 @@
 import React, { useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
+/**
+ * @component bpm.timePickerPopover
+ * @description Popover de sélection heures/minutes utilisé par TimeInput.
+ * @example
+ * // Usage interne via bpm.timeInput
+ *
+ * @param {object} props
+ * @param {React.RefObject<HTMLElement>} props.anchorRef - Référence à l'élément ancre. Obligatoire.
+ * @param {Date|null} props.value - Heure actuelle. Obligatoire.
+ * @param {function} props.onSelect - Callback (hours, minutes). Obligatoire.
+ * @param {function} props.onClose - Callback à la fermeture. Obligatoire.
+ *
+ * @parent bpm.timeInput
+ */
 export interface TimePickerPopoverProps {
   anchorRef: React.RefObject<HTMLElement | null>;
   value: Date | null;

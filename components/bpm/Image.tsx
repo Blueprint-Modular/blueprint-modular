@@ -2,6 +2,21 @@
 
 import React from "react";
 
+/**
+ * @component bpm.image
+ * @description Affiche une image avec chargement différé et options de dimensionnement/ajustement.
+ * @example
+ * bpm.image({ src: "/photo.jpg", alt: "Photo de profil", width: 200, fit: "cover" })
+ *
+ * @param {object} props
+ * @param {string} props.src - URL de l'image. Obligatoire.
+ * @param {string} props.alt - Texte alternatif pour l'accessibilité. Obligatoire.
+ * @param {string} [props.title] - Titre affiché au survol. Optionnel.
+ * @param {number|string} [props.width] - Largeur en pixels ou CSS. Optionnel.
+ * @param {number|string} [props.height] - Hauteur en pixels ou CSS. Optionnel.
+ * @param {"contain"|"cover"|"fill"|"none"} [props.fit="contain"] - Mode d'ajustement object-fit. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ */
 export interface ImageProps {
   src: string;
   alt: string;

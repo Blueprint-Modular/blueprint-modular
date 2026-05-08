@@ -9,6 +9,21 @@ type ThemeValue = "light" | "dark";
 
 export type ThemeVariant = "toggle" | "select";
 
+/**
+ * @component bpm.theme
+ * @description Sélecteur de thème clair/sombre avec toggle ou select, persiste en localStorage.
+ * @example
+ * bpm.theme({ variant: "toggle", label: "Mode sombre" })
+ *
+ * @param {object} props
+ * @param {"toggle"|"select"} [props.variant="toggle"] - Type de contrôle. Optionnel.
+ * @param {React.ReactNode} [props.label] - Label du toggle. Optionnel.
+ * @param {string} [props.lightLabel="Clair"] - Libellé option claire. Optionnel.
+ * @param {string} [props.darkLabel="Sombre"] - Libellé option sombre. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.toggle, bpm.pageLayout
+ */
 export interface ThemeProps {
   /** Type de contrôle : interrupteur (toggle) ou liste (select). */
   variant?: ThemeVariant;

@@ -2,6 +2,20 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.treemap
+ * @description Visualisation treemap (carte de chaleur hiérarchique) en SVG avec algorithme squarify.
+ * @example
+ * bpm.treemap({ data: [{ name: "A", value: 50 }, { name: "B", value: 30 }], width: 400, height: 300 })
+ *
+ * @param {object} props
+ * @param {TreemapItem[]} props.data - Données à afficher (name, value, fill optionnel). Obligatoire.
+ * @param {number} [props.width=400] - Largeur du SVG en pixels. Optionnel.
+ * @param {number} [props.height=280] - Hauteur du SVG en pixels. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.heatmap, bpm.pieChart, bpm.sunburst
+ */
 export interface TreemapItem {
   name: string;
   value: number;

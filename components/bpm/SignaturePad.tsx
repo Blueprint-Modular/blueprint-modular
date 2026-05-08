@@ -2,6 +2,21 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+/**
+ * @component bpm.signaturePad
+ * @description Zone de signature canvas avec export data URL PNG et boutons effacer/enregistrer.
+ * @example
+ * bpm.signaturePad({ width: 400, height: 160, onChangeDataUrl: setSignature })
+ *
+ * @param {object} props
+ * @param {number} [props.width=400] - Largeur du canvas. Optionnel.
+ * @param {number} [props.height=160] - Hauteur du canvas. Optionnel.
+ * @param {string} [props.lineColor="var(--bpm-text-primary)"] - Couleur du trait. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {function} [props.onChangeDataUrl] - Callback (dataUrl | null). Optionnel.
+ *
+ * @associated bpm.fileUploader, bpm.image
+ */
 export interface SignaturePadProps {
   width?: number;
   height?: number;

@@ -2,6 +2,21 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.progressRing
+ * @description Anneau de progression circulaire SVG avec animation de transition.
+ * @example
+ * bpm.progressRing({ value: 75, max: 100, size: 80, strokeWidth: 8 })
+ *
+ * @param {object} props
+ * @param {number} props.value - Valeur actuelle. Obligatoire.
+ * @param {number} [props.max=100] - Valeur maximale. Optionnel.
+ * @param {number} [props.size=72] - Diamètre en pixels. Optionnel.
+ * @param {number} [props.strokeWidth=8] - Épaisseur du trait. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.progress, bpm.liveGauge, bpm.metric
+ */
 export interface ProgressRingProps {
   value: number;
   max?: number;

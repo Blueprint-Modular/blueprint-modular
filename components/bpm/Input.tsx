@@ -2,6 +2,24 @@
 
 import React, { useId } from "react";
 
+/**
+ * @component bpm.input
+ * @description Champ de saisie texte avec label optionnel. Supporte différents types HTML (text, email, password, etc.).
+ * @example
+ * bpm.input({ label: "Email", value: email, onChange: setEmail, type: "email", placeholder: "exemple@mail.com" })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Label affiché au-dessus du champ. Optionnel.
+ * @param {string} [props.value=""] - Valeur contrôlée. Optionnel.
+ * @param {function} [props.onChange] - Callback recevant la valeur string directement. Optionnel.
+ * @param {string} [props.placeholder=""] - Texte indicatif. Optionnel.
+ * @param {"text"|"email"|"password"|"number"|"search"|"date"} [props.type="text"] - Type HTML du champ. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le champ. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.modal, bpm.panel, bpm.card
+ * @associated bpm.button, bpm.selectbox
+ */
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> {
   /** PARENT: bpm.modal (formulaire) | bpm.panel | bpm.card. INTERDIT: onChange absent sur champ contrôlé. ASSOCIÉ: bpm.button (submit), bpm.selectbox (filtres), bpm.modal. */
   /** Label affiché au-dessus du champ. */

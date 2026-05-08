@@ -10,6 +10,22 @@ function toInputValue(d: Date | string | null | undefined): string {
   return m ? m[1].padStart(2, "0") + ":" + m[2] : "";
 }
 
+/**
+ * @component bpm.timeInput
+ * @description Champ de sélection d'heure avec popover heures/minutes.
+ * @example
+ * bpm.timeInput({ label: "Heure de début", value: time, onChange: setTime })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Label affiché au-dessus. Optionnel.
+ * @param {Date|string|null} [props.value] - Valeur (Date ou "HH:MM"). Optionnel.
+ * @param {function} [props.onChange] - Callback (Date | null). Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le champ. Optionnel.
+ * @param {string} [props.min] - Heure minimale "HH:MM". Optionnel.
+ * @param {string} [props.max] - Heure maximale "HH:MM". Optionnel.
+ *
+ * @associated bpm.dateInput, bpm.timePickerPopover, bpm.scheduler
+ */
 export interface TimeInputProps {
   label?: string;
   value?: Date | string | null;

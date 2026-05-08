@@ -4,6 +4,24 @@ import dynamic from "next/dynamic";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
+/**
+ * @component bpm.plotlyChart
+ * @description Graphique interactif Plotly.js avec support de tous types de traces (bar, line, scatter, etc.).
+ * @example
+ * bpm.plotlyChart({ data: [{ type: "bar", x: ["A", "B"], y: [10, 20] }], height: 400 })
+ *
+ * @param {object} props
+ * @param {object[]} [props.data] - Tableau de traces Plotly. Optionnel.
+ * @param {object} [props.layout] - Config layout Plotly (title, axes). Optionnel.
+ * @param {object} [props.config] - Config Plotly (responsive, displayModeBar). Optionnel.
+ * @param {number} [props.height=400] - Hauteur en pixels. Optionnel.
+ * @param {number|string} [props.width="100%"] - Largeur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {string} [props.iframeSrc] - URL iframe (compatibilité ascendante). Optionnel.
+ *
+ * @parent bpm.panel, bpm.card, bpm.tabs
+ * @associated bpm.metric, bpm.selectbox, bpm.dateRangePicker
+ */
 export interface PlotlyChartProps {
   /** PARENT: bpm.panel | bpm.card | bpm.tabs (contenu onglet). INTERDIT: données vides [] passées à data — utiliser chartsReady guard. ASSOCIÉ: bpm.metric (contexte chiffre), bpm.selectbox (filtre période), bpm.dateRangePicker. */
   /** Tableau de traces Plotly (ex. [{type:'bar', x:[], y:[]}]). Obligatoire. */

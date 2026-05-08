@@ -5,6 +5,18 @@ import { useNotificationHistory } from "@/contexts/NotificationHistoryContext";
 import { getNotificationLevel } from "@/lib/notificationLevels";
 import "./Toast.css";
 
+/**
+ * @component bpm.toast
+ * @description Système de notifications toast avec provider contexte. Utiliser useToast() pour déclencher.
+ * @example
+ * // Dans l'app: <ToastProvider>{children}</ToastProvider>
+ * // Dans un composant: const { showToast } = useToast(); showToast("Message", "success");
+ *
+ * @param {object} ToastProvider.props
+ * @param {React.ReactNode} props.children - Contenu de l'application. Obligatoire.
+ *
+ * @associated bpm.message, bpm.notificationCenter
+ */
 const TOAST_DURATION_MS = 5000;
 
 type ToastItem = {

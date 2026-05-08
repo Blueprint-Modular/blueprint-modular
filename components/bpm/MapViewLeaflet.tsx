@@ -2,6 +2,30 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.mapViewLeaflet
+ * @description Composant interne Leaflet utilisé par MapView après chargement dynamique des dépendances.
+ * @example
+ * // Usage interne uniquement - utiliser bpm.mapView à la place
+ *
+ * @param {object} props
+ * @param {typeof import("react-leaflet")} props.rl - Module react-leaflet. Obligatoire.
+ * @param {typeof import("leaflet")} props.L - Module leaflet. Obligatoire.
+ * @param {[number, number]} props.center - Centre de la carte. Obligatoire.
+ * @param {number} props.zoom - Niveau de zoom. Obligatoire.
+ * @param {number|string} props.height - Hauteur. Obligatoire.
+ * @param {MapMarker[]} props.markers - Marqueurs. Obligatoire.
+ * @param {function} [props.onMarkerClick] - Callback clic marqueur. Optionnel.
+ * @param {string} props.tileUrl - URL des tuiles. Obligatoire.
+ * @param {string} [props.tileAttribution] - Attribution. Optionnel.
+ * @param {[number, number][][]} [props.polylines] - Polylignes. Optionnel.
+ * @param {string} [props.polylineColor] - Couleur polylignes. Optionnel.
+ * @param {MapPolygonSpec[]} [props.polygons] - Polygones. Optionnel.
+ * @param {function} [props.onMapClick] - Callback clic carte. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS. Optionnel.
+ *
+ * @parent bpm.mapView
+ */
 export interface MapMarker {
   position: [number, number];
   label?: string;

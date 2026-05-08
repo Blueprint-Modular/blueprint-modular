@@ -2,6 +2,24 @@
 
 import React, { useCallback, useState } from "react";
 
+/**
+ * @component bpm.labelValue
+ * @description Affiche une paire label/valeur avec options de style, orientation et bouton copier.
+ * @example
+ * bpm.labelValue({ label: "Référence", value: "REF-001", copyable: true, valueStyle: "bold" })
+ *
+ * @param {object} props
+ * @param {string} props.label - Libellé affiché en majuscules. Obligatoire.
+ * @param {string|number|React.ReactNode} props.value - Valeur à afficher. Obligatoire.
+ * @param {"horizontal"|"vertical"} [props.orientation="horizontal"] - Disposition label/valeur. Optionnel.
+ * @param {"sm"|"md"|"lg"} [props.size="md"] - Taille du texte. Optionnel.
+ * @param {"default"|"bold"|"accent"|"muted"} [props.valueStyle="default"] - Style de la valeur. Optionnel.
+ * @param {boolean} [props.copyable=false] - Affiche un bouton pour copier la valeur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.card, bpm.panel
+ * @associated bpm.metric, bpm.inlineEdit
+ */
 export interface LabelValueProps {
   label: string;
   value: string | number | React.ReactNode;

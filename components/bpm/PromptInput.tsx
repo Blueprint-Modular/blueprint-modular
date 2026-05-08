@@ -3,6 +3,28 @@
 import React, { useCallback, useRef, useState } from "react";
 import { Button } from "./Button";
 
+/**
+ * @component bpm.promptInput
+ * @description Zone de saisie multi-lignes pour prompts IA avec auto-resize, compteur de tokens et envoi Ctrl+Enter.
+ * @example
+ * bpm.promptInput({ value: prompt, onChange: setPrompt, onSubmit: handleSend, placeholder: "Posez votre question...", isLoading: false })
+ *
+ * @param {object} props
+ * @param {string} props.value - Contenu du prompt. Obligatoire.
+ * @param {function} props.onChange - Callback au changement de texte. Obligatoire.
+ * @param {function} props.onSubmit - Callback à l'envoi (Ctrl+Enter ou bouton). Obligatoire.
+ * @param {string} [props.placeholder="Écrivez votre message..."] - Placeholder. Optionnel.
+ * @param {boolean} [props.isLoading=false] - État de chargement (désactive l'envoi). Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive la saisie et l'envoi. Optionnel.
+ * @param {number} [props.maxLength] - Longueur maximale. Optionnel.
+ * @param {boolean} [props.showTokenCount=false] - Affiche le compteur de tokens estimé. Optionnel.
+ * @param {number} [props.minRows=3] - Nombre minimum de lignes. Optionnel.
+ * @param {number} [props.maxRows=8] - Nombre maximum de lignes. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.chatInterface
+ * @associated bpm.modelSelector, bpm.streamingText
+ */
 export interface PromptInputProps {
   value: string;
   onChange: (value: string) => void;

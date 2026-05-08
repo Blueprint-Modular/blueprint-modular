@@ -1,6 +1,23 @@
 "use client";
 
-import React, { useMemo } from "react";export interface LineChartDatum {
+import React, { useMemo } from "react";
+
+/**
+ * @component bpm.lineChart
+ * @description Graphique en ligne SVG simple et responsive pour afficher une série de données.
+ * @example
+ * bpm.lineChart({ data: [{ x: 0, y: 10 }, { x: 1, y: 25 }], color: "#3b82f6" })
+ *
+ * @param {object} props
+ * @param {LineChartDatum[]} props.data - Tableau de points { x, y }. Obligatoire.
+ * @param {number} [props.width=400] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=200] - Hauteur du SVG. Optionnel.
+ * @param {string} [props.color="var(--bpm-accent)"] - Couleur de la ligne. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.areaChart, bpm.barChart, bpm.scatterChart
+ */
+export interface LineChartDatum {
   x: number | string;
   y: number;
 }export interface LineChartProps {

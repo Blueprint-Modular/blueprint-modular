@@ -2,6 +2,22 @@
 
 import React, { useId, useMemo } from "react";
 
+/**
+ * @component bpm.printLayout
+ * @description Mise en page optimisée pour l'impression A4 avec en-tête, pied de page et marges personnalisables.
+ * @example
+ * bpm.printLayout({ children: <Content />, orientation: "portrait", header: <Logo />, footer: "Page 1", marginsMm: { top: 20 } })
+ *
+ * @param {object} props
+ * @param {React.ReactNode} props.children - Contenu principal. Obligatoire.
+ * @param {"portrait"|"landscape"} [props.orientation="portrait"] - Orientation de la page. Optionnel.
+ * @param {React.ReactNode} [props.header] - En-tête affiché en haut. Optionnel.
+ * @param {React.ReactNode} [props.footer] - Pied de page. Optionnel.
+ * @param {PrintLayoutMarginsMm} [props.marginsMm] - Marges en mm (top, right, bottom, left). Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.invoiceTemplate, bpm.reportPage
+ */
 export interface PrintLayoutMarginsMm {
   top?: number;
   right?: number;

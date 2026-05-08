@@ -3,6 +3,20 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * @component bpm.topNav
+ * @description Barre de navigation horizontale avec titre/logo et liens/boutons.
+ * @example
+ * bpm.topNav({ title: "Mon App", titleHref: "/", items: [{ label: "Accueil", href: "/" }, { label: "Aide", onClick: showHelp }] })
+ *
+ * @param {object} props
+ * @param {React.ReactNode} [props.title] - Titre ou logo. Optionnel.
+ * @param {string} [props.titleHref="#"] - Lien du titre. Optionnel.
+ * @param {TopNavItem[]} [props.items=[]] - Éléments de navigation (label, href?, onClick?). Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.pageLayout, bpm.sidebar, bpm.breadcrumb
+ */
 export interface TopNavItem {
   label: string;
   href?: string;

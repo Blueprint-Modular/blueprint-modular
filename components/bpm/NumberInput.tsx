@@ -2,6 +2,26 @@
 
 import React, { useState, useEffect } from "react";
 
+/**
+ * @component bpm.numberInput
+ * @description Champ de saisie numérique avec validation min/max et formatage au blur.
+ * @example
+ * bpm.numberInput({ label: "Quantité", value: 10, onChange: setQty, min: 0, max: 100, step: 1 })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Label affiché au-dessus. Optionnel.
+ * @param {number|null} [props.value] - Valeur contrôlée. Optionnel.
+ * @param {function} [props.onChange] - Callback (number | null). Optionnel.
+ * @param {number|null} [props.min] - Valeur minimale autorisée. Optionnel.
+ * @param {number|null} [props.max] - Valeur maximale autorisée. Optionnel.
+ * @param {number} [props.step=1] - Pas d'incrémentation. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le champ. Optionnel.
+ * @param {string} [props.help] - Texte d'aide au survol. Optionnel.
+ * @param {string} [props.placeholder=""] - Placeholder. Optionnel.
+ *
+ * @parent bpm.modal, bpm.panel
+ * @associated bpm.input, bpm.slider
+ */
 export interface NumberInputProps {
   label?: string;
   value?: number | null;

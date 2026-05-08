@@ -4,6 +4,20 @@ import React, { useEffect, useState } from "react";
 
 export type MachineStatusState = "running" | "idle" | "fault" | "unknown";
 
+/**
+ * @component bpm.machineStatus
+ * @description Carte d'état machine avec indicateur LED animé (clignotement en production ou défaut).
+ * @example
+ * bpm.machineStatus({ title: "Machine A", state: "running", detail: "Lot #1234" })
+ *
+ * @param {object} props
+ * @param {string} props.title - Nom de la machine. Obligatoire.
+ * @param {"running"|"idle"|"fault"|"unknown"} props.state - État actuel. Obligatoire.
+ * @param {string} [props.detail] - Détail additionnel affiché sous l'état. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.sensorGrid, bpm.liveGauge, bpm.statusBox
+ */
 export interface MachineStatusProps {
   title: string;
   state: MachineStatusState;

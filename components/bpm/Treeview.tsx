@@ -2,6 +2,20 @@
 
 import React, { useState } from "react";
 
+/**
+ * @component bpm.treeview
+ * @description Arborescence hiérarchique dépliable avec sélection de nœud.
+ * @example
+ * bpm.treeview({ nodes: [{ id: "1", label: "Parent", children: [{ id: "1.1", label: "Enfant" }] }], onSelect: handleSelect })
+ *
+ * @param {object} props
+ * @param {TreeviewNode[]} [props.nodes=[]] - Liste des nœuds racines (id, label, children, defaultOpen). Optionnel.
+ * @param {function} [props.onSelect] - Callback à la sélection d'un nœud (node). Optionnel.
+ * @param {string|null} [props.selectedId=null] - ID du nœud sélectionné. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.sidebar, bpm.accordion, bpm.menu
+ */
 export interface TreeviewNode {
   id: string;
   label: React.ReactNode;

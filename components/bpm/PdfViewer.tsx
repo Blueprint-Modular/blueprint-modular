@@ -2,6 +2,21 @@
 
 import React from "react";
 
+/**
+ * @component bpm.pdfViewer
+ * @description Visionneuse PDF embarquée en iframe avec dimensions personnalisables.
+ * @example
+ * bpm.pdfViewer({ src: "/documents/rapport.pdf", title: "Rapport annuel", height: 600 })
+ *
+ * @param {object} props
+ * @param {string} props.src - URL du fichier PDF. Obligatoire.
+ * @param {string} [props.title="PDF"] - Titre pour l'accessibilité. Optionnel.
+ * @param {number|string} [props.width="100%"] - Largeur. Optionnel.
+ * @param {number|string} [props.height="600px"] - Hauteur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.filePreview, bpm.fileUploader
+ */
 export interface PdfViewerProps {
   src: string;
   title?: string;

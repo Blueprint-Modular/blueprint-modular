@@ -2,6 +2,19 @@
 
 import React from "react";
 
+/**
+ * @component bpm.nfcBadge
+ * @description Badge indicateur de statut NFC/scannable avec icône et variantes de couleur.
+ * @example
+ * bpm.nfcBadge({ label: "Actif", variant: "success" })
+ *
+ * @param {object} props
+ * @param {string} [props.label="Scannable"] - Texte affiché. Optionnel.
+ * @param {"default"|"primary"|"success"} [props.variant="default"] - Variante de couleur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.badge, bpm.qrCode, bpm.barcode
+ */
 export interface NfcBadgeProps {
   label?: string;
   variant?: "default" | "primary" | "success";

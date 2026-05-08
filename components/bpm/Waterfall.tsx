@@ -2,6 +2,20 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.waterfall
+ * @description Graphique en cascade (waterfall chart) montrant l'évolution cumulative de valeurs positives/négatives.
+ * @example
+ * bpm.waterfall({ data: [{ label: "Début", value: 100, type: "start" }, { label: "+Ventes", value: 50 }, { label: "Total", value: 150, type: "total" }] })
+ *
+ * @param {object} props
+ * @param {WaterfallDatum[]} props.data - Données (label, value, type optionnel: "start"|"delta"|"total"). Obligatoire.
+ * @param {number} [props.width=480] - Largeur du SVG en pixels. Optionnel.
+ * @param {number} [props.height=260] - Hauteur du SVG en pixels. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.barChart, bpm.stackedBarChart, bpm.kpi
+ */
 export interface WaterfallDatum {
   label: string;
   value: number;

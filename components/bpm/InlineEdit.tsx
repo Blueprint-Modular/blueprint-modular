@@ -5,6 +5,23 @@ import { Spinner } from "./Spinner";
 
 export type InlineEditType = "text" | "number" | "select";
 
+/**
+ * @component bpm.inlineEdit
+ * @description Champ éditable au clic : texte, nombre ou select. Validation par Entrée/blur, annulation par Échap.
+ * @example
+ * bpm.inlineEdit({ value: "Mon texte", onSave: (v) => console.log(v), type: "text" })
+ *
+ * @param {object} props
+ * @param {string|number} props.value - Valeur actuelle affichée. Obligatoire.
+ * @param {function} props.onSave - Callback appelé à la sauvegarde avec la nouvelle valeur. Obligatoire.
+ * @param {"text"|"number"|"select"} [props.type="text"] - Type d'édition. Optionnel.
+ * @param {{ value: string; label: string }[]} [props.options=[]] - Options pour le type select. Optionnel.
+ * @param {string} [props.placeholder=""] - Placeholder si valeur vide. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive l'édition. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.labelValue
+ */
 export interface InlineEditProps {
   value: string | number;
   onSave: (next: string | number) => void | Promise<void>;

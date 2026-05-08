@@ -2,6 +2,24 @@
 
 import React, { useState } from "react";
 
+/**
+ * @component bpm.pageLayout
+ * @description Layout d'application avec sidebar rétractable, navigation par icônes Material et switch de thème.
+ * @example
+ * bpm.pageLayout({ title: "Mon App", items: [{ key: "home", label: "Accueil", icon: "home" }], currentItem: "home", onNavigate: setPage, children: <Content /> })
+ *
+ * @param {object} props
+ * @param {string} props.title - Titre affiché dans la sidebar. Obligatoire.
+ * @param {SidebarItem[]} props.items - Éléments de navigation (key, label, icon). Obligatoire.
+ * @param {string} props.currentItem - Clé de l'élément actif. Obligatoire.
+ * @param {function} props.onNavigate - Callback au clic sur un item (key). Obligatoire.
+ * @param {React.ReactNode} props.children - Contenu principal. Obligatoire.
+ * @param {boolean} [props.defaultCollapsed=false] - Sidebar rétractée par défaut. Optionnel.
+ * @param {"light"|"dark"} [props.theme] - Thème actuel. Optionnel.
+ * @param {function} [props.onThemeChange] - Callback changement de thème. Optionnel.
+ *
+ * @associated bpm.topNav, bpm.sidebar
+ */
 export interface SidebarItem {
   /** Clé unique de l’entrée. */
   key: string;

@@ -2,6 +2,24 @@
 
 import React from "react";
 
+/**
+ * @component bpm.invoiceTemplate
+ * @description Modèle de facture A4 prêt pour impression avec lignes, TVA et totaux calculés automatiquement.
+ * @example
+ * bpm.invoiceTemplate({ issuer: "Ma Société", client: "Client SA", lines: [{ label: "Service", qty: 2, unitPrice: 100 }] })
+ *
+ * @param {object} props
+ * @param {string} [props.title="Facture"] - Titre du document. Optionnel.
+ * @param {string} props.issuer - Informations de l'émetteur. Obligatoire.
+ * @param {string} props.client - Informations du client. Obligatoire.
+ * @param {InvoiceLine[]} props.lines - Lignes de facturation (label, qty, unitPrice). Obligatoire.
+ * @param {number} [props.taxRate=0.2] - Taux de TVA (0.2 = 20%). Optionnel.
+ * @param {string} [props.invoiceNo="—"] - Numéro de facture. Optionnel.
+ * @param {string} [props.date] - Date de la facture (YYYY-MM-DD). Optionnel, défaut aujourd'hui.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.printLayout
+ */
 export interface InvoiceLine {
   label: string;
   qty: number;

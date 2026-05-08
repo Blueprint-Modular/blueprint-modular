@@ -2,6 +2,23 @@
 
 import React, { useMemo, useState } from "react";
 
+/**
+ * @component bpm.scheduler
+ * @description Calendrier/agenda avec vues jour, semaine et mois, gestion d'événements et de ressources.
+ * @example
+ * bpm.scheduler({ view: "week", events: [{ id: "1", title: "Réunion", start: "2024-01-15T10:00", end: "2024-01-15T11:00" }], onEventClick: handleEvent, onSlotClick: handleSlot })
+ *
+ * @param {object} props
+ * @param {"day"|"week"|"month"} props.view - Vue active. Obligatoire.
+ * @param {SchedulerEvent[]} props.events - Liste des événements (id, title, start, end, resourceId?, color?). Obligatoire.
+ * @param {SchedulerResource[]} [props.resources] - Ressources associables (id, label). Optionnel.
+ * @param {function} props.onEventClick - Callback au clic sur un événement. Obligatoire.
+ * @param {function} props.onSlotClick - Callback au clic sur un créneau vide (dayStart, hour). Obligatoire.
+ * @param {number} [props.startHour=8] - Première heure affichée. Optionnel.
+ * @param {number} [props.endHour=20] - Dernière heure affichée. Optionnel.
+ *
+ * @associated bpm.calendar, bpm.timeline
+ */
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function parseMs(iso: string): number {

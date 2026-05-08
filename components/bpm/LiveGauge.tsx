@@ -4,6 +4,24 @@ import React, { useMemo } from "react";
 
 export type LiveGaugeSize = "sm" | "md" | "lg";
 
+/**
+ * @component bpm.liveGauge
+ * @description Jauge demi-cercle avec aiguille et zones colorées (normal/avertissement/critique).
+ * @example
+ * bpm.liveGauge({ value: 75, min: 0, max: 100, warningAbove: 70, criticalAbove: 90, label: "CPU" })
+ *
+ * @param {object} props
+ * @param {number} props.value - Valeur actuelle affichée. Obligatoire.
+ * @param {number} [props.min=0] - Valeur minimale de l'échelle. Optionnel.
+ * @param {number} [props.max=100] - Valeur maximale de l'échelle. Optionnel.
+ * @param {number} [props.warningAbove] - Seuil d'avertissement (zone jaune). Optionnel.
+ * @param {number} [props.criticalAbove] - Seuil critique (zone rouge). Optionnel.
+ * @param {"sm"|"md"|"lg"} [props.size="md"] - Taille de la jauge. Optionnel.
+ * @param {string} [props.label] - Libellé affiché sous la jauge. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.liveChart, bpm.metric, bpm.progress
+ */
 export interface LiveGaugeProps {
   value: number;
   min?: number;

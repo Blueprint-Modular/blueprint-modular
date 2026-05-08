@@ -2,6 +2,20 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
+/**
+ * @component bpm.popover
+ * @description Bulle contextuelle positionnée autour d'un déclencheur avec fermeture au clic extérieur.
+ * @example
+ * bpm.popover({ trigger: <button>Info</button>, children: <p>Contenu</p>, placement: "bottom" })
+ *
+ * @param {object} props
+ * @param {React.ReactNode} props.trigger - Élément déclencheur. Obligatoire.
+ * @param {React.ReactNode} props.children - Contenu de la bulle. Obligatoire.
+ * @param {"top"|"bottom"|"left"|"right"} [props.placement="bottom"] - Position de la bulle. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.tooltip, bpm.dropdown
+ */
 export interface PopoverProps {
   trigger: React.ReactNode;
   children: React.ReactNode;

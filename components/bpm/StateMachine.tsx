@@ -2,6 +2,24 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.stateMachine
+ * @description Visualisation d'une machine à états avec graphe circulaire, transitions cliquables et historique.
+ * @example
+ * bpm.stateMachine({ states: ["A", "B", "C"], transitions: [{ from: "A", to: "B" }], currentState: "A", onTransition: handleTransition })
+ *
+ * @param {object} props
+ * @param {string[]} props.states - Liste des états. Obligatoire.
+ * @param {StateTransition[]} props.transitions - Liste des transitions (from, to, label?). Obligatoire.
+ * @param {string} props.currentState - État actuel. Obligatoire.
+ * @param {string[]} [props.history=[]] - Historique des états traversés. Optionnel.
+ * @param {function} [props.onTransition] - Callback (from, to) au clic sur une transition. Optionnel.
+ * @param {number} [props.width=420] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=420] - Hauteur du SVG. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.stepper, bpm.timeline, bpm.relationGraph
+ */
 export interface StateTransition {
   from: string;
   to: string;

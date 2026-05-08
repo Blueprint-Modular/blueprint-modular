@@ -2,6 +2,22 @@
 
 import React, { useState, useEffect } from "react";
 
+/**
+ * @component bpm.tabs
+ * @description Système d'onglets avec contenu associé, scroll horizontal si débordement.
+ * @example
+ * bpm.tabs({ tabs: [{ label: "Aperçu", content: <Overview /> }, { label: "Détails", content: <Details /> }], defaultTab: 0 })
+ *
+ * @param {object} props
+ * @param {TabsItems} [props.tabs=[]] - Onglets (string[] ou { label, content, key? }[]). Optionnel.
+ * @param {number} [props.defaultTab=0] - Index de l'onglet actif au montage. Optionnel.
+ * @param {function} [props.onChange] - Callback au changement d'onglet (index). Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.panel, bpm.container
+ * @associated bpm.table, bpm.plotlyChart, bpm.metric
+ * @forbidden bpm.tabs (pas d'imbrication)
+ */
 export interface TabItem {
   label: string;
   content: React.ReactNode | null;

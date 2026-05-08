@@ -3,6 +3,21 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { MapView } from "./MapView";
 
+/**
+ * @component bpm.routePlanner
+ * @description Planificateur d'itinéraire avec liste de points réordonnables, carte Leaflet et calcul de distance orthodromique.
+ * @example
+ * bpm.routePlanner({ stops: [{ id: "1", label: "Paris", position: [48.85, 2.35] }], onReorder: setStops, showDistance: true })
+ *
+ * @param {object} props
+ * @param {RouteStop[]} props.stops - Points de l'itinéraire (id, label, position [lat, lng]). Obligatoire.
+ * @param {function} [props.onReorder] - Callback à la réorganisation. Optionnel.
+ * @param {boolean} [props.showDistance=true] - Affiche la distance totale. Optionnel.
+ * @param {number|string} [props.mapHeight=360] - Hauteur de la carte. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.mapView, bpm.gps, bpm.timeline
+ */
 export interface RouteStop {
   id: string;
   label?: string;

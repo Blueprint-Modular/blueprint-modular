@@ -3,6 +3,21 @@
 import React from "react";
 import { QRCodeSVG } from "qrcode.react";
 
+/**
+ * @component bpm.qrCode
+ * @description Génère un QR code SVG à partir d'une valeur texte avec couleurs personnalisables.
+ * @example
+ * bpm.qrCode({ value: "https://example.com", size: 150, fgColor: "#000" })
+ *
+ * @param {object} props
+ * @param {string} props.value - Texte/URL à encoder. Obligatoire.
+ * @param {number} [props.size=128] - Taille en pixels. Optionnel.
+ * @param {string} [props.fgColor="var(--bpm-text-primary)"] - Couleur des modules. Optionnel.
+ * @param {string} [props.bgColor="var(--bpm-bg-primary)"] - Couleur de fond. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.barcode, bpm.nfcBadge
+ */
 export interface QRCodeProps {
   value: string;
   size?: number;

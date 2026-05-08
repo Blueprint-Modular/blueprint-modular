@@ -17,6 +17,21 @@ const positionClasses: Record<NonNullable<FABProps["position"]>, string> = {
   "top-left": "left-6 top-6",
 };
 
+/**
+ * @component bpm.fab
+ * @description Bouton d'action flottant (Floating Action Button) positionné en coin d'écran pour action principale.
+ * @example
+ * bpm.fab({ icon: <PlusIcon />, label: "Nouveau", onClick: create, position: "bottom-right" })
+ *
+ * @param {object} props
+ * @param {ReactNode} [props.icon] - Icône affichée (défaut: +). Optionnel.
+ * @param {string} [props.label] - Texte pour titre/aria-label. Optionnel.
+ * @param {function} [props.onClick] - Callback au clic. Optionnel.
+ * @param {"bottom-right"|"bottom-left"|"top-right"|"top-left"} [props.position="bottom-right"] - Position. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.button, bpm.iconButton
+ */
 export function FAB({ icon, label, onClick, position = "bottom-right", className = "" }: FABProps) {
   return (
     <button

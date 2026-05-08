@@ -47,7 +47,21 @@ function rowsToCsv<T extends Record<string, unknown>>(
 }
 
 /**
- * Export CSV / JSON avec menu, BOM et séparateur configurable pour tableurs.
+ * @component bpm.exportButton
+ * @description Bouton d'export avec menu déroulant pour télécharger en CSV ou JSON avec configuration BOM/délimiteur.
+ * @example
+ * bpm.exportButton({ data: rows, filename: "export", formats: ["csv", "json"], csvDelimiter: ";" })
+ *
+ * @param {object} props
+ * @param {T[]|function} props.data - Données à exporter ou fonction retournant les données. Obligatoire.
+ * @param {string} props.filename - Nom du fichier sans extension. Obligatoire.
+ * @param {("csv"|"json")[]} [props.formats=["csv","json"]] - Formats proposés. Optionnel.
+ * @param {ExportColumn[]} [props.columns] - Colonnes à exporter {key, header}. Optionnel.
+ * @param {";"|","} [props.csvDelimiter=";"] - Délimiteur CSV. Optionnel.
+ * @param {boolean} [props.csvBOM=true] - Ajoute le BOM UTF-8. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.dataExplorer
  */
 export function ExportButton<T extends Record<string, unknown>>({
   data,

@@ -19,6 +19,22 @@ export interface DatePickerPopoverProps {
   onClose: () => void;
 }
 
+/**
+ * @component bpm.datePickerPopover
+ * @description Calendrier popover pour sélection de date avec navigation mois/année et contraintes min/max.
+ * @example
+ * bpm.datePickerPopover({ anchorRef: ref, value: new Date(), onSelect: setDate, onClose: close })
+ *
+ * @param {object} props
+ * @param {React.RefObject} props.anchorRef - Référence de l'élément déclencheur pour le positionnement. Obligatoire.
+ * @param {Date|null} props.value - Date actuellement sélectionnée. Obligatoire.
+ * @param {Date|null} [props.min] - Date minimale sélectionnable. Optionnel.
+ * @param {Date|null} [props.max] - Date maximale sélectionnable. Optionnel.
+ * @param {function} props.onSelect - Callback appelé avec la date choisie. Obligatoire.
+ * @param {function} props.onClose - Callback de fermeture. Obligatoire.
+ *
+ * @associated bpm.dateInput, bpm.dateRangePicker
+ */
 export function DatePickerPopover({ anchorRef, value, min, max, onSelect, onClose }: DatePickerPopoverProps) {
   const [viewMonth, setViewMonth] = useState(() => {
     const d = value ? new Date(value) : new Date();

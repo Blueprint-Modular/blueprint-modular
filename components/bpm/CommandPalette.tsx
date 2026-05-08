@@ -39,7 +39,19 @@ function commandHaystack(c: Command): string {
 
 /**
  * @component bpm.commandPalette
- * @description Palette de commandes modale (recherche floue, clavier).
+ * @description Palette de commandes modale avec recherche floue, navigation clavier et raccourcis (Cmd/Ctrl+K).
+ * @example
+ * bpm.commandPalette({ commands: [{ id: "save", label: "Enregistrer", action: save }], onClose: () => setOpen(false) })
+ *
+ * @param {object} props
+ * @param {Command[]} props.commands - Liste des commandes {id, label, description?, icon?, shortcut?, category?, action}. Obligatoire.
+ * @param {boolean} [props.isOpen] - Mode contrôlé : état d'ouverture. Optionnel.
+ * @param {function} props.onClose - Callback de fermeture. Obligatoire.
+ * @param {function} [props.onRequestOpen] - Callback sur Cmd/Ctrl+K (mode contrôlé). Optionnel.
+ * @param {string} [props.placeholder="Rechercher une action..."] - Texte d'aide. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.searchModal, bpm.autocomplete
  */
 export function CommandPalette({
   commands,

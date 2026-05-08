@@ -42,6 +42,22 @@ function inferMime(filename: string | undefined): string {
   return map[ext] ?? "application/octet-stream";
 }
 
+/**
+ * @component bpm.filePreview
+ * @description Prévisualiseur de fichiers (images, PDF, texte/code) avec inférence MIME et bouton téléchargement.
+ * @example
+ * bpm.filePreview({ url: "/files/doc.pdf", filename: "doc.pdf", showDownload: true })
+ *
+ * @param {object} props
+ * @param {string} props.url - URL du fichier. Obligatoire.
+ * @param {string} props.filename - Nom du fichier. Obligatoire.
+ * @param {string} [props.mimeType] - Type MIME (auto-inféré si absent). Optionnel.
+ * @param {string|number} [props.height=400] - Hauteur de la prévisualisation. Optionnel.
+ * @param {boolean} [props.showDownload=true] - Affiche le lien de téléchargement. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.fileUploader, bpm.codeBlock
+ */
 export function FilePreview(props: FilePreviewProps) {
   const url = props.url ?? props.file_url ?? "";
   const filename = props.filename ?? props.file_name ?? "";

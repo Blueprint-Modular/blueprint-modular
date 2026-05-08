@@ -42,6 +42,29 @@ const overlayIconSizeMap: Record<AvatarSize, number> = {
   large: 20,
 };
 
+/**
+ * @component bpm.avatar
+ * @description Avatar utilisateur avec image ou initiales, mode sidebar optionnel (nom + sous-titre + déconnexion).
+ * @example
+ * bpm.avatar({ src: "/photo.jpg", size: "medium", name: "Jean Dupont", variant: "sidebar" })
+ *
+ * @param {object} props
+ * @param {string} [props.src] - URL de l'image de l'avatar. Optionnel.
+ * @param {string} [props.alt] - Texte alternatif pour l'accessibilité. Optionnel.
+ * @param {string} [props.initials] - Initiales affichées si pas d'image. Optionnel.
+ * @param {"small"|"medium"|"large"} [props.size="medium"] - Taille de l'avatar. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {"default"|"sidebar"} [props.variant="default"] - Mode d'affichage. Optionnel.
+ * @param {string} [props.name] - Nom affiché (variant sidebar). Optionnel.
+ * @param {string} [props.subtitle] - Sous-titre sous le nom (variant sidebar). Optionnel.
+ * @param {function} [props.onLogout] - Callback déconnexion (variant sidebar). Optionnel.
+ * @param {string} [props.logoutLabel="Se déconnecter"] - Libellé du bouton déconnexion. Optionnel.
+ * @param {boolean} [props.editable=false] - Active le mode édition avec overlay. Optionnel.
+ * @param {function} [props.onImageChange] - Callback avec le fichier sélectionné. Optionnel.
+ *
+ * @parent bpm.sidebar, bpm.navbar
+ * @associated bpm.userMenu, bpm.badge
+ */
 export function Avatar({
   src: srcProp,
   alt,

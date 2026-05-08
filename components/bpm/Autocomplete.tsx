@@ -16,6 +16,23 @@ export interface AutocompleteProps {
   className?: string;
 }
 
+/**
+ * @component bpm.autocomplete
+ * @description Champ de saisie avec autocomplétion filtrant les options selon la valeur entrée.
+ * @example
+ * bpm.autocomplete({ label: "Ville", options: [{ value: "paris", label: "Paris" }], onChange: (v) => console.log(v) })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Libellé du champ. Optionnel.
+ * @param {string} [props.placeholder=""] - Texte d'aide. Optionnel.
+ * @param {string} [props.value=""] - Valeur courante. Optionnel.
+ * @param {function} [props.onChange] - Callback appelé à chaque modification. Optionnel.
+ * @param {AutocompleteOption[]} props.options - Liste des options {value, label}. Obligatoire.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.form
+ * @associated bpm.select, bpm.input, bpm.combobox
+ */
 export function Autocomplete(props: AutocompleteProps) {
   const { label, placeholder = "", value = "", onChange, options, className = "" } = props;
   const [open, setOpen] = useState(false);

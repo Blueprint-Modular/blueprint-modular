@@ -17,6 +17,21 @@ export type DrillDownProps<T extends Record<string, unknown>> = {
   breadcrumbs?: boolean;
 };
 
+/**
+ * @component bpm.drillDown
+ * @description Navigation multi-niveaux avec fil d'Ariane pour explorer des données hiérarchiques par clic sur les lignes.
+ * @example
+ * bpm.drillDown({ levels: [...], currentLevel: 0, onDrill: (item, lvl) => setLevel(lvl), onBack: () => setLevel(lvl-1) })
+ *
+ * @param {object} props
+ * @param {DrillDownLevel[]} props.levels - Niveaux de navigation {key, label, columns, items}. Obligatoire.
+ * @param {number} props.currentLevel - Index du niveau actuel. Obligatoire.
+ * @param {function} props.onDrill - Callback (item, nextLevel) pour navigation descendante. Obligatoire.
+ * @param {function} props.onBack - Callback pour remonter d'un niveau. Obligatoire.
+ * @param {boolean} [props.breadcrumbs=true] - Affiche le fil d'Ariane. Optionnel.
+ *
+ * @associated bpm.table, bpm.breadcrumbs
+ */
 export function DrillDown<T extends Record<string, unknown>>({
   levels,
   currentLevel,

@@ -11,6 +11,20 @@ export interface ColumnProps {
   children?: React.ReactNode;
 }
 
+/**
+ * @component bpm.column
+ * @description Conteneur en grille pour organiser le contenu en colonnes avec espacement configurable.
+ * @example
+ * bpm.column({ columns: 3, gap: "1rem", children: [<Card />, <Card />, <Card />] })
+ *
+ * @param {object} props
+ * @param {number} [props.columns=2] - Nombre de colonnes (1 à 12). Optionnel.
+ * @param {number|string} [props.gap="1rem"] - Espacement entre colonnes. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {ReactNode} [props.children] - Contenu des colonnes. Optionnel.
+ *
+ * @associated bpm.grid, bpm.container, bpm.row
+ */
 export function Column({
   columns = 2,
   gap = "1rem",

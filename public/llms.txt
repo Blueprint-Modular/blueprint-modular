@@ -1,6 +1,6 @@
 # Blueprint Modular — Agent Context File
 # Version : 0.1.60
-# Date    : 2026-04-07
+# Date    : 2026-05-08
 # URL canonique : https://blueprint-modular.com/llms.txt
 #
 # Ce fichier est la référence machine de @blueprint-modular/core.
@@ -60,12 +60,8 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 ```
 
 ## bpm.aiQueryBar
+Composant bpm.aiQueryBar — voir @blueprint-modular/core ou BPM_API.md.
 ```
-  onQuery*: (question: string) => Promise<string>
-  placeholder?: string
-  suggestions?: string[]
-  loading?: boolean
-  className?: string
 ```
 
 ## bpm.alarmPanel
@@ -111,6 +107,14 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
   width?: number
   height?: number
   color?: string
+  className?: string
+```
+
+## bpm.assistantPanel
+```
+  demoAnswers?: Record<string, string>  — Si fourni, les chips affichent les réponses statiques (démo publique, pas d'appel API).
+  title?: string  — Titre du panneau
+  demo?: boolean  — Utilise demoAnswers si fourni ; le panneau s'ouvre toujours en volet droit (drawer).
   className?: string
 ```
 
@@ -862,6 +866,11 @@ Modal dialog. PATTERN : {isOpen && bpm.modal({ isOpen:true, onClose, title, chil
   placeholder?: string
 ```
 
+## bpm.offlineIndicator
+```
+  demo?: boolean  — Affiche le composant même sans file (pour démo / page composants).
+```
+
 ## bpm.orgChart
 ```
   nodes*: OrgChartNode[]
@@ -931,8 +940,8 @@ Conteneur page (core) — props : children.
 ```
 
 ## bpm.plcConnector
+Composant bpm.plcConnector — voir @blueprint-modular/core ou BPM_API.md.
 ```
-  className?: string
 ```
 
 ## bpm.plotlyChart
@@ -1440,6 +1449,15 @@ Toast visuel ; en production préférer useToast().
   onClose*: () => void  — Fermeture — apps : ToastProvider + useToast()
 ```
 
+## bpm.toggle
+```
+  label?: React.ReactNode
+  value?: boolean
+  onChange?: (checked: boolean) => void
+  disabled?: boolean
+  className?: string
+```
+
 ## bpm.tooltip
 ```
   text*: string
@@ -1462,6 +1480,16 @@ Toast visuel ; en production préférer useToast().
   steps*: TourStep[]
   isActive*: boolean
   onClose?: () => void
+  className?: string
+```
+
+## bpm.transition
+```
+  activeIndex*: number  — Index de la page / vue active (0-based).
+  variant?: TransitionVariant  — Variant de transition : fade (slide), shimmer, border, grid.
+  children*: ReactNode[]  — Enfants : tableau de nœuds (une « page » par entrée).
+  duration?: number  — Durée de la transition fade (ms). Défaut 380.
+  onTransitionEnd?: () => void  — Callback à la fin de la transition.
   className?: string
 ```
 
@@ -1507,6 +1535,84 @@ Toast visuel ; en production préférer useToast().
   onCancel?: () => void
   submitLabel?: string
   showSummary?: boolean
+  className?: string
+```
+
+
+## COMPOSANTS INTERNES (helpers)
+Les composants ci-dessous sont utilisés en interne par d'autres composants bpm.
+Ils ne sont pas accessibles via bpm.xxx directement.
+
+## DatePickerPopover (interne)
+Utilisé par bpm.dateInput et bpm.dateRangePicker.
+```
+  anchorRef*: React.RefObject<HTMLElement | null>  — Référence de l'élément ancre.
+  value*: Date | null  — Date sélectionnée.
+  min?: Date | null  — Date minimum.
+  max?: Date | null  — Date maximum.
+  onSelect*: (date: Date) => void  — Callback de sélection.
+  onClose*: () => void  — Callback de fermeture.
+```
+
+## TimePickerPopover (interne)
+Utilisé par bpm.timeInput.
+```
+  anchorRef*: React.RefObject<HTMLElement | null>  — Référence de l'élément ancre.
+  value*: Date | null  — Date/heure sélectionnée.
+  onSelect*: (hours: number, minutes: number) => void  — Callback de sélection.
+  onClose*: () => void  — Callback de fermeture.
+```
+
+## GpsMap (interne)
+Utilisé par bpm.gps pour afficher la carte Leaflet.
+```
+  mode*: "display" | "picker"  — Mode affichage ou sélection.
+  center*: { lat: number; lng: number }  — Centre de la carte.
+  markerPosition*: { lat: number; lng: number } | null  — Position du marqueur.
+  onMarkerChange?: (lat: number, lng: number) => void  — Callback déplacement marqueur.
+  onMapClick?: (lat: number, lng: number) => void  — Callback clic sur carte.
+  height*: number  — Hauteur de la carte en px.
+```
+
+## MapViewLeafletInner (interne)
+Utilisé par bpm.mapView pour le rendu Leaflet après import dynamique.
+```
+  rl*: typeof import("react-leaflet")  — Module react-leaflet.
+  L*: typeof import("leaflet")  — Module leaflet.
+  center*: [number, number]  — Centre [lat, lng].
+  zoom*: number  — Niveau de zoom.
+  height*: number | string  — Hauteur de la carte.
+  markers*: MapMarker[]  — Liste des marqueurs.
+  onMarkerClick?: (index: number, marker: MapMarker) => void  — Callback clic marqueur.
+  tileUrl*: string  — URL des tuiles.
+  tileAttribution?: string  — Attribution des tuiles.
+  polylines?: [number, number][][]  — Polylignes.
+  polylineColor?: string  — Couleur des polylignes.
+  polygons?: MapPolygonSpec[]  — Polygones.
+  onMapClick?: (latlng: [number, number]) => void  — Callback clic carte.
+  className?: string
+```
+
+## DataExplorerAnalytics (interne)
+Variante analytique du DataExplorer avec filtres et graphiques.
+```
+  mode*: "analytics"  — Mode de l'explorateur.
+  data*: Record<string, unknown>[]  — Données à explorer.
+  columns*: ExplorerAnalyticsColumn[]  — Définition des colonnes (key, label, type, enumValues?).
+  chartConfig?: { type: "bar" | "line" | "pie"; xKey: string; yKey: string }  — Configuration du graphique.
+  onFilter?: (filtered: Record<string, unknown>[]) => void  — Callback données filtrées.
+  className?: string
+```
+
+## DataExplorerClassic (interne)
+Variante classique du DataExplorer avec recherche, tri et pagination.
+```
+  data*: Record<string, unknown>[]  — Données à explorer.
+  columns?: ColumnDef[]  — Définition des colonnes (key, label, type, sortable, filterable).
+  title?: string  — Titre de l'explorateur.
+  searchable?: boolean  — Activer la recherche. Default: true.
+  exportable?: boolean  — Activer l'export CSV. Default: false.
+  pageSize?: number  — Nombre d'éléments par page. Default: 20.
   className?: string
 ```
 

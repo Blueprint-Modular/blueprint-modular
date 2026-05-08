@@ -146,6 +146,9 @@ import {
   Title4,
   Toggle,
   Toast,
+  Transition,
+  AssistantPanel,
+  OfflineIndicator,
   Tooltip,
   TopNav,
   Tour,
@@ -522,4 +525,8 @@ export const bpm = {
   waterfall: wrap(Waterfall),
   wizardForm: wrap(WizardForm),
   titleBpm: wrap(TitleBpm),
+  toggle: wrap(Toggle),
+  transition: wrap(Transition),
+  assistantPanel: wrap(AssistantPanel),
+  offlineIndicator: wrap(OfflineIndicator),
 };

@@ -18,6 +18,23 @@ function groupKeyString(v: unknown): string {
   return String(v);
 }
 
+/**
+ * @component bpm.groupedList
+ * @description Liste générique avec regroupement automatique par clé, en-têtes de groupe personnalisables et sections repliables.
+ * @example
+ * bpm.groupedList({ items: users, groupBy: "department", renderItem: (u) => <span>{u.name}</span>, collapsible: true })
+ *
+ * @param {object} props
+ * @param {T[]} props.items - Tableau d'éléments à grouper. Obligatoire.
+ * @param {keyof T} props.groupBy - Clé de regroupement. Obligatoire.
+ * @param {function} props.renderItem - Fonction de rendu pour chaque élément. Obligatoire.
+ * @param {function} [props.renderGroupHeader] - Rendu personnalisé de l'en-tête de groupe. Optionnel.
+ * @param {"asc"|"desc"} [props.sortGroups="asc"] - Ordre de tri des groupes. Optionnel.
+ * @param {boolean} [props.collapsible=false] - Permet de replier les groupes. Optionnel.
+ * @param {boolean} [props.defaultCollapsed=false] - Groupes repliés par défaut. Optionnel.
+ *
+ * @associated bpm.list, bpm.accordion, bpm.dataList
+ */
 export function GroupedList<T extends Record<string, unknown>>({
   items,
   groupBy,

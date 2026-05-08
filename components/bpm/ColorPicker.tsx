@@ -10,6 +10,22 @@ export interface ColorPickerProps {
   disabled?: boolean;
 }
 
+/**
+ * @component bpm.colorPicker
+ * @description Sélecteur de couleur avec aperçu et affichage du code hexadécimal.
+ * @example
+ * bpm.colorPicker({ label: "Couleur principale", value: "#00a3e2", onChange: setColor })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Libellé du champ. Optionnel.
+ * @param {string} [props.value="#000000"] - Valeur couleur hexadécimale. Optionnel.
+ * @param {function} [props.onChange] - Callback appelé avec la nouvelle couleur. Optionnel.
+ * @param {string} [props.help] - Texte d'aide affiché en tooltip. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le sélecteur. Optionnel.
+ *
+ * @parent bpm.form
+ * @associated bpm.input, bpm.select
+ */
 export function ColorPicker({
   label,
   value = "#000000",

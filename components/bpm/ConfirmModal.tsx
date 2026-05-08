@@ -25,6 +25,25 @@ const VARIANT_STYLES: Record<
   info: { buttonBg: "var(--bpm-accent)", buttonColor: "var(--bpm-accent-contrast)", icon: "info" },
 };
 
+/**
+ * @component bpm.confirmModal
+ * @description Modale de confirmation pour actions critiques (suppression, validation) avec variantes danger/warning/info.
+ * @example
+ * bpm.confirmModal({ isOpen: true, title: "Supprimer ?", message: "Cette action est irréversible.", onConfirm: delete, onCancel: close, variant: "danger" })
+ *
+ * @param {object} props
+ * @param {boolean} props.isOpen - État d'ouverture de la modale. Obligatoire.
+ * @param {function} props.onConfirm - Callback de confirmation. Obligatoire.
+ * @param {function} props.onCancel - Callback d'annulation. Obligatoire.
+ * @param {string} props.title - Titre de la modale. Obligatoire.
+ * @param {string} props.message - Message explicatif. Obligatoire.
+ * @param {string} [props.confirmLabel="Confirmer"] - Texte du bouton confirmer. Optionnel.
+ * @param {string} [props.cancelLabel="Annuler"] - Texte du bouton annuler. Optionnel.
+ * @param {"danger"|"warning"|"info"} [props.variant="info"] - Style visuel. Optionnel.
+ * @param {boolean} [props.isLoading=false] - État de chargement. Optionnel.
+ *
+ * @associated bpm.modal, bpm.button
+ */
 export function ConfirmModal({
   isOpen,
   onConfirm,

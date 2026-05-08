@@ -15,7 +15,18 @@ export interface FunnelChartProps {
 }
 
 /**
- * Entonnoir en trapèzes empilés (clip-path polygon), pourcentages optionnels.
+ * @component bpm.funnelChart
+ * @description Graphique en entonnoir pour visualiser les étapes d'un processus de conversion avec pourcentages.
+ * @example
+ * bpm.funnelChart({ stages: [{ label: "Visiteurs", value: 1000 }, { label: "Leads", value: 200 }], showPercentage: true })
+ *
+ * @param {object} props
+ * @param {FunnelStage[]} props.stages - Étapes {label, value}. Obligatoire.
+ * @param {boolean} [props.showPercentage=false] - Affiche les pourcentages. Optionnel.
+ * @param {boolean} [props.horizontal=false] - Orientation horizontale. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.barChart, bpm.metric
  */
 export function FunnelChart({
   stages,

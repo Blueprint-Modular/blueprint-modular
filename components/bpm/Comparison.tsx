@@ -16,6 +16,21 @@ function toNum(v: unknown): number | null {
   return null;
 }
 
+/**
+ * @component bpm.comparison
+ * @description Tableau de comparaison multi-critères avec mise en évidence optionnelle des meilleures valeurs.
+ * @example
+ * bpm.comparison({ items: [{ prix: 100 }, { prix: 80 }], dimensions: ["prix"], highlightBest: true })
+ *
+ * @param {object} props
+ * @param {Record<string, unknown>[]} props.items - Objets à comparer. Obligatoire.
+ * @param {string[]} props.dimensions - Clés des critères de comparaison. Obligatoire.
+ * @param {Record<string, string>} [props.labels] - Labels personnalisés pour les dimensions. Optionnel.
+ * @param {boolean} [props.highlightBest=true] - Met en évidence les meilleures valeurs. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.metric
+ */
 export function Comparison({
   items,
   dimensions,

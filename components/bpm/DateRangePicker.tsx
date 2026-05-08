@@ -23,6 +23,24 @@ export interface DateRangePickerProps {
   max?: Date | string | null;
 }
 
+/**
+ * @component bpm.dateRangePicker
+ * @description Sélecteur de plage de dates avec deux champs (début/fin) et calendriers popover coordonnés.
+ * @example
+ * bpm.dateRangePicker({ label: "Période", start: startDate, end: endDate, onChange: (s, e) => setRange(s, e) })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Libellé du champ. Optionnel.
+ * @param {Date|string|null} [props.start] - Date de début. Optionnel.
+ * @param {Date|string|null} [props.end] - Date de fin. Optionnel.
+ * @param {function} [props.onChange] - Callback (start, end). Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le sélecteur. Optionnel.
+ * @param {Date|string|null} [props.min] - Date minimale. Optionnel.
+ * @param {Date|string|null} [props.max] - Date maximale. Optionnel.
+ *
+ * @parent bpm.filterPanel, bpm.form
+ * @associated bpm.dateInput, bpm.datePickerPopover
+ */
 export function DateRangePicker(p: DateRangePickerProps) {
   const { label, start, end, onChange, disabled = false, min = null, max = null } = p;
   const [openStart, setOpenStart] = useState(false);

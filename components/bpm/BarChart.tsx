@@ -15,6 +15,21 @@ export interface BarChartProps {
   className?: string;
 }
 
+/**
+ * @component bpm.barChart
+ * @description Graphique à barres verticales SVG simple pour comparaisons de valeurs.
+ * @example
+ * bpm.barChart({ data: [{ x: "Jan", y: 100 }, { x: "Fév", y: 150 }], color: "var(--bpm-accent)" })
+ *
+ * @param {object} props
+ * @param {BarChartDatum[]} props.data - Données du graphique [{x, y}]. Obligatoire.
+ * @param {number} [props.width=400] - Largeur du graphique. Optionnel.
+ * @param {number} [props.height=200] - Hauteur du graphique. Optionnel.
+ * @param {string} [props.color="var(--bpm-accent)"] - Couleur des barres. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.lineChart, bpm.areaChart, bpm.plotlyChart
+ */
 export function BarChart(p: BarChartProps) {
   const { data, width = 400, height = 200, color = "var(--bpm-accent)", className = "" } = p;
   const bars = useMemo(() => {

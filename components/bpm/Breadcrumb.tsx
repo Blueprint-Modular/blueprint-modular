@@ -14,6 +14,20 @@ export interface BreadcrumbProps {
   className?: string;
 }
 
+/**
+ * @component bpm.breadcrumb
+ * @description Fil d'Ariane pour navigation hiérarchique avec liens cliquables.
+ * @example
+ * bpm.breadcrumb({ items: [{ label: "Accueil", href: "/" }, { label: "Produits" }] })
+ *
+ * @param {object} props
+ * @param {BreadcrumbItem[]} [props.items=[]] - Liste des éléments {label, href}. Optionnel.
+ * @param {string} [props.separator="›"] - Séparateur entre éléments. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.pageHeader, bpm.navbar
+ * @associated bpm.breadcrumbs, bpm.tabs
+ */
 export function Breadcrumb({
   items = [],
   separator = "›",

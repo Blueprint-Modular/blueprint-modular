@@ -39,6 +39,20 @@ function initial(s: string): string {
   return s.trim().slice(0, 1).toUpperCase() || "?";
 }
 
+/**
+ * @component bpm.changelog
+ * @description Journal des modifications affichant avant/après avec acteur, date et regroupement optionnel par jour.
+ * @example
+ * bpm.changelog({ changes: [{ field: "prix", before: 100, after: 120, actor: "Marie", date: "2024-01-15T10:00:00Z" }] })
+ *
+ * @param {object} props
+ * @param {ChangelogEntry[]} props.changes - Liste des modifications à afficher. Obligatoire.
+ * @param {boolean} [props.groupByDate=false] - Regroupe par jour (Aujourd'hui, Hier, date). Optionnel.
+ * @param {number} [props.maxItems] - Limite le nombre d'entrées affichées. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.activityFeed, bpm.timeline, bpm.diffViewer
+ */
 export function Changelog({ changes, groupByDate = false, maxItems, className = "" }: ChangelogProps) {
   const [expanded, setExpanded] = useState(false);
   const limit = maxItems ?? changes.length;

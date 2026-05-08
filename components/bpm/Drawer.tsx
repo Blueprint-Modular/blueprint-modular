@@ -12,6 +12,23 @@ export interface DrawerProps {
   className?: string;
 }
 
+/**
+ * @component bpm.drawer
+ * @description Panneau latéral glissant (gauche ou droite) avec overlay et fermeture par Escape ou clic extérieur.
+ * @example
+ * bpm.drawer({ open: true, onClose: close, title: "Détails", side: "right", children: <Content /> })
+ *
+ * @param {object} props
+ * @param {ReactNode} props.children - Contenu du drawer. Obligatoire.
+ * @param {boolean} props.open - État d'ouverture. Obligatoire.
+ * @param {function} props.onClose - Callback de fermeture. Obligatoire.
+ * @param {ReactNode} [props.title] - Titre dans l'en-tête. Optionnel.
+ * @param {"left"|"right"} [props.side="right"] - Côté d'apparition. Optionnel.
+ * @param {number|string} [props.width=360] - Largeur du drawer. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.modal, bpm.panel, bpm.sidebar
+ */
 export function Drawer({ children, open, onClose, title, side = "right", width = 360, className = "" }: DrawerProps) {
   useEffect(() => {
     if (open) {

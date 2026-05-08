@@ -60,6 +60,23 @@ function formatCell(value: unknown, type: ColumnDef["type"]): React.ReactNode {
   return String(value);
 }
 
+/**
+ * @component bpm.dataExplorerClassic
+ * @description Explorateur de données classique avec table triable, recherche, pagination et export CSV.
+ * @example
+ * bpm.dataExplorerClassic({ data: [...], columns: [...], searchable: true, exportable: true })
+ *
+ * @param {object} props
+ * @param {Record<string, unknown>[]} props.data - Données à afficher. Obligatoire.
+ * @param {ColumnDef[]} [props.columns] - Définition des colonnes (auto-inféré si absent). Optionnel.
+ * @param {string} [props.title] - Titre de l'explorateur. Optionnel.
+ * @param {boolean} [props.searchable=true] - Active la recherche. Optionnel.
+ * @param {boolean} [props.exportable=false] - Active l'export CSV. Optionnel.
+ * @param {number} [props.pageSize=20] - Nombre d'éléments par page. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.pagination, bpm.input
+ */
 export function DataExplorerClassic({
   data,
   columns: columnsProp,

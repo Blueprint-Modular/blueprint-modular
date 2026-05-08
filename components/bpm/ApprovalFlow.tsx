@@ -25,6 +25,22 @@ function initial(s: string): string {
   return s.trim().slice(0, 1).toUpperCase() || "?";
 }
 
+/**
+ * @component bpm.approvalFlow
+ * @description Circuit de validation multi-étapes avec approbateurs, statuts et possibilité d'approuver/rejeter avec commentaire.
+ * @example
+ * bpm.approvalFlow({ steps: [{ id: "1", approver: "Marie", status: "approved" }, { id: "2", approver: "Jean", status: "pending" }] })
+ *
+ * @param {object} props
+ * @param {ApprovalStep[]} props.steps - Liste des étapes d'approbation. Obligatoire.
+ * @param {function} [props.onApprove] - Callback appelé lors de l'approbation (stepId, comment). Optionnel.
+ * @param {function} [props.onReject] - Callback appelé lors du rejet (stepId, comment). Optionnel.
+ * @param {"horizontal"|"vertical"} [props.direction] - Direction d'affichage. Auto si non spécifié. Optionnel.
+ * @param {boolean} [props.showCommentInput=true] - Affiche le champ commentaire. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.stepper, bpm.timeline, bpm.workflow
+ */
 export function ApprovalFlow({
   steps,
   onApprove,

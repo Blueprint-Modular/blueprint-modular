@@ -45,6 +45,22 @@ function getActiveCount(filters: FilterConfig[], values: Record<string, unknown>
   return n;
 }
 
+/**
+ * @component bpm.filterPanel
+ * @description Panneau de filtres dynamiques (select, multiselect, daterange, text, toggle) avec réinitialisation.
+ * @example
+ * bpm.filterPanel({ filters: [...], values: { status: "active" }, onChange: handleChange, onReset: reset })
+ *
+ * @param {object} props
+ * @param {FilterConfig[]} props.filters - Configuration des filtres {key, label, type, options?}. Obligatoire.
+ * @param {Record<string, unknown>} [props.values={}] - Valeurs courantes des filtres. Optionnel.
+ * @param {function} props.onChange - Callback (key, value). Obligatoire.
+ * @param {function} props.onReset - Callback de réinitialisation. Obligatoire.
+ * @param {"horizontal"|"vertical"} [props.orientation="horizontal"] - Disposition. Optionnel.
+ * @param {boolean} [props.collapsible=false] - Panneau repliable avec badge. Optionnel.
+ *
+ * @associated bpm.table, bpm.dataExplorer, bpm.chip
+ */
 export function FilterPanel({
   filters,
   values = {},

@@ -16,6 +16,20 @@ export interface ContextMenuProps {
   className?: string;
 }
 
+/**
+ * @component bpm.contextMenu
+ * @description Menu contextuel positionné dynamiquement, déclenché par clic droit ou clic simple.
+ * @example
+ * bpm.contextMenu({ items: [{ id: "copy", label: "Copier", onSelect: copy }], trigger: <Button>...</Button>, triggerOn: "contextmenu" })
+ *
+ * @param {object} props
+ * @param {ContextMenuItem[]} props.items - Liste des éléments du menu {id, label, disabled?, onSelect?}. Obligatoire.
+ * @param {ReactNode} props.trigger - Élément déclencheur du menu. Obligatoire.
+ * @param {"contextmenu"|"click"} [props.triggerOn="contextmenu"] - Mode de déclenchement. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.dropdown, bpm.popover
+ */
 export function ContextMenu({
   items,
   trigger,

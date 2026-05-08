@@ -12,6 +12,21 @@ export interface AltairChartProps {
   className?: string;
 }
 
+/**
+ * @component bpm.altairChart
+ * @description Conteneur pour graphiques Vega-Lite / Altair via spécification JSON ou iframe externe.
+ * @example
+ * bpm.altairChart({ iframeSrc: "/charts/ventes.html", height: 400 })
+ *
+ * @param {object} props
+ * @param {object} [props.spec] - Spécification Vega-Lite / Altair en JSON. Optionnel.
+ * @param {string} [props.iframeSrc] - URL d'un fichier JSON ou vue compilée. Optionnel.
+ * @param {number|string} [props.width="100%"] - Largeur du graphique. Optionnel.
+ * @param {number|string} [props.height=400] - Hauteur du graphique. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.plotlyChart, bpm.lineChart, bpm.barChart
+ */
 export function AltairChart({
   spec,
   iframeSrc,

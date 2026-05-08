@@ -192,6 +192,28 @@ function ButtonIcon({ name, size }: { name: string; size: number }) {
 
 const SPINNER_CSS = "@keyframes bpm-btn-spin{to{transform:rotate(360deg)}}";
 
+/**
+ * @component bpm.button
+ * @description Bouton d'action avec variantes (primary, secondary, outline, ghost, destructive, link), tailles et icônes.
+ * @example
+ * bpm.button({ children: "Enregistrer", variant: "primary", icon: "check", onClick: () => save() })
+ *
+ * @param {object} props
+ * @param {ReactNode} [props.children] - Contenu textuel du bouton. Optionnel.
+ * @param {function} [props.onClick] - Callback au clic. Optionnel.
+ * @param {"primary"|"secondary"|"outline"|"ghost"|"destructive"|"link"} [props.variant="primary"] - Style du bouton. Optionnel.
+ * @param {"small"|"medium"|"large"|"sm"|"md"|"lg"} [props.size="medium"] - Taille du bouton. Optionnel.
+ * @param {boolean} [props.raised=false] - Mode toolbar avec ombre au survol. Optionnel.
+ * @param {string} [props.icon] - Nom de l'icône à gauche. Optionnel.
+ * @param {string} [props.iconRight] - Nom de l'icône à droite. Optionnel.
+ * @param {boolean} [props.loading=false] - Affiche un spinner. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le bouton. Optionnel.
+ * @param {boolean} [props.fullWidth=false] - Occupe toute la largeur. Optionnel.
+ * @param {"button"|"submit"|"reset"} [props.type="button"] - Type HTML du bouton. Optionnel.
+ * @param {string} [props.className] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.fab, bpm.iconButton, bpm.buttonGroup
+ */
 export function Button({
   children,
   onClick,

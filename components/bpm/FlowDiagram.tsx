@@ -113,7 +113,19 @@ function arrowHead(tipX: number, tipY: number, ang: number, size = 8): string {
 
 /**
  * @component bpm.flowDiagram
- * @description Diagramme d'états et transitions (SVG), arcs interactifs depuis l'état courant.
+ * @description Diagramme d'états et transitions SVG avec états colorés et arcs cliquables depuis l'état courant.
+ * @example
+ * bpm.flowDiagram({ states: [...], transitions: [...], currentState: "pending", onTransition: handleTransition })
+ *
+ * @param {object} props
+ * @param {FlowDiagramState[]} props.states - Liste des états {value, label, color?, terminal?}. Obligatoire.
+ * @param {FlowDiagramTransition[]} props.transitions - Transitions {from, to, label}. Obligatoire.
+ * @param {string} [props.currentState] - État actif (surligné). Optionnel.
+ * @param {function} [props.onTransition] - Callback (from, to). Optionnel.
+ * @param {"horizontal"|"vertical"} [props.direction="horizontal"] - Direction du diagramme. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.decisionTree, bpm.stepper, bpm.timeline
  */
 export function FlowDiagram({
   states,

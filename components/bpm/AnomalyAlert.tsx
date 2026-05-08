@@ -31,6 +31,22 @@ const SEV_TEXT: Record<AnomalySeverity, string> = {
   critical: "var(--bpm-error-text)",
 };
 
+/**
+ * @component bpm.anomalyAlert
+ * @description Alerte d'anomalie affichant l'écart entre valeur attendue et mesurée avec niveau de gravité.
+ * @example
+ * bpm.anomalyAlert({ expected: "100 kg", actual: "85 kg", severity: "warning" })
+ *
+ * @param {object} props
+ * @param {string} [props.title="Anomalie détectée"] - Titre de l'alerte. Optionnel.
+ * @param {string|number} props.expected - Valeur attendue. Obligatoire.
+ * @param {string|number} props.actual - Valeur mesurée. Obligatoire.
+ * @param {"info"|"warning"|"critical"} [props.severity="warning"] - Niveau de gravité. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {function} [props.onDismiss] - Callback pour fermer l'alerte. Optionnel.
+ *
+ * @associated bpm.alarmPanel, bpm.statusBox, bpm.panel
+ */
 export function AnomalyAlert({
   title = "Anomalie détectée",
   expected,

@@ -12,12 +12,43 @@ export interface ActivityItem {
   color?: "default" | "info" | "success" | "warning" | "error";
 }
 
+/**
+ * @component bpm.activityFeed
+ * @description Flux chronologique d'activités métier avec avatars initiaux, horodatages relatifs en français et état vide.
+ * @example
+ * bpm.activityFeed({
+ *   activities: [
+ *     { id: "1", actor: "Alice", action: "a validé", target: "le devis DV-001", timestamp: new Date().toISOString(), color: "success" },
+ *   ],
+ *   maxItems: 10,
+ *   onLoadMore: () => fetchMore(),
+ *   compact: true,
+ * })
+ *
+ * @param {object} props
+ * @param {ActivityItem[]} props.activities - Liste ordonnée ; chaque entrée : `{ id, actor, action, target, timestamp (ISO), icon?, color? }`. Obligatoire.
+ * @param {number} [props.maxItems] - Nombre max d'entrées visibles ; si la liste est plus longue, affiche « Charger plus » si onLoadMore est fourni. Optionnel.
+ * @param {function} [props.onLoadMore] - Callback du bouton « Charger plus ». Optionnel.
+ * @param {string} [props.emptyMessage="Aucune activité récente."] - Message lorsque activities est vide. Optionnel.
+ * @param {boolean} [props.compact=false] - Densité réduite (typo et padding plus petits). Optionnel.
+ * @param {string} [props.className=""] - Classes CSS sur le conteneur racine. Optionnel.
+ *
+ * @usage Historique CRM, journal d'audit léger, timeline d'événements sur une fiche.
+ * @context PARENT: bpm.panel | bpm.card | colonne dashboard. ASSOCIATED: bpm.timeline, bpm.statusTracker.
+ * @note SSR : composant client (`use client`) ; les libellés relatifs utilisent `Date.now()` — prévoir hydratation côté client pour éviter un écart serveur/client sur l'horodatage affiché.
+ */
 export interface ActivityFeedProps {
+  /** Liste des activités à afficher (ordre = ordre d'affichage). */
   activities: ActivityItem[];
+  /** Limite d'affichage ; au-delà, le bouton « Charger plus » apparaît si onLoadMore est défini. */
   maxItems?: number;
+  /** Déclenché au clic sur « Charger plus » lorsque activities.length > maxItems. */
   onLoadMore?: () => void;
+  /** Texte centré affiché quand `activities` est vide. Défaut : « Aucune activité récente. » */
   emptyMessage?: string;
+  /** Mode compact : lignes plus serrées et avatars plus petits. Défaut : `false`. */
   compact?: boolean;
+  /** Classes CSS additionnelles sur le conteneur `.bpm-activity-feed`. Défaut : `""`. */
   className?: string;
 }
 
@@ -57,10 +88,6 @@ function initial(name: string): string {
   return t ? t[0]!.toUpperCase() : "?";
 }
 
-/**
- * @component bpm.activityFeed
- * @description Flux d'activité compact avec avatars initiaux.
- */
 export function ActivityFeed({
   activities,
   maxItems,

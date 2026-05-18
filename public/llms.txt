@@ -38,13 +38,14 @@ INTERDIT : import { bpm.modal } ou tout autre destructuring
 ```
 
 ## bpm.activityFeed
+@component bpm.activityFeed @description Flux chronologique d'activités métier avec avatars initiaux, horodatages relatifs en français et état vide. @example bpm.activityFeed({ activities: [{ id: "1", actor: "Alice", action: "a validé", target: "le devis DV-001", timestamp: new Date().toISOString(), color: "success" }], maxItems: 10, onLoadMore: () => fetchMore(), compact: true }) @note SSR : composant client (`use client`) ; horodatages relatifs via Date.now() côté client.
 ```
-  activities*: ActivityItem[]
-  maxItems?: number
-  onLoadMore?: () => void
-  emptyMessage?: string
-  compact?: boolean
-  className?: string
+  activities*: ActivityItem[]  — Liste ordonnée ; entrée { id, actor, action, target, timestamp (ISO), icon?, color? }.
+  maxItems?: number  — Limite d'affichage ; bouton « Charger plus » si onLoadMore défini et liste plus longue.
+  onLoadMore?: () => void  — Callback du bouton « Charger plus ».
+  emptyMessage?: string  — Message si activities vide. Défaut : « Aucune activité récente. »
+  compact?: boolean  — Densité réduite. Défaut : false.
+  className?: string  — Classes CSS sur `.bpm-activity-feed`. Défaut : "".
 ```
 
 ## bpm.addressInput

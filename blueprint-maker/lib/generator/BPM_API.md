@@ -194,16 +194,30 @@ Fil chronologique vertical (événements ISO). Rétrocompat : prop `items` (Time
 
 ## bpm.activityFeed
 
-Liste d’activités (acteur, action, cible, horodatage relatif).
+Flux chronologique d’activités métier (acteur, action, cible) avec avatars initiaux colorés et horodatages relatifs en français (« il y a 5 min », « hier »). Composant client (`use client`) : les libellés de temps reposent sur `Date.now()` côté navigateur.
 
-| Prop | Type | Requis | Description |
-|------|------|--------|-------------|
-| activities | ActivityItem[] | Oui | id, actor, action, target, timestamp (ISO), icon?, color? |
-| maxItems | number | Non | |
-| onLoadMore | () => void | Non | Bouton « Charger plus » |
-| emptyMessage | string | Non | |
-| compact | boolean | Non | |
-| className | string | Non | |
+| Prop | Type | Requis | Défaut | Description |
+|------|------|--------|--------|-------------|
+| activities | ActivityItem[] | Oui | — | Entrées `{ id, actor, action, target, timestamp (ISO), icon?, color? }` ; `color` : `default` \| `info` \| `success` \| `warning` \| `error` |
+| maxItems | number | Non | — | Nombre max d’entrées affichées ; si la liste est plus longue et `onLoadMore` est défini, affiche le bouton « Charger plus » |
+| onLoadMore | () => void | Non | — | Callback du bouton « Charger plus » |
+| emptyMessage | string | Non | `"Aucune activité récente."` | Message lorsque `activities` est vide |
+| compact | boolean | Non | `false` | Densité réduite (typo et padding) |
+| className | string | Non | `""` | Classes CSS sur le conteneur racine |
+
+**Exemple :**
+
+```python
+bpm.activityFeed(
+    activities=[
+        {"id": "1", "actor": "Alice", "action": "a validé", "target": "le devis DV-001",
+         "timestamp": "2026-05-18T10:00:00Z", "color": "success"},
+    ],
+    max_items=10,
+    on_load_more=load_more,
+    compact=True,
+)
+```
 
 ---
 

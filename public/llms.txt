@@ -566,15 +566,24 @@ Composant bpm.gantt — interface non parsée (voir BPM_API.md).
 ```
 
 ## bpm.gps
+Géolocalisation navigateur + carte Leaflet. Modes `display` (affiche la position courante) et `picker` (sélection d'un point sur la carte). SSR-safe (carte dynamique, ssr:false).
 ```
   label?: string  — Titre affiché au-dessus du bloc.
   showMap?: boolean  — Afficher une carte Leaflet. Default: true.
-  onLocation?: (coords: { lat: number  — Callback appelé quand la position est obtenue (mode display).
+  onLocation?: (coords: { lat: number; lng: number; accuracy: number }) => void  — Callback appelé quand la position est obtenue (mode display).
   height?: number  — Hauteur de la carte en px. Default: 300.
-  className?: string
-  mode?: "display" | "picker"  — Mode : 'display' = affichage position, 'picker' = sélection d'un point sur la carte. Default: 'display'.
-  value?: { lat: number  — Position courante (mode picker).
-  onChange?: (coords: { lat: number  — Callback à chaque déplacement du marker ou clic sur la carte (mode picker).
+  className?: string  — Classes CSS additionnelles.
+  mode?: "display" | "picker"  — 'display' = affichage position, 'picker' = sélection d'un point. Default: 'display'.
+  value?: { lat: number; lng: number } | null  — Position courante (mode picker, composant contrôlé).
+  onChange?: (coords: { lat: number; lng: number }) => void  — Callback déclenché en mode picker à chaque clic ou déplacement du marqueur.
+```
+Exemple :
+```tsx
+// Mode display
+bpm.gps({ label: "Ma position", onLocation: ({ lat, lng }) => setPos({ lat, lng }) })
+
+// Mode picker
+bpm.gps({ mode: "picker", value: point, onChange: setPoint, height: 400 })
 ```
 
 ## bpm.grid

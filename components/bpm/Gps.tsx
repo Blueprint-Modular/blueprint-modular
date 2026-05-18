@@ -9,6 +9,7 @@ const LeafletMap = dynamic(
   { ssr: false }
 );
 
+/** État du cycle de vie de la géolocalisation. */
 export type GpsStatus = "idle" | "loading" | "success" | "error";
 
 export interface GpsProps {
@@ -20,6 +21,7 @@ export interface GpsProps {
   onLocation?: (coords: { lat: number; lng: number; accuracy: number }) => void;
   /** Hauteur de la carte en px. Default: 300. */
   height?: number;
+  /** Classes CSS additionnelles. */
   className?: string;
   /** Mode : 'display' = affichage position, 'picker' = sélection d'un point sur la carte. Default: 'display'. */
   mode?: "display" | "picker";
@@ -31,6 +33,42 @@ export interface GpsProps {
 
 const DEFAULT_CENTER = { lat: 48.8566, lng: 2.3522 };
 
+/**
+ * @component bpm.gps
+ * @description Composant de géolocalisation avec carte Leaflet : affiche la position courante de l'utilisateur (mode `display`) ou permet de sélectionner un point sur la carte (mode `picker`).
+ * @example
+ * // Mode display : récupération et affichage de la position du navigateur
+ * bpm.gps({
+ *   label: "Ma position",
+ *   onLocation: ({ lat, lng, accuracy }) => console.log(lat, lng, accuracy),
+ * })
+ *
+ * @example
+ * // Mode picker : sélection contrôlée d'un point sur la carte
+ * const [point, setPoint] = useState<{ lat: number; lng: number } | null>(null);
+ * bpm.gps({
+ *   mode: "picker",
+ *   value: point,
+ *   onChange: setPoint,
+ *   height: 400,
+ * })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Titre affiché au-dessus du bloc. Optionnel.
+ * @param {boolean} [props.showMap=true] - Affiche la carte Leaflet sous les contrôles. Optionnel.
+ * @param {function} [props.onLocation] - Callback appelé en mode `display` quand la position du navigateur est obtenue. Reçoit `{ lat, lng, accuracy }`. Optionnel.
+ * @param {number} [props.height=300] - Hauteur de la carte en pixels. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles appliquées au conteneur racine. Optionnel.
+ * @param {"display"|"picker"} [props.mode="display"] - Mode du composant : `display` pour afficher la position courante, `picker` pour sélectionner un point. Optionnel.
+ * @param {{lat:number,lng:number}|null} [props.value=null] - Position courante en mode `picker` (composant contrôlé). Optionnel.
+ * @param {function} [props.onChange] - Callback appelé en mode `picker` à chaque clic sur la carte ou déplacement du marqueur. Reçoit `{ lat, lng }`. Optionnel.
+ *
+ * @note SSR-safe : la carte Leaflet est chargée dynamiquement avec `ssr: false`. L'accès à `navigator.geolocation` est encapsulé dans un handler utilisateur, jamais exécuté pendant le rendu.
+ * @note Permission requise : le navigateur demande l'autorisation à l'utilisateur lors du premier clic sur « Localiser ». En cas de refus (code 1), le statut passe à `error` avec le message « Autorisation refusée ».
+ *
+ * @parent bpm.card, bpm.panel, bpm.modal
+ * @associated bpm.mapView, bpm.geofence, bpm.routePlanner, bpm.addressInput
+ */
 export function Gps({
   label,
   showMap = true,

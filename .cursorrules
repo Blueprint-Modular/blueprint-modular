@@ -1,0 +1,38 @@
+# Blueprint Modular — Cursor Rules
+
+## Identité
+Blueprint Modular est la bibliothèque UI de l'écosystème Blueprint.
+Package npm : @blueprint-modular/core
+Composants : namespace bpm.*
+
+## Principes inviolables
+- Pas de push direct sur master. Toujours via PR.
+- Un changement = une PR.
+- Pas de secrets dans le code versionné.
+- Composants SSR-safe par défaut (pas d'accès window/document sans guard).
+
+## Conventions composants bpm.*
+- Une responsabilité par composant.
+- Props typées explicitement.
+- JSDoc obligatoire sur les props publiques (@component, @description, @param, @example).
+- Mise à jour synchrone de public/llms.txt après chaque modification.
+- Mise à jour de BPM_API.md si l'API publique change.
+
+## Structure du repo
+- components/bpm/ : composants bpm.* (source réelle)
+- public/llms.txt : documentation orientée LLM
+- BPM_API.md : documentation orientée humain (si existant)
+
+## Check repo
+test -d components/bpm && test -f public/llms.txt && echo "REPO_OK_MODULAR" || echo "CHECK_REPO"
+
+## Conventions
+- Commits : Conventional Commits (feat/fix/refactor/docs/chore)
+- Branches : fix/<slug>, feat/<slug>, docs/<slug>
+- TypeScript strict, pas de `any` sans justification
+- Tailwind CSS uniquement (pas de SCSS, pas de CSS modules)
+- npm uniquement (pas de Yarn)
+
+## Gouvernance complète
+Voir AGENTS.md dans ce repo pour le mode d'emploi détaillé.
+Voir https://github.com/remigit55/blueprint-maker-memory pour PRINCIPLES.md, CONVENTIONS.md, ROADMAP.md.

@@ -13,6 +13,22 @@ export interface GpsMapProps {
   height: number;
 }
 
+/**
+ * @component bpm.gpsMap
+ * @description Carte Leaflet avec marqueur GPS (mode affichage ou picker) et gestion des clics.
+ * @example
+ * bpm.gpsMap({ mode: "picker", center: { lat: 48.85, lng: 2.35 }, markerPosition: pos, onMapClick: setPos, height: 300 })
+ *
+ * @param {object} props
+ * @param {"display"|"picker"} props.mode - Mode affichage ou sélection. Obligatoire.
+ * @param {object} props.center - Centre initial {lat, lng}. Obligatoire.
+ * @param {object|null} props.markerPosition - Position du marqueur {lat, lng} ou null. Obligatoire.
+ * @param {function} [props.onMarkerChange] - Callback au déplacement du marqueur (mode picker). Optionnel.
+ * @param {function} [props.onMapClick] - Callback au clic sur la carte (mode picker). Optionnel.
+ * @param {number} props.height - Hauteur de la carte en pixels. Obligatoire.
+ *
+ * @associated bpm.gps, bpm.mapView, bpm.geofence
+ */
 export function GpsMap({
   mode,
   center,

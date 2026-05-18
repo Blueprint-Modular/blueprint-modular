@@ -3,6 +3,17 @@
 import { useEffect, useState } from "react";
 import { getQueueSize, sync } from "@/lib/offline";
 
+/**
+ * @component bpm.offlineIndicator
+ * @description Indicateur de statut hors ligne avec compteur de requêtes en attente et bouton de synchronisation.
+ * @example
+ * bpm.offlineIndicator({ demo: false })
+ *
+ * @param {object} props
+ * @param {boolean} [props.demo=false] - Mode démo pour afficher le composant même sans file. Optionnel.
+ *
+ * @associated bpm.toast, bpm.statusBox
+ */
 export interface OfflineIndicatorProps {
   /** Affiche le composant même sans file (pour démo / page composants). */
   demo?: boolean;

@@ -167,7 +167,19 @@ function CommentBlock({
 }
 
 /**
- * Fil de commentaires récursif avec réponses inline et dates relatives.
+ * @component bpm.commentThread
+ * @description Fil de commentaires récursif avec réponses inline, dates relatives et profondeur configurable.
+ * @example
+ * bpm.commentThread({ comments: [...], onPost: (content, parentId) => addComment(content, parentId), currentUser: { id: "1", name: "Marie" } })
+ *
+ * @param {object} props
+ * @param {Comment[]} props.comments - Liste des commentaires avec replies optionnelles. Obligatoire.
+ * @param {function} props.onPost - Callback pour publier (content, parentId?). Obligatoire.
+ * @param {object} props.currentUser - Utilisateur connecté {id, name}. Obligatoire.
+ * @param {number} [props.maxDepth=2] - Profondeur maximale des réponses. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.activityFeed, bpm.chatInterface
  */
 export function CommentThread({
   comments,

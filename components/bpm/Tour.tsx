@@ -2,6 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 
+/**
+ * @component bpm.tour
+ * @description Visite guidée interactive avec overlay sombre et mise en surbrillance des éléments cibles étape par étape.
+ * @example
+ * bpm.tour({ steps: [{ target: "#btn", title: "Bienvenue", content: "Cliquez ici" }], isActive: true, onClose: () => setActive(false) })
+ *
+ * @param {object} props
+ * @param {TourStep[]} props.steps - Liste des étapes (target sélecteur CSS, title, content). Obligatoire.
+ * @param {boolean} props.isActive - Active/désactive la visite. Obligatoire.
+ * @param {function} [props.onClose] - Callback à la fermeture. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.modal, bpm.stepper
+ */
 export interface TourStep {
   target: string;
   title: string;

@@ -21,6 +21,24 @@ export interface EmailComposerProps {
   className?: string;
 }
 
+/**
+ * @component bpm.emailComposer
+ * @description Formulaire de composition d'email avec éditeur riche, modèles prédéfinis et envoi.
+ * @example
+ * bpm.emailComposer({ to: "client@exemple.fr", templates: [...], onSend: sendEmail, useRichText: true })
+ *
+ * @param {object} props
+ * @param {string} [props.to=""] - Destinataire initial. Optionnel.
+ * @param {string} [props.subject=""] - Objet initial. Optionnel.
+ * @param {string} [props.body=""] - Corps initial. Optionnel.
+ * @param {EmailTemplate[]} [props.templates=[]] - Modèles d'email {id, label, subject, bodyHtml}. Optionnel.
+ * @param {boolean} [props.useRichText=true] - Utilise l'éditeur riche. Optionnel.
+ * @param {function} [props.onSend] - Callback d'envoi (payload). Optionnel.
+ * @param {function} [props.onCancel] - Callback d'annulation. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.richTextEditor, bpm.form
+ */
 export function EmailComposer({
   to: toInit = "",
   subject: subInit = "",

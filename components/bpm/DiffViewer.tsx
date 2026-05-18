@@ -44,6 +44,22 @@ function computeUnifiedLines(original: string, modified: string): DiffLine[] {
   return result;
 }
 
+/**
+ * @component bpm.diffViewer
+ * @description Visualiseur de différences textuelles entre deux versions (mode split ou unified).
+ * @example
+ * bpm.diffViewer({ original: "ancien", modified: "nouveau", mode: "split" })
+ *
+ * @param {object} props
+ * @param {string} props.original - Texte original. Obligatoire.
+ * @param {string} props.modified - Texte modifié. Obligatoire.
+ * @param {string} [props.language] - Langage pour référence. Optionnel.
+ * @param {"split"|"unified"} [props.mode="split"] - Mode d'affichage. Optionnel.
+ * @param {object} [props.title] - Titres des colonnes {original?, modified?}. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.changelog, bpm.codeBlock
+ */
 function computeSplitLines(original: string, modified: string): { left: DiffLine[]; right: DiffLine[] } {
   const a = original.split(/\r?\n/);
   const b = modified.split(/\r?\n/);

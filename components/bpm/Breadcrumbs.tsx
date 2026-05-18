@@ -16,7 +16,19 @@ export interface BreadcrumbsProps {
 }
 
 /**
- * Fil d’Ariane avec séparateur personnalisable et réduction si trop d’entrées.
+ * @component bpm.breadcrumbs
+ * @description Fil d’Ariane avancé avec séparateur personnalisable et réduction automatique si trop d’entrées.
+ * @example
+ * bpm.breadcrumbs({ items: [{ label: "Accueil", href: "/" }, { label: "Catégorie" }, { label: "Article" }], maxItems: 4 })
+ *
+ * @param {object} props
+ * @param {BreadcrumbsItem[]} props.items - Liste des éléments {label, href?, onClick?}. Obligatoire.
+ * @param {ReactNode} [props.separator="/"] - Séparateur entre éléments. Optionnel.
+ * @param {number} [props.maxItems=8] - Nombre max d’éléments avant réduction. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.pageHeader, bpm.navbar
+ * @associated bpm.breadcrumb, bpm.tabs
  */
 export function Breadcrumbs({
   items,

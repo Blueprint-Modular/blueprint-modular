@@ -2,6 +2,23 @@
 
 import React from "react";
 
+/**
+ * @component bpm.pagination
+ * @description Contrôle de pagination avec boutons précédent/suivant, indicateur de page et compteur d'éléments.
+ * @example
+ * bpm.pagination({ page: 1, totalPages: 10, onPageChange: setPage, totalItems: 100, pageSize: 10 })
+ *
+ * @param {object} props
+ * @param {number} props.page - Page courante (1-based). Obligatoire.
+ * @param {number} props.totalPages - Nombre total de pages. Obligatoire.
+ * @param {function} props.onPageChange - Callback au changement de page. Obligatoire.
+ * @param {number} [props.pageSize] - Taille de page pour affichage. Optionnel.
+ * @param {number} [props.totalItems] - Nombre total d'éléments. Optionnel.
+ * @param {string} [props.label] - Libellé personnalisé. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.crud
+ */
 export interface PaginationProps {
   /** Page courante (1-based). */
   page: number;

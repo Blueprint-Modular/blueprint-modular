@@ -58,6 +58,23 @@ function formatCellValue(value: unknown, type?: string): React.ReactNode {
   return String(value);
 }
 
+/**
+ * @component bpm.crudPage
+ * @description Page CRUD complète avec table paginée, recherche, modales création/édition/suppression et appels API.
+ * @example
+ * bpm.crudPage({ title: "Clients", endpoint: "/api/clients", columns: [...], fields: [...] })
+ *
+ * @param {object} props
+ * @param {string} props.title - Titre de la page. Obligatoire.
+ * @param {string} props.endpoint - URL de l'API CRUD. Obligatoire.
+ * @param {CrudColumn[]} props.columns - Colonnes du tableau {key, label, type?, sortable?}. Obligatoire.
+ * @param {CrudField[]} props.fields - Champs du formulaire {key, label, type, required?, options?}. Obligatoire.
+ * @param {string} [props.domain] - Domaine métier. Optionnel.
+ * @param {string} [props.semantic] - Sémantique du contenu. Optionnel.
+ * @param {string} [props.idKey="id"] - Clé d'identifiant pour les opérations. Optionnel.
+ *
+ * @associated bpm.table, bpm.modal, bpm.form
+ */
 export function CrudPage({
   title,
   endpoint,

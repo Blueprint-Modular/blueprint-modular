@@ -18,6 +18,21 @@ export interface AddressInputProps {
 
 const FR_POSTAL = /^\d{5}$/;
 
+/**
+ * @component bpm.addressInput
+ * @description Champ de saisie d'adresse avec mode simple ou champs séparés (ligne 1, ligne 2, code postal, ville) et validation FR.
+ * @example
+ * bpm.addressInput({ mode: "fields", onChange: (addr) => console.log(addr) })
+ *
+ * @param {object} props
+ * @param {"single"|"fields"} [props.mode="fields"] - Mode de saisie : ligne unique ou champs séparés. Optionnel.
+ * @param {object} [props.value] - Valeur initiale { line1, line2, city, postal }. Optionnel.
+ * @param {function} [props.onChange] - Callback appelé à chaque modification. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.form
+ * @associated bpm.input, bpm.autocomplete
+ */
 export function AddressInput({
   mode = "fields",
   value,

@@ -29,6 +29,24 @@ export interface DateInputProps {
   max?: Date | string | null;
 }
 
+/**
+ * @component bpm.dateInput
+ * @description Champ de saisie de date avec calendrier popover et format FR (JJ/MM/AAAA).
+ * @example
+ * bpm.dateInput({ label: "Date de livraison", value: new Date(), onChange: setDate })
+ *
+ * @param {object} props
+ * @param {string} [props.label] - Libellé du champ. Optionnel.
+ * @param {Date|string|null} [props.value] - Valeur de la date. Optionnel.
+ * @param {function} [props.onChange] - Callback avec la date sélectionnée. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive le champ. Optionnel.
+ * @param {string} [props.help] - Texte d'aide en tooltip. Optionnel.
+ * @param {Date|string|null} [props.min] - Date minimale autorisée. Optionnel.
+ * @param {Date|string|null} [props.max] - Date maximale autorisée. Optionnel.
+ *
+ * @parent bpm.form
+ * @associated bpm.dateRangePicker, bpm.datePickerPopover
+ */
 export function DateInput({
   label,
   value,

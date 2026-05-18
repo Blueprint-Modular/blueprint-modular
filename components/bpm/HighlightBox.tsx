@@ -3,6 +3,22 @@
 import React from "react";
 import "./HighlightBox.css";
 
+/**
+ * @component bpm.highlightBox
+ * @description Bloc de mise en valeur avec barre latérale colorée, numéro, titre et sections RTB/Cible optionnelles.
+ * @example
+ * bpm.highlightBox({ value: 1, label: "DAILY", title: "Objectif quotidien", rtbPoints: ["Point 1", "Point 2"] })
+ *
+ * @param {object} props
+ * @param {number} props.value - Numéro affiché dans la barre gauche. Obligatoire.
+ * @param {string} props.label - Texte sous le numéro (ex: "DAILY"). Obligatoire.
+ * @param {string} props.title - Titre principal du contenu. Obligatoire.
+ * @param {string} [props.momentDescription] - Description "Moment" affichée en italique. Optionnel.
+ * @param {string[]} [props.rtbPoints] - Points RTB séparés par "·". Optionnel.
+ * @param {string|string[]} [props.targetPoints] - Points Cible (chaîne ou liste). Optionnel.
+ * @param {string} [props.barColor="#212121"] - Couleur de la barre latérale. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ */
 export interface HighlightBoxProps {
   /** Numéro affiché dans la barre gauche (ex. 1) */
   value: number;

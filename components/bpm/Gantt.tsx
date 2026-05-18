@@ -51,6 +51,21 @@ function padDaysForView(mode: GanttProps["viewMode"]): number {
 
 type DisplayRow = { kind: "group"; label: string } | { kind: "task"; task: GanttTask };
 
+/**
+ * @component bpm.gantt
+ * @description Diagramme de Gantt avec tâches, dépendances, groupes et ligne du jour.
+ * @example
+ * bpm.gantt({ tasks: [...], viewMode: "week", onTaskClick: handleClick, showDependencies: true })
+ *
+ * @param {object} props
+ * @param {GanttTask[]} props.tasks - Tâches {id, label, start, end, progress?, color?, dependencies?, group?}. Obligatoire.
+ * @param {"day"|"week"|"month"} props.viewMode - Mode d'affichage temporel. Obligatoire.
+ * @param {function} props.onTaskClick - Callback au clic sur une tâche. Obligatoire.
+ * @param {boolean} [props.showDependencies=true] - Affiche les flèches de dépendance. Optionnel.
+ * @param {boolean} [props.todayLine=true] - Affiche la ligne du jour. Optionnel.
+ *
+ * @associated bpm.timeline, bpm.table
+ */
 export function Gantt({
   tasks,
   viewMode,

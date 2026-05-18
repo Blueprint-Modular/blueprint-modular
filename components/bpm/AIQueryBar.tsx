@@ -11,6 +11,21 @@ export interface AIQueryBarProps {
   className?: string;
 }
 
+/**
+ * @component bpm.aiQueryBar
+ * @description Barre de requête IA permettant à l'utilisateur de poser des questions sur ses données avec suggestions et historique.
+ * @example
+ * bpm.aiQueryBar({ onQuery: async (q) => await fetchAnswer(q), suggestions: ["Quel est le CA ?"] })
+ *
+ * @param {object} props
+ * @param {function} props.onQuery - Fonction asynchrone appelée lors de l'envoi d'une question. Obligatoire.
+ * @param {string} [props.placeholder="Posez une question sur vos données..."] - Texte d'aide dans le champ. Optionnel.
+ * @param {string[]} [props.suggestions=[]] - Liste de suggestions cliquables. Optionnel.
+ * @param {boolean} [props.loading] - Force l'état de chargement. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.chatInterface, bpm.assistantPanel
+ */
 export function AIQueryBar({
   onQuery,
   placeholder = "Posez une question sur vos données...",

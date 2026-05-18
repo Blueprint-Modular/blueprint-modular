@@ -2,6 +2,24 @@
 
 import React from "react";
 
+/**
+ * @component bpm.suggestionCard
+ * @description Carte de suggestion IA avec titre, description, barre de confiance et boutons d'action.
+ * @example
+ * bpm.suggestionCard({ title: "Suggestion", description: "Détail...", confidence: 85, actions: [{ label: "Appliquer", onClick: apply, variant: "primary" }] })
+ *
+ * @param {object} props
+ * @param {string} props.title - Titre de la suggestion. Obligatoire.
+ * @param {string} props.description - Description détaillée. Obligatoire.
+ * @param {number} [props.confidence] - Niveau de confiance 0-100. Optionnel.
+ * @param {string} [props.icon] - Nom d'icône Material Symbols. Optionnel.
+ * @param {{ label: string; onClick: () => void; variant?: "primary" | "secondary" }[]} props.actions - Boutons d'action. Obligatoire.
+ * @param {boolean} [props.dismissable] - Affiche le bouton fermer. Optionnel.
+ * @param {function} [props.onDismiss] - Callback à la fermeture. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.card, bpm.message
+ */
 export interface SuggestionCardProps {
   title: string;
   description: string;

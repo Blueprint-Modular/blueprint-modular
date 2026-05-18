@@ -10,6 +10,28 @@ export type { MapMarker, MapPolygonSpec };
 const OSM_TILE =
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
+/**
+ * @component bpm.mapView
+ * @description Carte Leaflet interactive avec marqueurs, polylignes, polygones et gestion des clics.
+ * @example
+ * bpm.mapView({ center: [48.8566, 2.3522], zoom: 13, markers: [{ position: [48.8566, 2.3522], label: "Paris" }] })
+ *
+ * @param {object} props
+ * @param {[number, number]} props.center - Coordonnées [lat, lng] du centre. Obligatoire.
+ * @param {number} [props.zoom=13] - Niveau de zoom initial. Optionnel.
+ * @param {number|string} [props.height=320] - Hauteur de la carte. Optionnel.
+ * @param {MapMarker[]} [props.markers=[]] - Liste des marqueurs. Optionnel.
+ * @param {function} [props.onMarkerClick] - Callback au clic sur un marqueur. Optionnel.
+ * @param {string} [props.tileUrl] - URL du serveur de tuiles. Optionnel.
+ * @param {string} [props.tileAttribution] - Attribution du fournisseur de tuiles. Optionnel.
+ * @param {[number, number][][]} [props.polylines] - Lignes à tracer. Optionnel.
+ * @param {string} [props.polylineColor] - Couleur des polylignes. Optionnel.
+ * @param {MapPolygonSpec[]} [props.polygons] - Polygones à afficher. Optionnel.
+ * @param {function} [props.onMapClick] - Callback au clic sur la carte. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.map, bpm.routePlanner, bpm.gps
+ */
 export interface MapViewProps {
   center: [number, number];
   zoom?: number;

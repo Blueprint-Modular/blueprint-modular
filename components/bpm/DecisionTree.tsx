@@ -212,6 +212,20 @@ function TreeSubtree({
   );
 }
 
+/**
+ * @component bpm.decisionTree
+ * @description Arbre de décision interactif avec questions (losanges), actions et résultats navigables.
+ * @example
+ * bpm.decisionTree({ rootId: "q1", nodes: [...], currentNodeId: "q1", onNodeClick: handleClick })
+ *
+ * @param {object} props
+ * @param {string} props.rootId - ID du nœud racine. Obligatoire.
+ * @param {DecisionNode[]} props.nodes - Liste des nœuds {id, kind, label, branches?}. Obligatoire.
+ * @param {string} [props.currentNodeId] - ID du nœud actif. Optionnel.
+ * @param {function} props.onNodeClick - Callback (nodeId, branch?). Obligatoire.
+ *
+ * @associated bpm.flowDiagram, bpm.stepper
+ */
 export function DecisionTree({ rootId, nodes, currentNodeId, onNodeClick }: DecisionTreeProps) {
   const nodeMap = useMemo(() => {
     const m = new Map<string, DecisionNode>();

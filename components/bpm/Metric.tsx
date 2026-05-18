@@ -6,6 +6,34 @@ import { useBPMContext } from "@/lib/ai/context";
 /** Locales courants pour le format nombre (ex. "fr-FR" → 1 000,50, "en-US" → 1,000.50). */
 export type MetricValueLocale = "fr-FR" | "en-US" | "de-DE" | string;
 
+/**
+ * @component bpm.metric
+ * @description Affiche une métrique chiffrée avec label, valeur, variation delta et options de formatage (devise, locale).
+ * @example
+ * bpm.metric({ label: "Chiffre d'affaires", value: 125000, delta: "+12%", currency: "EUR" })
+ *
+ * @param {object} props
+ * @param {string} props.label - Libellé de la métrique. Obligatoire.
+ * @param {string|number} props.value - Valeur principale. Obligatoire.
+ * @param {number|string} [props.delta] - Variation affichée (ex: "+12%"). Optionnel.
+ * @param {string} [props.name] - Nom pour référencer dans le chat IA. Optionnel.
+ * @param {"aucun"|"normal"|"inverse"} [props.deltaType="normal"] - Coloration du delta. Optionnel.
+ * @param {string} [props.help] - Texte d'aide au survol. Optionnel.
+ * @param {number} [props.deltaDecimals=0] - Décimales pour le delta. Optionnel.
+ * @param {string} [props.currency="EUR"] - Devise pour l'affichage. Optionnel.
+ * @param {string} [props.valueLocale] - Locale pour formatage (fr-FR, en-US). Optionnel.
+ * @param {number} [props.valueDecimals=0] - Décimales pour la valeur. Optionnel.
+ * @param {boolean} [props.valueGrouping=true] - Séparateur de milliers. Optionnel.
+ * @param {boolean} [props.border=true] - Affiche la bordure. Optionnel.
+ * @param {React.ReactNode} [props.icon] - Icône à gauche du label. Optionnel.
+ * @param {string} [props.subtext] - Texte contextuel sous la valeur. Optionnel.
+ * @param {string} [props.accentColor] - Couleur d'accent. Optionnel.
+ * @param {boolean} [props.compact=false] - Mode compact réduit. Optionnel.
+ * @param {boolean} [props.trackContext=false] - Expose au contexte IA. Optionnel.
+ *
+ * @parent bpm.metricRow, bpm.grid, bpm.card
+ * @associated bpm.badge, bpm.plotlyChart
+ */
 export interface MetricProps {
   /** PARENT: bpm.metricRow (standard) | bpm.grid | bpm.card (isolé). INTERDIT: div custom comme parent — casse le responsive. ASSOCIÉ: bpm.badge (statut), bpm.plotlyChart (tendance), bpm.metricRow. */
   /** Libellé affiché au-dessus de la valeur. */

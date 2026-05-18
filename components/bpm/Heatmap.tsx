@@ -2,6 +2,23 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 
+/**
+ * @component bpm.heatmap
+ * @description Grille de valeurs numériques avec dégradé de couleur, infobulle au survol et clic optionnel sur cellule.
+ * @example
+ * bpm.heatmap({ data: [[1,2],[3,4]], xLabels: ["A","B"], yLabels: ["X","Y"], colorScale: { min: "#fff", max: "#f00" } })
+ *
+ * @param {object} props
+ * @param {number[][]} props.data - Matrice 2D de valeurs numériques. Obligatoire.
+ * @param {string[]} props.xLabels - Libellés des colonnes. Obligatoire.
+ * @param {string[]} props.yLabels - Libellés des lignes. Obligatoire.
+ * @param {{ min: string; max: string }} props.colorScale - Couleurs min/max du dégradé. Obligatoire.
+ * @param {number} [props.valueMin] - Valeur minimale pour l'échelle. Optionnel, calculé automatiquement.
+ * @param {number} [props.valueMax] - Valeur maximale pour l'échelle. Optionnel, calculé automatiquement.
+ * @param {boolean} [props.showValues=false] - Affiche les valeurs dans les cellules. Optionnel.
+ * @param {function} [props.onCellClick] - Callback au clic sur une cellule (row, col, value). Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ */
 export interface HeatmapProps {
   data: number[][];
   xLabels: string[];

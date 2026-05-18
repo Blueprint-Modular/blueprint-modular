@@ -34,6 +34,20 @@ export interface AssistantPanelProps {
   className?: string;
 }
 
+/**
+ * @component bpm.assistantPanel
+ * @description Panneau d'assistant IA en drawer latéral avec questions pré-configurées et streaming de réponses.
+ * @example
+ * bpm.assistantPanel({ title: "Assistant Production", demo: true, demoAnswers: { "Question 1": "Réponse 1" } })
+ *
+ * @param {object} props
+ * @param {Record<string, string>} [props.demoAnswers] - Réponses statiques pour mode démo. Optionnel.
+ * @param {string} [props.title="Assistant Production"] - Titre du panneau. Optionnel.
+ * @param {boolean} [props.demo=false] - Mode démo sans appel API. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.chatInterface, bpm.aiQueryBar, bpm.drawer
+ */
 export function AssistantPanel({
   demoAnswers,
   title = "Assistant Production",

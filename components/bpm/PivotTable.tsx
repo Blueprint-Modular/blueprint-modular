@@ -4,6 +4,22 @@ import React, { useMemo, useState } from "react";
 
 export type PivotAgg = "sum" | "avg" | "count" | "min" | "max";
 
+/**
+ * @component bpm.pivotTable
+ * @description Tableau croisé dynamique avec agrégation (sum, avg, count, min, max), tri et heatmap.
+ * @example
+ * bpm.pivotTable({ data: rows, rowKey: "region", colKey: "produit", valueKey: "ventes", agg: "sum" })
+ *
+ * @param {object} props
+ * @param {Record<string, unknown>[]} props.data - Données source. Obligatoire.
+ * @param {string} props.rowKey - Clé pour les lignes. Obligatoire.
+ * @param {string} props.colKey - Clé pour les colonnes. Obligatoire.
+ * @param {string} props.valueKey - Clé pour les valeurs à agréger. Obligatoire.
+ * @param {"sum"|"avg"|"count"|"min"|"max"} [props.agg="sum"] - Fonction d'agrégation. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.table, bpm.dataExplorer, bpm.heatmap
+ */
 export interface PivotTableProps {
   data: Record<string, unknown>[];
   rowKey: string;

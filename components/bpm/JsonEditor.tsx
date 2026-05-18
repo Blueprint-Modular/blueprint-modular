@@ -3,6 +3,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CodeBlock } from "./CodeBlock";
 
+/**
+ * @component bpm.jsonEditor
+ * @description Éditeur JSON avec validation en temps réel, formatage automatique au blur et indicateur de validité.
+ * @example
+ * bpm.jsonEditor({ value: '{"key": "value"}', onChange: (v, valid) => console.log(v, valid) })
+ *
+ * @param {object} props
+ * @param {string} props.value - Contenu JSON sous forme de chaîne. Obligatoire.
+ * @param {function} props.onChange - Callback (value, isValid) appelé à chaque modification. Obligatoire.
+ * @param {boolean} [props.readOnly=false] - Mode lecture seule (affiche un CodeBlock). Optionnel.
+ * @param {string|number} [props.height=300] - Hauteur du textarea. Optionnel.
+ * @param {boolean} [props.showValidation=true] - Affiche l'indicateur de validité. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.jsonViewer, bpm.codeBlock
+ */
 export interface JsonEditorProps {
   value: string;
   onChange: (value: string, isValid: boolean) => void;

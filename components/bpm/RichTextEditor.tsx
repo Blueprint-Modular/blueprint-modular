@@ -4,6 +4,25 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 export type RichTextExportFormat = "html" | "markdown";
 
+/**
+ * @component bpm.richTextEditor
+ * @description Éditeur WYSIWYG contentEditable avec barre d'outils (gras, italique, titres, listes, liens, images) et export HTML/Markdown.
+ * @example
+ * bpm.richTextEditor({ value: html, onChange: ({ html, markdown }) => save(html), placeholder: "Rédigez ici..." })
+ *
+ * @param {object} props
+ * @param {string} [props.defaultHtml=""] - HTML initial. Optionnel.
+ * @param {string} [props.value] - HTML contrôlé. Optionnel.
+ * @param {function} [props.onChange] - Callback ({ html, markdown }). Optionnel.
+ * @param {"html"|"markdown"} [props.format="html"] - Affiche l'aperçu Markdown si "markdown". Optionnel.
+ * @param {number} [props.minHeight=160] - Hauteur minimale. Optionnel.
+ * @param {number} [props.maxHeight=360] - Hauteur maximale. Optionnel.
+ * @param {boolean} [props.readOnly=false] - Mode lecture seule. Optionnel.
+ * @param {string} [props.placeholder=""] - Placeholder. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.textarea, bpm.markdown, bpm.codeEditor
+ */
 export interface RichTextEditorProps {
   defaultHtml?: string;
   value?: string;

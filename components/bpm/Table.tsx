@@ -5,6 +5,34 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useBPMContext } from "@/lib/ai/context";
 import type { MetricValueLocale } from "./Metric";
 
+/**
+ * @component bpm.table
+ * @description Tableau de données triable avec colonnes personnalisables, formatage numérique et scroll horizontal.
+ * @example
+ * bpm.table({ columns: [{ key: "nom", label: "Nom" }, { key: "montant", label: "Montant", align: "right" }], data: rows, striped: true, hover: true })
+ *
+ * @param {object} props
+ * @param {TableColumn[]} props.columns - Définition des colonnes (key, label, align?, render?, decimals?). Obligatoire.
+ * @param {Record<string, unknown>[]} props.data - Tableau de données. Obligatoire.
+ * @param {boolean} [props.striped=true] - Lignes alternées. Optionnel.
+ * @param {boolean} [props.hover=true] - Surbrillance au survol. Optionnel.
+ * @param {function} [props.onRowClick] - Callback au clic sur une ligne. Optionnel.
+ * @param {string} [props.defaultSortColumn] - Colonne triée par défaut. Optionnel.
+ * @param {"asc"|"desc"} [props.defaultSortDirection="asc"] - Direction de tri par défaut. Optionnel.
+ * @param {string} [props.name] - Nom pour référence IA. Optionnel.
+ * @param {string} [props.keyColumn] - Colonne d'ID unique. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {string} [props.valueLocale="fr-FR"] - Locale pour formatage. Optionnel.
+ * @param {number} [props.valueDecimals=0] - Décimales par défaut. Optionnel.
+ * @param {boolean} [props.valueGrouping=true] - Séparateur de milliers. Optionnel.
+ * @param {number} [props.minWidth] - Largeur minimale en pixels. Optionnel.
+ * @param {boolean} [props.trackContext=false] - Expose au contexte IA. Optionnel.
+ * @param {string} [props.emptyMessage="Aucune donnée disponible"] - Message si vide. Optionnel.
+ *
+ * @parent bpm.panel, bpm.container
+ * @associated bpm.pagination, bpm.input, bpm.badge, bpm.button
+ * @forbidden bpm.card (overflow caché)
+ */
 export interface TableColumn {
   key: string;
   label: React.ReactNode;

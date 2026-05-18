@@ -2,6 +2,22 @@
 
 import React, { useMemo } from "react";
 
+/**
+ * @component bpm.radarChart
+ * @description Graphique radar SVG pour comparer des valeurs sur plusieurs axes.
+ * @example
+ * bpm.radarChart({ axes: ["Vitesse", "Force", "Endurance"], values: [80, 60, 90], max: 100 })
+ *
+ * @param {object} props
+ * @param {string[]} props.axes - Libellés des axes. Obligatoire.
+ * @param {number[]} props.values - Valeurs correspondantes aux axes. Obligatoire.
+ * @param {number} [props.max] - Valeur maximale de l'échelle. Optionnel, calculé auto.
+ * @param {number} [props.width=320] - Largeur du SVG. Optionnel.
+ * @param {number} [props.height=320] - Hauteur du SVG. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.plotlyChart, bpm.lineChart
+ */
 export interface RadarChartProps {
   axes: string[];
   values: number[];

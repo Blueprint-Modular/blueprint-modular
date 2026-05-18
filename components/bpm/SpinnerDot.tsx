@@ -2,6 +2,18 @@
 
 import React from "react";
 
+/**
+ * @component bpm.spinnerDot
+ * @description Spinner compact type cercle tournant pour indicateur de chargement inline.
+ * @example
+ * bpm.spinnerDot({ size: "medium" })
+ *
+ * @param {object} props
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ * @param {"small"|"medium"|"large"} [props.size="medium"] - Taille (16/24/32px). Optionnel.
+ *
+ * @associated bpm.spinner, bpm.loadingBar, bpm.skeleton
+ */
 export interface SpinnerDotProps {
   className?: string;
   /** Taille : small (16px), medium (24px), large (32px). */

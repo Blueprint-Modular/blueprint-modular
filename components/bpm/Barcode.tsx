@@ -12,6 +12,23 @@ export interface BarcodeProps {
   className?: string;
 }
 
+/**
+ * @component bpm.barcode
+ * @description Générateur de code-barres SVG avec valeur textuelle affichée dessous.
+ * @example
+ * bpm.barcode({ value: "ABC123456", format: "CODE128", height: 60 })
+ *
+ * @param {object} props
+ * @param {string} props.value - Valeur à encoder en code-barres. Obligatoire.
+ * @param {"EAN13"|"CODE128"} [props.format="CODE128"] - Format du code-barres. Optionnel.
+ * @param {number} [props.height=60] - Hauteur des barres. Optionnel.
+ * @param {number} [props.width=2] - Largeur d'une barre unitaire. Optionnel.
+ * @param {string} [props.lineColor="var(--bpm-text-primary)"] - Couleur des barres. Optionnel.
+ * @param {string} [props.background="transparent"] - Couleur de fond. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.qrCode, bpm.labelValue
+ */
 export function Barcode({
   value,
   format = "CODE128",

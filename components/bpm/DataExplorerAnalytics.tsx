@@ -23,6 +23,21 @@ function num(v: unknown): number {
   return Number.isFinite(n) ? n : 0;
 }
 
+/**
+ * @component bpm.dataExplorerAnalytics
+ * @description Explorateur de données mode analytics avec filtres dynamiques, graphiques et tableau des résultats.
+ * @example
+ * bpm.dataExplorerAnalytics({ data: [...], columns: [...], chartConfig: { type: "bar", xKey: "categorie", yKey: "montant" } })
+ *
+ * @param {object} props
+ * @param {Record<string, unknown>[]} props.data - Données à analyser. Obligatoire.
+ * @param {ExplorerAnalyticsColumn[]} props.columns - Colonnes avec type (string/number/date/enum). Obligatoire.
+ * @param {object} [props.chartConfig] - Configuration du graphique {type, xKey, yKey}. Optionnel.
+ * @param {function} [props.onFilter] - Callback avec les données filtrées. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.filterPanel, bpm.barChart, bpm.table
+ */
 export function DataExplorerAnalytics({
   data,
   columns,

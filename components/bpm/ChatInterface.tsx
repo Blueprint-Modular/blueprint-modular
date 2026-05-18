@@ -39,6 +39,26 @@ function formatMsgTime(ts: string | Date | undefined): string | null {
   }
 }
 
+/**
+ * @component bpm.chatInterface
+ * @description Interface de chat complète avec messages utilisateur/assistant, indicateur de frappe et champ de saisie.
+ * @example
+ * bpm.chatInterface({ messages: [{ id: "1", role: "user", content: "Bonjour" }], onSend: (msg) => sendMessage(msg) })
+ *
+ * @param {object} props
+ * @param {ChatMessage[]} props.messages - Liste des messages {id, role, content, timestamp?}. Obligatoire.
+ * @param {function} props.onSend - Callback appelé avec le contenu du message envoyé. Obligatoire.
+ * @param {boolean} [props.isLoading=false] - Indicateur de chargement (deprecated, utiliser typing). Optionnel.
+ * @param {boolean} [props.typing] - Indicateur de frappe côté assistant. Optionnel.
+ * @param {string} [props.placeholder="Écrivez votre message..."] - Texte d'aide du champ. Optionnel.
+ * @param {string} [props.systemContext] - Contexte système affiché en haut. Optionnel.
+ * @param {string} [props.title] - Titre dans l'en-tête. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive l'envoi. Optionnel.
+ * @param {string} [props.height="100%"] - Hauteur du conteneur. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.assistantPanel, bpm.aiQueryBar, bpm.promptInput
+ */
 export function ChatInterface({
   messages,
   onSend,

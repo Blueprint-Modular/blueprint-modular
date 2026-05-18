@@ -13,6 +13,23 @@ export interface ChipProps {
   className?: string;
 }
 
+/**
+ * @component bpm.chip
+ * @description Étiquette interactive avec label et bouton de suppression optionnel pour tags ou filtres actifs.
+ * @example
+ * bpm.chip({ label: "React", variant: "primary", onDelete: () => removeTag("React") })
+ *
+ * @param {object} props
+ * @param {ReactNode} props.label - Texte ou contenu du chip. Obligatoire.
+ * @param {function} [props.onDelete] - Callback pour supprimer le chip. Optionnel.
+ * @param {function} [props.onClick] - Callback au clic sur le chip. Optionnel.
+ * @param {"default"|"primary"|"outline"} [props.variant="default"] - Style du chip. Optionnel.
+ * @param {boolean} [props.disabled=false] - Désactive les interactions. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.filterPanel, bpm.form
+ * @associated bpm.badge, bpm.tag
+ */
 export function Chip({
   label,
   onDelete,

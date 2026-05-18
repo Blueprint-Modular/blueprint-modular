@@ -37,7 +37,18 @@ const sevColor: Record<AlarmSeverity, string> = {
 };
 
 /**
- * Liste d’alarmes triée par gravité, accusé réception, suppression et clignotement pour le critique.
+ * @component bpm.alarmPanel
+ * @description Liste d’alarmes triée par gravité avec accusé de réception, suppression et clignotement pour les alertes critiques.
+ * @example
+ * bpm.alarmPanel({ alarms: [{ id: "1", title: "Température haute", severity: "critical", timestamp: Date.now() }] })
+ *
+ * @param {object} props
+ * @param {Alarm[]} props.alarms - Liste des alarmes à afficher. Obligatoire.
+ * @param {function} [props.onAcknowledge] - Callback pour accuser réception d’une alarme. Optionnel.
+ * @param {function} [props.onDismiss] - Callback pour fermer une alarme. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.anomalyAlert, bpm.statusBox, bpm.panel
  */
 export function AlarmPanel({ alarms, onAcknowledge, onDismiss, className = "" }: AlarmPanelProps) {
   const sorted = useMemo(

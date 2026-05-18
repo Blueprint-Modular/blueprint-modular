@@ -45,6 +45,21 @@ const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
   },
 };
 
+/**
+ * @component bpm.badge
+ * @description Étiquette compacte pour afficher un statut, une catégorie ou un compteur avec variantes de couleur.
+ * @example
+ * bpm.badge({ children: "En cours", variant: "warning" })
+ *
+ * @param {object} props
+ * @param {ReactNode} props.children - Contenu du badge. Obligatoire.
+ * @param {"default"|"primary"|"success"|"warning"|"error"} [props.variant="default"] - Style du badge. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.table, bpm.card, bpm.metric
+ * @associated bpm.chip, bpm.statusBox
+ * @forbidden Texte long >20 caractères — utiliser bpm.chip
+ */
 export function Badge({
   children,
   variant = "default",

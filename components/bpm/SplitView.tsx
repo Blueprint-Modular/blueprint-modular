@@ -2,6 +2,23 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+/**
+ * @component bpm.splitView
+ * @description Deux volets redimensionnables avec séparateur draggable. Empile verticalement sous 640px.
+ * @example
+ * bpm.splitView({ left: <List />, right: <Detail />, defaultSplit: 30, direction: "horizontal" })
+ *
+ * @param {object} props
+ * @param {React.ReactNode} props.left - Contenu du volet gauche/haut. Obligatoire.
+ * @param {React.ReactNode} props.right - Contenu du volet droit/bas. Obligatoire.
+ * @param {number} [props.defaultSplit=50] - Pourcentage initial du premier volet. Optionnel.
+ * @param {number} [props.minLeft=15] - Pourcentage minimum du premier volet. Optionnel.
+ * @param {number} [props.minRight=15] - Pourcentage minimum du second volet. Optionnel.
+ * @param {"horizontal"|"vertical"} [props.direction="horizontal"] - Direction du split. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.masterDetail, bpm.panel
+ */
 export interface SplitViewProps {
   left: React.ReactNode;
   right: React.ReactNode;

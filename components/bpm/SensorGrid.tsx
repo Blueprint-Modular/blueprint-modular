@@ -4,6 +4,19 @@ import React from "react";
 
 export type SensorStatus = "ok" | "warning" | "error" | "offline";
 
+/**
+ * @component bpm.sensorGrid
+ * @description Grille de cartes capteur avec valeur, unité, statut coloré et détail optionnel.
+ * @example
+ * bpm.sensorGrid({ sensors: [{ id: "1", label: "Température", value: 24.5, unit: "°C", status: "ok" }], columns: 3 })
+ *
+ * @param {object} props
+ * @param {SensorReading[]} props.sensors - Liste des capteurs (id, label, value, unit?, status, detail?). Obligatoire.
+ * @param {number} [props.columns=3] - Nombre de colonnes de la grille. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.machineStatus, bpm.liveGauge, bpm.metric
+ */
 export interface SensorReading {
   id: string;
   label: string;

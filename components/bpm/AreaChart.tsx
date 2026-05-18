@@ -15,6 +15,21 @@ export interface AreaChartProps {
   className?: string;
 }
 
+/**
+ * @component bpm.areaChart
+ * @description Graphique en aire SVG simple pour visualiser une série temporelle ou une distribution.
+ * @example
+ * bpm.areaChart({ data: [{ x: 1, y: 10 }, { x: 2, y: 25 }], color: "var(--bpm-success)" })
+ *
+ * @param {object} props
+ * @param {AreaChartDatum[]} props.data - Données du graphique [{x, y}]. Obligatoire.
+ * @param {number} [props.width=400] - Largeur du graphique. Optionnel.
+ * @param {number} [props.height=200] - Hauteur du graphique. Optionnel.
+ * @param {string} [props.color="var(--bpm-accent)"] - Couleur de l'aire. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.lineChart, bpm.barChart, bpm.plotlyChart
+ */
 export function AreaChart(p: AreaChartProps) {
   const { data, width = 400, height = 200, color = "var(--bpm-accent)", className = "" } = p;
   const path = useMemo(() => {

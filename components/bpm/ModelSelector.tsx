@@ -3,6 +3,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
+/**
+ * @component bpm.modelSelector
+ * @description Sélecteur de modèle IA avec dropdown groupé par fournisseur et affichage des capacités.
+ * @example
+ * bpm.modelSelector({ models: [{ id: "gpt-4", label: "GPT-4", provider: "OpenAI" }], selected: "gpt-4", onChange: setModel })
+ *
+ * @param {object} props
+ * @param {ModelOption[]} props.models - Liste des modèles disponibles. Obligatoire.
+ * @param {string} props.selected - ID du modèle sélectionné. Obligatoire.
+ * @param {function} props.onChange - Callback au changement de sélection. Obligatoire.
+ * @param {boolean} [props.showCapabilities=true] - Affiche les capacités et fenêtre de contexte. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.chatInterface, bpm.promptInput
+ */
 export interface ModelOption {
   id: string;
   label: string;

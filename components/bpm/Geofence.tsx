@@ -20,6 +20,22 @@ export interface GeofenceProps {
   className?: string;
 }
 
+/**
+ * @component bpm.geofence
+ * @description Éditeur de zones géographiques sur carte avec polygones cliquables pour définir des périmètres.
+ * @example
+ * bpm.geofence({ zones: [...], center: [48.85, 2.35], onZonesChange: setZones })
+ *
+ * @param {object} props
+ * @param {GeofenceZone[]} props.zones - Liste des zones {id, name?, positions, color?}. Obligatoire.
+ * @param {function} [props.onZonesChange] - Callback avec les zones modifiées. Optionnel.
+ * @param {[number, number]} props.center - Centre de la carte [lat, lng]. Obligatoire.
+ * @param {number} [props.zoom=14] - Niveau de zoom initial. Optionnel.
+ * @param {number|string} [props.height=400] - Hauteur de la carte. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.mapView, bpm.gps
+ */
 export function Geofence({
   zones: controlledZones,
   onZonesChange,

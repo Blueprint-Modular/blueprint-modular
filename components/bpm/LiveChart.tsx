@@ -2,6 +2,23 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 
+/**
+ * @component bpm.liveChart
+ * @description Graphique temps réel avec fenêtre glissante, seuils en pointillés et rafraîchissement automatique.
+ * @example
+ * bpm.liveChart({ data: [{ timestamp: Date.now(), value: 42 }], bufferDuration: 60, refreshInterval: 1000 })
+ *
+ * @param {object} props
+ * @param {LiveChartDatum[]} props.data - Points { timestamp, value }. Obligatoire.
+ * @param {number} [props.bufferDuration=120] - Durée de la fenêtre en secondes. Optionnel.
+ * @param {{ value: number; label?: string }[]} [props.thresholds=[]] - Lignes de seuil horizontales. Optionnel.
+ * @param {number} [props.refreshInterval] - Intervalle de rafraîchissement en ms. Optionnel.
+ * @param {number} [props.width=400] - Largeur du graphique. Optionnel.
+ * @param {number} [props.height=180] - Hauteur du graphique. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @associated bpm.liveGauge, bpm.lineChart, bpm.sparkline
+ */
 export interface LiveChartDatum {
   timestamp: number;
   value: number;

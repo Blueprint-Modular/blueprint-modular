@@ -2,6 +2,22 @@
 
 import React from "react";
 
+/**
+ * @component bpm.scrollContainer
+ * @description Conteneur avec scroll vertical, horizontal ou bidirectionnel et option pour masquer la scrollbar.
+ * @example
+ * bpm.scrollContainer({ children: <Content />, height: 400, direction: "vertical", hideScrollbar: true })
+ *
+ * @param {object} props
+ * @param {React.ReactNode} props.children - Contenu scrollable. Obligatoire.
+ * @param {string|number} [props.height="100%"] - Hauteur du conteneur. Optionnel.
+ * @param {string|number} [props.maxHeight] - Hauteur maximale. Optionnel.
+ * @param {"vertical"|"horizontal"|"both"} [props.direction="vertical"] - Direction du scroll. Optionnel.
+ * @param {boolean} [props.hideScrollbar=false] - Masque la scrollbar visuellement. Optionnel.
+ * @param {string} [props.className=""] - Classes CSS additionnelles. Optionnel.
+ *
+ * @parent bpm.panel, bpm.card
+ */
 export interface ScrollContainerProps {
   children: React.ReactNode;
   /** Hauteur du conteneur (défaut '100%'). */
